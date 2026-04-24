@@ -13,15 +13,22 @@ export default function TextField(props: {
 }) {
   const field = useFieldContext<string>()
   const id = `${field.form.formId}-${field.name}`
+  const isInvalid = !field.state.meta.isValid
 
   return (
     <Field>
-      {props.label && <FieldLabel htmlFor={id}>{props.label}</FieldLabel>}
+      {props.label && (
+        <FieldLabel aria-invalid={isInvalid} htmlFor={id}>
+          {props.label}
+        </FieldLabel>
+      )}
       <Input
         id={id}
         value={field.state.value}
         onChange={(e) => field.handleChange(e.target.value)}
         onBlur={field.handleBlur}
+        autoComplete="off"
+        aria-invalid={isInvalid}
       />
       {props.description && (
         <FieldDescription>{props.description}</FieldDescription>

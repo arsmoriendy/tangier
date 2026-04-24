@@ -22,9 +22,11 @@ export default function NumberField({
   description?: string
 } & VariantProps<typeof fieldVariants>) {
   const field = useFieldContext<number>()
+  const isInvalid = !field.state.meta.isValid
 
   return (
     <AriaNumberField
+      isInvalid={isInvalid}
       value={field.state.value}
       className={cn(fieldVariants({ orientation }), className)}
       onChange={field.handleChange}
