@@ -12,11 +12,13 @@ export default function TextField(props: {
   description?: string
 }) {
   const field = useFieldContext<string>()
+  const id = `${field.form.formId}-${field.name}`
 
   return (
     <Field>
-      {props.label && <FieldLabel>{props.label}</FieldLabel>}
+      {props.label && <FieldLabel htmlFor={id}>{props.label}</FieldLabel>}
       <Input
+        id={id}
         value={field.state.value}
         onChange={(e) => field.handleChange(e.target.value)}
         onBlur={field.handleBlur}
