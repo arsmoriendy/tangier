@@ -1,10 +1,12 @@
-import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google"
+"use client"
 
+import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/app-sidebar"
+import { I18nProvider } from "react-aria-components"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -34,13 +36,15 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <main>
-              <SidebarTrigger />
-              <div className="px-2">{children}</div>
-            </main>
-          </SidebarProvider>
+          <I18nProvider locale="id-ID">
+            <SidebarProvider>
+              <AppSidebar />
+              <main>
+                <SidebarTrigger />
+                <div className="px-2">{children}</div>
+              </main>
+            </SidebarProvider>
+          </I18nProvider>
         </ThemeProvider>
       </body>
     </html>

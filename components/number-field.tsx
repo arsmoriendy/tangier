@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils"
 export default function NumberField({
   className,
   orientation = "vertical",
+  step = -1,
   ...props
 }: AriaNumberFieldProps & {
   label?: string
@@ -31,6 +32,7 @@ export default function NumberField({
       className={cn(fieldVariants({ orientation }), className)}
       onChange={field.handleChange}
       onBlur={field.handleBlur}
+      step={step}
       {...props}
     >
       {props.label && <Label className={labelClass}>{props.label}</Label>}

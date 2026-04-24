@@ -43,21 +43,25 @@ export default function CreateItemForm() {
 
   return (
     <Form handleSubmit={form.handleSubmit}>
-      <form.AppField
-        name="name"
-        children={(f) => <f.TextField label="Name" />}
-      />
-      <form.AppField
-        name="stock"
-        children={(f) => <f.NumberField label="Stock" />}
-      />
+      <form.AppField name="name">
+        {(f) => <f.TextField label="Name" />}
+      </form.AppField>
+      <form.AppField name="stock">
+        {(f) => <f.NumberField label="Stock" minValue={0} />}
+      </form.AppField>
       {priceGroupNames.map((name, i) => (
         <div key={i}>
           <form.Field name={`prices[${i}].priceGroup`}>
             {(f) => <input type="hidden" value={f.state.value} />}
           </form.Field>
           <form.AppField name={`prices[${i}].price`}>
-            {(f) => <f.NumberField label={name} />}
+            {(f) => (
+              <f.NumberField
+                label={name}
+                minValue={0}
+                formatOptions={{ style: "currency", currency: "IDR" }}
+              />
+            )}
           </form.AppField>
         </div>
       ))}
