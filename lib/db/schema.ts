@@ -18,8 +18,8 @@ export const items = pgTable("items", {
   stock: bigint({ mode: "number" }).default(0).notNull(),
 })
 
-export const customerTiers = pgTable(
-  "customer_tiers",
+export const priceGroups = pgTable(
+  "price_groups",
   {
     id: uuid().primaryKey().notNull().defaultRandom(),
     name: varchar().notNull(),
@@ -32,7 +32,7 @@ export const prices = pgTable(
   {
     item: uuid("item").notNull(),
     price: numeric().notNull(),
-    customerTier: uuid("customer_tier").notNull(),
+    priceGroup: uuid("price_group").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -46,14 +46,14 @@ export const prices = pgTable(
       .onUpdate("cascade")
       .onDelete("cascade"),
     foreignKey({
-      columns: [table.customerTier],
-      foreignColumns: [customerTiers.id],
-      name: "customer_tiers_fk",
+      columns: [table.priceGroup],
+      foreignColumns: [priceGroups.id],
+      name: "price_group_fk",
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
     primaryKey({
-      columns: [table.item, table.price, table.customerTier, table.createdAt],
+      columns: [table.item, table.price, table.priceGroup, table.createdAt],
       name: "prices_pkey",
     }),
   ]

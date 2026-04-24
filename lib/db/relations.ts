@@ -1,14 +1,14 @@
 import { relations } from "drizzle-orm/relations"
-import { items, prices, customerTiers } from "./schema"
+import { items, prices, priceGroups } from "./schema"
 
 export const pricesRelations = relations(prices, ({ one }) => ({
   item: one(items, {
     fields: [prices.item],
     references: [items.id],
   }),
-  customerTier: one(customerTiers, {
-    fields: [prices.customerTier],
-    references: [customerTiers.id],
+  priceGroup: one(priceGroups, {
+    fields: [prices.priceGroup],
+    references: [priceGroups.id],
   }),
 }))
 
@@ -16,6 +16,6 @@ export const itemsRelations = relations(items, ({ many }) => ({
   prices: many(prices),
 }))
 
-export const customerTiersRelations = relations(customerTiers, ({ many }) => ({
+export const priceGroupsRelations = relations(priceGroups, ({ many }) => ({
   prices: many(prices),
 }))
