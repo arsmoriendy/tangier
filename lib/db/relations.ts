@@ -3,11 +3,11 @@ import { items, prices, customerTiers } from "./schema"
 
 export const pricesRelations = relations(prices, ({ one }) => ({
   item: one(items, {
-    fields: [prices.itemId],
+    fields: [prices.item],
     references: [items.id],
   }),
   customerTier: one(customerTiers, {
-    fields: [prices.customerTierId],
+    fields: [prices.customerTier],
     references: [customerTiers.id],
   }),
 }))
