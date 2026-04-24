@@ -31,7 +31,7 @@ export const prices = pgTable(
   "prices",
   {
     item: uuid("item").notNull(),
-    price: numeric().notNull(),
+    price: numeric({ mode: "number" }).notNull(),
     priceGroup: uuid("price_group").notNull(),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
