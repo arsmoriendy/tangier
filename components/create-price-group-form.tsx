@@ -25,7 +25,7 @@ export default function CreatePriceGroupForm() {
         children={(f) => <f.TextField label="Name" />}
       />
       <form.AppForm>
-        <form.SubmitButton>Create</form.SubmitButton>
+        <form.SubmitButton>Create price group</form.SubmitButton>
       </form.AppForm>
     </Form>
   )
