@@ -12,7 +12,7 @@ import {
 import { sql } from "drizzle-orm"
 
 export const items = pgTable("items", {
-  id: uuid().primaryKey().notNull(),
+  id: uuid().primaryKey().notNull().defaultRandom(),
   name: varchar().notNull(),
   // You can use { mode: "bigint" } if numbers are exceeding js number limitations
   stock: bigint({ mode: "number" }).default(0).notNull(),
