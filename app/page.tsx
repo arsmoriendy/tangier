@@ -1,5 +1,5 @@
-import CreateItemForm from "@/components/create-item-form"
+import { redirect } from "next/navigation"
 
 export default function Page() {
-  return <CreateItemForm />
+  redirect("/items")
 }
