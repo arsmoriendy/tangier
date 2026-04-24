@@ -1,6 +1,7 @@
 "use client"
 
 import { Form, useAppForm } from "@/components/form"
+import { createItem } from "@/lib/crud/item"
 import * as z from "zod"
 
 const createItemFormSchema = z.object({
@@ -15,7 +16,9 @@ export default function CreateItemForm() {
       onChange: createItemFormSchema,
       onMount: createItemFormSchema,
     },
-    onSubmit: ({ value }) => console.log(value),
+    onSubmit: async ({ value }) => {
+      await createItem(value)
+    },
   })
 
   return (
