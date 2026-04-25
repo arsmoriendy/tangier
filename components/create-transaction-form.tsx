@@ -1,5 +1,4 @@
 import { Form, useAppForm } from "@/components/form"
-import { items } from "@/lib/db/schema"
 import * as z from "zod"
 import { MagnifyingGlassIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react"
 import { ItemWithRelations, searchItem } from "@/lib/crud/item"
@@ -11,8 +10,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { getItemPrices } from "@/lib/crud/price"
-import { listPriceGroups } from "@/lib/crud/price-group"
 import {
   RadioGroupChoiceCard,
   RadioGroupChoiceItem,
@@ -24,14 +21,16 @@ import { createTransaction } from "@/lib/crud/transaction"
 
 export default function CreateTransactionForm() {
   const createTransactionFormSchema = z.object({
-    items: z.array(
-      z.object({
-        name: z.string().min(0),
-        unitPrice: z.number().min(0),
-        quantity: z.number().min(0),
-        quantifiedPrice: z.number().min(0),
-      })
-    ),
+    items: z
+      .array(
+        z.object({
+          name: z.string().min(0),
+          unitPrice: z.number().min(0),
+          quantity: z.number().min(1),
+          quantifiedPrice: z.number().min(0),
+        })
+      )
+      .min(1),
     totalPrice: z.number().min(0),
   })
 
@@ -191,7 +190,7 @@ export default function CreateTransactionForm() {
 const addItemFormSchema = z.object({
   name: z.string().min(1),
   unitPrice: z.number().min(0),
-  quantity: z.number().min(0),
+  quantity: z.number().min(1),
   quantifiedPrice: z.number().min(0),
 })
 
@@ -201,7 +200,7 @@ function AddItemForm(props: {
   const defaultValues: z.infer<typeof addItemFormSchema> = {
     name: "",
     unitPrice: 0,
-    quantity: 0,
+    quantity: 1,
     quantifiedPrice: 0,
   }
 
@@ -244,7 +243,7 @@ function AddItemForm(props: {
               ),
           }}
         >
-          {(f) => <f.NumberField className="w-12" minValue={0} label="Qty" />}
+          {(f) => <f.NumberField className="w-12" minValue={1} label="Qty" />}
         </form.AppField>
         <div className="grow">
           <FieldLabel className="mb-1">Search</FieldLabel>
