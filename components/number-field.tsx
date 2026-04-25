@@ -28,6 +28,7 @@ export default function NumberField({
   return (
     <AriaNumberField
       isInvalid={isInvalid}
+      aria-label={props.label ?? field.name}
       value={field.state.value}
       className={cn(fieldVariants({ orientation }), className)}
       onChange={field.handleChange}
