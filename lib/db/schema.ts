@@ -59,7 +59,7 @@ export const prices = pgTable(
 )
 
 export const transactions = pgTable("transactions", {
-  id: uuid().notNull().primaryKey(),
+  id: uuid().notNull().primaryKey().defaultRandom(),
   totalPrice: numeric("total_price").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
     .default(sql`CURRENT_TIMESTAMP`)
