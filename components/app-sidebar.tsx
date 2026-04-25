@@ -9,24 +9,33 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
 } from "@/components/ui/sidebar"
-import { MoneyIcon, PackageIcon, BasketIcon } from "@phosphor-icons/react/ssr"
+import {
+  MoneyIcon,
+  PlusIcon,
+  PackageIcon,
+  BasketIcon,
+  ClockCounterClockwiseIcon,
+} from "@phosphor-icons/react/ssr"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
 
-function SidebarLink(props: { children: ReactNode; href: string }) {
+function DynamicSidebarLink(props: {
+  children: (props: { className: string; href: string }) => ReactNode
+  href: string
+}) {
   const activeClass =
     "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground hover:brightness-90"
+
   const isActive = usePathname().startsWith(props.href)
 
-  return (
-    <SidebarMenuItem>
-      <SidebarMenuButton className={isActive ? activeClass : ""} asChild>
-        <Link href={props.href}>{props.children}</Link>
-      </SidebarMenuButton>
-    </SidebarMenuItem>
-  )
+  return props.children({
+    className: isActive ? activeClass : "",
+    href: props.href,
+  })
 }
 
 export function AppSidebar() {
@@ -36,18 +45,55 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            <SidebarLink href="/transactions">
-              <BasketIcon />
-              Transactions
-            </SidebarLink>
-            <SidebarLink href="/items">
-              <PackageIcon />
-              Items
-            </SidebarLink>
-            <SidebarLink href="/price-groups">
-              <MoneyIcon />
-              Price groups
-            </SidebarLink>
+            <DynamicSidebarLink href="/transactions">
+              {({ href, ...props }) => (
+                <SidebarMenuItem>
+                  <SidebarMenuButton {...props}>
+                    <BasketIcon />
+                    Transactions
+                  </SidebarMenuButton>
+
+                  <SidebarMenuSub>
+                    <DynamicSidebarLink href="/transactions/new">
+                      {({ href, ...props }) => (
+                        <SidebarMenuSubButton asChild {...props}>
+                          <Link href={href}>New</Link>
+                        </SidebarMenuSubButton>
+                      )}
+                    </DynamicSidebarLink>
+                    <DynamicSidebarLink href="/transactions/history">
+                      {({ href, ...props }) => (
+                        <SidebarMenuSubButton asChild {...props}>
+                          <Link href={href}>History</Link>
+                        </SidebarMenuSubButton>
+                      )}
+                    </DynamicSidebarLink>
+                  </SidebarMenuSub>
+                </SidebarMenuItem>
+              )}
+            </DynamicSidebarLink>
+
+            <DynamicSidebarLink href="/items">
+              {({ href, ...props }) => (
+                <SidebarMenuButton asChild {...props}>
+                  <Link href={href}>
+                    <PackageIcon />
+                    Items
+                  </Link>
+                </SidebarMenuButton>
+              )}
+            </DynamicSidebarLink>
+
+            <DynamicSidebarLink href="/price-groups">
+              {({ href, ...props }) => (
+                <SidebarMenuButton asChild {...props}>
+                  <Link href={href!}>
+                    <MoneyIcon />
+                    Price groups
+                  </Link>
+                </SidebarMenuButton>
+              )}
+            </DynamicSidebarLink>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
