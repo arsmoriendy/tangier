@@ -1,10 +1,7 @@
 import { Form, useAppForm } from "@/components/form"
-import { db } from "@/lib/db"
 import { items } from "@/lib/db/schema"
-import { useEffect, useState } from "react"
 import * as z from "zod"
 import { MagnifyingGlassIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react"
-import { ilike } from "drizzle-orm"
 import { searchItem } from "@/lib/crud/item"
 import {
   Table,
@@ -16,14 +13,11 @@ import {
 import { Button } from "@/components/ui/button"
 import { getItemPrices } from "@/lib/crud/price"
 import { listPriceGroups } from "@/lib/crud/price-group"
-import { RadioGroup } from "@/components/ui/radio-group"
 import {
   RadioGroupChoiceCard,
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
 import { formatCurrency } from "@/lib/i18n/currency"
-import NumberField from "@/components/number-field"
-import { Input } from "@/components/ui/input"
 import { FieldLabel } from "@/components/ui/field"
 
 export default function CreateTransactionForm() {
