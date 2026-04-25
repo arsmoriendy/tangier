@@ -25,8 +25,15 @@ export async function createItem({
 }
 
 export async function searchItem({ name }: { name: string }) {
-  return await db
-    .select()
-    .from(items)
-    .where(ilike(items.name, `%${name}%`))
+  return await db.query.items.findMany({
+    where: ilike(items.name, `%${name}%`),
+    with: {
+      prices: {
+        columns: { price: true, createdAt: true },
+        with: { priceGroup: true },
+      },
+    },
+  })
 }
+
+export type ItemWithRelations = Awaited<ReturnType<typeof searchItem>>[number]

@@ -2,7 +2,7 @@ import { Form, useAppForm } from "@/components/form"
 import { items } from "@/lib/db/schema"
 import * as z from "zod"
 import { MagnifyingGlassIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react"
-import { searchItem } from "@/lib/crud/item"
+import { ItemWithRelations, searchItem } from "@/lib/crud/item"
 import {
   Table,
   TableBody,
@@ -219,17 +219,14 @@ function AddItemForm(props: {
     []
   )
 
-  async function handleSelectItem({ id, name }: typeof items.$inferSelect) {
-    const prices = await getItemPrices(id)
-    const priceGroups = await listPriceGroups()
-
+  async function handleSelectItem({ name, prices }: ItemWithRelations) {
     form.setFieldValue("name", name)
     prices.length > 0 && form.setFieldValue("unitPrice", prices[0].price)
 
     setPrices(
       prices.map((p) => ({
         price: p.price,
-        priceGroup: priceGroups.find((pg) => pg.id === p.priceGroup)!.name,
+        priceGroup: p.priceGroup.name,
       }))
     )
   }
@@ -311,7 +308,7 @@ function AddItemForm(props: {
 }
 
 export function SearchItemForm(props: {
-  selectItem: (item: typeof items.$inferSelect) => any
+  selectItem: (item: ItemWithRelations) => any
 }) {
   const searchItemFormSchema = z.object({ name: z.string().min(0) })
 
@@ -330,9 +327,7 @@ export function SearchItemForm(props: {
     },
   })
 
-  const [foundItems, setFoundItems] = useState<(typeof items.$inferSelect)[]>(
-    []
-  )
+  const [foundItems, setFoundItems] = useState<ItemWithRelations[]>([])
 
   return (
     <div>
