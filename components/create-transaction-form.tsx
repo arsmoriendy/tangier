@@ -49,8 +49,6 @@ export default function CreateTransactionForm() {
     },
   })
 
-  const [trxItems, setTrxItems] = useState<[]>([])
-
   function recalculateTotalPrice() {
     form.setFieldValue(
       "totalPrice",
