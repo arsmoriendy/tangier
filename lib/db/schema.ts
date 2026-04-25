@@ -70,7 +70,7 @@ export const transactionItems = pgTable(
   "transaction_items",
   {
     transaction: uuid().notNull(),
-    itemName: varchar("item_name").notNull(),
+    name: varchar().notNull(),
     unitPrice: numeric("unit_price", { mode: "number" }).notNull(),
     quantity: integer().notNull(),
     quantifiedPrice: numeric("quantified_price", { mode: "number" }).notNull(),
@@ -84,7 +84,7 @@ export const transactionItems = pgTable(
       .onUpdate("cascade")
       .onDelete("cascade"),
     primaryKey({
-      columns: [table.itemName, table.transaction],
+      columns: [table.name, table.transaction],
       name: "transaction_items_pk",
     }),
   ]
