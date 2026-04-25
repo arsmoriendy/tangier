@@ -60,7 +60,7 @@ export const prices = pgTable(
 
 export const transactions = pgTable("transactions", {
   id: uuid().notNull().primaryKey().defaultRandom(),
-  totalPrice: numeric("total_price").notNull(),
+  totalPrice: numeric("total_price", { mode: "number" }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -71,9 +71,9 @@ export const transactionItems = pgTable(
   {
     transaction: uuid().notNull(),
     itemName: varchar("item_name").notNull(),
-    unitPrice: numeric("unit_price").notNull(),
+    unitPrice: numeric("unit_price", { mode: "number" }).notNull(),
     quantity: integer().notNull(),
-    quantifiedPrice: numeric("quantified_price").notNull(),
+    quantifiedPrice: numeric("quantified_price", { mode: "number" }).notNull(),
   },
   (table) => [
     foreignKey({
