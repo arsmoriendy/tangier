@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/choice-card"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { FieldLabel } from "@/components/ui/field"
+import { useState } from "react"
 
 export default function CreateTransactionForm() {
   const createTransactionFormSchema = z.object({
