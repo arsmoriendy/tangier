@@ -2,20 +2,19 @@ import {
   pgTable,
   uuid,
   varchar,
-  bigint,
   foreignKey,
   primaryKey,
   numeric,
   timestamp,
   uniqueIndex,
+  integer,
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
 export const items = pgTable("items", {
   id: uuid().primaryKey().notNull().defaultRandom(),
   name: varchar().notNull(),
-  // You can use { mode: "bigint" } if numbers are exceeding js number limitations
-  stock: bigint({ mode: "number" }).default(0).notNull(),
+  stock: integer().default(0).notNull(),
 })
 
 export const priceGroups = pgTable(
@@ -55,6 +54,37 @@ export const prices = pgTable(
     primaryKey({
       columns: [table.item, table.price, table.priceGroup, table.createdAt],
       name: "prices_pkey",
+    }),
+  ]
+)
+
+export const transactions = pgTable("transactions", {
+  id: uuid().notNull().primaryKey(),
+  totalPrice: numeric("total_price").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+})
+
+export const transactionItems = pgTable(
+  "transaction_items",
+  {
+    transaction: uuid().notNull(),
+    itemName: varchar("item_name").notNull(),
+    unitPrice: numeric("unit_price").notNull(),
+    quantity: integer().notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.transaction],
+      foreignColumns: [transactions.id],
+      name: "transactions_fk",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+    primaryKey({
+      columns: [table.itemName, table.transaction],
+      name: "transaction_items_pk",
     }),
   ]
 )
