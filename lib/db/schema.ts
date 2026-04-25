@@ -73,6 +73,7 @@ export const transactionItems = pgTable(
     itemName: varchar("item_name").notNull(),
     unitPrice: numeric("unit_price").notNull(),
     quantity: integer().notNull(),
+    quantifiedPrice: numeric("quantified_price").notNull(),
   },
   (table) => [
     foreignKey({

@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/db"
 import { items, prices as pricesTable } from "@/lib/db/schema"
+import { ilike } from "drizzle-orm"
 
 export async function createItem({
   name,
@@ -21,4 +22,11 @@ export async function createItem({
       await tx.insert(pricesTable).values({ item, price, priceGroup })
     }
   })
+}
+
+export async function searchItem({ name }: { name: string }) {
+  return await db
+    .select()
+    .from(items)
+    .where(ilike(items.name, `%${name}%`))
 }

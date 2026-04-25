@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { MoneyIcon, PackageIcon } from "@phosphor-icons/react/ssr"
+import { MoneyIcon, PackageIcon, BasketIcon } from "@phosphor-icons/react/ssr"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { ReactNode } from "react"
@@ -36,6 +36,10 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
+            <SidebarLink href="/transactions">
+              <BasketIcon />
+              Transactions
+            </SidebarLink>
             <SidebarLink href="/items">
               <PackageIcon />
               Items
