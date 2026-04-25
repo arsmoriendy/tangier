@@ -45,8 +45,9 @@ export default function CreateTransactionForm() {
       onMount: createTransactionFormSchema,
       onChange: createTransactionFormSchema,
     },
-    onSubmit: ({ value }) => {
-      createTransaction(value)
+    onSubmit: async ({ value }) => {
+      await createTransaction(value)
+      form.reset()
     },
   })
 
