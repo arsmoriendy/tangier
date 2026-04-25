@@ -20,6 +20,7 @@ import {
 import { formatCurrency } from "@/lib/i18n/currency"
 import { FieldLabel } from "@/components/ui/field"
 import { useState } from "react"
+import { createTransaction } from "@/lib/crud/transaction"
 
 export default function CreateTransactionForm() {
   const createTransactionFormSchema = z.object({
@@ -46,7 +47,7 @@ export default function CreateTransactionForm() {
       onChange: createTransactionFormSchema,
     },
     onSubmit: ({ value }) => {
-      console.log("submited", value)
+      createTransaction(value)
     },
   })
 
