@@ -1,4 +1,4 @@
-import { NumberInputProps, NumberInput } from "@/components/number-input"
+import { NumberInputProps, NumberInput } from "@/components/ui/number-input"
 
 type IdrInputProps = Omit<
   NumberInputProps,
