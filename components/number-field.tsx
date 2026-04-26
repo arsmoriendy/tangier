@@ -10,6 +10,7 @@ import { NumberInput, NumberInputProps } from "@/components/ui/number-input"
 export default function NumberField({
   label,
   description,
+  className,
   ...inputProps
 }: {
   label?: string
@@ -23,7 +24,7 @@ export default function NumberField({
   const isInvalid = !field.state.meta.isValid
 
   return (
-    <Field>
+    <Field className={className}>
       {label && (
         <FieldLabel aria-invalid={isInvalid} htmlFor={id}>
           {label}

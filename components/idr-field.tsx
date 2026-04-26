@@ -10,6 +10,7 @@ import { IdrInput, IdrInputProps } from "@/components/ui/idr-input"
 export default function IdrField({
   label,
   description,
+  className,
   ...inputProps
 }: {
   label?: string
@@ -23,7 +24,7 @@ export default function IdrField({
   const isInvalid = !field.state.meta.isValid
 
   return (
-    <Field>
+    <Field className={className}>
       {label && (
         <FieldLabel aria-invalid={isInvalid} htmlFor={id}>
           {label}

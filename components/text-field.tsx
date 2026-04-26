@@ -10,13 +10,14 @@ import { Input } from "@/components/ui/input"
 export default function TextField(props: {
   label?: string
   description?: string
+  className?: string
 }) {
   const field = useFieldContext<string>()
   const id = `${field.form.formId}-${field.name}`
   const isInvalid = !field.state.meta.isValid
 
   return (
-    <Field>
+    <Field className={props.className}>
       {props.label && (
         <FieldLabel aria-invalid={isInvalid} htmlFor={id}>
           {props.label}
