@@ -1,3 +1,5 @@
+import { inputClass } from "@/components/ui/input"
+import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { NumericFormat, NumericFormatProps } from "react-number-format"
 
@@ -16,6 +18,7 @@ export function NumberInput({
   step = 1,
   min = -Infinity,
   max = Infinity,
+  className,
   onWheel,
   onKeyDown,
   onValueChange,
@@ -27,6 +30,7 @@ export function NumberInput({
   return (
     <NumericFormat
       value={value}
+      className={cn(inputClass, className)}
       onValueChange={(v, s) => {
         v.floatValue = clamp(v.floatValue ?? defaultValue)
         setValue(v.floatValue)
