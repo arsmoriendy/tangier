@@ -254,9 +254,7 @@ function AddItemForm(props: {
                 setSelectedPriceGroupId(v)
                 form.setFieldValue(
                   "unitPrice",
-                  priceGroups.find(
-                    (p) => p.priceGroup.id === selectedPriceGroupId
-                  )!.price
+                  priceGroups.find((p) => p.priceGroup.id === v)!.price
                 )
               }}
             >
