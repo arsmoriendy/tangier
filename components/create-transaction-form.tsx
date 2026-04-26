@@ -15,13 +15,7 @@ import {
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
 import { formatCurrency } from "@/lib/i18n/currency"
-import {
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field"
+import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field"
 import { useState } from "react"
 import { createTransaction } from "@/lib/crud/transaction"
 
@@ -284,7 +278,14 @@ function AddItemForm(props: {
                   ),
               }}
             >
-              {(f) => <f.NumberField className="w-24" min={1} label="Qty" />}
+              {(f) => (
+                <f.NumberField
+                  className="w-24"
+                  min={1}
+                  label="Qty"
+                  tabIndex={1}
+                />
+              )}
             </form.AppField>
           </div>
           <form.AppField name="quantifiedPrice">
@@ -327,7 +328,7 @@ export function SearchItemForm(props: {
         <FieldLegend>Search item</FieldLegend>
         <Form handleSubmit={form.handleSubmit} className="flex gap-2">
           <form.AppField name="name">
-            {(field) => <field.TextField />}
+            {(field) => <field.TextField tabIndex={2} />}
           </form.AppField>
           <form.AppForm>
             <form.SubmitButton size="icon">
