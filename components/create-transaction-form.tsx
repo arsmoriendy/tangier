@@ -204,30 +204,33 @@ function AddItemForm(props: {
     validators: { onMount: addItemFormSchema, onChange: addItemFormSchema },
     onSubmit: ({ value }) => {
       props.addItem(value)
-      setPrices([])
+      setPriceGroups([])
       form.reset()
     },
   })
 
-  const [prices, setPrices] = useState<{ price: number; priceGroup: string }[]>(
+  const [priceGroups, setPriceGroups] = useState<ItemWithRelations["prices"]>(
     []
   )
+  const [selectedPriceGroupId, setSelectedPriceGroupId] = useState<string>()
 
-  async function handleSelectItem({ name, prices }: ItemWithRelations) {
+  async function handleSelectItem(
+    { name, prices }: ItemWithRelations,
+    selectedPriceGroupId?: string
+  ) {
     form.setFieldValue("name", name)
-    prices.length > 0 && form.setFieldValue("unitPrice", prices[0].price)
-
-    setPrices(
-      prices.map((p) => ({
-        price: p.price,
-        priceGroup: p.priceGroup.name,
-      }))
+    form.setFieldValue(
+      "unitPrice",
+      prices.find((p) => p.priceGroup.id === selectedPriceGroupId)?.price ?? 0
     )
+
+    setSelectedPriceGroupId(selectedPriceGroupId)
+    setPriceGroups(prices)
   }
 
   return (
     <>
-      <SearchItemForm selectItem={handleSelectItem} />
+      <SearchItemForm selectItemPrice={handleSelectItem} />
 
       <FieldSet>
         <FieldLegend>Add item</FieldLegend>
@@ -239,25 +242,31 @@ function AddItemForm(props: {
             </form.AppField>
           </div>
 
-          {prices.length === 0 ? (
+          {priceGroups.length === 0 ? (
             <span className="grid h-full min-h-14 place-items-center border border-dashed text-sm text-muted-foreground">
               No available price groups
             </span>
           ) : (
             <RadioGroupChoiceCard
               className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-              defaultValue={prices[0]?.price.toString()}
-              onValueChange={(v) =>
-                form.setFieldValue("unitPrice", parseFloat(v))
-              }
+              value={selectedPriceGroupId}
+              onValueChange={(v) => {
+                setSelectedPriceGroupId(v)
+                form.setFieldValue(
+                  "unitPrice",
+                  priceGroups.find(
+                    (p) => p.priceGroup.id === selectedPriceGroupId
+                  )!.price
+                )
+              }}
             >
-              {prices.map((p, i) => (
+              {priceGroups.map((p, i) => (
                 <RadioGroupChoiceItem
                   className="bg-background"
                   key={i}
-                  value={p.price.toString()}
+                  value={p.priceGroup.id}
                   title={formatCurrency(p.price)}
-                  description={p.priceGroup}
+                  description={p.priceGroup.name}
                 ></RadioGroupChoiceItem>
               ))}
             </RadioGroupChoiceCard>
@@ -310,7 +319,7 @@ function AddItemForm(props: {
 }
 
 export function SearchItemForm(props: {
-  selectItem: (item: ItemWithRelations) => any
+  selectItemPrice: (item: ItemWithRelations, priceGroup?: string) => any
 }) {
   const searchItemFormSchema = z.object({ name: z.string().min(0) })
   const defaultValues: z.infer<typeof searchItemFormSchema> = { name: "" }
@@ -383,29 +392,19 @@ export function SearchItemForm(props: {
                   const price = item.prices.find(
                     (p) => p.priceGroup.id === pg.id
                   )?.price
+
                   return (
                     <TableCell
-                      className={
-                        price
-                          ? "cursor-pointer hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus-visible:text-primary-foreground"
-                          : "select-none"
-                      }
+                      className="cursor-pointer hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus-visible:text-primary-foreground"
                       key={i}
                       onClick={() => {
-                        if (price === undefined) return
-                        form.setFieldValue("name", "")
+                        form.reset()
                         setFoundItems([])
                         setDialogOpened(false)
-                        props.selectItem(item)
+                        props.selectItemPrice(item, price ? pg.id : undefined)
                       }}
                     >
-                      {price ? (
-                        formatCurrency(price)
-                      ) : (
-                        <span className="text-xs text-muted-foreground">
-                          Not set
-                        </span>
-                      )}
+                      {formatCurrency(price ?? 0)}
                     </TableCell>
                   )
                 })}
