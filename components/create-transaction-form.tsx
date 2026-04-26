@@ -1,11 +1,12 @@
 import { Form, useAppForm } from "@/components/form"
 import * as z from "zod"
-import { MagnifyingGlassIcon, PlusIcon, TrashIcon } from "@phosphor-icons/react"
-import { ItemWithRelations, searchItem } from "@/lib/crud/item"
+import { MagnifyingGlassIcon, TrashIcon } from "@phosphor-icons/react"
+import { ItemWithRelations, listItem } from "@/lib/crud/item"
 import {
   Table,
   TableBody,
   TableCell,
+  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
@@ -16,8 +17,16 @@ import {
 } from "@/components/ui/choice-card"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { createTransaction } from "@/lib/crud/transaction"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { priceGroups } from "@/lib/db/schema"
+import { listPriceGroups } from "@/lib/crud/price-group"
 
 export default function CreateTransactionForm() {
   const createTransactionFormSchema = z.object({
@@ -91,10 +100,10 @@ export default function CreateTransactionForm() {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Unit price</TableCell>
-                      <TableCell>Qty</TableCell>
-                      <TableCell>Quantified price</TableCell>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Unit price</TableHead>
+                      <TableHead>Qty</TableHead>
+                      <TableHead>Quantified price</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -304,9 +313,7 @@ export function SearchItemForm(props: {
   selectItem: (item: ItemWithRelations) => any
 }) {
   const searchItemFormSchema = z.object({ name: z.string().min(0) })
-
   const defaultValues: z.infer<typeof searchItemFormSchema> = { name: "" }
-
   const form = useAppForm({
     defaultValues,
     validators: {
@@ -314,16 +321,25 @@ export function SearchItemForm(props: {
       onChange: searchItemFormSchema,
     },
     onSubmit: ({ value: { name } }) => {
-      searchItem({ name }).then((items) => {
+      listItem({ name }).then((items) => {
         setFoundItems(items)
+        setDialogOpened(true)
       })
     },
   })
 
   const [foundItems, setFoundItems] = useState<ItemWithRelations[]>([])
+  const [dialogIsOpen, setDialogOpened] = useState(false)
+  const [priceGroupsState, setPriceGroups] = useState<
+    (typeof priceGroups.$inferSelect)[]
+  >([])
+
+  useEffect(() => {
+    listPriceGroups().then(setPriceGroups)
+  }, [])
 
   return (
-    <div>
+    <Dialog open={dialogIsOpen} onOpenChange={setDialogOpened}>
       <FieldSet>
         <FieldLegend>Search item</FieldLegend>
         <Form handleSubmit={form.handleSubmit} className="flex gap-2">
@@ -338,27 +354,66 @@ export function SearchItemForm(props: {
         </Form>
       </FieldSet>
 
-      <Table>
-        <TableBody>
-          {foundItems.map((item, i) => (
-            <TableRow key={i}>
-              <TableCell>{item.name}</TableCell>
-              <TableCell>
-                <Button
-                  size="icon"
-                  onClick={() => {
-                    form.setFieldValue("name", "")
-                    setFoundItems([])
-                    props.selectItem(item)
-                  }}
-                >
-                  <PlusIcon />
-                </Button>
-              </TableCell>
+      <DialogContent>
+        <DialogTitle>Select item</DialogTitle>
+        <DialogDescription>
+          Pick a price cell to add the corresponding item with the selected
+          price
+        </DialogDescription>
+
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead rowSpan={2}>Name</TableHead>
+              <TableHead colSpan={priceGroupsState.length}>Prices</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+
+            <TableRow>
+              {priceGroupsState.map((pg, i) => (
+                <TableHead key={i}>{pg.name}</TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+
+          <TableBody>
+            {foundItems.map((item, i) => (
+              <TableRow key={i}>
+                <TableCell>{item.name}</TableCell>
+                {priceGroupsState.map((pg, i) => {
+                  const price = item.prices.find(
+                    (p) => p.priceGroup.id === pg.id
+                  )?.price
+                  return (
+                    <TableCell
+                      className={
+                        price
+                          ? "cursor-pointer hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus-visible:text-primary-foreground"
+                          : "select-none"
+                      }
+                      key={i}
+                      onClick={() => {
+                        if (price === undefined) return
+                        form.setFieldValue("name", "")
+                        setFoundItems([])
+                        setDialogOpened(false)
+                        props.selectItem(item)
+                      }}
+                    >
+                      {price ? (
+                        formatCurrency(price)
+                      ) : (
+                        <span className="text-xs text-muted-foreground">
+                          Not set
+                        </span>
+                      )}
+                    </TableCell>
+                  )
+                })}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </DialogContent>
+    </Dialog>
   )
 }
