@@ -1,7 +1,7 @@
 import { NumberInputProps, NumberInput } from "@/components/ui/number-input"
 import { cn } from "@/lib/utils"
 
-type IdrInputProps = Omit<
+export type IdrInputProps = Omit<
   NumberInputProps,
   | "decimalScale"
   | "fixedDecimalScale"

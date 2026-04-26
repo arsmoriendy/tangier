@@ -71,15 +71,7 @@ export default function CreateTransactionForm() {
       <Form handleSubmit={form.handleSubmit}>
         <div className="flex items-end gap-1">
           <form.AppField name="totalPrice">
-            {(field) => (
-              <field.NumberField
-                label="Total price"
-                formatOptions={{
-                  style: "currency",
-                  currency: "IDR",
-                }}
-              />
-            )}
+            {(field) => <field.IdrField min={0} label="Total price" />}
           </form.AppField>
           <form.AppForm>
             <form.SubmitButton>Save and print</form.SubmitButton>
@@ -122,14 +114,7 @@ export default function CreateTransactionForm() {
                           },
                         }}
                       >
-                        {(field) => (
-                          <field.NumberField
-                            formatOptions={{
-                              style: "currency",
-                              currency: "IDR",
-                            }}
-                          />
-                        )}
+                        {(field) => <field.IdrField min={0} />}
                       </form.AppField>
                     </TableCell>
                     <TableCell>
@@ -144,7 +129,9 @@ export default function CreateTransactionForm() {
                           },
                         }}
                       >
-                        {(field) => <field.NumberField className="w-10" />}
+                        {(field) => (
+                          <field.NumberField min={1} className="w-10" />
+                        )}
                       </form.AppField>
                     </TableCell>
                     <TableCell>
@@ -154,14 +141,7 @@ export default function CreateTransactionForm() {
                           onChange: recalculateTotalPrice,
                         }}
                       >
-                        {(field) => (
-                          <field.NumberField
-                            formatOptions={{
-                              style: "currency",
-                              currency: "IDR",
-                            }}
-                          />
-                        )}
+                        {(field) => <field.IdrField min={0} />}
                       </form.AppField>
                     </TableCell>
                     <TableCell>
@@ -244,10 +224,10 @@ function AddItemForm(props: {
               ),
           }}
         >
-          {(f) => <f.NumberField className="w-12" minValue={1} label="Qty" />}
+          {(f) => <f.NumberField className="w-12" min={1} label="Qty" />}
         </form.AppField>
         <div className="grow">
-          <FieldLabel className="mb-1">Search</FieldLabel>
+          <FieldLabel className="mb-2">Search</FieldLabel>
           <SearchItemForm selectItem={handleSelectItem} />
         </div>
       </div>
@@ -283,21 +263,11 @@ function AddItemForm(props: {
                 ),
             }}
           >
-            {(field) => (
-              <field.NumberField
-                label="Unit price"
-                formatOptions={{ style: "currency", currency: "IDR" }}
-              />
-            )}
+            {(field) => <field.IdrField min={0} label="Unit price" />}
           </form.AppField>
         </div>
         <form.AppField name="quantifiedPrice">
-          {(field) => (
-            <field.NumberField
-              label="Quantified price"
-              formatOptions={{ style: "currency", currency: "IDR" }}
-            />
-          )}
+          {(field) => <field.IdrField label="Quantified price" min={0} />}
         </form.AppField>
         <form.AppForm>
           <form.SubmitButton>Add item</form.SubmitButton>

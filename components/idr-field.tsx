@@ -5,9 +5,9 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field"
-import { NumberInput, NumberInputProps } from "@/components/ui/number-input"
+import { IdrInput, IdrInputProps } from "@/components/ui/idr-input"
 
-export default function NumberField({
+export default function IdrField({
   label,
   description,
   ...inputProps
@@ -15,7 +15,7 @@ export default function NumberField({
   label?: string
   description?: string
 } & Omit<
-  NumberInputProps,
+  IdrInputProps,
   "id" | "value" | "onValueChange" | "onBlur" | "aria-invalid"
 >) {
   const field = useFieldContext<number>()
@@ -29,7 +29,7 @@ export default function NumberField({
           {label}
         </FieldLabel>
       )}
-      <NumberInput
+      <IdrInput
         id={id}
         value={field.state.value}
         onValueChange={({ floatValue }) => field.handleChange(floatValue!)}

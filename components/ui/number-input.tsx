@@ -1,17 +1,18 @@
 import { inputClass } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { NumericFormat, NumericFormatProps } from "react-number-format"
 
 export type NumberInputProps = Omit<
   NumericFormatProps,
-  "defaultValue" | "step" | "min" | "max"
+  "defaultValue" | "step" | "min" | "max" | "value"
 > & {
   defaultValue?: number
   step?: number
   min?: number
   max?: number
   unstyled?: true
+  value: number
 }
 
 export function NumberInput({
@@ -24,11 +25,16 @@ export function NumberInput({
   onKeyDown,
   onValueChange,
   unstyled,
+  value: valueProp,
   ...props
 }: NumberInputProps) {
   const [value, setValue] = useState(defaultValue)
   const clamp = (v: number): number => Math.min(max, Math.max(min, v))
   const inputRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    setValue(valueProp!)
+  }, [valueProp])
 
   return (
     <NumericFormat

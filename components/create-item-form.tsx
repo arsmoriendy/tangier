@@ -47,7 +47,7 @@ export default function CreateItemForm() {
         {(f) => <f.TextField label="Name" />}
       </form.AppField>
       <form.AppField name="stock">
-        {(f) => <f.NumberField label="Stock" minValue={0} />}
+        {(f) => <f.NumberField label="Stock" min={0} />}
       </form.AppField>
       {priceGroupNames.map((name, i) => (
         <div key={i}>
@@ -55,13 +55,7 @@ export default function CreateItemForm() {
             {(f) => <input type="hidden" value={f.state.value} />}
           </form.Field>
           <form.AppField name={`prices[${i}].price`}>
-            {(f) => (
-              <f.NumberField
-                label={name}
-                minValue={0}
-                formatOptions={{ style: "currency", currency: "IDR" }}
-              />
-            )}
+            {(f) => <f.IdrField label={name} min={0} />}
           </form.AppField>
         </div>
       ))}
