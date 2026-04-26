@@ -8,14 +8,12 @@ import * as z from "zod"
 
 const createItemFormSchema = z.object({
   name: z.string().min(1),
-  stock: z.number().min(0),
   prices: z.array(z.object({ priceGroup: z.uuid(), price: z.number().min(0) })),
 })
 
 export default function CreateItemForm() {
   const defaultValues: z.infer<typeof createItemFormSchema> = {
     name: "",
-    stock: 0,
     prices: [],
   }
 
@@ -45,9 +43,6 @@ export default function CreateItemForm() {
     <Form handleSubmit={form.handleSubmit}>
       <form.AppField name="name">
         {(f) => <f.TextField label="Name" />}
-      </form.AppField>
-      <form.AppField name="stock">
-        {(f) => <f.NumberField label="Stock" min={0} />}
       </form.AppField>
       {priceGroupNames.map((name, i) => (
         <div key={i}>

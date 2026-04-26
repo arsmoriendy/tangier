@@ -14,7 +14,6 @@ import { sql } from "drizzle-orm"
 export const items = pgTable("items", {
   id: uuid().primaryKey().notNull().defaultRandom(),
   name: varchar().notNull(),
-  stock: integer().default(0).notNull(),
 })
 
 export const priceGroups = pgTable(
