@@ -1,6 +1,6 @@
 import { inputClass } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { NumericFormat, NumericFormatProps } from "react-number-format"
 
 export type NumberInputProps = Omit<
@@ -26,9 +26,11 @@ export function NumberInput({
 }: NumberInputProps) {
   const [value, setValue] = useState(defaultValue)
   const clamp = (v: number): number => Math.min(max, Math.max(min, v))
+  const inputRef = useRef<HTMLInputElement>(null)
 
   return (
     <NumericFormat
+      getInputRef={inputRef}
       value={value}
       className={cn(inputClass, className)}
       onValueChange={(v, s) => {
@@ -48,7 +50,9 @@ export function NumberInput({
         onKeyDown?.(e)
       }}
       onWheel={(e) => {
-        setValue((old) => clamp(e.deltaY < 0 ? old + step : old - step))
+        if (document.activeElement === inputRef.current) {
+          setValue((old) => clamp(e.deltaY < 0 ? old + step : old - step))
+        }
         onWheel?.(e)
       }}
       {...props}
