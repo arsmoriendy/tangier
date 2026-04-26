@@ -223,40 +223,34 @@ function AddItemForm(props: {
   }
 
   return (
-    <FieldSet>
-      <FieldLegend>Add item</FieldLegend>
-      <div className="flex gap-2">
-        <form.AppField
-          name="quantity"
-          listeners={{
-            onChange: (v) =>
-              form.setFieldValue(
-                "quantifiedPrice",
-                v.value * form.state.values.unitPrice
-              ),
-          }}
-        >
-          {(f) => <f.NumberField className="w-12" min={1} label="Qty" />}
-        </form.AppField>
-        <div className="grow">
-          <FieldLabel className="mb-2">Search</FieldLabel>
-          <SearchItemForm selectItem={handleSelectItem} />
-        </div>
-      </div>
-      <Form handleSubmit={form.handleSubmit}>
-        <form.AppField name="name">
-          {(field) => <field.TextField label="Name" />}
-        </form.AppField>
-        <div className="flex gap-2">
-          {prices.length > 0 && (
+    <>
+      <SearchItemForm selectItem={handleSelectItem} />
+
+      <FieldSet>
+        <FieldLegend>Add item</FieldLegend>
+
+        <Form handleSubmit={form.handleSubmit}>
+          <div className="flex gap-2">
+            <form.AppField name="name">
+              {(field) => <field.TextField label="Name" />}
+            </form.AppField>
+          </div>
+
+          {prices.length === 0 ? (
+            <span className="grid h-full min-h-14 place-items-center border border-dashed text-sm text-muted-foreground">
+              No available price groups
+            </span>
+          ) : (
             <RadioGroupChoiceCard
-              defaultValue={prices[0].price.toString()}
+              className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+              defaultValue={prices[0]?.price.toString()}
               onValueChange={(v) =>
                 form.setFieldValue("unitPrice", parseFloat(v))
               }
             >
               {prices.map((p, i) => (
                 <RadioGroupChoiceItem
+                  className="bg-background"
                   key={i}
                   value={p.price.toString()}
                   title={formatCurrency(p.price)}
@@ -265,27 +259,43 @@ function AddItemForm(props: {
               ))}
             </RadioGroupChoiceCard>
           )}
-          <form.AppField
-            name="unitPrice"
-            listeners={{
-              onChange: (v) =>
-                form.setFieldValue(
-                  "quantifiedPrice",
-                  v.value * form.state.values.quantity
-                ),
-            }}
-          >
-            {(field) => <field.IdrField min={0} label="Unit price" />}
+
+          <div className="flex gap-2">
+            <form.AppField
+              name="unitPrice"
+              listeners={{
+                onChange: (v) =>
+                  form.setFieldValue(
+                    "quantifiedPrice",
+                    v.value * form.state.values.quantity
+                  ),
+              }}
+            >
+              {(field) => <field.IdrField min={0} label="Unit price" />}
+            </form.AppField>
+            <span className="mt-6 grid h-8 place-items-center">x</span>
+            <form.AppField
+              name="quantity"
+              listeners={{
+                onChange: (v) =>
+                  form.setFieldValue(
+                    "quantifiedPrice",
+                    v.value * form.state.values.unitPrice
+                  ),
+              }}
+            >
+              {(f) => <f.NumberField className="w-24" min={1} label="Qty" />}
+            </form.AppField>
+          </div>
+          <form.AppField name="quantifiedPrice">
+            {(field) => <field.IdrField label="Quantified price" min={0} />}
           </form.AppField>
-        </div>
-        <form.AppField name="quantifiedPrice">
-          {(field) => <field.IdrField label="Quantified price" min={0} />}
-        </form.AppField>
-        <form.AppForm>
-          <form.SubmitButton>Add item</form.SubmitButton>
-        </form.AppForm>
-      </Form>
-    </FieldSet>
+          <form.AppForm>
+            <form.SubmitButton>Add item</form.SubmitButton>
+          </form.AppForm>
+        </Form>
+      </FieldSet>
+    </>
   )
 }
 
@@ -313,16 +323,19 @@ export function SearchItemForm(props: {
 
   return (
     <div>
-      <Form handleSubmit={form.handleSubmit} className="flex gap-2">
-        <form.AppField name="name">
-          {(field) => <field.TextField />}
-        </form.AppField>
-        <form.AppForm>
-          <form.SubmitButton size="icon">
-            <MagnifyingGlassIcon />
-          </form.SubmitButton>
-        </form.AppForm>
-      </Form>
+      <FieldSet>
+        <FieldLegend>Search item</FieldLegend>
+        <Form handleSubmit={form.handleSubmit} className="flex gap-2">
+          <form.AppField name="name">
+            {(field) => <field.TextField />}
+          </form.AppField>
+          <form.AppForm>
+            <form.SubmitButton size="icon">
+              <MagnifyingGlassIcon />
+            </form.SubmitButton>
+          </form.AppForm>
+        </Form>
+      </FieldSet>
 
       <Table>
         <TableBody>
