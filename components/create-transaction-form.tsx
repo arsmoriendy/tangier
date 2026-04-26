@@ -15,7 +15,13 @@ import {
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
 import { formatCurrency } from "@/lib/i18n/currency"
-import { FieldLabel } from "@/components/ui/field"
+import {
+  FieldDescription,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field"
 import { useState } from "react"
 import { createTransaction } from "@/lib/crud/transaction"
 
@@ -68,102 +74,107 @@ export default function CreateTransactionForm() {
         }}
       />
 
-      <Form handleSubmit={form.handleSubmit}>
-        <div className="flex items-end gap-1">
-          <form.AppField name="totalPrice">
-            {(field) => <field.IdrField min={0} label="Total price" />}
-          </form.AppField>
-          <form.AppForm>
-            <form.SubmitButton>Save and print</form.SubmitButton>
-          </form.AppForm>
-        </div>
-        <form.AppField
-          name="items"
-          mode="array"
-          listeners={{
-            onChange: recalculateTotalPrice,
-          }}
-        >
-          {({ state }) => (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Unit price</TableCell>
-                  <TableCell>Qty</TableCell>
-                  <TableCell>Quantified price</TableCell>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {state.value.map((_, i) => (
-                  <TableRow key={i}>
-                    <TableCell>
-                      <form.AppField name={`items[${i}].name`}>
-                        {(field) => <field.TextField />}
-                      </form.AppField>
-                    </TableCell>
-                    <TableCell>
-                      <form.AppField
-                        name={`items[${i}].unitPrice`}
-                        listeners={{
-                          onChange: ({ value }) => {
-                            form.setFieldValue(
-                              `items[${i}].quantifiedPrice`,
-                              form.state.values.items[i].quantity * value
-                            )
-                          },
-                        }}
-                      >
-                        {(field) => <field.IdrField min={0} />}
-                      </form.AppField>
-                    </TableCell>
-                    <TableCell>
-                      <form.AppField
-                        name={`items[${i}].quantity`}
-                        listeners={{
-                          onChange: ({ value }) => {
-                            form.setFieldValue(
-                              `items[${i}].quantifiedPrice`,
-                              form.state.values.items[i].unitPrice * value
-                            )
-                          },
-                        }}
-                      >
-                        {(field) => (
-                          <field.NumberField min={1} className="w-10" />
-                        )}
-                      </form.AppField>
-                    </TableCell>
-                    <TableCell>
-                      <form.AppField
-                        name={`items[${i}].quantifiedPrice`}
-                        listeners={{
-                          onChange: recalculateTotalPrice,
-                        }}
-                      >
-                        {(field) => <field.IdrField min={0} />}
-                      </form.AppField>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        variant="destructive"
-                        type="button"
-                        size="icon"
-                        onClick={() => {
-                          form.removeFieldValue("items", i)
-                          recalculateTotalPrice()
-                        }}
-                      >
-                        <TrashIcon />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </form.AppField>
-      </Form>
+      <FieldSet>
+        <FieldLegend>Transaction details</FieldLegend>
+        <FieldGroup>
+          <Form handleSubmit={form.handleSubmit}>
+            <div className="flex items-end gap-1">
+              <form.AppField name="totalPrice">
+                {(field) => <field.IdrField min={0} label="Total price" />}
+              </form.AppField>
+              <form.AppForm>
+                <form.SubmitButton>Save and print</form.SubmitButton>
+              </form.AppForm>
+            </div>
+            <form.AppField
+              name="items"
+              mode="array"
+              listeners={{
+                onChange: recalculateTotalPrice,
+              }}
+            >
+              {({ state }) => (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableCell>Name</TableCell>
+                      <TableCell>Unit price</TableCell>
+                      <TableCell>Qty</TableCell>
+                      <TableCell>Quantified price</TableCell>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {state.value.map((_, i) => (
+                      <TableRow key={i}>
+                        <TableCell>
+                          <form.AppField name={`items[${i}].name`}>
+                            {(field) => <field.TextField />}
+                          </form.AppField>
+                        </TableCell>
+                        <TableCell>
+                          <form.AppField
+                            name={`items[${i}].unitPrice`}
+                            listeners={{
+                              onChange: ({ value }) => {
+                                form.setFieldValue(
+                                  `items[${i}].quantifiedPrice`,
+                                  form.state.values.items[i].quantity * value
+                                )
+                              },
+                            }}
+                          >
+                            {(field) => <field.IdrField min={0} />}
+                          </form.AppField>
+                        </TableCell>
+                        <TableCell>
+                          <form.AppField
+                            name={`items[${i}].quantity`}
+                            listeners={{
+                              onChange: ({ value }) => {
+                                form.setFieldValue(
+                                  `items[${i}].quantifiedPrice`,
+                                  form.state.values.items[i].unitPrice * value
+                                )
+                              },
+                            }}
+                          >
+                            {(field) => (
+                              <field.NumberField min={1} className="w-10" />
+                            )}
+                          </form.AppField>
+                        </TableCell>
+                        <TableCell>
+                          <form.AppField
+                            name={`items[${i}].quantifiedPrice`}
+                            listeners={{
+                              onChange: recalculateTotalPrice,
+                            }}
+                          >
+                            {(field) => <field.IdrField min={0} />}
+                          </form.AppField>
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            variant="destructive"
+                            type="button"
+                            size="icon"
+                            onClick={() => {
+                              form.removeFieldValue("items", i)
+                              recalculateTotalPrice()
+                            }}
+                          >
+                            <TrashIcon />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </form.AppField>
+          </Form>
+        </FieldGroup>
+      </FieldSet>
     </div>
   )
 }
@@ -212,7 +223,8 @@ function AddItemForm(props: {
   }
 
   return (
-    <div>
+    <FieldSet>
+      <FieldLegend>Add item</FieldLegend>
       <div className="flex gap-2">
         <form.AppField
           name="quantity"
@@ -273,7 +285,7 @@ function AddItemForm(props: {
           <form.SubmitButton>Add item</form.SubmitButton>
         </form.AppForm>
       </Form>
-    </div>
+    </FieldSet>
   )
 }
 
