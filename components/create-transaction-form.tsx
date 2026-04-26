@@ -61,7 +61,7 @@ export default function CreateTransactionForm() {
   }
 
   return (
-    <div>
+    <div className="space-y-2">
       <AddItemForm
         addItem={(item) => {
           form.setFieldValue("items", [...form.state.values.items, item])
