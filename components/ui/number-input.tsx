@@ -11,6 +11,7 @@ export type NumberInputProps = Omit<
   step?: number
   min?: number
   max?: number
+  unstyled?: true
 }
 
 export function NumberInput({
@@ -22,6 +23,7 @@ export function NumberInput({
   onWheel,
   onKeyDown,
   onValueChange,
+  unstyled,
   ...props
 }: NumberInputProps) {
   const [value, setValue] = useState(defaultValue)
@@ -32,7 +34,7 @@ export function NumberInput({
     <NumericFormat
       getInputRef={inputRef}
       value={value}
-      className={cn(inputClass, className)}
+      className={!unstyled ? cn(inputClass, className) : className}
       onValueChange={(v, s) => {
         v.floatValue = clamp(v.floatValue ?? defaultValue)
         setValue(v.floatValue)
