@@ -1,3 +1,6 @@
+// ensure env vars
+import "./lib/env.ts"
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   optimizePackageImports: ["@phosphor-icons/react"],
