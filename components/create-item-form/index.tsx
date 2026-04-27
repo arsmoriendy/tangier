@@ -53,10 +53,11 @@ export default function CreateItemForm() {
   const [items, setItems] = useState<ItemWithRelations[]>([])
   const [itemCount, setItemCount] = useState(0)
   const [page, setPage] = useState(0)
-  const [offset, setOffset] = useState(0)
 
   async function refreshItems() {
-    setItems(await listItems({ limit: itemsPerPage, offset }))
+    setItems(
+      await listItems({ limit: itemsPerPage, offset: page * itemsPerPage })
+    )
   }
 
   useEffect(() => {
@@ -70,6 +71,10 @@ export default function CreateItemForm() {
 
     refreshItems()
   }, [])
+
+  useEffect(() => {
+    refreshItems()
+  }, [page])
 
   return (
     <>
@@ -110,12 +115,20 @@ export default function CreateItemForm() {
           <PaginationContent>
             <PaginationItem>
               <PaginationPrevious
-                className={offset === 0 ? disabledClass : ""}
+                onClick={() => {
+                  setPage(page - 1)
+                }}
+                className={page === 0 ? disabledClass : ""}
               />
             </PaginationItem>
             <PaginationItem>
               <PaginationNext
-              // className={offset  ? disabledClass : ""}
+                onClick={() => {
+                  setPage(page + 1)
+                }}
+                className={
+                  page * itemsPerPage >= itemCount ? disabledClass : ""
+                }
               />
             </PaginationItem>
           </PaginationContent>
