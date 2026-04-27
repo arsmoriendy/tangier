@@ -3,15 +3,16 @@
 import { Printer } from "@node-escpos/core"
 import USB from "@node-escpos/usb-adapter"
 import { TransactionWithRelations } from "@/lib/crud/transaction"
+import { env } from "@/lib/env"
 
 const numberFormatter = new Intl.NumberFormat("id-ID", {})
 const formatNumber = numberFormatter.format
 
 export async function printTransaction(trx: TransactionWithRelations) {
-  // TODO: variables
-  const vid = 0x04b8
-  const pid = 0x202
-  const width = 33
+  // variables
+  const vid = env.PRINTER_VID
+  const pid = env.PRINTER_PID
+  const width = env.PRINTER_WIDTH
 
   const device = new USB(vid, pid)
   const printer = new Printer(device, { encoding: "ascii", width })
