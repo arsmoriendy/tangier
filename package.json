@@ -35,7 +35,6 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@node-escpos/console": "^0.0.1",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.20.0",

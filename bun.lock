@@ -28,7 +28,6 @@
       },
       "devDependencies": {
         "@eslint/eslintrc": "^3",
-        "@node-escpos/console": "^0.0.1",
         "@tailwindcss/postcss": "^4.2.1",
         "@types/node": "^25.5.0",
         "@types/pg": "^8.20.0",
@@ -314,8 +313,6 @@
     "@noble/hashes": ["@noble/hashes@1.8.0", "", {}, "sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A=="],
 
     "@node-escpos/adapter": ["@node-escpos/adapter@0.0.1", "", { "dependencies": { "eventemitter3": "^4.0.7" } }, "sha512-I1RT6GjwxkzqCZBJ27XVDvSwPEzpP4aPJfjWCym5LY2Zj1o+fSXcIOMnR/U5cp4FZTFfERFcQpkDvMAHu+qnHA=="],
-
-    "@node-escpos/console": ["@node-escpos/console@0.0.1", "", { "dependencies": { "@node-escpos/adapter": "0.0.1", "eventemitter3": "^4.0.7" } }, "sha512-DNZXvrVLpIOQoxx7oRiW7WTmqoexoUUXFfQaDq1hnoKwPT6xhLrHhn+UBatjyqfOljyfw3gK9L7y12O/SZCirA=="],
 
     "@node-escpos/core": ["@node-escpos/core@0.6.0", "", { "dependencies": { "@node-escpos/adapter": "0.0.1", "@types/ndarray": "^1.0.11", "@types/qr-image": "^3.2.4", "eventemitter3": "^4.0.7", "get-pixels": "*", "iconv-lite": "*", "mutable-buffer": "^2.0.3", "ndarray": "^1.0.19", "qr-image": "*" } }, "sha512-6JccIYy0o5epBcLE9GcxT19YTL4ydQeP3TPj3grsFjHmGZ+D6whwXtGZ5VosW6PbU01dXtxJG2IotPtZPLWTqA=="],
 
