@@ -361,15 +361,15 @@ export function SearchItemForm(props: {
         </Form>
       </FieldSet>
 
-      <DialogContent>
-        <DialogTitle>Select item</DialogTitle>
+      <DialogContent className="max-h-[92vh] w-[92vw] overflow-auto pt-0 sm:max-w-[92vw]">
+        <DialogTitle className="mt-4">Select item</DialogTitle>
         <DialogDescription>
           Pick a price cell to add the corresponding item with the selected
           price
         </DialogDescription>
 
-        <Table>
-          <TableHeader>
+        <Table className="border-separate border-spacing-0 [&_td]:border-b [&_th]:border-b [&_tr]:bg-popover [&_tr]:hover:bg-muted">
+          <TableHeader className="sticky top-0">
             <TableRow>
               <TableHead rowSpan={2}>Name</TableHead>
               <TableHead colSpan={priceGroupsState.length}>Prices</TableHead>
