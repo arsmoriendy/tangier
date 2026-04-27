@@ -1,4 +1,4 @@
-import CreateItemForm from "@/components/create-item-form"
+import CreateItemForm from "@/components/create-item-form/index"
 
 export default function Page() {
   return <CreateItemForm />

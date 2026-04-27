@@ -1,7 +1,7 @@
 import { Form, useAppForm } from "@/components/form"
 import * as z from "zod"
 import { MagnifyingGlassIcon, TrashIcon } from "@phosphor-icons/react"
-import { ItemWithRelations, listItem } from "@/lib/crud/item"
+import { ItemWithRelations, listItems } from "@/lib/crud/item"
 import {
   Table,
   TableBody,
@@ -328,7 +328,7 @@ export function SearchItemForm(props: {
       onChange: searchItemFormSchema,
     },
     onSubmit: ({ value: { name } }) => {
-      listItem({ name }).then((items) => {
+      listItems({ name }).then((items) => {
         setFoundItems(items)
         setDialogOpened(true)
       })

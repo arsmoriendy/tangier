@@ -22,7 +22,7 @@ export async function createItem({
   })
 }
 
-export async function listItem({ name }: { name: string }) {
+export async function listItems({ name = "" }: { name?: string }) {
   return await db.query.items.findMany({
     where: ilike(items.name, `%${name}%`),
     with: {
@@ -34,4 +34,4 @@ export async function listItem({ name }: { name: string }) {
   })
 }
 
-export type ItemWithRelations = Awaited<ReturnType<typeof listItem>>[number]
+export type ItemWithRelations = Awaited<ReturnType<typeof listItems>>[number]
