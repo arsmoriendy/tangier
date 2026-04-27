@@ -225,7 +225,7 @@ function AddItemForm(props: {
     )
 
     setSelectedPriceGroupId(selectedPriceGroupId)
-    setPriceGroups(prices)
+    setPriceGroups(prices.reverse())
   }
 
   return (
