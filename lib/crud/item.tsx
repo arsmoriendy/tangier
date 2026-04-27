@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { items, prices as pricesTable } from "@/lib/db/schema"
-import { ilike } from "drizzle-orm"
+import { count, ilike } from "drizzle-orm"
 
 export async function createItem({
   name,
@@ -22,9 +22,23 @@ export async function createItem({
   })
 }
 
-export async function listItems({ name = "" }: { name?: string }) {
+export async function getItemCount() {
+  return (await db.select({ count: count() }).from(items))[0].count
+}
+
+export async function listItems({
+  name = "",
+  limit = 10,
+  offset = 0,
+}: {
+  name?: string
+  limit?: number
+  offset?: number
+}) {
   return await db.query.items.findMany({
     where: ilike(items.name, `%${name}%`),
+    limit,
+    offset,
     with: {
       prices: {
         columns: { price: true, createdAt: true },
