@@ -12,6 +12,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@node-escpos/core": "^0.6.0",
+    "@node-escpos/usb-adapter": "^0.3.1",
     "@phosphor-icons/react": "^2.1.10",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@tanstack/react-form": "^1.29.1",
@@ -33,6 +35,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@node-escpos/console": "^0.0.1",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/node": "^25.5.0",
     "@types/pg": "^8.20.0",

@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/dialog"
 import { priceGroups } from "@/lib/db/schema"
 import { listPriceGroups } from "@/lib/crud/price-group"
+import { printTransaction } from "@/lib/print-transaction"
 
 export default function CreateTransactionForm() {
   const createTransactionFormSchema = z.object({
@@ -55,7 +56,13 @@ export default function CreateTransactionForm() {
       onChange: createTransactionFormSchema,
     },
     onSubmit: async ({ value }) => {
-      await createTransaction(value)
+      const { id, createdAt } = await createTransaction(value)
+      await printTransaction({
+        id,
+        createdAt,
+        totalPrice: value.totalPrice,
+        transactionItems: value.items,
+      })
       form.reset()
     },
   })
