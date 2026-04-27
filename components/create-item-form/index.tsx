@@ -1,6 +1,7 @@
 "use client"
 
 import { ItemsTable } from "@/components/create-item-form/items-table"
+import { SearchBar } from "@/components/create-item-form/search-bar"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import {
@@ -53,10 +54,15 @@ export default function CreateItemForm() {
   const [items, setItems] = useState<ItemWithRelations[]>([])
   const [itemCount, setItemCount] = useState(0)
   const [page, setPage] = useState(0)
+  const [searchName, setSearchName] = useState("")
 
   async function refreshItems() {
     setItems(
-      await listItems({ limit: itemsPerPage, offset: page * itemsPerPage })
+      await listItems({
+        name: searchName,
+        limit: itemsPerPage,
+        offset: page * itemsPerPage,
+      })
     )
   }
 
@@ -74,7 +80,7 @@ export default function CreateItemForm() {
 
   useEffect(() => {
     refreshItems()
-  }, [page])
+  }, [page, searchName])
 
   return (
     <>
@@ -106,8 +112,10 @@ export default function CreateItemForm() {
         </Form>
       </FieldSet>
 
-      <FieldSet>
+      <FieldSet className="gap-0">
         <FieldLegend>Item list</FieldLegend>
+
+        <SearchBar handleSearch={setSearchName} />
 
         <ItemsTable items={items} />
 
