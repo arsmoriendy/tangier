@@ -3,7 +3,19 @@
 import { ItemsTable } from "@/components/create-item-form/items-table"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
-import { createItem, ItemWithRelations, listItems } from "@/lib/crud/item"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+import {
+  createItem,
+  getItemCount,
+  ItemWithRelations,
+  listItems,
+} from "@/lib/crud/item"
 import { listPriceGroups } from "@/lib/crud/price-group"
 import { useEffect, useState } from "react"
 import * as z from "zod"
@@ -31,13 +43,20 @@ export default function CreateItemForm() {
     },
   })
 
+  const itemsPerPage = 10
+  const disabledClass =
+    "cursor-not-allowed text-muted-foreground hover:text-muted-foreground"
+
   const [priceGroups, setPriceGroups] = useState<
     Awaited<ReturnType<typeof listPriceGroups>>
   >([])
   const [items, setItems] = useState<ItemWithRelations[]>([])
+  const [itemCount, setItemCount] = useState(0)
+  const [page, setPage] = useState(0)
+  const [offset, setOffset] = useState(0)
 
   async function refreshItems() {
-    setItems(await listItems({}))
+    setItems(await listItems({ limit: itemsPerPage, offset }))
   }
 
   useEffect(() => {
@@ -47,6 +66,7 @@ export default function CreateItemForm() {
         form.pushFieldValue("prices", { price: 0, priceGroup: pg.id })
       })
     })
+    getItemCount().then(setItemCount)
 
     refreshItems()
   }, [])
@@ -85,6 +105,21 @@ export default function CreateItemForm() {
         <FieldLegend>Item list</FieldLegend>
 
         <ItemsTable items={items} />
+
+        <Pagination>
+          <PaginationContent>
+            <PaginationItem>
+              <PaginationPrevious
+                className={offset === 0 ? disabledClass : ""}
+              />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationNext
+              // className={offset  ? disabledClass : ""}
+              />
+            </PaginationItem>
+          </PaginationContent>
+        </Pagination>
       </FieldSet>
     </>
   )
