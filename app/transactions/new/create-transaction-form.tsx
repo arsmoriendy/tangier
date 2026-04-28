@@ -1,5 +1,5 @@
 import { Form, useAppForm } from "@/components/form"
-import * as z from "zod"
+import z from "zod"
 import { TrashIcon } from "@phosphor-icons/react"
 import {
   Table,

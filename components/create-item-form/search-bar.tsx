@@ -1,6 +1,6 @@
 import { Form, useAppForm } from "@/components/form"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react"
-import * as z from "zod"
+import z from "zod"
 
 export function SearchBar(props: { handleSearch: (name: string) => any }) {
   const formSchema = z.object({ name: z.string() })

@@ -19,7 +19,7 @@ import {
 } from "@/lib/crud/item"
 import { listPriceGroups } from "@/lib/crud/price-group"
 import { useEffect, useState } from "react"
-import * as z from "zod"
+import z from "zod"
 
 export default function CreateItemForm() {
   const createItemFormSchema = z.object({

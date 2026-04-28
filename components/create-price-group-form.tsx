@@ -2,7 +2,7 @@
 
 import { Form, useAppForm } from "@/components/form"
 import { createPriceGroup } from "@/lib/crud/price-group"
-import * as z from "zod"
+import z from "zod"
 
 const createPriceGroupFormSchema = z.object({ name: z.string().min(1) })
 
