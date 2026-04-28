@@ -3,10 +3,14 @@
 import { Button, ButtonProps } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Sidebar,
   SidebarContent,
@@ -88,7 +92,7 @@ function ThemeButton({
 
 function ThemeSidebarItem() {
   const { state } = useSidebar()
-  const { theme } = useTheme()
+  const { theme, setTheme } = useTheme()
   const themeIconMap: { [theme: string]: ReactNode } = {
     light: <SunIcon />,
     system: <DesktopIcon />,
@@ -106,22 +110,28 @@ function ThemeSidebarItem() {
           ))}
         </ButtonGroup>
       ) : (
-        <Popover>
-          <PopoverTrigger asChild>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
             <SidebarMenuButton>{themeIconMap[theme!]}</SidebarMenuButton>
-          </PopoverTrigger>
-          <PopoverContent
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent
             side="right"
             align="end"
-            className="relative left-2 w-52"
+            className="relative left-2"
           >
-            {Object.entries(themeIconMap).map(([theme, icon], i) => (
-              <ThemeButton key={i} theme={theme} className="justify-start">
-                {icon} {capitalize(theme)}
-              </ThemeButton>
-            ))}
-          </PopoverContent>
-        </Popover>
+            <DropdownMenuGroup>
+              <DropdownMenuLabel>Theme</DropdownMenuLabel>
+              <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+                {Object.entries(themeIconMap).map(([theme, icon], i) => (
+                  <DropdownMenuRadioItem key={i} value={theme}>
+                    {icon} {capitalize(theme)}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       )}
     </SidebarMenuItem>
   )
