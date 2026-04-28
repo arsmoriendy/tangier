@@ -1,7 +1,7 @@
 "use client"
 
-import { ItemsTable } from "@/app/items/create-item-form/items-table"
-import { SearchBar } from "@/app/items/create-item-form/search-bar"
+import { ItemsTable } from "@/app/items/items-table"
+import { SearchBar } from "@/app/items/search-bar"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import {
