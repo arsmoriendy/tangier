@@ -60,6 +60,7 @@ export const prices = pgTable(
 export const transactions = pgTable("transactions", {
   id: uuid().notNull().primaryKey().defaultRandom(),
   totalPrice: numeric("total_price", { mode: "number" }).notNull(),
+  customerPriceGroup: varchar("customer_price_group").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

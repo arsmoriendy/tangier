@@ -31,7 +31,7 @@ import { printTransaction } from "@/lib/print-transaction"
 
 export default function CreateTransactionForm() {
   const createTransactionFormSchema = z.object({
-    items: z
+    transactionItems: z
       .array(
         z.object({
           name: z.string().min(0),
@@ -42,11 +42,13 @@ export default function CreateTransactionForm() {
       )
       .min(1),
     totalPrice: z.number().min(0),
+    customerPriceGroup: z.string(),
   })
 
   const defaultValues: z.infer<typeof createTransactionFormSchema> = {
-    items: [],
+    transactionItems: [],
     totalPrice: 0,
+    customerPriceGroup: "",
   }
 
   const form = useAppForm({
@@ -56,12 +58,15 @@ export default function CreateTransactionForm() {
       onChange: createTransactionFormSchema,
     },
     onSubmit: async ({ value }) => {
-      const { id, createdAt } = await createTransaction(value)
+      const { id, createdAt } = await createTransaction({
+        ...value,
+      })
       await printTransaction({
         id,
         createdAt,
         totalPrice: value.totalPrice,
-        transactionItems: value.items,
+        transactionItems: value.transactionItems,
+        customerPriceGroup: value.customerPriceGroup,
       })
       form.reset()
     },
@@ -70,7 +75,7 @@ export default function CreateTransactionForm() {
   function recalculateTotalPrice() {
     form.setFieldValue(
       "totalPrice",
-      form.state.values.items
+      form.state.values.transactionItems
         .map((i) => i.quantifiedPrice)
         .reduce((a, i) => a + i, 0)
     )
@@ -79,8 +84,14 @@ export default function CreateTransactionForm() {
   return (
     <div className="space-y-2">
       <AddItemForm
+        setSelectedPriceGroupName={(v) =>
+          form.setFieldValue("customerPriceGroup", v)
+        }
         addItem={(item) => {
-          form.setFieldValue("items", [...form.state.values.items, item])
+          form.setFieldValue("transactionItems", [
+            ...form.state.values.transactionItems,
+            item,
+          ])
         }}
       />
 
@@ -97,7 +108,7 @@ export default function CreateTransactionForm() {
               </form.AppForm>
             </div>
             <form.AppField
-              name="items"
+              name="transactionItems"
               mode="array"
               listeners={{
                 onChange: recalculateTotalPrice,
@@ -117,18 +128,19 @@ export default function CreateTransactionForm() {
                     {state.value.map((_, i) => (
                       <TableRow key={i}>
                         <TableCell>
-                          <form.AppField name={`items[${i}].name`}>
+                          <form.AppField name={`transactionItems[${i}].name`}>
                             {(field) => <field.TextField />}
                           </form.AppField>
                         </TableCell>
                         <TableCell>
                           <form.AppField
-                            name={`items[${i}].unitPrice`}
+                            name={`transactionItems[${i}].unitPrice`}
                             listeners={{
                               onChange: ({ value }) => {
                                 form.setFieldValue(
-                                  `items[${i}].quantifiedPrice`,
-                                  form.state.values.items[i].quantity * value
+                                  `transactionItems[${i}].quantifiedPrice`,
+                                  form.state.values.transactionItems[i]
+                                    .quantity * value
                                 )
                               },
                             }}
@@ -138,12 +150,13 @@ export default function CreateTransactionForm() {
                         </TableCell>
                         <TableCell>
                           <form.AppField
-                            name={`items[${i}].quantity`}
+                            name={`transactionItems[${i}].quantity`}
                             listeners={{
                               onChange: ({ value }) => {
                                 form.setFieldValue(
-                                  `items[${i}].quantifiedPrice`,
-                                  form.state.values.items[i].unitPrice * value
+                                  `transactionItems[${i}].quantifiedPrice`,
+                                  form.state.values.transactionItems[i]
+                                    .unitPrice * value
                                 )
                               },
                             }}
@@ -155,7 +168,7 @@ export default function CreateTransactionForm() {
                         </TableCell>
                         <TableCell>
                           <form.AppField
-                            name={`items[${i}].quantifiedPrice`}
+                            name={`transactionItems[${i}].quantifiedPrice`}
                             listeners={{
                               onChange: recalculateTotalPrice,
                             }}
@@ -169,7 +182,7 @@ export default function CreateTransactionForm() {
                             type="button"
                             size="icon"
                             onClick={() => {
-                              form.removeFieldValue("items", i)
+                              form.removeFieldValue("transactionItems", i)
                               recalculateTotalPrice()
                             }}
                           >
@@ -198,6 +211,7 @@ const addItemFormSchema = z.object({
 
 function AddItemForm(props: {
   addItem: (item: z.infer<typeof addItemFormSchema>) => any
+  setSelectedPriceGroupName: (pg: string) => any
 }) {
   const defaultValues: z.infer<typeof addItemFormSchema> = {
     name: "",
@@ -211,29 +225,36 @@ function AddItemForm(props: {
     validators: { onMount: addItemFormSchema, onChange: addItemFormSchema },
     onSubmit: ({ value }) => {
       props.addItem(value)
-      setPriceGroups([])
+      setItemPriceGroups([])
       form.reset()
     },
   })
 
-  const [priceGroups, setPriceGroups] = useState<ItemWithRelations["prices"]>(
-    []
-  )
+  const [priceGroupsState, setPriceGroupsState] = useState<
+    (typeof priceGroups.$inferSelect)[]
+  >([])
+  const [itemPriceGroups, setItemPriceGroups] = useState<
+    ItemWithRelations["prices"]
+  >([])
   const [selectedPriceGroupId, setSelectedPriceGroupId] = useState<string>()
 
-  async function handleSelectItem(
-    { name, prices }: ItemWithRelations,
-    selectedPriceGroupId?: string
-  ) {
+  async function handleSelectItem({ name, prices }: ItemWithRelations) {
     form.setFieldValue("name", name)
     form.setFieldValue(
       "unitPrice",
       prices.find((p) => p.priceGroup.id === selectedPriceGroupId)?.price ?? 0
     )
 
-    setSelectedPriceGroupId(selectedPriceGroupId)
-    setPriceGroups(prices.reverse())
+    setItemPriceGroups(prices)
   }
+
+  useEffect(() => {
+    listPriceGroups().then((pgs) => {
+      setPriceGroupsState(pgs)
+      setSelectedPriceGroupId(pgs[0]?.id)
+      props.setSelectedPriceGroupName(pgs[0]?.name)
+    })
+  }, [])
 
   return (
     <>
@@ -249,33 +270,33 @@ function AddItemForm(props: {
             </form.AppField>
           </div>
 
-          {priceGroups.length === 0 ? (
-            <span className="grid h-full min-h-14 place-items-center border border-dashed text-sm text-muted-foreground">
-              No available price groups
-            </span>
-          ) : (
-            <RadioGroupChoiceCard
-              className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-              value={selectedPriceGroupId}
-              onValueChange={(v) => {
-                setSelectedPriceGroupId(v)
-                form.setFieldValue(
-                  "unitPrice",
-                  priceGroups.find((p) => p.priceGroup.id === v)!.price
-                )
-              }}
-            >
-              {priceGroups.map((p, i) => (
-                <RadioGroupChoiceItem
-                  className="bg-background"
-                  key={i}
-                  value={p.priceGroup.id}
-                  title={formatCurrency(p.price)}
-                  description={p.priceGroup.name}
-                ></RadioGroupChoiceItem>
-              ))}
-            </RadioGroupChoiceCard>
-          )}
+          <RadioGroupChoiceCard
+            className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+            value={selectedPriceGroupId}
+            onValueChange={(v) => {
+              setSelectedPriceGroupId(v)
+              form.setFieldValue(
+                "unitPrice",
+                itemPriceGroups.find((p) => p.priceGroup.id === v)?.price ?? 0
+              )
+              props.setSelectedPriceGroupName(
+                priceGroupsState.find((pgs) => pgs.id === v)!.name
+              )
+            }}
+          >
+            {priceGroupsState.map((pg, i) => (
+              <RadioGroupChoiceItem
+                className="bg-background"
+                key={i}
+                value={pg.id}
+                title={formatCurrency(
+                  itemPriceGroups.find((p) => p.priceGroup.id === pg.id)
+                    ?.price ?? 0
+                )}
+                description={pg.name}
+              />
+            ))}
+          </RadioGroupChoiceCard>
 
           <div className="flex gap-2">
             <form.AppField
@@ -324,7 +345,7 @@ function AddItemForm(props: {
 }
 
 export function SearchItemForm(props: {
-  selectItemPrice: (item: ItemWithRelations, priceGroup?: string) => any
+  selectItemPrice: (item: ItemWithRelations) => any
 }) {
   const searchItemFormSchema = z.object({ name: z.string().min(0) })
   const defaultValues: z.infer<typeof searchItemFormSchema> = { name: "" }
@@ -391,7 +412,16 @@ export function SearchItemForm(props: {
 
           <TableBody>
             {foundItems.map((item, i) => (
-              <TableRow key={i}>
+              <TableRow
+                key={i}
+                className="group cursor-pointer [&_td]:group-hover:bg-primary [&_td]:group-hover:text-primary-foreground [&_td]:group-focus-visible:bg-primary [&_td]:group-focus-visible:text-primary-foreground"
+                onClick={() => {
+                  form.reset()
+                  setFoundItems([])
+                  setDialogOpened(false)
+                  props.selectItemPrice(item)
+                }}
+              >
                 <TableCell>{item.name}</TableCell>
                 {priceGroupsState.map((pg, i) => {
                   const price = item.prices.find(
@@ -399,18 +429,7 @@ export function SearchItemForm(props: {
                   )?.price
 
                   return (
-                    <TableCell
-                      className="cursor-pointer hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus-visible:text-primary-foreground"
-                      key={i}
-                      onClick={() => {
-                        form.reset()
-                        setFoundItems([])
-                        setDialogOpened(false)
-                        props.selectItemPrice(item, price ? pg.id : undefined)
-                      }}
-                    >
-                      {formatCurrency(price ?? 0)}
-                    </TableCell>
+                    <TableCell key={i}>{formatCurrency(price ?? 0)}</TableCell>
                   )
                 })}
               </TableRow>

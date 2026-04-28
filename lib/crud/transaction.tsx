@@ -5,16 +5,14 @@ import { transactionItems, transactions } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
 
 export async function createTransaction({
-  totalPrice,
-  items,
-}: typeof transactions.$inferInsert & {
-  items: Omit<typeof transactionItems.$inferInsert, "transaction">[]
-}) {
+  transactionItems: items,
+  ...transaction
+}: Omit<TransactionWithRelations, "createdAt" | "id">) {
   return await db.transaction(async (trx) => {
     const { id, createdAt } = (
       await trx
         .insert(transactions)
-        .values({ totalPrice })
+        .values(transaction)
         .returning({ id: transactions.id, createdAt: transactions.createdAt })
     )[0]
 
