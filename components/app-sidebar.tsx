@@ -149,9 +149,11 @@ export function AppSidebar() {
             <DynamicSidebarLink href="/transactions">
               {({ href, ...props }) => (
                 <SidebarMenuItem>
-                  <SidebarMenuButton {...props}>
-                    <BasketIcon />
-                    Transactions
+                  <SidebarMenuButton asChild {...props}>
+                    <Link href="/transactions/new">
+                      <BasketIcon />
+                      Transactions
+                    </Link>
                   </SidebarMenuButton>
 
                   <SidebarMenuSub>
