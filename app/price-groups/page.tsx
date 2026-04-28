@@ -1,6 +1,6 @@
 "use client"
 
-import CreatePriceGroupForm from "@/components/create-price-group-form"
+import CreatePriceGroupForm from "@/app/price-groups/create-price-group-form"
 
 export default function Page() {
   return <CreatePriceGroupForm />
