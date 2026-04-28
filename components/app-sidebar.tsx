@@ -3,6 +3,11 @@
 import { Button, ButtonProps } from "@/components/ui/button"
 import { ButtonGroup } from "@/components/ui/button-group"
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
@@ -13,7 +18,10 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
+  SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar"
+import capitalize from "@/lib/capitalize"
 import { cn } from "@/lib/utils"
 import {
   MoneyIcon,
@@ -78,10 +86,53 @@ function ThemeButton({
   )
 }
 
+function ThemeSidebarItem() {
+  const { state } = useSidebar()
+  const { theme } = useTheme()
+  const themeIconMap: { [theme: string]: ReactNode } = {
+    light: <SunIcon />,
+    system: <DesktopIcon />,
+    dark: <MoonIcon />,
+  }
+
+  return (
+    <SidebarMenuItem>
+      {state === "expanded" ? (
+        <ButtonGroup className="border">
+          {Object.entries(themeIconMap).map(([theme, icon], i) => (
+            <ThemeButton key={i} theme={theme}>
+              {icon} {capitalize(theme)}
+            </ThemeButton>
+          ))}
+        </ButtonGroup>
+      ) : (
+        <Popover>
+          <PopoverTrigger asChild>
+            <SidebarMenuButton>{themeIconMap[theme!]}</SidebarMenuButton>
+          </PopoverTrigger>
+          <PopoverContent
+            side="right"
+            align="end"
+            className="relative left-2 w-52"
+          >
+            {Object.entries(themeIconMap).map(([theme, icon], i) => (
+              <ThemeButton key={i} theme={theme} className="justify-start">
+                {icon} {capitalize(theme)}
+              </ThemeButton>
+            ))}
+          </PopoverContent>
+        </Popover>
+      )}
+    </SidebarMenuItem>
+  )
+}
+
 export function AppSidebar() {
   return (
-    <Sidebar>
-      <SidebarHeader />
+    <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarTrigger />
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
@@ -138,17 +189,9 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <ButtonGroup className="border">
-          <ThemeButton theme="light">
-            <SunIcon /> Light
-          </ThemeButton>
-          <ThemeButton theme="system">
-            <DesktopIcon /> System
-          </ThemeButton>
-          <ThemeButton theme="dark">
-            <MoonIcon /> Dark
-          </ThemeButton>
-        </ButtonGroup>
+        <SidebarMenu>
+          <ThemeSidebarItem />
+        </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
   )
