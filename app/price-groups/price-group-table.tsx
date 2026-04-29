@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { priceGroups } from "@/lib/db/schema"
 import { useState } from "react"
 
@@ -46,9 +47,8 @@ function PriceGroupRow({
   )
 }
 
-export default function PriceGroupTable(props: {
-  priceGroups: (typeof priceGroups.$inferSelect)[]
-}) {
+export default function PriceGroupTable() {
+  const { priceGroups } = usePriceGroups()
   return (
     <Table>
       <TableHeader>
@@ -60,7 +60,7 @@ export default function PriceGroupTable(props: {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {props.priceGroups.map((pg, i) => (
+        {priceGroups.map((pg, i) => (
           <PriceGroupRow key={i} priceGroup={pg} />
         ))}
       </TableBody>
