@@ -15,17 +15,6 @@ export const colors = [
   "89B4FA",
   "B4BEFE",
   "CDD6F4",
-  "BAC2DE",
-  "A6ADC8",
-  "9399B2",
-  "7F849C",
-  "6C7086",
-  "585B70",
-  "45475A",
-  "313244",
-  "1E1E2E",
-  "181825",
-  "11111B",
 ]
 
 export function getRandomColor() {
