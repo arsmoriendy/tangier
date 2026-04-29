@@ -34,6 +34,8 @@ export default function CreatePriceGroupForm() {
     onSubmit: async ({ value }) => {
       await createPriceGroup(value)
       setPriceGroups(await listPriceGroups())
+      form.setFieldValue("hexColor", getRandomColor())
+      form.reset()
     },
   })
 
