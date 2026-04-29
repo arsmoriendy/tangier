@@ -1,6 +1,7 @@
 import { getRandomColor } from "@/app/price-groups/price-group-colors"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLabel } from "@/components/ui/field"
+import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { updatePriceGroup } from "@/lib/crud/price-group"
 import { priceGroups } from "@/lib/db/schema"
 import { ArrowsClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
@@ -17,6 +18,7 @@ export default function UpdatePriceGroupForm(props: {
   onSumbit?: (value: z.infer<typeof createPriceGroupFormSchema>) => any
   priceGroup: typeof priceGroups.$inferSelect
 }) {
+  const { priceGroups, setPriceGroups } = usePriceGroups()
   const defaultValues: z.infer<typeof createPriceGroupFormSchema> = {
     name: props.priceGroup.name,
     hexColor: props.priceGroup.hexColor,
@@ -32,6 +34,11 @@ export default function UpdatePriceGroupForm(props: {
     },
     onSubmit: async ({ value }) => {
       await updatePriceGroup({ id: props.priceGroup.id, ...value })
+      Object.assign(
+        priceGroups.find((pg) => pg.id === props.priceGroup.id)!,
+        value
+      )
+      setPriceGroups(priceGroups)
       props.onSumbit?.(value)
     },
   })
