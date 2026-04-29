@@ -1,5 +1,6 @@
 "use client"
 
+import { getRandomColor } from "@/app/price-groups/price-group-colors"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLabel } from "@/components/ui/field"
 import { createPriceGroup } from "@/lib/crud/price-group"
@@ -13,40 +14,6 @@ const createPriceGroupFormSchema = z.object({
   quantityThreshold: z.number().min(0),
   hexColor: z.string().min(3).max(6),
 })
-
-/** Catpuccin mocha colors */
-const colors = [
-  "F5E0DC",
-  "F2CDCD",
-  "F5C2E7",
-  "CBA6F7",
-  "F38BA8",
-  "EBA0AC",
-  "FAB387",
-  "F9E2AF",
-  "A6E3A1",
-  "94E2D5",
-  "89DCEB",
-  "74C7EC",
-  "89B4FA",
-  "B4BEFE",
-  "CDD6F4",
-  "BAC2DE",
-  "A6ADC8",
-  "9399B2",
-  "7F849C",
-  "6C7086",
-  "585B70",
-  "45475A",
-  "313244",
-  "1E1E2E",
-  "181825",
-  "11111B",
-]
-
-function getRandomColor() {
-  return colors[parseInt((Math.random() * colors.length - 1).toFixed())]
-}
 
 export default function CreatePriceGroupForm() {
   const defaultValues: z.infer<typeof createPriceGroupFormSchema> = {
