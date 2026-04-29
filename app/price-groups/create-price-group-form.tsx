@@ -22,6 +22,7 @@ export default function CreatePriceGroupForm() {
     name: "",
     hexColor: "",
     quantityThreshold: 0,
+    description: "",
   }
 
   const form = useAppForm({
@@ -81,10 +82,9 @@ export default function CreatePriceGroupForm() {
           )}
         </form.AppField>
 
-        <form.AppField
-          name="description"
-          children={(f) => <f.TextField label="Description" />}
-        />
+        <form.AppField name="description">
+          {(f) => <f.TextField label="Description" />}
+        </form.AppField>
       </div>
 
       <form.AppForm>
