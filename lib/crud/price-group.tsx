@@ -19,7 +19,7 @@ export async function updatePriceGroup({
 
 export async function listPriceGroups(
   args: Parameters<typeof db.query.priceGroups.findMany>[0] = {
-    orderBy: [asc(priceGroups.quantityThreshold)],
+    orderBy: [asc(priceGroups.quantityThreshold), asc(priceGroups.name)],
   }
 ) {
   return await db.query.priceGroups.findMany(args)
