@@ -64,14 +64,14 @@ export default function UpdatePriceGroupForm(props: {
               <form.Subscribe selector={(state) => state.values.hexColor}>
                 {(hexColor) => (
                   <div
-                    className="group relative grid size-8 cursor-pointer place-items-center bg-black"
+                    className="group relative grid size-8 cursor-pointer place-items-center"
                     onClick={() =>
                       form.setFieldValue("hexColor", getRandomColor())
                     }
                   >
                     <ArrowsClockwiseIcon className="z-1 hidden group-hover:block" />
                     <div
-                      className="absolute size-8 group-hover:opacity-90"
+                      className="absolute size-8 rounded-full group-hover:opacity-90"
                       style={{ backgroundColor: `#${hexColor}` }}
                     />
                   </div>
