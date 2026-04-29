@@ -1,3 +1,5 @@
+"use client"
+
 import { Form, useAppForm } from "@/components/form"
 import z from "zod"
 import { TrashIcon } from "@phosphor-icons/react"

@@ -5,12 +5,11 @@ import {
 } from "@/components/ui/choice-card"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { ItemWithRelations } from "@/lib/crud/item"
-import { priceGroups } from "@/lib/db/schema"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useEffect, useState } from "react"
 import z from "zod"
-import { listPriceGroups } from "@/lib/crud/price-group"
 import { SearchItemForm } from "@/app/transactions/new/search-item-form"
+import { usePriceGroups } from "@/contexts/price-groups-ctx"
 
 const addItemFormSchema = z.object({
   name: z.string().min(1),
@@ -23,6 +22,8 @@ export function AddItemForm(props: {
   addItem: (item: z.infer<typeof addItemFormSchema>) => any
   setSelectedPriceGroupName: (pg: string) => any
 }) {
+  const { priceGroups } = usePriceGroups()
+
   const defaultValues: z.infer<typeof addItemFormSchema> = {
     name: "",
     unitPrice: 0,
@@ -40,9 +41,6 @@ export function AddItemForm(props: {
     },
   })
 
-  const [priceGroupsState, setPriceGroupsState] = useState<
-    (typeof priceGroups.$inferSelect)[]
-  >([])
   const [itemPriceGroups, setItemPriceGroups] = useState<
     ItemWithRelations["prices"]
   >([])
@@ -59,11 +57,8 @@ export function AddItemForm(props: {
   }
 
   useEffect(() => {
-    listPriceGroups().then((pgs) => {
-      setPriceGroupsState(pgs)
-      setSelectedPriceGroupId(pgs[0]?.id)
-      props.setSelectedPriceGroupName(pgs[0]?.name)
-    })
+    setSelectedPriceGroupId(priceGroups[0]?.id)
+    props.setSelectedPriceGroupName(priceGroups[0]?.name)
   }, [])
 
   return (
@@ -90,11 +85,11 @@ export function AddItemForm(props: {
                 itemPriceGroups.find((p) => p.priceGroup.id === v)?.price ?? 0
               )
               props.setSelectedPriceGroupName(
-                priceGroupsState.find((pgs) => pgs.id === v)!.name
+                priceGroups.find((pgs) => pgs.id === v)!.name
               )
             }}
           >
-            {priceGroupsState.map((pg, i) => (
+            {priceGroups.map((pg, i) => (
               <RadioGroupChoiceItem
                 className="bg-background"
                 key={i}
