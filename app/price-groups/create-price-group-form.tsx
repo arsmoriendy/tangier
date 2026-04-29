@@ -3,7 +3,8 @@
 import { getRandomColor } from "@/app/price-groups/price-group-colors"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLabel } from "@/components/ui/field"
-import { createPriceGroup } from "@/lib/crud/price-group"
+import { usePriceGroups } from "@/contexts/price-groups-ctx"
+import { createPriceGroup, listPriceGroups } from "@/lib/crud/price-group"
 import { ArrowsClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
 import { useEffect } from "react"
 import z from "zod"
@@ -16,6 +17,7 @@ const createPriceGroupFormSchema = z.object({
 })
 
 export default function CreatePriceGroupForm() {
+  const { setPriceGroups } = usePriceGroups()
   const defaultValues: z.infer<typeof createPriceGroupFormSchema> = {
     name: "",
     hexColor: "",
@@ -30,6 +32,7 @@ export default function CreatePriceGroupForm() {
     },
     onSubmit: async ({ value }) => {
       await createPriceGroup(value)
+      setPriceGroups(await listPriceGroups())
     },
   })
 

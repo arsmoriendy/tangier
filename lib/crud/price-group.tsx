@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { priceGroups } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
+import { asc, eq } from "drizzle-orm"
 
 export async function createPriceGroup(
   priceGroup: typeof priceGroups.$inferInsert
@@ -17,6 +17,10 @@ export async function updatePriceGroup({
   await db.update(priceGroups).set(priceGroup).where(eq(priceGroups.id, id))
 }
 
-export async function listPriceGroups() {
-  return await db.select().from(priceGroups)
+export async function listPriceGroups(
+  args: Parameters<typeof db.query.priceGroups.findMany>[0] = {
+    orderBy: [asc(priceGroups.quantityThreshold)],
+  }
+) {
+  return await db.query.priceGroups.findMany(args)
 }
