@@ -18,5 +18,5 @@ export const colors = [
 ]
 
 export function getRandomColor() {
-  return colors[parseInt((Math.random() * colors.length - 1).toFixed())]
+  return colors[Math.floor(Math.random() * (colors.length - 1))]
 }
