@@ -10,6 +10,21 @@ import {
 } from "@/components/ui/table"
 import { priceGroups } from "@/lib/db/schema"
 
+function PriceGroupRow({
+  priceGroup,
+}: {
+  priceGroup: typeof priceGroups.$inferSelect
+}) {
+  return (
+    <TableRow>
+      <TableCell>{priceGroup.name}</TableCell>
+      <TableCell>{priceGroup.quantityThreshold}</TableCell>
+      <TableCell>{priceGroup.hexColor}</TableCell>
+      <TableCell>{priceGroup.description}</TableCell>
+    </TableRow>
+  )
+}
+
 export default function PriceGroupTable(props: {
   priceGroups: (typeof priceGroups.$inferSelect)[]
 }) {
@@ -25,12 +40,7 @@ export default function PriceGroupTable(props: {
       </TableHeader>
       <TableBody>
         {props.priceGroups.map((pg, i) => (
-          <TableRow key={i}>
-            <TableCell>{pg.name}</TableCell>
-            <TableCell>{pg.quantityThreshold}</TableCell>
-            <TableCell>{pg.hexColor}</TableCell>
-            <TableCell>{pg.description}</TableCell>
-          </TableRow>
+          <PriceGroupRow key={i} priceGroup={pg} />
         ))}
       </TableBody>
     </Table>
