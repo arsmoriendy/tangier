@@ -21,6 +21,9 @@ export const priceGroups = pgTable(
   {
     id: uuid().primaryKey().notNull().defaultRandom(),
     name: varchar().notNull(),
+    hexColor: varchar("hex_color", { length: 6 }).notNull(),
+    description: varchar(),
+    quantityThreshold: integer().default(0),
   },
   (table) => [uniqueIndex("name_index").on(table.name)]
 )
