@@ -42,16 +42,18 @@ export default function CreatePriceGroupForm() {
       <div className="flex gap-2">
         <form.AppField
           name="name"
-          children={(f) => <f.TextField label="Name" className="w-sm" />}
+          children={(f) => <f.TextField label="Name" />}
         />
 
         <form.AppField name="quantityThreshold">
-          {(f) => <f.NumberField label="Min qty" min={0} className="w-24" />}
+          {(f) => (
+            <f.NumberField label="Min qty" min={0} className="max-w-16" />
+          )}
         </form.AppField>
 
         <form.AppField name="hexColor">
           {(f) => (
-            <div className="w-sm space-y-2">
+            <div className="space-y-2">
               <FieldLabel>Color</FieldLabel>
               <div className="flex gap-2">
                 <form.Subscribe selector={(state) => state.values.hexColor}>
@@ -70,7 +72,7 @@ export default function CreatePriceGroupForm() {
                     </div>
                   )}
                 </form.Subscribe>
-                <f.TextField />
+                <f.TextField className="min-w-16" />
               </div>
             </div>
           )}
