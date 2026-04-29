@@ -1,4 +1,4 @@
 export type StateContext<T> = {
   state: T
-  setState: (pgs: T) => void
+  setState: (state: T | ((oldState: T) => T)) => void
 }

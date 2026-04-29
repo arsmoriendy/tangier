@@ -1,6 +1,7 @@
 "use client"
 
 import UpdatePriceGroupForm from "@/app/price-groups/update-price-group-form"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -16,7 +17,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
+import { deletePriceGroup } from "@/lib/crud/price-group"
 import { priceGroups } from "@/lib/db/schema"
+import { TrashIcon } from "@phosphor-icons/react/dist/ssr"
 import { useState } from "react"
 
 function PriceGroupRow({
@@ -46,6 +49,7 @@ function PriceGroupRow({
         <DialogTitle>Update price group</DialogTitle>
         <UpdatePriceGroupForm
           onSumbit={() => setDialogOpen(false)}
+          onDelete={() => setDialogOpen(false)}
           priceGroup={priceGroup}
         />
       </DialogContent>

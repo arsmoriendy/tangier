@@ -24,3 +24,7 @@ export async function listPriceGroups(
 ) {
   return await db.query.priceGroups.findMany(args)
 }
+
+export async function deletePriceGroup(id: string) {
+  await db.delete(priceGroups).where(eq(priceGroups.id, id))
+}

@@ -1,10 +1,11 @@
 import { getRandomColor } from "@/app/price-groups/price-group-colors"
 import { Form, useAppForm } from "@/components/form"
+import { Button } from "@/components/ui/button"
 import { FieldLabel } from "@/components/ui/field"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
-import { updatePriceGroup } from "@/lib/crud/price-group"
+import { deletePriceGroup, updatePriceGroup } from "@/lib/crud/price-group"
 import { priceGroups } from "@/lib/db/schema"
-import { ArrowsClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
+import { ArrowsClockwiseIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr"
 import z from "zod"
 
 const createPriceGroupFormSchema = z.object({
@@ -16,6 +17,7 @@ const createPriceGroupFormSchema = z.object({
 
 export default function UpdatePriceGroupForm(props: {
   onSumbit?: (value: z.infer<typeof createPriceGroupFormSchema>) => any
+  onDelete?: () => any
   priceGroup: typeof priceGroups.$inferSelect
 }) {
   const { priceGroups, setPriceGroups } = usePriceGroups()
@@ -87,7 +89,22 @@ export default function UpdatePriceGroupForm(props: {
       />
 
       <form.AppForm>
-        <form.SubmitButton>Update price group</form.SubmitButton>
+        <div className="flex gap-2">
+          <form.SubmitButton>Update price group</form.SubmitButton>
+          <Button
+            variant="destructive"
+            onClick={async () => {
+              await deletePriceGroup(props.priceGroup.id)
+              setPriceGroups((pgs) =>
+                pgs.filter((pg) => pg.id !== props.priceGroup.id)
+              )
+              props.onDelete?.()
+            }}
+          >
+            <TrashIcon />
+            Delete price group
+          </Button>
+        </div>
       </form.AppForm>
     </Form>
   )
