@@ -1,5 +1,6 @@
 "use client"
 
+import chroma from "chroma-js"
 import { ItemsTable } from "@/app/items/items-table"
 import { SearchBar } from "@/app/items/search-bar"
 import { Form, useAppForm } from "@/components/form"
@@ -87,13 +88,23 @@ export default function CreateItemForm(props: {
 
           <FieldSet>
             <FieldLegend>Prices</FieldLegend>
-            {props.priceGroups.map(({ id, name }, i) => (
+            {props.priceGroups.map(({ id, name, hexColor }, i) => (
               <div key={i}>
                 <form.Field name={`prices[${i}].priceGroup`}>
                   {() => <input type="hidden" value={id} />}
                 </form.Field>
                 <form.AppField name={`prices[${i}].price`}>
-                  {(f) => <f.IdrField label={name} min={0} />}
+                  {(f) => (
+                    <f.IdrField
+                      style={{
+                        backgroundColor: chroma(`#${hexColor}`)
+                          .alpha(0.33)
+                          .hex(),
+                      }}
+                      label={name}
+                      min={0}
+                    />
+                  )}
                 </form.AppField>
               </div>
             ))}
