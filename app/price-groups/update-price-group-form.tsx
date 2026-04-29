@@ -92,6 +92,7 @@ export default function UpdatePriceGroupForm(props: {
         <div className="flex gap-2">
           <form.SubmitButton>Update price group</form.SubmitButton>
           <Button
+            type="button"
             variant="destructive"
             onClick={async () => {
               await deletePriceGroup(props.priceGroup.id)
