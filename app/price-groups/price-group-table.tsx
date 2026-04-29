@@ -32,7 +32,13 @@ function PriceGroupRow({
         <TableRow className="cursor-pointer">
           <TableCell>{priceGroup.name}</TableCell>
           <TableCell>{priceGroup.quantityThreshold}</TableCell>
-          <TableCell>{priceGroup.hexColor}</TableCell>
+          <TableCell>
+            #{priceGroup.hexColor}
+            <div
+              className="h-1"
+              style={{ backgroundColor: `#${priceGroup.hexColor}` }}
+            />
+          </TableCell>
           <TableCell>{priceGroup.description}</TableCell>
         </TableRow>
       </DialogTrigger>
