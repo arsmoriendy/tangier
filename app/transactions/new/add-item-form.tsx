@@ -91,8 +91,8 @@ export function AddItemForm(props: {
           >
             {priceGroups.map((pg, i) => (
               <RadioGroupChoiceItem
-                className="bg-background"
                 key={i}
+                style={{ backgroundColor: `#${pg.hexColor}` }}
                 value={pg.id}
                 title={formatCurrency(
                   itemPriceGroups.find((p) => p.priceGroup.id === pg.id)
