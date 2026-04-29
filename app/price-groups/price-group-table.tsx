@@ -1,5 +1,12 @@
 "use client"
 
+import UpdatePriceGroupForm from "@/app/price-groups/update-price-group-form"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   Table,
   TableBody,
@@ -9,19 +16,33 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { priceGroups } from "@/lib/db/schema"
+import { useState } from "react"
 
 function PriceGroupRow({
   priceGroup,
 }: {
   priceGroup: typeof priceGroups.$inferSelect
 }) {
+  const [openDialog, setDialogOpen] = useState(false)
+
   return (
-    <TableRow>
-      <TableCell>{priceGroup.name}</TableCell>
-      <TableCell>{priceGroup.quantityThreshold}</TableCell>
-      <TableCell>{priceGroup.hexColor}</TableCell>
-      <TableCell>{priceGroup.description}</TableCell>
-    </TableRow>
+    <Dialog open={openDialog} onOpenChange={setDialogOpen}>
+      <DialogTrigger asChild>
+        <TableRow className="cursor-pointer">
+          <TableCell>{priceGroup.name}</TableCell>
+          <TableCell>{priceGroup.quantityThreshold}</TableCell>
+          <TableCell>{priceGroup.hexColor}</TableCell>
+          <TableCell>{priceGroup.description}</TableCell>
+        </TableRow>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogTitle>Update price group</DialogTitle>
+        <UpdatePriceGroupForm
+          onSumbit={() => setDialogOpen(false)}
+          priceGroup={priceGroup}
+        />
+      </DialogContent>
+    </Dialog>
   )
 }
 
