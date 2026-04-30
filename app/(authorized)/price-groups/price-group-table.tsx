@@ -1,6 +1,6 @@
 "use client"
 
-import UpdatePriceGroupForm from "@/app/price-groups/update-price-group-form"
+import UpdatePriceGroupForm from "@/app/(authorized)/price-groups/update-price-group-form"
 import {
   Dialog,
   DialogContent,

@@ -1,4 +1,4 @@
-import CreateItemForm from "@/app/items/create-item-form"
+import CreateItemForm from "@/app/(authorized)/items/create-item-form"
 import { listPriceGroups } from "@/lib/crud/price-group"
 
 export default async function Page() {

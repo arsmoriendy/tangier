@@ -14,12 +14,12 @@ import { Button } from "@/components/ui/button"
 import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field"
 import { createTransaction } from "@/lib/crud/transaction"
 import { printTransaction } from "@/lib/print-transaction"
-import { AddItemForm } from "@/app/transactions/new/add-item-form"
-import { AddItemProvider } from "@/app/transactions/new/add-item-ctx"
+import { AddItemForm } from "@/app/(authorized)/transactions/new/add-item-form"
+import { AddItemProvider } from "@/app/(authorized)/transactions/new/add-item-ctx"
 import {
   createTransactionSchema,
   defaultCreateTransacionValues,
-} from "@/app/transactions/new/create-transaction-schema"
+} from "@/app/(authorized)/transactions/new/create-transaction-schema"
 
 export default function CreateTransactionForm() {
   const form = useAppForm({

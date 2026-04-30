@@ -1,8 +1,8 @@
 "use client"
 
 import chroma from "chroma-js"
-import { ItemsTable } from "@/app/items/items-table"
-import { SearchBar } from "@/app/items/search-bar"
+import { ItemsTable } from "@/app/(authorized)/items/items-table"
+import { SearchBar } from "@/app/(authorized)/items/search-bar"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import {

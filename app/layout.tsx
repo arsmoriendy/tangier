@@ -1,11 +1,9 @@
 "use client"
 
-import { Geist, Geist_Mono, JetBrains_Mono } from "next/font/google"
+import { Geist, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -34,12 +32,7 @@ export default function RootLayout({
       )}
     >
       <body>
-        <ThemeProvider>
-          <SidebarProvider>
-            <AppSidebar />
-            <main className="w-full p-2">{children}</main>
-          </SidebarProvider>
-        </ThemeProvider>
+        <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
   )

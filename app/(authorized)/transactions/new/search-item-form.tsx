@@ -1,5 +1,5 @@
-import { useAddItem } from "@/app/transactions/new/add-item-ctx"
-import { defaultAddItemValues } from "@/app/transactions/new/add-item-schema"
+import { useAddItem } from "@/app/(authorized)/transactions/new/add-item-ctx"
+import { defaultAddItemValues } from "@/app/(authorized)/transactions/new/add-item-schema"
 import { Form, useAppForm, withForm } from "@/components/form"
 import {
   Dialog,

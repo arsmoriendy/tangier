@@ -1,4 +1,4 @@
-import { getRandomColor } from "@/app/price-groups/price-group-colors"
+import { getRandomColor } from "@/app/(authorized)/price-groups/price-group-colors"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
 import { FieldLabel } from "@/components/ui/field"
