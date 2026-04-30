@@ -7,13 +7,13 @@ Run with the bun runtime, e.g. `bun -b dev`
 ##### TODO
 
 1. Item unit
-2. Update and delete items
-3. Update and delete transactions
-4. Hold and recall
-5. Authentication / cashier name on receipt
-6. Auto set price based on quantity threshold
-7. Keyboard shortcuts
-8. Underpriced indicator
-9. Reorder transaction items / group based on new category column
-10. Barcode, (upper and lower) / array, search by barcode
+2. Item barcode array, search by barcode
+3. Update and delete items
+4. Update and delete transactions
+5. Hold and recall
+6. Authentication / cashier name on receipt
+7. Auto set price based on quantity threshold
+8. Keyboard shortcuts
+9. Underpriced indicator
+10. Reorder transaction items / group based on new category column
 11. Stock tracking
