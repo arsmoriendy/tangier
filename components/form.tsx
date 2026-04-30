@@ -9,7 +9,7 @@ import { ComponentProps } from "react"
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts()
 
-export const { useAppForm } = createFormHook({
+export const { useAppForm, withForm } = createFormHook({
   fieldComponents: { TextField, NumberField, IdrField },
   formComponents: {
     SubmitButton,

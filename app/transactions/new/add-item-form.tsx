@@ -4,66 +4,42 @@ import {
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
-import { ItemWithRelations } from "@/lib/crud/item"
 import { formatCurrency } from "@/lib/i18n/currency"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import z from "zod"
 import { SearchItemForm } from "@/app/transactions/new/search-item-form"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
-
-const addItemFormSchema = z.object({
-  name: z.string().min(1),
-  unitPrice: z.number().min(0),
-  quantity: z.number().min(1),
-  quantifiedPrice: z.number().min(0),
-})
+import {
+  addItemSchema,
+  defaultAddItemValues,
+} from "@/app/transactions/new/add-item-schema"
+import { useAddItem } from "@/app/transactions/new/add-item-ctx"
 
 export function AddItemForm(props: {
-  addItem: (item: z.infer<typeof addItemFormSchema>) => any
+  addItem: (item: z.infer<typeof addItemSchema>) => any
   setSelectedPriceGroupName: (pg: string) => any
 }) {
   const { priceGroups } = usePriceGroups()
-
-  const defaultValues: z.infer<typeof addItemFormSchema> = {
-    name: "",
-    unitPrice: 0,
-    quantity: 1,
-    quantifiedPrice: 0,
-  }
+  const { addItemProxy, addItemSnap } = useAddItem()
 
   const form = useAppForm({
-    defaultValues,
-    validators: { onMount: addItemFormSchema, onChange: addItemFormSchema },
+    defaultValues: defaultAddItemValues,
+    validators: { onMount: addItemSchema, onChange: addItemSchema },
     onSubmit: ({ value }) => {
       props.addItem(value)
-      setItemPriceGroups([])
+      addItemProxy.itemPrices = []
       form.reset()
     },
   })
 
-  const [itemPriceGroups, setItemPriceGroups] = useState<
-    ItemWithRelations["prices"]
-  >([])
-  const [selectedPriceGroupId, setSelectedPriceGroupId] = useState<string>()
-
-  async function handleSelectItem({ name, prices }: ItemWithRelations) {
-    form.setFieldValue("name", name)
-    form.setFieldValue(
-      "unitPrice",
-      prices.find((p) => p.priceGroup.id === selectedPriceGroupId)?.price ?? 0
-    )
-
-    setItemPriceGroups(prices)
-  }
-
   useEffect(() => {
-    setSelectedPriceGroupId(priceGroups[0]?.id)
+    addItemProxy.selectedPriceGroupId = priceGroups[0]?.id
     props.setSelectedPriceGroupName(priceGroups[0]?.name)
   }, [])
 
   return (
     <>
-      <SearchItemForm selectItemPrice={handleSelectItem} />
+      <SearchItemForm form={form} />
 
       <FieldSet>
         <FieldLegend>Add item</FieldLegend>
@@ -77,12 +53,13 @@ export function AddItemForm(props: {
 
           <RadioGroupChoiceCard
             className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-            value={selectedPriceGroupId}
+            value={addItemSnap.selectedPriceGroupId}
             onValueChange={(v) => {
-              setSelectedPriceGroupId(v)
+              addItemProxy.selectedPriceGroupId = v
               form.setFieldValue(
                 "unitPrice",
-                itemPriceGroups.find((p) => p.priceGroup.id === v)?.price ?? 0
+                addItemSnap.itemPrices.find((p) => p.priceGroup.id === v)
+                  ?.price ?? 0
               )
               props.setSelectedPriceGroupName(
                 priceGroups.find((pgs) => pgs.id === v)!.name
@@ -95,7 +72,7 @@ export function AddItemForm(props: {
                 style={{ backgroundColor: `#${pg.hexColor}` }}
                 value={pg.id}
                 title={formatCurrency(
-                  itemPriceGroups.find((p) => p.priceGroup.id === pg.id)
+                  addItemSnap.itemPrices.find((p) => p.priceGroup.id === pg.id)
                     ?.price ?? 0
                 )}
                 description={pg.name}

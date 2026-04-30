@@ -16,6 +16,7 @@ import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field"
 import { createTransaction } from "@/lib/crud/transaction"
 import { printTransaction } from "@/lib/print-transaction"
 import { AddItemForm } from "@/app/transactions/new/add-item-form"
+import { AddItemProvider } from "@/app/transactions/new/add-item-ctx"
 
 export default function CreateTransactionForm() {
   const createTransactionFormSchema = z.object({
@@ -71,17 +72,19 @@ export default function CreateTransactionForm() {
 
   return (
     <div className="space-y-2">
-      <AddItemForm
-        setSelectedPriceGroupName={(v) =>
-          form.setFieldValue("customerPriceGroup", v)
-        }
-        addItem={(item) => {
-          form.setFieldValue("transactionItems", [
-            ...form.state.values.transactionItems,
-            item,
-          ])
-        }}
-      />
+      <AddItemProvider>
+        <AddItemForm
+          setSelectedPriceGroupName={(v) =>
+            form.setFieldValue("customerPriceGroup", v)
+          }
+          addItem={(item) => {
+            form.setFieldValue("transactionItems", [
+              ...form.state.values.transactionItems,
+              item,
+            ])
+          }}
+        />
+      </AddItemProvider>
 
       <FieldSet>
         <FieldLegend>Transaction details</FieldLegend>
