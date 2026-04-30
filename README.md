@@ -1,3 +1,9 @@
+#### `usb` compatibility
+
+##### Arch + `curl -fsSL https://bun.sh/install | bash`
+
+Run with the bun runtime, e.g. `bun -b dev`
+
 ##### TODO
 
 1. `items` context
