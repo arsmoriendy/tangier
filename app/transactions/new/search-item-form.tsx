@@ -14,18 +14,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { listItems } from "@/lib/crud/item"
 import { ItemWithRelations } from "@/lib/crud/item"
-import { listPriceGroups } from "@/lib/crud/price-group"
-import { priceGroups } from "@/lib/db/schema"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import z from "zod"
 
 export function SearchItemForm(props: {
   selectItemPrice: (item: ItemWithRelations) => any
 }) {
+  const { priceGroups } = usePriceGroups()
   const searchItemFormSchema = z.object({ name: z.string().min(0) })
   const defaultValues: z.infer<typeof searchItemFormSchema> = { name: "" }
   const form = useAppForm({
@@ -44,13 +44,6 @@ export function SearchItemForm(props: {
 
   const [foundItems, setFoundItems] = useState<ItemWithRelations[]>([])
   const [dialogIsOpen, setDialogOpened] = useState(false)
-  const [priceGroupsState, setPriceGroups] = useState<
-    (typeof priceGroups.$inferSelect)[]
-  >([])
-
-  useEffect(() => {
-    listPriceGroups().then(setPriceGroups)
-  }, [])
 
   return (
     <Dialog open={dialogIsOpen} onOpenChange={setDialogOpened}>
@@ -79,11 +72,11 @@ export function SearchItemForm(props: {
           <TableHeader className="sticky top-0">
             <TableRow>
               <TableHead rowSpan={2}>Name</TableHead>
-              <TableHead colSpan={priceGroupsState.length}>Prices</TableHead>
+              <TableHead colSpan={priceGroups.length}>Prices</TableHead>
             </TableRow>
 
             <TableRow>
-              {priceGroupsState.map((pg, i) => (
+              {priceGroups.map((pg, i) => (
                 <TableHead key={i}>{pg.name}</TableHead>
               ))}
             </TableRow>
@@ -102,7 +95,7 @@ export function SearchItemForm(props: {
                 }}
               >
                 <TableCell>{item.name}</TableCell>
-                {priceGroupsState.map((pg, i) => {
+                {priceGroups.map((pg, i) => {
                   const price = item.prices.find(
                     (p) => p.priceGroup.id === pg.id
                   )?.price
