@@ -139,7 +139,7 @@ export default function CreateItemForm(props: {
                   setPage(page + 1)
                 }}
                 className={
-                  page * itemsPerPage >= itemCount ? disabledClass : ""
+                  (page + 1) * itemsPerPage >= itemCount ? disabledClass : ""
                 }
               />
             </PaginationItem>
