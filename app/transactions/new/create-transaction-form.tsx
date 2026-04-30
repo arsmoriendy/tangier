@@ -1,7 +1,6 @@
 "use client"
 
 import { Form, useAppForm } from "@/components/form"
-import z from "zod"
 import { TrashIcon } from "@phosphor-icons/react"
 import {
   Table,
@@ -17,34 +16,17 @@ import { createTransaction } from "@/lib/crud/transaction"
 import { printTransaction } from "@/lib/print-transaction"
 import { AddItemForm } from "@/app/transactions/new/add-item-form"
 import { AddItemProvider } from "@/app/transactions/new/add-item-ctx"
+import {
+  createTransactionSchema,
+  defaultCreateTransacionValues,
+} from "@/app/transactions/new/create-transaction-schema"
 
 export default function CreateTransactionForm() {
-  const createTransactionFormSchema = z.object({
-    transactionItems: z
-      .array(
-        z.object({
-          name: z.string().min(0),
-          unitPrice: z.number().min(0),
-          quantity: z.number().min(1),
-          quantifiedPrice: z.number().min(0),
-        })
-      )
-      .min(1),
-    totalPrice: z.number().min(0),
-    customerPriceGroup: z.string(),
-  })
-
-  const defaultValues: z.infer<typeof createTransactionFormSchema> = {
-    transactionItems: [],
-    totalPrice: 0,
-    customerPriceGroup: "",
-  }
-
   const form = useAppForm({
-    defaultValues,
+    defaultValues: defaultCreateTransacionValues,
     validators: {
-      onMount: createTransactionFormSchema,
-      onChange: createTransactionFormSchema,
+      onMount: createTransactionSchema,
+      onChange: createTransactionSchema,
     },
     onSubmit: async ({ value }) => {
       const { id, createdAt } = await createTransaction({
@@ -73,17 +55,7 @@ export default function CreateTransactionForm() {
   return (
     <div className="space-y-2">
       <AddItemProvider>
-        <AddItemForm
-          setSelectedPriceGroupName={(v) =>
-            form.setFieldValue("customerPriceGroup", v)
-          }
-          addItem={(item) => {
-            form.setFieldValue("transactionItems", [
-              ...form.state.values.transactionItems,
-              item,
-            ])
-          }}
-        />
+        <AddItemForm form={form} />
       </AddItemProvider>
 
       <FieldSet>
