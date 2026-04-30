@@ -12,6 +12,7 @@ export default function TextField({
   label,
   description,
   className,
+  onChange,
   ...inputProps
 }: {
   label?: string
@@ -32,7 +33,10 @@ export default function TextField({
       <Input
         id={id}
         value={field.state.value}
-        onChange={(e) => field.handleChange(e.target.value)}
+        onChange={(e) => {
+          onChange?.(e)
+          field.handleChange(e.target.value)
+        }}
         onBlur={field.handleBlur}
         autoComplete="off"
         aria-invalid={isInvalid}
