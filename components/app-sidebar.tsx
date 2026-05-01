@@ -25,6 +25,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { useSession } from "@/contexts/session-ctx"
 import { authClient } from "@/lib/auth-client"
 import capitalize from "@/lib/capitalize"
 import { cn } from "@/lib/utils"
@@ -36,6 +37,7 @@ import {
   MoonIcon,
   DesktopIcon,
   DoorIcon,
+  UserIcon,
 } from "@phosphor-icons/react/ssr"
 import { useTheme } from "next-themes"
 import Link from "next/link"
@@ -140,6 +142,7 @@ function ThemeSidebarItem() {
 }
 
 export function AppSidebar() {
+  const session = useSession()
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -199,6 +202,19 @@ export function AppSidebar() {
                 </SidebarMenuButton>
               )}
             </DynamicSidebarLink>
+
+            {session.user.role === "admin" && (
+              <DynamicSidebarLink href="/users">
+                {({ href, ...props }) => (
+                  <SidebarMenuButton asChild {...props}>
+                    <Link href={href!}>
+                      <UserIcon />
+                      Users
+                    </Link>
+                  </SidebarMenuButton>
+                )}
+              </DynamicSidebarLink>
+            )}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>

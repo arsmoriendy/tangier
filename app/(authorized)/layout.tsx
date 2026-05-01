@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
+import { SessionProvider } from "@/contexts/session-ctx"
 import { auth } from "@/lib/auth"
 import { headers } from "next/headers"
 import { redirect } from "next/navigation"
@@ -16,9 +17,11 @@ export default async function AuthorizedLayout({
   if (!session) redirect("/auth")
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <main className="w-full p-2">{children}</main>
-    </SidebarProvider>
+    <SessionProvider session={session}>
+      <SidebarProvider>
+        <AppSidebar />
+        <main className="w-full p-2">{children}</main>
+      </SidebarProvider>
+    </SessionProvider>
   )
 }
