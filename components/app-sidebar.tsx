@@ -25,6 +25,7 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { authClient } from "@/lib/auth-client"
 import capitalize from "@/lib/capitalize"
 import { cn } from "@/lib/utils"
 import {
@@ -34,10 +35,11 @@ import {
   SunIcon,
   MoonIcon,
   DesktopIcon,
+  DoorIcon,
 } from "@phosphor-icons/react/ssr"
 import { useTheme } from "next-themes"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { redirect, usePathname } from "next/navigation"
 import { ReactNode, useEffect, useState } from "react"
 
 function DynamicSidebarLink(props: {
@@ -201,8 +203,26 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarMenu>
+        <SidebarMenu className="gap-2">
           <ThemeSidebarItem />
+
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              className="bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40"
+              onClick={() =>
+                authClient.signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      redirect("/")
+                    },
+                  },
+                })
+              }
+            >
+              <DoorIcon />
+              Sign out
+            </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
