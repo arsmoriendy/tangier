@@ -42,6 +42,7 @@ import { useTheme } from "next-themes"
 import Link from "next/link"
 import { redirect, usePathname } from "next/navigation"
 import { ReactNode, useEffect, useState } from "react"
+import { toast } from "sonner"
 
 function DynamicSidebarLink(props: {
   children: (props: { className: string; href: string }) => ReactNode
@@ -133,7 +134,11 @@ function UserSidebarItem() {
             <DropdownMenuItem
               variant="destructive"
               onClick={async () => {
-                await authClient.deleteUser()
+                const { error } = await authClient.deleteUser()
+                if (error) {
+                  toast.error(error.message ?? error.statusText)
+                  return
+                }
                 redirect("/")
               }}
             >
