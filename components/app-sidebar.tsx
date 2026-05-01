@@ -1,5 +1,12 @@
 "use client"
 
+import { ChangeUsernameForm } from "@/components/change-username-form"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -8,6 +15,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {
@@ -129,6 +137,22 @@ function UserSidebarItem() {
         >
           <DropdownMenuGroup>
             <DropdownMenuLabel>Manage account</DropdownMenuLabel>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  Change username
+                </DropdownMenuItem>
+              </DialogTrigger>
+
+              <DialogContent>
+                <DialogTitle>Change username</DialogTitle>
+                <ChangeUsernameForm />
+              </DialogContent>
+            </Dialog>
+
+            <DropdownMenuSeparator />
+
             <DropdownMenuItem
               variant="destructive"
               onClick={async () => {
@@ -139,6 +163,7 @@ function UserSidebarItem() {
               <SignOutIcon />
               Sign out
             </DropdownMenuItem>
+
             <DropdownMenuItem
               variant="destructive"
               onClick={async () => {
