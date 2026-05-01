@@ -36,7 +36,7 @@ import {
   SunIcon,
   MoonIcon,
   DesktopIcon,
-  DoorIcon,
+  SignOutIcon,
   UserIcon,
 } from "@phosphor-icons/react/ssr"
 import { useTheme } from "next-themes"
@@ -235,7 +235,7 @@ export function AppSidebar() {
                 })
               }
             >
-              <DoorIcon />
+              <SignOutIcon />
               Sign out
             </SidebarMenuButton>
           </SidebarMenuItem>
