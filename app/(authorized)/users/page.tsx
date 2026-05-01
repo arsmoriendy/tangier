@@ -1,5 +1,6 @@
 import { UsersProvider } from "@/app/(authorized)/users/users-ctx"
 import { UsersTable } from "@/app/(authorized)/users/users-table"
+import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { db } from "@/lib/db"
 
 export default async function Page() {
@@ -7,7 +8,11 @@ export default async function Page() {
 
   return (
     <UsersProvider users={users}>
-      <UsersTable />
+      <FieldSet>
+        <FieldLegend>Manage users</FieldLegend>
+
+        <UsersTable />
+      </FieldSet>
     </UsersProvider>
   )
 }
