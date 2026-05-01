@@ -2,7 +2,7 @@
 
 import { nameToEmail } from "@/app/auth/name-to-email"
 import { Form, useAppForm } from "@/components/form"
-import { FieldError, FieldLegend, FieldSet } from "@/components/ui/field"
+import { FieldError } from "@/components/ui/field"
 import { authClient } from "@/lib/auth-client"
 import { kebabCase } from "es-toolkit"
 import { redirect } from "next/navigation"
@@ -21,7 +21,7 @@ const registerDefaultValues: z.infer<typeof registerSchema> = {
   confirmPassword: "",
 }
 
-export function RegisterForm() {
+export function SignUpForm() {
   const form = useAppForm({
     defaultValues: registerDefaultValues,
     validators: { onMount: registerSchema, onChange: registerSchema },
@@ -49,39 +49,35 @@ export function RegisterForm() {
   return (
     <Form handleSubmit={form.handleSubmit}>
       <form.AppForm>
-        <FieldSet className="block space-y-2 sm:min-w-sm">
-          <FieldLegend>Register</FieldLegend>
+        <form.AppField name="username">
+          {(f) => (
+            <f.TextField
+              label="Username"
+              onChange={(e) => (e.target.value = kebabCase(e.target.value))}
+            />
+          )}
+        </form.AppField>
 
-          <form.AppField name="username">
-            {(f) => (
-              <f.TextField
-                label="Username"
-                onChange={(e) => (e.target.value = kebabCase(e.target.value))}
-              />
-            )}
-          </form.AppField>
+        <form.AppField name="password">
+          {(f) => <f.TextField type="password" label="Password" />}
+        </form.AppField>
 
-          <form.AppField name="password">
-            {(f) => <f.TextField type="password" label="Password" />}
-          </form.AppField>
+        <form.AppField
+          name="confirmPassword"
+          validators={{
+            onChangeListenTo: ["password"],
+            onChange: ({ value, fieldApi }) => {
+              if (value !== fieldApi.form.getFieldValue("password"))
+                return { message: "Passwords don't match" }
+            },
+          }}
+        >
+          {(f) => <f.TextField type="password" label="Confirm password" />}
+        </form.AppField>
 
-          <form.AppField
-            name="confirmPassword"
-            validators={{
-              onChangeListenTo: ["password"],
-              onChange: ({ value, fieldApi }) => {
-                if (value !== fieldApi.form.getFieldValue("password"))
-                  return { message: "Passwords don't match" }
-              },
-            }}
-          >
-            {(f) => <f.TextField type="password" label="Confirm password" />}
-          </form.AppField>
+        <form.SubmitButton>Sign up</form.SubmitButton>
 
-          <form.SubmitButton>Register</form.SubmitButton>
-
-          {formError && <FieldError>{formError}</FieldError>}
-        </FieldSet>
+        {formError && <FieldError>{formError}</FieldError>}
       </form.AppForm>
     </Form>
   )
