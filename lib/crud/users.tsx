@@ -13,6 +13,7 @@ export async function readUser(
 ) {
   return await db.query.user.findFirst(args)
 }
+
 export async function listUsers(
   args: Parameters<typeof db.query.user.findMany>[0]
 ) {

@@ -17,14 +17,14 @@ export async function updatePriceGroup({
   await db.update(priceGroups).set(priceGroup).where(eq(priceGroups.id, id))
 }
 
+export async function deletePriceGroup(id: string) {
+  await db.delete(priceGroups).where(eq(priceGroups.id, id))
+}
+
 export async function listPriceGroups(
   args: Parameters<typeof db.query.priceGroups.findMany>[0] = {
     orderBy: [asc(priceGroups.quantityThreshold), asc(priceGroups.name)],
   }
 ) {
   return await db.query.priceGroups.findMany(args)
-}
-
-export async function deletePriceGroup(id: string) {
-  await db.delete(priceGroups).where(eq(priceGroups.id, id))
 }

@@ -4,6 +4,10 @@ import { db } from "@/lib/db"
 import { items, prices as pricesTable } from "@/lib/db/schema"
 import { count, ilike } from "drizzle-orm"
 
+export async function countItems() {
+  return (await db.select({ count: count() }).from(items))[0].count
+}
+
 export async function createItem({
   name,
   prices = [],
@@ -20,10 +24,6 @@ export async function createItem({
       await tx.insert(pricesTable).values({ item, price, priceGroup })
     }
   })
-}
-
-export async function getItemCount() {
-  return (await db.select({ count: count() }).from(items))[0].count
 }
 
 export async function listItems({

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/pagination"
 import {
   createItem,
-  getItemCount,
+  countItems,
   ItemWithRelations,
   listItems,
 } from "@/lib/crud/item"
@@ -67,7 +67,7 @@ export default function CreateItemForm(props: {
   }
 
   useEffect(() => {
-    getItemCount().then(setItemCount)
+    countItems().then(setItemCount)
 
     refreshItems()
   }, [])
