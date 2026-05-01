@@ -7,6 +7,7 @@ import { countUser } from "@/lib/crud/users"
 export const auth = betterAuth({
   emailAndPassword: { enabled: true },
   user: {
+    deleteUser: { enabled: true },
     additionalFields: {
       active: { type: "boolean", defaultValue: false, input: false },
     },

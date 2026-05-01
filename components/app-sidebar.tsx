@@ -1,11 +1,10 @@
 "use client"
 
-import { Button, ButtonProps } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
@@ -23,12 +22,10 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarTrigger,
-  useSidebar,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/contexts/session-ctx"
 import { authClient } from "@/lib/auth-client"
 import capitalize from "@/lib/capitalize"
-import { cn } from "@/lib/utils"
 import {
   MoneyIcon,
   PackageIcon,
@@ -37,7 +34,9 @@ import {
   MoonIcon,
   DesktopIcon,
   SignOutIcon,
-  UserIcon,
+  UserCircleIcon,
+  UsersIcon,
+  TrashIcon,
 } from "@phosphor-icons/react/ssr"
 import { useTheme } from "next-themes"
 import Link from "next/link"
@@ -59,84 +58,91 @@ function DynamicSidebarLink(props: {
   })
 }
 
-function ThemeButton({
-  theme,
-  className,
-  onClick,
-  variant,
-  ...props
-}: { theme: string } & ButtonProps) {
-  const [mounted, setMounted] = useState(false)
-  const themeState = useTheme()
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
-    return <Button variant={variant ?? "ghost"} {...props} />
-  }
-
-  return (
-    <Button
-      className={cn(
-        className,
-        themeState.theme === theme ? "" : "",
-        "border-0"
-      )}
-      variant={variant ?? (themeState.theme === theme ? "default" : "ghost")}
-      onClick={(e) => {
-        themeState.setTheme(theme)
-        onClick?.(e)
-      }}
-      {...props}
-    />
-  )
-}
-
 function ThemeSidebarItem() {
-  const { state } = useSidebar()
   const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
   const themeIconMap: { [theme: string]: ReactNode } = {
     light: <SunIcon />,
     system: <DesktopIcon />,
     dark: <MoonIcon />,
   }
 
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) return null
+
   return (
     <SidebarMenuItem>
-      {state === "expanded" ? (
-        <ButtonGroup className="border">
-          {Object.entries(themeIconMap).map(([theme, icon], i) => (
-            <ThemeButton key={i} theme={theme}>
-              {icon} {capitalize(theme)}
-            </ThemeButton>
-          ))}
-        </ButtonGroup>
-      ) : (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton>{themeIconMap[theme!]}</SidebarMenuButton>
-          </DropdownMenuTrigger>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <SidebarMenuButton>
+            {themeIconMap[theme ?? ""] ?? <DesktopIcon />} Theme
+          </SidebarMenuButton>
+        </DropdownMenuTrigger>
 
-          <DropdownMenuContent
-            side="right"
-            align="end"
-            className="relative left-2"
-          >
-            <DropdownMenuGroup>
-              <DropdownMenuLabel>Theme</DropdownMenuLabel>
-              <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
-                {Object.entries(themeIconMap).map(([theme, icon], i) => (
-                  <DropdownMenuRadioItem key={i} value={theme}>
-                    {icon} {capitalize(theme)}
-                  </DropdownMenuRadioItem>
-                ))}
-              </DropdownMenuRadioGroup>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
+        <DropdownMenuContent
+          side="right"
+          align="end"
+          className="relative left-2"
+        >
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Theme</DropdownMenuLabel>
+            <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
+              {Object.entries(themeIconMap).map(([theme, icon], i) => (
+                <DropdownMenuRadioItem key={i} value={theme}>
+                  {icon} {capitalize(theme)}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuRadioGroup>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </SidebarMenuItem>
+  )
+}
+
+function UserSidebarItem() {
+  return (
+    <SidebarMenuItem>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <SidebarMenuButton>
+            <UserCircleIcon />
+            Account
+          </SidebarMenuButton>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          side="right"
+          align="end"
+          className="relative left-2"
+        >
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Manage account</DropdownMenuLabel>
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={async () => {
+                await authClient.signOut()
+                redirect("/")
+              }}
+            >
+              <SignOutIcon />
+              Sign out
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              variant="destructive"
+              onClick={async () => {
+                await authClient.deleteUser()
+                redirect("/")
+              }}
+            >
+              <TrashIcon />
+              Delete account
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </SidebarMenuItem>
   )
 }
@@ -208,7 +214,7 @@ export function AppSidebar() {
                 {({ href, ...props }) => (
                   <SidebarMenuButton asChild {...props}>
                     <Link href={href!}>
-                      <UserIcon />
+                      <UsersIcon />
                       Users
                     </Link>
                   </SidebarMenuButton>
@@ -221,24 +227,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu className="gap-2">
           <ThemeSidebarItem />
-
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              className="bg-destructive/10 text-destructive hover:bg-destructive/20 hover:text-destructive focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40"
-              onClick={() =>
-                authClient.signOut({
-                  fetchOptions: {
-                    onSuccess: () => {
-                      redirect("/")
-                    },
-                  },
-                })
-              }
-            >
-              <SignOutIcon />
-              Sign out
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          <UserSidebarItem />
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
