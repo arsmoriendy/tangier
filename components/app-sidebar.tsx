@@ -1,5 +1,6 @@
 "use client"
 
+import { ChangePasswordForm } from "@/components/change-password-form"
 import { ChangeUsernameForm } from "@/components/change-username-form"
 import {
   Dialog,
@@ -148,6 +149,19 @@ function UserSidebarItem() {
               <DialogContent>
                 <DialogTitle>Change username</DialogTitle>
                 <ChangeUsernameForm />
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                  Change password
+                </DropdownMenuItem>
+              </DialogTrigger>
+
+              <DialogContent>
+                <DialogTitle>Change password</DialogTitle>
+                <ChangePasswordForm />
               </DialogContent>
             </Dialog>
 
