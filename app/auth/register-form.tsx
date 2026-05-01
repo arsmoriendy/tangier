@@ -21,7 +21,7 @@ const registerDefaultValues: z.infer<typeof registerSchema> = {
   confirmPassword: "",
 }
 
-export function RegisterFirstUserForm() {
+export function RegisterForm() {
   const form = useAppForm({
     defaultValues: registerDefaultValues,
     validators: { onMount: registerSchema, onChange: registerSchema },
@@ -50,7 +50,7 @@ export function RegisterFirstUserForm() {
     <Form handleSubmit={form.handleSubmit}>
       <form.AppForm>
         <FieldSet className="block space-y-2 sm:min-w-sm">
-          <FieldLegend>Register first user</FieldLegend>
+          <FieldLegend>Register</FieldLegend>
 
           <form.AppField name="username">
             {(f) => (
