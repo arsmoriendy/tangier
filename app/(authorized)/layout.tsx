@@ -15,6 +15,7 @@ export default async function AuthorizedLayout({
   })
 
   if (!session) redirect("/auth")
+  if (!session.user.active) redirect("/auth/inactive")
 
   return (
     <SessionProvider session={session}>
