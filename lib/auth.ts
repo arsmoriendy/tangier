@@ -20,7 +20,13 @@ export const auth = betterAuth({
         // administrate and activate first user
         before: async (user) => {
           const userCount = await countUser()
-          return { data: { ...user, active: userCount === 0, role: "admin" } }
+          return {
+            data: {
+              ...user,
+              active: userCount === 0,
+              role: userCount === 0 ? "admin" : "user",
+            },
+          }
         },
       },
     },
