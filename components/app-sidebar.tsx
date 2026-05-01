@@ -105,19 +105,27 @@ function ThemeSidebarItem() {
 }
 
 function UserSidebarItem() {
+  const session = useSession()
   return (
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton>
-            <UserCircleIcon />
-            Account
+          <SidebarMenuButton size="lg">
+            <div className="grid aspect-square size-8 place-items-center">
+              <UserCircleIcon />
+            </div>
+            <div className="space-y-0.5">
+              <small className="block text-muted-foreground">
+                Signed in as
+              </small>
+              <span>{session.user.name}</span>
+            </div>
           </SidebarMenuButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           side="right"
           align="end"
-          className="relative left-2"
+          className="relative left-2 min-w-3xs"
         >
           <DropdownMenuGroup>
             <DropdownMenuLabel>Manage account</DropdownMenuLabel>
@@ -232,6 +240,7 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu className="gap-2">
           <ThemeSidebarItem />
+          <hr />
           <UserSidebarItem />
         </SidebarMenu>
       </SidebarFooter>
