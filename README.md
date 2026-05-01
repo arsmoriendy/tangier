@@ -13,7 +13,7 @@ Run with the bun runtime, e.g. `bun -b dev`
 5. Update and delete items
 6. Update and delete transactions
 7. Hold and recall
-8. Authentication / cashier name on receipt
+8. Cashier name on receipt
 9. Auto set price based on quantity threshold
 10. Keyboard shortcuts
 11. Underpriced indicator
