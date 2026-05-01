@@ -11,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useSession } from "@/contexts/session-ctx"
 import { authClient } from "@/lib/auth-client"
 
 export function UsersTable() {
