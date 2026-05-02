@@ -25,5 +25,5 @@ export function BarcodeGroupsProvider(props: {
 
 export const useBarcodeGroups = () => {
   const { state, setState } = useContext(barcodeGroupCtx)
-  return { priceGroups: state, setPriceGroups: setState }
+  return { barcodeGroups: state, setBarcodeGroups: setState }
 }
