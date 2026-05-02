@@ -34,9 +34,6 @@ export const prices = pgTable(
     item: uuid("item").notNull(),
     price: numeric({ mode: "number" }).notNull(),
     priceGroup: uuid("price_group").notNull(),
-    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
   },
   (table) => [
     foreignKey({
@@ -54,7 +51,7 @@ export const prices = pgTable(
       .onUpdate("cascade")
       .onDelete("cascade"),
     primaryKey({
-      columns: [table.item, table.price, table.priceGroup, table.createdAt],
+      columns: [table.item, table.price, table.priceGroup],
       name: "prices_pkey",
     }),
   ]

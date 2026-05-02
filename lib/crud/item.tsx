@@ -41,7 +41,7 @@ export async function listItems({
     offset,
     with: {
       prices: {
-        columns: { price: true, createdAt: true },
+        columns: { price: true },
         with: { priceGroup: true },
       },
     },
