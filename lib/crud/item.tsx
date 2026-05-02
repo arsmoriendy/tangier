@@ -1,7 +1,11 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { items, prices as pricesTable } from "@/lib/db/schema"
+import {
+  items,
+  prices as pricesTable,
+  barcodes as barcodesTable,
+} from "@/lib/db/schema"
 import { count, ilike } from "drizzle-orm"
 
 export async function countItems() {
@@ -11,18 +15,34 @@ export async function countItems() {
 export async function createItem({
   name,
   prices = [],
+  barcodes = [],
 }: {
   name: string
   prices?: { priceGroup: string; price: number }[]
+  barcodes?: { barcodeGroup: string; barcode: string }[]
 }) {
   await db.transaction(async (tx) => {
     const { id: item } = (
       await tx.insert(items).values({ name }).returning({ id: items.id })
     )[0]
 
-    for (const { price, priceGroup } of prices) {
-      await tx.insert(pricesTable).values({ item, price, priceGroup })
-    }
+    await tx
+      .insert(pricesTable)
+      .values(
+        prices
+          .filter((p) => p.price > 0)
+          .map(({ price, priceGroup }) => ({ item, price, priceGroup }))
+      )
+
+    await tx.insert(barcodesTable).values(
+      barcodes
+        .filter((b) => b.barcode.length > 0)
+        .map(({ barcode, barcodeGroup }) => ({
+          item,
+          barcode,
+          barcodeGroup,
+        }))
+    )
   })
 }
 
