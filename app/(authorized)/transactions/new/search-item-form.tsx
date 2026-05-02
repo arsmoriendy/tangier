@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { FieldLegend, FieldSet } from "@/components/ui/field"
+import { FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import {
   Table,
   TableBody,
@@ -51,22 +51,23 @@ export const SearchItemForm = withForm({
 
     return (
       <Dialog open={dialogIsOpen} onOpenChange={setDialogOpened}>
-        <FieldSet>
-          <FieldLegend>Search item</FieldLegend>
-          <Form
-            handleSubmit={searchItemForm.handleSubmit}
-            className="flex gap-2"
-          >
-            <searchItemForm.AppField name="name">
-              {(field) => <field.TextField tabIndex={2} />}
-            </searchItemForm.AppField>
-            <searchItemForm.AppForm>
+        <Form handleSubmit={searchItemForm.handleSubmit}>
+          <searchItemForm.AppForm>
+            <FieldLabel>Name</FieldLabel>
+
+            <div className="flex gap-2">
+              <searchItemForm.AppField name="name">
+                {(field) => (
+                  <field.TextField tabIndex={2} id="search-item-name" />
+                )}
+              </searchItemForm.AppField>
+
               <searchItemForm.SubmitButton size="icon">
                 <MagnifyingGlassIcon />
               </searchItemForm.SubmitButton>
-            </searchItemForm.AppForm>
-          </Form>
-        </FieldSet>
+            </div>
+          </searchItemForm.AppForm>
+        </Form>
 
         <DialogContent className="max-h-[92vh] w-[92vw] overflow-auto pt-0 sm:max-w-[92vw]">
           <DialogTitle className="mt-4">Select item</DialogTitle>

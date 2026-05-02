@@ -1,0 +1,28 @@
+"use server"
+
+import { db } from "@/lib/db"
+import { barcodes } from "@/lib/db/schema"
+import { eq } from "drizzle-orm"
+
+export async function readBarcode(barcode: string) {
+  return await db.query.barcodes.findFirst({
+    where: eq(barcodes.barcode, barcode),
+    columns: {},
+    with: {
+      barcodeGroup: true,
+      item: {
+        // match `ItemWithRelations`
+        with: {
+          barcodes: {
+            columns: { barcode: true },
+            with: { barcodeGroup: true },
+          },
+          prices: {
+            columns: { price: true },
+            with: { priceGroup: true },
+          },
+        },
+      },
+    },
+  })
+}

@@ -14,6 +14,7 @@ import {
 } from "@/app/(authorized)/transactions/new/add-item-schema"
 import { useAddItem } from "@/app/(authorized)/transactions/new/add-item-ctx"
 import { defaultCreateTransacionValues } from "@/app/(authorized)/transactions/new/create-transaction-schema"
+import { ScanBarcodeField } from "@/app/(authorized)/transactions/new/scan-barcode-field"
 
 export const AddItemForm = withForm({
   defaultValues: defaultCreateTransacionValues,
@@ -44,7 +45,11 @@ export const AddItemForm = withForm({
 
     return (
       <>
-        <SearchItemForm form={form} />
+        <FieldSet>
+          <FieldLegend>Search item</FieldLegend>
+          <SearchItemForm form={form} />
+          <ScanBarcodeField form={form} />
+        </FieldSet>
 
         <FieldSet>
           <FieldLegend>Add item</FieldLegend>
