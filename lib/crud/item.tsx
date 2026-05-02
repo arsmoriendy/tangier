@@ -40,6 +40,10 @@ export async function listItems({
     limit,
     offset,
     with: {
+      barcodes: {
+        columns: { barcode: true },
+        with: { barcodeGroup: true },
+      },
       prices: {
         columns: { price: true },
         with: { priceGroup: true },
