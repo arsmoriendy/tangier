@@ -41,7 +41,7 @@ export default function CreatePriceGroupForm() {
 
   useEffect(() => {
     form.setFieldValue("hexColor", getRandomColor())
-  })
+  }, [])
 
   return (
     <FieldSet>
