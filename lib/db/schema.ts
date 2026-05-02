@@ -16,6 +16,40 @@ export const items = pgTable("items", {
   name: varchar().notNull(),
 })
 
+export const barcodeGroups = pgTable("barcode_groups", {
+  id: uuid().primaryKey().notNull().defaultRandom(),
+  name: varchar().notNull(),
+})
+
+export const barcodes = pgTable(
+  "barcodes",
+  {
+    item: uuid("item").notNull(),
+    barcodeGroup: uuid("barcode_group").notNull(),
+    barcode: varchar().notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.item],
+      foreignColumns: [items.id],
+      name: "items_fk",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+    foreignKey({
+      columns: [table.barcodeGroup],
+      foreignColumns: [barcodeGroups.id],
+      name: "barcode_group_fk",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+    primaryKey({
+      columns: [table.item, table.barcodeGroup],
+      name: "barcodes_pkey",
+    }),
+  ]
+)
+
 export const priceGroups = pgTable(
   "price_groups",
   {
