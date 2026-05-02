@@ -7,6 +7,7 @@ import { createItem } from "@/lib/crud/item"
 import z from "zod"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
+import { toast } from "sonner"
 
 export default function CreateItemForm() {
   const { priceGroups } = usePriceGroups()
@@ -36,6 +37,8 @@ export default function CreateItemForm() {
     },
     onSubmit: async ({ value }) => {
       await createItem(value)
+      form.reset()
+      toast.success("Successfully created item")
     },
   })
 
