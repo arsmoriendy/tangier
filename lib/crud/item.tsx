@@ -26,23 +26,24 @@ export async function createItem({
       await tx.insert(items).values({ name }).returning({ id: items.id })
     )[0]
 
-    await tx
-      .insert(pricesTable)
-      .values(
-        prices
-          .filter((p) => p.price > 0)
-          .map(({ price, priceGroup }) => ({ item, price, priceGroup }))
-      )
+    prices = prices.filter((p) => p.price > 0)
+    barcodes = barcodes.filter((b) => b.barcode.length > 0)
 
-    await tx.insert(barcodesTable).values(
-      barcodes
-        .filter((b) => b.barcode.length > 0)
-        .map(({ barcode, barcodeGroup }) => ({
+    prices.length > 0 &&
+      (await tx
+        .insert(pricesTable)
+        .values(
+          prices.map(({ price, priceGroup }) => ({ item, price, priceGroup }))
+        ))
+
+    barcodes.length > 0 &&
+      (await tx.insert(barcodesTable).values(
+        barcodes.map(({ barcode, barcodeGroup }) => ({
           item,
           barcode,
           barcodeGroup,
         }))
-    )
+      ))
   })
 }
 
