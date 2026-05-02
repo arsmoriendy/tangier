@@ -8,19 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { ItemWithRelations } from "@/lib/crud/item"
-import { listPriceGroups } from "@/lib/crud/price-group"
 import { formatCurrency } from "@/lib/i18n/currency"
-import { useEffect, useState } from "react"
 
 export function ItemsTable(props: { items: ItemWithRelations[] }) {
-  const [priceGroups, setPriceGroups] = useState<
-    Awaited<ReturnType<typeof listPriceGroups>>
-  >([])
-
-  useEffect(() => {
-    listPriceGroups().then(setPriceGroups)
-  }, [])
+  const { priceGroups } = usePriceGroups()
 
   return (
     <Table>

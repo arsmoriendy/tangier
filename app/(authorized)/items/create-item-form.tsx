@@ -18,13 +18,12 @@ import {
   ItemWithRelations,
   listItems,
 } from "@/lib/crud/item"
-import { priceGroups } from "@/lib/db/schema"
 import { useEffect, useState } from "react"
 import z from "zod"
+import { usePriceGroups } from "@/contexts/price-groups-ctx"
 
-export default function CreateItemForm(props: {
-  priceGroups: (typeof priceGroups.$inferSelect)[]
-}) {
+export default function CreateItemForm() {
+  const { priceGroups } = usePriceGroups()
   const createItemFormSchema = z.object({
     name: z.string().min(1),
     prices: z.array(
@@ -88,7 +87,7 @@ export default function CreateItemForm(props: {
 
           <FieldSet>
             <FieldLegend>Prices</FieldLegend>
-            {props.priceGroups.map(({ id, name, hexColor }, i) => (
+            {priceGroups.map(({ id, name, hexColor }, i) => (
               <div key={i}>
                 <form.Field name={`prices[${i}].priceGroup`}>
                   {() => <input type="hidden" value={id} />}
