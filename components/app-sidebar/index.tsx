@@ -22,6 +22,7 @@ import {
   PackageIcon,
   BasketIcon,
   UsersIcon,
+  BarcodeIcon,
 } from "@phosphor-icons/react/ssr"
 import Link from "next/link"
 
@@ -82,6 +83,17 @@ export function AppSidebar() {
                   <Link href={href!}>
                     <MoneyIcon />
                     Price groups
+                  </Link>
+                </SidebarMenuButton>
+              )}
+            </DynamicSidebarLink>
+
+            <DynamicSidebarLink href="/barcode-groups">
+              {({ href, ...props }) => (
+                <SidebarMenuButton asChild {...props}>
+                  <Link href={href!}>
+                    <BarcodeIcon />
+                    Barcode groups
                   </Link>
                 </SidebarMenuButton>
               )}
