@@ -8,11 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { useItems } from "@/contexts/items-ctx"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
-import { ItemWithRelations } from "@/lib/crud/item"
 import { formatCurrency } from "@/lib/i18n/currency"
 
-export function ItemsTable(props: { items: ItemWithRelations[] }) {
+export function ItemsTable() {
+  const { itemsSnap } = useItems()
   const { priceGroups } = usePriceGroups()
 
   return (
@@ -31,7 +32,7 @@ export function ItemsTable(props: { items: ItemWithRelations[] }) {
       </TableHeader>
 
       <TableBody>
-        {props.items.map((item, i) => (
+        {itemsSnap.map((item, i) => (
           <TableRow key={i}>
             <TableCell>{item.name}</TableCell>
             {priceGroups.map((pg, i) => {

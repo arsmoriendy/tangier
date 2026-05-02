@@ -34,7 +34,7 @@ export async function listItems({
   name?: string
   limit?: number
   offset?: number
-}) {
+} = {}) {
   return await db.query.items.findMany({
     where: ilike(items.name, `%${name}%`),
     limit,

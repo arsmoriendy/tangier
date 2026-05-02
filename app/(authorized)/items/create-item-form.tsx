@@ -12,15 +12,11 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import {
-  createItem,
-  countItems,
-  ItemWithRelations,
-  listItems,
-} from "@/lib/crud/item"
+import { createItem, countItems, listItems } from "@/lib/crud/item"
 import { useEffect, useState } from "react"
 import z from "zod"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
+import { useItems } from "@/contexts/items-ctx"
 
 export default function CreateItemForm() {
   const { priceGroups } = usePriceGroups()
@@ -50,18 +46,20 @@ export default function CreateItemForm() {
   const disabledClass =
     "cursor-not-allowed text-muted-foreground hover:text-muted-foreground"
 
-  const [items, setItems] = useState<ItemWithRelations[]>([])
+  const { itemsSnap, itemsProxy } = useItems()
   const [itemCount, setItemCount] = useState(0)
   const [page, setPage] = useState(0)
   const [searchName, setSearchName] = useState("")
 
   async function refreshItems() {
-    setItems(
-      await listItems({
+    itemsProxy.splice(
+      0,
+      itemsSnap.length,
+      ...(await listItems({
         name: searchName,
         limit: itemsPerPage,
         offset: page * itemsPerPage,
-      })
+      }))
     )
   }
 
@@ -120,7 +118,7 @@ export default function CreateItemForm() {
 
         <SearchBar handleSearch={setSearchName} />
 
-        <ItemsTable items={items} />
+        <ItemsTable />
 
         <Pagination>
           <PaginationContent>
