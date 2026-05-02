@@ -1,4 +1,5 @@
 import CreateItemForm from "@/app/(authorized)/items/create-item-form"
+import ItemList from "@/app/(authorized)/items/item-list"
 import { BarcodeGroupsProvider } from "@/contexts/barcode-groups-ctx"
 import { ItemsProvider } from "@/contexts/items-ctx"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
@@ -16,6 +17,7 @@ export default async function Page() {
       <PriceGroupsProvider priceGroups={priceGroups}>
         <ItemsProvider items={items}>
           <CreateItemForm />
+          <ItemList />
         </ItemsProvider>
       </PriceGroupsProvider>
     </BarcodeGroupsProvider>
