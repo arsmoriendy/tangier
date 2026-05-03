@@ -6,18 +6,17 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Item pagination limit on search
-2. Item unit
-3. Item buy price
-4. Server function authorization
-5. Update and delete items
-6. Update and delete transactions
-7. Hold and recall
-8. Cashier name on receipt
-9. Auto set price based on quantity threshold
-10. Keyboard shortcuts
-11. Underpriced indicator
-12. Reorder transaction items / group based on new category column
-13. Stock tracking
-14. Per item quantity threshold
-15. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
+1. Item unit
+2. Item buy price
+3. Server function authorization
+4. Update and delete items
+5. Update and delete transactions
+6. Hold and recall
+7. Cashier name on receipt
+8. Auto set price based on quantity threshold
+9. Keyboard shortcuts
+10. Underpriced indicator
+11. Reorder transaction items / group based on new category column
+12. Stock tracking
+13. Per item quantity threshold
+14. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))

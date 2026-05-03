@@ -8,8 +8,13 @@ import {
 } from "@/lib/db/schema"
 import { count, ilike } from "drizzle-orm"
 
-export async function countItems() {
-  return (await db.select({ count: count() }).from(items))[0].count
+export async function countItems({ name }: { name: string } = { name: "" }) {
+  return (
+    await db
+      .select({ count: count() })
+      .from(items)
+      .where(ilike(items.name, `%${name}%`))
+  )[0].count
 }
 
 export async function createItem({

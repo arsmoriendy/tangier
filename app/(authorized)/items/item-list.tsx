@@ -43,8 +43,14 @@ export default function CreateItemForm() {
   }, [])
 
   useEffect(() => {
+    countItems({ name: searchName }).then(setItemCount)
+    setPage(0)
     refreshItems()
-  }, [page, searchName])
+  }, [searchName])
+
+  useEffect(() => {
+    refreshItems()
+  }, [page])
 
   return (
     <FieldSet className="gap-0">
