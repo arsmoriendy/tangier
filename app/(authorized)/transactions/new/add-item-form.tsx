@@ -57,6 +57,10 @@ export const AddItemForm = withForm({
         <FieldSet>
           <FieldLegend>Search item</FieldLegend>
           <SearchItemForm form={form} />
+        </FieldSet>
+
+        <FieldSet>
+          <FieldLegend>Scan barcode</FieldLegend>
           <ScanBarcodeField form={form} />
         </FieldSet>
 

@@ -1,6 +1,7 @@
 import { useAddItem } from "@/app/(authorized)/transactions/new/add-item-ctx"
 import { defaultAddItemValues } from "@/app/(authorized)/transactions/new/add-item-schema"
 import { Form, useAppForm, withForm } from "@/components/form"
+import { Badge } from "@/components/ui/badge"
 import {
   Dialog,
   DialogContent,
@@ -17,6 +18,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
+import { useUnits } from "@/contexts/units-ctx"
 import { listItems } from "@/lib/crud/item"
 import { ItemWithRelations } from "@/lib/crud/item"
 import { formatCurrency } from "@/lib/i18n/currency"
@@ -24,13 +26,17 @@ import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
 import { useState } from "react"
 import z from "zod"
 
-const searchItemSchema = z.object({ name: z.string().min(0) })
+const searchItemSchema = z.object({
+  name: z.string().min(0),
+  unitId: z.string().optional(),
+})
 const defaultSearchItemValues: z.infer<typeof searchItemSchema> = { name: "" }
 
 export const SearchItemForm = withForm({
   defaultValues: defaultAddItemValues,
   render: function Render({ form }) {
     const { addItemProxy, addItemSnap } = useAddItem()
+    const { units } = useUnits()
     const { priceGroups } = usePriceGroups()
     const searchItemForm = useAppForm({
       defaultValues: defaultSearchItemValues,
@@ -38,11 +44,10 @@ export const SearchItemForm = withForm({
         onMount: searchItemSchema,
         onChange: searchItemSchema,
       },
-      onSubmit: ({ value: { name } }) => {
-        listItems({ name }).then((items) => {
-          setFoundItems(items)
-          setDialogOpened(true)
-        })
+      onSubmit: async ({ value }) => {
+        const items = await listItems(value)
+        setFoundItems(items)
+        setDialogOpened(true)
       },
     })
 
@@ -65,6 +70,28 @@ export const SearchItemForm = withForm({
               <searchItemForm.SubmitButton size="icon">
                 <MagnifyingGlassIcon />
               </searchItemForm.SubmitButton>
+            </div>
+
+            <FieldLabel>Unit filter</FieldLabel>
+            <div className="flex flex-wrap gap-2">
+              <searchItemForm.Subscribe selector={(f) => f.values.unitId}>
+                {(unit) =>
+                  units.map((u, i) => (
+                    <Badge
+                      key={i}
+                      className="select-none hover:bg-primary hover:text-primary-foreground"
+                      variant={u.id === unit ? "default" : "outline"}
+                      onClick={() => {
+                        if (unit === u.id)
+                          searchItemForm.setFieldValue("unitId", undefined)
+                        else searchItemForm.setFieldValue("unitId", u.id)
+                      }}
+                    >
+                      {u.name}
+                    </Badge>
+                  ))
+                }
+              </searchItemForm.Subscribe>
             </div>
           </searchItemForm.AppForm>
         </Form>

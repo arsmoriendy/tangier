@@ -6,7 +6,7 @@ import {
   prices as pricesTable,
   barcodes as barcodesTable,
 } from "@/lib/db/schema"
-import { count, ilike } from "drizzle-orm"
+import { and, count, eq, ilike } from "drizzle-orm"
 
 export async function countItems({ name }: { name: string } = { name: "" }) {
   return (
@@ -56,15 +56,21 @@ export async function createItem({
 
 export async function listItems({
   name = "",
+  unitId = "",
   limit = 10,
   offset = 0,
 }: {
   name?: string
+  unitId?: string
   limit?: number
   offset?: number
 } = {}) {
   return await db.query.items.findMany({
-    where: ilike(items.name, `%${name}%`),
+    where: and(
+      ilike(items.name, `%${name}%`),
+      unitId.length > 0 ? eq(items.unit, unitId) : undefined,
+      undefined
+    ),
     limit,
     offset,
     columns: { unit: false },
