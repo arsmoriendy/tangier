@@ -8,7 +8,10 @@ import { formatCurrency } from "@/lib/i18n/currency"
 import { useEffect } from "react"
 import { SearchItemForm } from "@/app/(authorized)/transactions/new/search-item-form"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
-import { addItemSchema } from "@/app/(authorized)/transactions/new/add-item-schema"
+import {
+  addItemSchema,
+  defaultAddItemValues,
+} from "@/app/(authorized)/transactions/new/add-item-schema"
 import { useAddItem } from "@/app/(authorized)/transactions/new/add-item-ctx"
 import { defaultCreateTransacionValues } from "@/app/(authorized)/transactions/new/create-transaction-schema"
 import { ScanBarcodeField } from "@/app/(authorized)/transactions/new/scan-barcode-field"
@@ -20,7 +23,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import z from "zod"
 
 export const AddItemForm = withForm({
   defaultValues: defaultCreateTransacionValues,
@@ -29,16 +31,8 @@ export const AddItemForm = withForm({
     const { units } = useUnits()
     const { addItemProxy, addItemSnap } = useAddItem()
 
-    const defaultAddItemValues: z.infer<typeof addItemSchema> = {
-      name: "",
-      unit: units[0]?.name,
-      unitPrice: 0,
-      quantity: 1,
-      quantifiedPrice: 0,
-    }
-
     const form = useAppForm({
-      defaultValues: defaultAddItemValues,
+      defaultValues: { ...defaultAddItemValues, unit: units[0]?.name },
       validators: { onMount: addItemSchema, onChange: addItemSchema },
       onSubmit: ({ value }) => {
         createTransactionForm.setFieldValue("transactionItems", (items) => [

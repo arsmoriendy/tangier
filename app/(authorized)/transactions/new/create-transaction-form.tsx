@@ -82,6 +82,7 @@ export default function CreateTransactionForm() {
                   <TableHeader>
                     <TableRow>
                       <TableHead>Name</TableHead>
+                      <TableHead>Unit</TableHead>
                       <TableHead>Unit price</TableHead>
                       <TableHead>Qty</TableHead>
                       <TableHead>Quantified price</TableHead>
@@ -92,6 +93,11 @@ export default function CreateTransactionForm() {
                       <TableRow key={i}>
                         <TableCell>
                           <form.AppField name={`transactionItems[${i}].name`}>
+                            {(field) => <field.TextField />}
+                          </form.AppField>
+                        </TableCell>
+                        <TableCell>
+                          <form.AppField name={`transactionItems[${i}].unit`}>
                             {(field) => <field.TextField />}
                           </form.AppField>
                         </TableCell>

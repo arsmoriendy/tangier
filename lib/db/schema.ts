@@ -123,6 +123,7 @@ export const transactionItems = pgTable(
   {
     transaction: uuid().notNull(),
     name: varchar().notNull(),
+    unit: varchar().notNull(),
     unitPrice: numeric("unit_price", { mode: "number" }).notNull(),
     quantity: integer().notNull(),
     quantifiedPrice: numeric("quantified_price", { mode: "number" }).notNull(),

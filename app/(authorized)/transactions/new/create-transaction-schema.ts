@@ -5,6 +5,7 @@ export const createTransactionSchema = z.object({
     .array(
       z.object({
         name: z.string().min(0),
+        unit: z.string(),
         unitPrice: z.number().min(0),
         quantity: z.number().min(1),
         quantifiedPrice: z.number().min(0),
