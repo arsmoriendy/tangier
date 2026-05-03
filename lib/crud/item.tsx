@@ -67,7 +67,9 @@ export async function listItems({
     where: ilike(items.name, `%${name}%`),
     limit,
     offset,
+    columns: { unit: false },
     with: {
+      unit: true,
       barcodes: {
         columns: { barcode: true },
         with: { barcodeGroup: true },
