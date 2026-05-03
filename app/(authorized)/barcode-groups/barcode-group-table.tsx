@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { FieldLegend, FieldSet } from "@/components/ui/field"
 import {
   Table,
   TableBody,
@@ -48,17 +49,15 @@ function BarcodeGroupRow({
 export default function BarcodeGroupsTable() {
   const { barcodeGroups } = useBarcodeGroups()
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {barcodeGroups.map((bg, i) => (
-          <BarcodeGroupRow key={i} barcodeGroup={bg} />
-        ))}
-      </TableBody>
-    </Table>
+    <FieldSet>
+      <FieldLegend>Barcode group list</FieldLegend>
+      <Table>
+        <TableBody>
+          {barcodeGroups.map((bg, i) => (
+            <BarcodeGroupRow key={i} barcodeGroup={bg} />
+          ))}
+        </TableBody>
+      </Table>
+    </FieldSet>
   )
 }
