@@ -11,7 +11,25 @@ import {
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
-export const items = pgTable("items", {
+export const items = pgTable(
+  "items",
+  {
+    id: uuid().primaryKey().notNull().defaultRandom(),
+    name: varchar().notNull(),
+    unit: uuid().notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.unit],
+      foreignColumns: [units.id],
+      name: "units_fk",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+  ]
+)
+
+export const units = pgTable("units", {
   id: uuid().primaryKey().notNull().defaultRandom(),
   name: varchar().notNull(),
 })

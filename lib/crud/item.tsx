@@ -19,16 +19,18 @@ export async function countItems({ name }: { name: string } = { name: "" }) {
 
 export async function createItem({
   name,
+  unit,
   prices = [],
   barcodes = [],
 }: {
   name: string
+  unit: string
   prices?: { priceGroup: string; price: number }[]
   barcodes?: { barcodeGroup: string; barcode: string }[]
 }) {
   await db.transaction(async (tx) => {
     const { id: item } = (
-      await tx.insert(items).values({ name }).returning({ id: items.id })
+      await tx.insert(items).values({ name, unit }).returning({ id: items.id })
     )[0]
 
     prices = prices.filter((p) => p.price > 0)

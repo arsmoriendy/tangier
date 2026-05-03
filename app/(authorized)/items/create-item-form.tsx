@@ -8,12 +8,17 @@ import z from "zod"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
 import { toast } from "sonner"
+import { useContext } from "react"
+import { unitsCtx } from "@/contexts/units-ctx"
+import { Badge } from "@/components/ui/badge"
 
 export default function CreateItemForm() {
   const { priceGroups } = usePriceGroups()
   const { barcodeGroups } = useBarcodeGroups()
+  const { state: units } = useContext(unitsCtx)!
   const createItemFormSchema = z.object({
     name: z.string().min(1),
+    unit: z.uuid(),
     prices: z.array(
       z.object({ priceGroup: z.uuid(), price: z.number().min(0) })
     ),
@@ -23,6 +28,7 @@ export default function CreateItemForm() {
   })
   const defaultValues: z.infer<typeof createItemFormSchema> = {
     name: "",
+    unit: units[0]?.id,
     prices: priceGroups.map(({ id }) => ({ priceGroup: id, price: 0 })),
     barcodes: barcodeGroups.map(({ id }) => ({
       barcodeGroup: id,
@@ -50,6 +56,25 @@ export default function CreateItemForm() {
         <form.AppField name="name">
           {(f) => <f.TextField label="Name" />}
         </form.AppField>
+
+        <FieldSet className="flex-row flex-wrap gap-2">
+          <FieldLegend>Unit</FieldLegend>
+
+          <form.Subscribe selector={(f) => f.values.unit}>
+            {(unit) =>
+              units.map((u, i) => (
+                <Badge
+                  key={i}
+                  className="select-none hover:bg-primary hover:text-primary-foreground"
+                  variant={u.id === unit ? "default" : "outline"}
+                  onClick={() => form.setFieldValue("unit", u.id)}
+                >
+                  {u.name}
+                </Badge>
+              ))
+            }
+          </form.Subscribe>
+        </FieldSet>
 
         <div className="flex gap-2">
           <FieldSet className="flex-1">
