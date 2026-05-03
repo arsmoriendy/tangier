@@ -98,6 +98,7 @@ export const SearchItemForm = withForm({
                   className="group cursor-pointer [&_td]:group-hover:bg-primary [&_td]:group-hover:text-primary-foreground [&_td]:group-focus-visible:bg-primary [&_td]:group-focus-visible:text-primary-foreground"
                   onClick={() => {
                     form.setFieldValue("name", item.name)
+                    form.setFieldValue("unit", item.unit.name)
                     form.setFieldValue(
                       "unitPrice",
                       item.prices.find(

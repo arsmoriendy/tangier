@@ -38,6 +38,7 @@ export const ScanBarcodeField = withForm({
 
             const { item } = res
             form.setFieldValue("name", item.name)
+            form.setFieldValue("unit", item.unit.name)
             form.setFieldValue(
               "unitPrice",
               item.prices.find(

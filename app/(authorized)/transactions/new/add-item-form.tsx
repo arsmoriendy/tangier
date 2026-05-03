@@ -3,24 +3,39 @@ import {
   RadioGroupChoiceCard,
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
-import { FieldLegend, FieldSet } from "@/components/ui/field"
+import { FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useEffect } from "react"
 import { SearchItemForm } from "@/app/(authorized)/transactions/new/search-item-form"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
-import {
-  addItemSchema,
-  defaultAddItemValues,
-} from "@/app/(authorized)/transactions/new/add-item-schema"
+import { addItemSchema } from "@/app/(authorized)/transactions/new/add-item-schema"
 import { useAddItem } from "@/app/(authorized)/transactions/new/add-item-ctx"
 import { defaultCreateTransacionValues } from "@/app/(authorized)/transactions/new/create-transaction-schema"
 import { ScanBarcodeField } from "@/app/(authorized)/transactions/new/scan-barcode-field"
+import { useUnits } from "@/contexts/units-ctx"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import z from "zod"
 
 export const AddItemForm = withForm({
   defaultValues: defaultCreateTransacionValues,
   render: function Render({ form: createTransactionForm }) {
     const { priceGroups } = usePriceGroups()
+    const { units } = useUnits()
     const { addItemProxy, addItemSnap } = useAddItem()
+
+    const defaultAddItemValues: z.infer<typeof addItemSchema> = {
+      name: "",
+      unit: units[0]?.name,
+      unitPrice: 0,
+      quantity: 1,
+      quantifiedPrice: 0,
+    }
 
     const form = useAppForm({
       defaultValues: defaultAddItemValues,
@@ -93,6 +108,31 @@ export const AddItemForm = withForm({
             </RadioGroupChoiceCard>
 
             <div className="flex gap-2">
+              <form.Subscribe selector={(f) => f.values.unit}>
+                {(unit) => (
+                  <div className="space-y-2">
+                    <FieldLabel>Unit</FieldLabel>
+
+                    <Select
+                      value={unit}
+                      onValueChange={(v) => form.setFieldValue("unit", v)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue></SelectValue>
+                      </SelectTrigger>
+
+                      <SelectContent position="item-aligned">
+                        {units.map((unit, i) => (
+                          <SelectItem key={i} value={unit.name}>
+                            {unit.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+              </form.Subscribe>
+
               <form.AppField
                 name="unitPrice"
                 listeners={{

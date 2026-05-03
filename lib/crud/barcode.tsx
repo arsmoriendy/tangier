@@ -12,7 +12,9 @@ export async function readBarcode(barcode: string) {
       barcodeGroup: true,
       item: {
         // match `ItemWithRelations`
+        columns: { unit: false },
         with: {
+          unit: true,
           barcodes: {
             columns: { barcode: true },
             with: { barcodeGroup: true },
