@@ -21,6 +21,7 @@ export function ItemsTable() {
       <TableHeader>
         <TableRow>
           <TableHead rowSpan={2}>Name</TableHead>
+          <TableHead rowSpan={2}>Unit</TableHead>
           <TableHead colSpan={priceGroups.length}>Prices</TableHead>
         </TableRow>
 
@@ -35,6 +36,7 @@ export function ItemsTable() {
         {itemsSnap.map((item, i) => (
           <TableRow key={i}>
             <TableCell>{item.name}</TableCell>
+            <TableCell>{item.unit.name}</TableCell>
             {priceGroups.map((pg, i) => {
               const price = item.prices.find(
                 (p) => p.priceGroup.id === pg.id

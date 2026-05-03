@@ -7,7 +7,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
+import { FieldLabel } from "@/components/ui/field"
 import {
   Table,
   TableBody,
@@ -80,6 +80,7 @@ export const SearchItemForm = withForm({
             <TableHeader className="sticky top-0">
               <TableRow>
                 <TableHead rowSpan={2}>Name</TableHead>
+                <TableHead rowSpan={2}>Unit</TableHead>
                 <TableHead colSpan={priceGroups.length}>Prices</TableHead>
               </TableRow>
 
@@ -112,6 +113,7 @@ export const SearchItemForm = withForm({
                   }}
                 >
                   <TableCell>{item.name}</TableCell>
+                  <TableCell>{item.unit.name}</TableCell>
                   {priceGroups.map((pg, i) => {
                     const price = item.prices.find(
                       (p) => p.priceGroup.id === pg.id
