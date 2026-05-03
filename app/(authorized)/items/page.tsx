@@ -19,7 +19,7 @@ export default async function Page() {
     <BarcodeGroupsProvider barcodeGroups={barcodeGroups}>
       <PriceGroupsProvider priceGroups={priceGroups}>
         <ItemsProvider items={items}>
-          <UnitsProvider initialValue={units}>
+          <UnitsProvider units={units}>
             <CreateItemForm />
             <ItemList />
           </UnitsProvider>

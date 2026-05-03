@@ -1,0 +1,64 @@
+import { Form, useAppForm } from "@/components/form"
+import { Button } from "@/components/ui/button"
+import { useUnits } from "@/contexts/units-ctx"
+import { deleteUnit, updateUnit } from "@/lib/crud/unit"
+import { units } from "@/lib/db/schema"
+import { TrashIcon } from "@phosphor-icons/react/dist/ssr"
+import z from "zod"
+
+const updateUnitFormSchema = z.object({
+  name: z.string().min(1),
+})
+
+export default function UpdateUnitForm(props: {
+  onSubmit?: (value: z.infer<typeof updateUnitFormSchema>) => any
+  onDelete?: () => any
+  unit: typeof units.$inferSelect
+}) {
+  const { units: allUnits, setUnits } = useUnits()
+  const defaultValues: z.infer<typeof updateUnitFormSchema> = {
+    name: props.unit.name,
+  }
+
+  const form = useAppForm({
+    defaultValues,
+    validators: {
+      onMount: updateUnitFormSchema,
+      onChange: updateUnitFormSchema,
+    },
+    onSubmit: async ({ value }) => {
+      await updateUnit({ id: props.unit.id, ...value })
+      setUnits(
+        allUnits.map((u) => (u.id === props.unit.id ? { ...u, ...value } : u))
+      )
+      props.onSubmit?.(value)
+    },
+  })
+
+  return (
+    <Form handleSubmit={form.handleSubmit}>
+      <form.AppField
+        name="name"
+        children={(f) => <f.TextField label="Name" />}
+      />
+
+      <form.AppForm>
+        <div className="flex gap-2">
+          <form.SubmitButton>Update unit</form.SubmitButton>
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={async () => {
+              await deleteUnit(props.unit.id)
+              setUnits((prev) => prev.filter((u) => u.id !== props.unit.id))
+              props.onDelete?.()
+            }}
+          >
+            <TrashIcon />
+            Delete unit
+          </Button>
+        </div>
+      </form.AppForm>
+    </Form>
+  )
+}

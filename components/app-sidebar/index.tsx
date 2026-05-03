@@ -23,6 +23,7 @@ import {
   BasketIcon,
   UsersIcon,
   BarcodeIcon,
+  TagIcon,
 } from "@phosphor-icons/react/ssr"
 import Link from "next/link"
 
@@ -72,6 +73,17 @@ export function AppSidebar() {
                   <Link href={href}>
                     <PackageIcon />
                     Items
+                  </Link>
+                </SidebarMenuButton>
+              )}
+            </DynamicSidebarLink>
+
+            <DynamicSidebarLink href="/units">
+              {({ href, ...props }) => (
+                <SidebarMenuButton asChild {...props}>
+                  <Link href={href!}>
+                    <TagIcon />
+                    Units
                   </Link>
                 </SidebarMenuButton>
               )}

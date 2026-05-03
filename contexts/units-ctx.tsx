@@ -1,27 +1,26 @@
 "use client"
 
 import { StateContext } from "@/contexts/state-context"
-import { type units } from "@/lib/db/schema"
-import { createContext, ReactNode, useState } from "react"
+import { units } from "@/lib/db/schema"
+import { createContext, ReactNode, useContext, useState } from "react"
 
 type Units = (typeof units.$inferSelect)[]
 
-export const unitsCtx = createContext<StateContext<Units> | undefined>(
-  undefined
-)
+const unitsCtx = createContext<StateContext<Units>>({
+  state: [],
+  setState: () => {},
+})
 
-export function UnitsProvider({
-  initialValue,
-  children,
-}: {
-  initialValue: Units
-  children: ReactNode
-}) {
-  const [units, setUnits] = useState(initialValue)
-
+export function UnitsProvider(props: { children: ReactNode; units: Units }) {
+  const [state, setState] = useState(props.units)
   return (
-    <unitsCtx.Provider value={{ state: units, setState: setUnits }}>
-      {children}
+    <unitsCtx.Provider value={{ state, setState }}>
+      {props.children}
     </unitsCtx.Provider>
   )
+}
+
+export const useUnits = () => {
+  const { state, setState } = useContext(unitsCtx)
+  return { units: state, setUnits: setState }
 }

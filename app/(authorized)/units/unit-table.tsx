@@ -1,6 +1,6 @@
 "use client"
 
-import UpdateBarcodeGroupForm from "@/app/(authorized)/barcode-groups/update-barcode-group-form"
+import UpdateUnitForm from "@/app/(authorized)/units/update-unit-form"
 import {
   Dialog,
   DialogContent,
@@ -9,28 +9,24 @@ import {
 } from "@/components/ui/dialog"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
-import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
-import { barcodeGroups } from "@/lib/db/schema"
+import { useUnits } from "@/contexts/units-ctx"
+import { units } from "@/lib/db/schema"
 import { useState } from "react"
 
-function BarcodeGroupRow({
-  barcodeGroup,
-}: {
-  barcodeGroup: typeof barcodeGroups.$inferSelect
-}) {
+function UnitRow({ unit }: { unit: typeof units.$inferSelect }) {
   const [openDialog, setDialogOpen] = useState(false)
 
   return (
     <Dialog open={openDialog} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
         <TableRow className="cursor-pointer">
-          <TableCell>{barcodeGroup.name}</TableCell>
+          <TableCell>{unit.name}</TableCell>
         </TableRow>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Update barcode group</DialogTitle>
-        <UpdateBarcodeGroupForm
-          barcodeGroup={barcodeGroup}
+        <DialogTitle>Update unit</DialogTitle>
+        <UpdateUnitForm
+          unit={unit}
           onSubmit={() => setDialogOpen(false)}
           onDelete={() => setDialogOpen(false)}
         />
@@ -39,15 +35,15 @@ function BarcodeGroupRow({
   )
 }
 
-export default function BarcodeGroupsTable() {
-  const { barcodeGroups } = useBarcodeGroups()
+export default function UnitTable() {
+  const { units } = useUnits()
   return (
     <FieldSet>
-      <FieldLegend>Barcode group list</FieldLegend>
+      <FieldLegend>Unit list</FieldLegend>
       <Table>
         <TableBody>
-          {barcodeGroups.map((bg, i) => (
-            <BarcodeGroupRow key={i} barcodeGroup={bg} />
+          {units.map((unit) => (
+            <UnitRow key={unit.id} unit={unit} />
           ))}
         </TableBody>
       </Table>

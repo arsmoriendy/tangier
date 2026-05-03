@@ -8,14 +8,13 @@ import z from "zod"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
 import { toast } from "sonner"
-import { useContext } from "react"
-import { unitsCtx } from "@/contexts/units-ctx"
 import { Badge } from "@/components/ui/badge"
+import { useUnits } from "@/contexts/units-ctx"
 
 export default function CreateItemForm() {
   const { priceGroups } = usePriceGroups()
   const { barcodeGroups } = useBarcodeGroups()
-  const { state: units } = useContext(unitsCtx)!
+  const { units } = useUnits()
   const createItemFormSchema = z.object({
     name: z.string().min(1),
     unit: z.uuid(),
