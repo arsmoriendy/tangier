@@ -16,6 +16,7 @@ import { useItems } from "@/contexts/items-ctx"
 import { useItemFilters } from "@/app/(authorized)/items/item-filters-ctx"
 import { useItemCount } from "@/app/(authorized)/items/item-count-ctx"
 import { subscribe } from "valtio"
+import { UnitFilter } from "@/app/(authorized)/items/unit-filter"
 
 export default function CreateItemForm() {
   const itemsPerPage = 10
@@ -48,10 +49,12 @@ export default function CreateItemForm() {
   }, [])
 
   return (
-    <FieldSet className="gap-0">
+    <FieldSet>
       <FieldLegend>Item list</FieldLegend>
 
       <SearchBar />
+
+      <UnitFilter />
 
       <ItemsTable />
 

@@ -19,7 +19,7 @@ export function SearchBar() {
   })
 
   return (
-    <Form handleSubmit={form.handleSubmit} className="flex gap-2">
+    <Form handleSubmit={form.handleSubmit} className="flex gap-2 space-y-0">
       <form.AppField name="name">
         {(field) => <field.TextField placeholder="Search name" />}
       </form.AppField>

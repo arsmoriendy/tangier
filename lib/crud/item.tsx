@@ -8,12 +8,20 @@ import {
 } from "@/lib/db/schema"
 import { and, count, eq, ilike } from "drizzle-orm"
 
-export async function countItems({ name = "" }: { name?: string } = {}) {
+export async function countItems({
+  name = "",
+  unitId = undefined,
+}: { name?: string; unitId?: string } = {}) {
   return (
     await db
       .select({ count: count() })
       .from(items)
-      .where(ilike(items.name, `%${name}%`))
+      .where(
+        and(
+          ilike(items.name, `%${name}%`),
+          unitId ? eq(items.unit, unitId) : undefined
+        )
+      )
   )[0].count
 }
 
