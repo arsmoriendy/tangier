@@ -1,32 +1,26 @@
 import { relations } from "drizzle-orm/relations"
 import {
+  units,
   items,
-  prices,
-  priceGroups,
   barcodes,
   barcodeGroups,
+  prices,
+  priceGroups,
   transactions,
   transactionItems,
 } from "./schema"
 
-export const pricesRelations = relations(prices, ({ one }) => ({
-  item: one(items, {
-    fields: [prices.item],
-    references: [items.id],
+export const itemsRelations = relations(items, ({ one, many }) => ({
+  unit: one(units, {
+    fields: [items.unit],
+    references: [units.id],
   }),
-  priceGroup: one(priceGroups, {
-    fields: [prices.priceGroup],
-    references: [priceGroups.id],
-  }),
-}))
-
-export const itemsRelations = relations(items, ({ many }) => ({
-  prices: many(prices),
   barcodes: many(barcodes),
+  prices: many(prices),
 }))
 
-export const priceGroupsRelations = relations(priceGroups, ({ many }) => ({
-  prices: many(prices),
+export const unitsRelations = relations(units, ({ many }) => ({
+  items: many(items),
 }))
 
 export const barcodesRelations = relations(barcodes, ({ one }) => ({
@@ -42,6 +36,21 @@ export const barcodesRelations = relations(barcodes, ({ one }) => ({
 
 export const barcodeGroupsRelations = relations(barcodeGroups, ({ many }) => ({
   barcodes: many(barcodes),
+}))
+
+export const pricesRelations = relations(prices, ({ one }) => ({
+  item: one(items, {
+    fields: [prices.item],
+    references: [items.id],
+  }),
+  priceGroup: one(priceGroups, {
+    fields: [prices.priceGroup],
+    references: [priceGroups.id],
+  }),
+}))
+
+export const priceGroupsRelations = relations(priceGroups, ({ many }) => ({
+  prices: many(prices),
 }))
 
 export const transactionItemsRelations = relations(
