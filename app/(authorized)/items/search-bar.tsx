@@ -1,15 +1,20 @@
+import { useItemFilters } from "@/app/(authorized)/items/item-filters-ctx"
 import { Form, useAppForm } from "@/components/form"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react"
 import z from "zod"
 
-export function SearchBar(props: { handleSearch: (name: string) => any }) {
+export function SearchBar() {
+  const { itemFiltersProxy } = useItemFilters()
   const formSchema = z.object({ name: z.string() })
   const form = useAppForm({
     defaultValues: { name: "" },
     validators: {
       onChange: formSchema,
       onMount: formSchema,
-      onSubmit: ({ value: { name } }) => props.handleSearch(name),
+      onSubmit: async ({ value: { name } }) => {
+        itemFiltersProxy.name = name
+        itemFiltersProxy.offset = 0
+      },
     },
   })
 

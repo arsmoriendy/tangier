@@ -11,52 +11,47 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { countItems, listItems } from "@/lib/crud/item"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useItems } from "@/contexts/items-ctx"
+import { useItemFilters } from "@/app/(authorized)/items/item-filters-ctx"
+import { useItemCount } from "@/app/(authorized)/items/item-count-ctx"
+import { subscribe } from "valtio"
 
 export default function CreateItemForm() {
   const itemsPerPage = 10
   const disabledClass =
     "cursor-not-allowed text-muted-foreground hover:text-muted-foreground"
 
-  const { itemsSnap, itemsProxy } = useItems()
-  const [itemCount, setItemCount] = useState(0)
-  const [page, setPage] = useState(0)
-  const [searchName, setSearchName] = useState("")
-
-  async function refreshItems() {
-    itemsProxy.splice(
-      0,
-      itemsSnap.length,
-      ...(await listItems({
-        name: searchName,
-        limit: itemsPerPage,
-        offset: page * itemsPerPage,
-      }))
-    )
-  }
+  const { itemsProxy } = useItems()
+  const { itemFiltersProxy, itemFiltersSnap } = useItemFilters()
+  const { itemCount, setItemCount } = useItemCount()
 
   useEffect(() => {
     countItems().then(setItemCount)
 
-    refreshItems()
+    const subscriptions: (() => void)[] = []
+
+    subscriptions.push(
+      subscribe(itemFiltersProxy, async () => {
+        itemsProxy.splice(
+          0,
+          itemsProxy.length,
+          ...(await listItems(itemFiltersProxy))
+        )
+        setItemCount(await countItems(itemFiltersProxy))
+      })
+    )
+
+    return () => {
+      for (const unsubscribe of subscriptions) unsubscribe()
+    }
   }, [])
-
-  useEffect(() => {
-    countItems({ name: searchName }).then(setItemCount)
-    setPage(0)
-    refreshItems()
-  }, [searchName])
-
-  useEffect(() => {
-    refreshItems()
-  }, [page])
 
   return (
     <FieldSet className="gap-0">
       <FieldLegend>Item list</FieldLegend>
 
-      <SearchBar handleSearch={setSearchName} />
+      <SearchBar />
 
       <ItemsTable />
 
@@ -64,19 +59,28 @@ export default function CreateItemForm() {
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious
-              onClick={() => {
-                setPage(page - 1)
+              onClick={async () => {
+                itemFiltersProxy.offset =
+                  (itemFiltersProxy?.offset ?? 0) - itemsPerPage
               }}
-              className={page === 0 ? disabledClass : ""}
+              className={
+                itemFiltersSnap.offset === 0 ||
+                itemFiltersSnap.offset === undefined
+                  ? disabledClass
+                  : ""
+              }
             />
           </PaginationItem>
           <PaginationItem>
             <PaginationNext
-              onClick={() => {
-                setPage(page + 1)
+              onClick={async () => {
+                itemFiltersProxy.offset =
+                  (itemFiltersProxy?.offset ?? 0) + itemsPerPage
               }}
               className={
-                (page + 1) * itemsPerPage >= itemCount ? disabledClass : ""
+                (itemFiltersSnap?.offset ?? 0) + itemsPerPage >= itemCount
+                  ? disabledClass
+                  : ""
               }
             />
           </PaginationItem>

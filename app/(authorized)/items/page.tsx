@@ -1,4 +1,6 @@
 import CreateItemForm from "@/app/(authorized)/items/create-item-form"
+import { ItemCountProvider } from "@/app/(authorized)/items/item-count-ctx"
+import { ItemFiltersProvider } from "@/app/(authorized)/items/item-filters-ctx"
 import ItemList from "@/app/(authorized)/items/item-list"
 import { BarcodeGroupsProvider } from "@/contexts/barcode-groups-ctx"
 import { ItemsProvider } from "@/contexts/items-ctx"
@@ -18,10 +20,14 @@ export default async function Page() {
   return (
     <BarcodeGroupsProvider barcodeGroups={barcodeGroups}>
       <PriceGroupsProvider priceGroups={priceGroups}>
+        <CreateItemForm />
         <ItemsProvider items={items}>
           <UnitsProvider units={units}>
-            <CreateItemForm />
-            <ItemList />
+            <ItemFiltersProvider initialValue={{}}>
+              <ItemCountProvider>
+                <ItemList />
+              </ItemCountProvider>
+            </ItemFiltersProvider>
           </UnitsProvider>
         </ItemsProvider>
       </PriceGroupsProvider>
