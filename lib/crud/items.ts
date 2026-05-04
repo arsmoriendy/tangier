@@ -6,8 +6,9 @@ import {
   sellPrices as sellPricesTbl,
   buyPrices as buyPricesTbl,
   barcodes as barcodesTable,
+  buyPrices,
 } from "@/lib/db/schema"
-import { and, count, eq, ilike } from "drizzle-orm"
+import { and, asc, count, eq, ilike } from "drizzle-orm"
 
 export async function countItems({
   name = "",
@@ -107,6 +108,7 @@ export async function listItems({
         with: { priceGroup: true },
       },
       buyPrices: {
+        orderBy: [asc(buyPrices.price)],
         columns: { item: false },
       },
     },

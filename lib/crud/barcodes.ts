@@ -1,8 +1,8 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { barcodes } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
+import { barcodes, buyPrices } from "@/lib/db/schema"
+import { asc, eq } from "drizzle-orm"
 
 export async function readBarcode(barcode: string) {
   return await db.query.barcodes.findFirst({
@@ -24,6 +24,7 @@ export async function readBarcode(barcode: string) {
             with: { priceGroup: true },
           },
           buyPrices: {
+            orderBy: [asc(buyPrices.price)],
             columns: { item: false },
           },
         },
