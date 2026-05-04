@@ -128,12 +128,12 @@ export const SearchItemForm = withForm({
                     form.setFieldValue("unit", item.unit.name)
                     form.setFieldValue(
                       "unitPrice",
-                      item.prices.find(
+                      item.sellPrices.find(
                         (p) =>
                           p.priceGroup.id === addItemSnap.selectedPriceGroupId
                       )?.price ?? 0
                     )
-                    addItemProxy.itemPrices = item.prices
+                    addItemProxy.sellPrices = item.sellPrices
 
                     searchItemForm.reset()
                     setFoundItems([])
@@ -143,7 +143,7 @@ export const SearchItemForm = withForm({
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.unit.name}</TableCell>
                   {priceGroups.map((pg, i) => {
-                    const price = item.prices.find(
+                    const price = item.sellPrices.find(
                       (p) => p.priceGroup.id === pg.id
                     )?.price
 

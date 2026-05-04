@@ -38,7 +38,7 @@ export function ItemsTable() {
             <TableCell>{item.name}</TableCell>
             <TableCell>{item.unit.name}</TableCell>
             {priceGroups.map((pg, i) => {
-              const price = item.prices.find(
+              const price = item.sellPrices.find(
                 (p) => p.priceGroup.id === pg.id
               )?.price
 

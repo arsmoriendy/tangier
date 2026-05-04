@@ -19,7 +19,7 @@ export async function readBarcode(barcode: string) {
             columns: { barcode: true },
             with: { barcodeGroup: true },
           },
-          prices: {
+          sellPrices: {
             columns: { price: true },
             with: { priceGroup: true },
           },

@@ -40,11 +40,11 @@ export const ScanBarcodeField = withForm({
             form.setFieldValue("unit", item.unit.name)
             form.setFieldValue(
               "unitPrice",
-              item.prices.find(
+              item.sellPrices.find(
                 (p) => p.priceGroup.id === addItemSnap.selectedPriceGroupId
               )?.price ?? 0
             )
-            addItemProxy.itemPrices = item.prices
+            addItemProxy.sellPrices = item.sellPrices
           }}
         />
         {error && <FieldError>{error}</FieldError>}

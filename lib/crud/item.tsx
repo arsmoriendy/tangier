@@ -3,7 +3,7 @@
 import { db } from "@/lib/db"
 import {
   items,
-  prices as pricesTable,
+  sellPrices as pricesTable,
   barcodes as barcodesTable,
 } from "@/lib/db/schema"
 import { and, count, eq, ilike } from "drizzle-orm"
@@ -28,12 +28,12 @@ export async function countItems({
 export async function createItem({
   name,
   unit,
-  prices = [],
+  buyPrices = [],
   barcodes = [],
 }: {
   name: string
   unit: string
-  prices?: { priceGroup: string; price: number }[]
+  buyPrices?: { priceGroup: string; price: number }[]
   barcodes?: { barcodeGroup: string; barcode: string }[]
 }) {
   await db.transaction(async (tx) => {
@@ -41,15 +41,17 @@ export async function createItem({
       await tx.insert(items).values({ name, unit }).returning({ id: items.id })
     )[0]
 
-    prices = prices.filter((p) => p.price > 0)
+    buyPrices = buyPrices.filter((p) => p.price > 0)
     barcodes = barcodes.filter((b) => b.barcode.length > 0)
 
-    prices.length > 0 &&
-      (await tx
-        .insert(pricesTable)
-        .values(
-          prices.map(({ price, priceGroup }) => ({ item, price, priceGroup }))
-        ))
+    buyPrices.length > 0 &&
+      (await tx.insert(pricesTable).values(
+        buyPrices.map(({ price, priceGroup }) => ({
+          item,
+          price,
+          priceGroup,
+        }))
+      ))
 
     barcodes.length > 0 &&
       (await tx.insert(barcodesTable).values(
@@ -88,7 +90,7 @@ export async function listItems({
         columns: { barcode: true },
         with: { barcodeGroup: true },
       },
-      prices: {
+      sellPrices: {
         columns: { price: true },
         with: { priceGroup: true },
       },

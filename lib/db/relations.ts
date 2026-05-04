@@ -4,7 +4,7 @@ import {
   items,
   barcodes,
   barcodeGroups,
-  prices,
+  sellPrices,
   priceGroups,
   transactions,
   transactionItems,
@@ -16,7 +16,7 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
     references: [units.id],
   }),
   barcodes: many(barcodes),
-  prices: many(prices),
+  sellPrices: many(sellPrices),
 }))
 
 export const unitsRelations = relations(units, ({ many }) => ({
@@ -38,19 +38,19 @@ export const barcodeGroupsRelations = relations(barcodeGroups, ({ many }) => ({
   barcodes: many(barcodes),
 }))
 
-export const pricesRelations = relations(prices, ({ one }) => ({
+export const sellPricesRelations = relations(sellPrices, ({ one }) => ({
   item: one(items, {
-    fields: [prices.item],
+    fields: [sellPrices.item],
     references: [items.id],
   }),
   priceGroup: one(priceGroups, {
-    fields: [prices.priceGroup],
+    fields: [sellPrices.priceGroup],
     references: [priceGroups.id],
   }),
 }))
 
 export const priceGroupsRelations = relations(priceGroups, ({ many }) => ({
-  prices: many(prices),
+  sellPrices: many(sellPrices),
 }))
 
 export const transactionItemsRelations = relations(
@@ -66,3 +66,4 @@ export const transactionItemsRelations = relations(
 export const transactionsRelations = relations(transactions, ({ many }) => ({
   transactionItems: many(transactionItems),
 }))
+

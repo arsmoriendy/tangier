@@ -39,7 +39,7 @@ export const AddItemForm = withForm({
           ...items,
           value,
         ])
-        addItemProxy.itemPrices = []
+        addItemProxy.sellPrices = []
         form.reset()
       },
     })
@@ -81,7 +81,7 @@ export const AddItemForm = withForm({
                 addItemProxy.selectedPriceGroupId = v
                 form.setFieldValue(
                   "unitPrice",
-                  addItemSnap.itemPrices.find((p) => p.priceGroup.id === v)
+                  addItemSnap.sellPrices.find((p) => p.priceGroup.id === v)
                     ?.price ?? 0
                 )
                 createTransactionForm.setFieldValue(
@@ -96,7 +96,7 @@ export const AddItemForm = withForm({
                   style={{ backgroundColor: `#${pg.hexColor}` }}
                   value={pg.id}
                   title={formatCurrency(
-                    addItemSnap.itemPrices.find(
+                    addItemSnap.sellPrices.find(
                       (p) => p.priceGroup.id === pg.id
                     )?.price ?? 0
                   )}

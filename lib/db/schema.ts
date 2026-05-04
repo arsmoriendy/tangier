@@ -80,8 +80,8 @@ export const priceGroups = pgTable(
   (table) => [uniqueIndex("name_index").on(table.name)]
 )
 
-export const prices = pgTable(
-  "prices",
+export const sellPrices = pgTable(
+  "sell_prices",
   {
     item: uuid("item").notNull(),
     price: numeric({ mode: "number" }).notNull(),
