@@ -80,6 +80,31 @@ export const priceGroups = pgTable(
   (table) => [uniqueIndex("name_index").on(table.name)]
 )
 
+export const buyPrices = pgTable(
+  "buy_prices",
+  {
+    item: uuid("item").notNull(),
+    price: numeric({ mode: "number" }).notNull(),
+    stock: integer().notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.item],
+      foreignColumns: [items.id],
+      name: "items_fk",
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+    primaryKey({
+      columns: [table.item, table.price],
+      name: "buy_prices_pkey",
+    }),
+  ]
+)
+
 export const sellPrices = pgTable(
   "sell_prices",
   {
@@ -104,7 +129,7 @@ export const sellPrices = pgTable(
       .onDelete("cascade"),
     primaryKey({
       columns: [table.item, table.price, table.priceGroup],
-      name: "prices_pkey",
+      name: "sell_prices_pkey",
     }),
   ]
 )

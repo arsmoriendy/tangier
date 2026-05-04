@@ -6,6 +6,7 @@ import {
   barcodeGroups,
   sellPrices,
   priceGroups,
+  buyPrices,
   transactions,
   transactionItems,
 } from "./schema"
@@ -17,6 +18,7 @@ export const itemsRelations = relations(items, ({ one, many }) => ({
   }),
   barcodes: many(barcodes),
   sellPrices: many(sellPrices),
+  buyPrices: many(buyPrices),
 }))
 
 export const unitsRelations = relations(units, ({ many }) => ({
@@ -51,6 +53,13 @@ export const sellPricesRelations = relations(sellPrices, ({ one }) => ({
 
 export const priceGroupsRelations = relations(priceGroups, ({ many }) => ({
   sellPrices: many(sellPrices),
+}))
+
+export const buyPricesRelations = relations(buyPrices, ({ one }) => ({
+  item: one(items, {
+    fields: [buyPrices.item],
+    references: [items.id],
+  }),
 }))
 
 export const transactionItemsRelations = relations(
