@@ -23,6 +23,9 @@ export async function readBarcode(barcode: string) {
             columns: { price: true },
             with: { priceGroup: true },
           },
+          buyPrices: {
+            columns: { item: false },
+          },
         },
       },
     },

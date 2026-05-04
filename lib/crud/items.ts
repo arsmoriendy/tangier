@@ -106,6 +106,9 @@ export async function listItems({
         columns: { price: true },
         with: { priceGroup: true },
       },
+      buyPrices: {
+        columns: { item: false },
+      },
     },
   })
 }
