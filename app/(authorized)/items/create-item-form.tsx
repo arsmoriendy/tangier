@@ -100,6 +100,7 @@ export default function CreateItemForm() {
             </form.Subscribe>
 
             <Button
+              type="button"
               onClick={() => {
                 form.pushFieldValue("buyPrices", { price: 0, stock: 0 })
               }}
