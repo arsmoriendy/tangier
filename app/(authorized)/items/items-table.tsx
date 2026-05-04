@@ -22,7 +22,8 @@ export function ItemsTable() {
         <TableRow>
           <TableHead rowSpan={2}>Name</TableHead>
           <TableHead rowSpan={2}>Unit</TableHead>
-          <TableHead colSpan={priceGroups.length}>Prices</TableHead>
+          <TableHead rowSpan={2}>Buy prices</TableHead>
+          <TableHead colSpan={priceGroups.length}>Sell prices</TableHead>
         </TableRow>
 
         <TableRow>
@@ -37,6 +38,11 @@ export function ItemsTable() {
           <TableRow key={i}>
             <TableCell>{item.name}</TableCell>
             <TableCell>{item.unit.name}</TableCell>
+            <TableCell>
+              {item.buyPrices
+                .map((bp) => `${formatCurrency(bp.price)} (${bp.stock} left)`)
+                .join("; ")}
+            </TableCell>
             {priceGroups.map((pg, i) => {
               const price = item.sellPrices.find(
                 (p) => p.priceGroup.id === pg.id
