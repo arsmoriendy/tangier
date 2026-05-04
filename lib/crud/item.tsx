@@ -28,12 +28,12 @@ export async function countItems({
 export async function createItem({
   name,
   unit,
-  buyPrices = [],
+  sellPrices = [],
   barcodes = [],
 }: {
   name: string
   unit: string
-  buyPrices?: { priceGroup: string; price: number }[]
+  sellPrices?: { priceGroup: string; price: number }[]
   barcodes?: { barcodeGroup: string; barcode: string }[]
 }) {
   await db.transaction(async (tx) => {
@@ -41,12 +41,12 @@ export async function createItem({
       await tx.insert(items).values({ name, unit }).returning({ id: items.id })
     )[0]
 
-    buyPrices = buyPrices.filter((p) => p.price > 0)
+    sellPrices = sellPrices.filter((p) => p.price > 0)
     barcodes = barcodes.filter((b) => b.barcode.length > 0)
 
-    buyPrices.length > 0 &&
+    sellPrices.length > 0 &&
       (await tx.insert(pricesTable).values(
-        buyPrices.map(({ price, priceGroup }) => ({
+        sellPrices.map(({ price, priceGroup }) => ({
           item,
           price,
           priceGroup,

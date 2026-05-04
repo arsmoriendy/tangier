@@ -18,7 +18,7 @@ export default function CreateItemForm() {
   const createItemFormSchema = z.object({
     name: z.string().min(1),
     unit: z.uuid(),
-    prices: z.array(
+    sellPrices: z.array(
       z.object({ priceGroup: z.uuid(), price: z.number().min(0) })
     ),
     barcodes: z.array(
@@ -28,7 +28,7 @@ export default function CreateItemForm() {
   const defaultValues: z.infer<typeof createItemFormSchema> = {
     name: "",
     unit: units[0]?.id,
-    prices: priceGroups.map(({ id }) => ({ priceGroup: id, price: 0 })),
+    sellPrices: priceGroups.map(({ id }) => ({ priceGroup: id, price: 0 })),
     barcodes: barcodeGroups.map(({ id }) => ({
       barcodeGroup: id,
       barcode: "",
@@ -77,13 +77,13 @@ export default function CreateItemForm() {
 
         <div className="flex gap-2">
           <FieldSet className="flex-1">
-            <FieldLegend>Prices</FieldLegend>
+            <FieldLegend>Sell prices</FieldLegend>
             {priceGroups.map(({ id, name, hexColor }, i) => (
               <div key={i}>
-                <form.Field name={`prices[${i}].priceGroup`}>
+                <form.Field name={`sellPrices[${i}].priceGroup`}>
                   {() => <input type="hidden" value={id} />}
                 </form.Field>
-                <form.AppField name={`prices[${i}].price`}>
+                <form.AppField name={`sellPrices[${i}].price`}>
                   {(f) => (
                     <f.IdrField
                       style={{
