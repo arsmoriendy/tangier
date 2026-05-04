@@ -11,6 +11,7 @@ import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 import { useUnits } from "@/contexts/units-ctx"
 import { Button } from "@/components/ui/button"
+import { TrashIcon } from "@phosphor-icons/react"
 
 export default function CreateItemForm() {
   const { priceGroups } = usePriceGroups()
@@ -87,13 +88,25 @@ export default function CreateItemForm() {
             <form.Subscribe selector={(f) => f.values.buyPrices}>
               {(buyPrices) =>
                 buyPrices.map((_, i) => (
-                  <div className="flex gap-2" key={i}>
+                  <div className="flex items-end gap-2" key={i}>
                     <form.AppField name={`buyPrices[${i}].price`}>
                       {(f) => <f.IdrField label="Price" />}
                     </form.AppField>
                     <form.AppField name={`buyPrices[${i}].stock`}>
-                      {(f) => <f.NumberField label="Stock" min={0} />}
+                      {(f) => (
+                        <f.NumberField className="w-24" label="Stock" min={0} />
+                      )}
                     </form.AppField>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      type="button"
+                      onClick={() => {
+                        form.removeFieldValue("buyPrices", i)
+                      }}
+                    >
+                      <TrashIcon />
+                    </Button>
                   </div>
                 ))
               }
