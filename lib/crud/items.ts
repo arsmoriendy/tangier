@@ -3,7 +3,8 @@
 import { db } from "@/lib/db"
 import {
   items,
-  sellPrices as pricesTable,
+  sellPrices as sellPricesTbl,
+  buyPrices as buyPricesTbl,
   barcodes as barcodesTable,
 } from "@/lib/db/schema"
 import { and, count, eq, ilike } from "drizzle-orm"
@@ -28,12 +29,14 @@ export async function countItems({
 export async function createItem({
   name,
   unit,
+  buyPrices = [],
   sellPrices = [],
   barcodes = [],
 }: {
   name: string
   unit: string
   sellPrices?: { priceGroup: string; price: number }[]
+  buyPrices?: { price: number; stock: number }[]
   barcodes?: { barcodeGroup: string; barcode: string }[]
 }) {
   await db.transaction(async (tx) => {
@@ -44,8 +47,17 @@ export async function createItem({
     sellPrices = sellPrices.filter((p) => p.price > 0)
     barcodes = barcodes.filter((b) => b.barcode.length > 0)
 
+    buyPrices.length > 0 &&
+      (await tx.insert(buyPricesTbl).values(
+        buyPrices.map(({ price, stock }) => ({
+          item,
+          price,
+          stock,
+        }))
+      ))
+
     sellPrices.length > 0 &&
-      (await tx.insert(pricesTable).values(
+      (await tx.insert(sellPricesTbl).values(
         sellPrices.map(({ price, priceGroup }) => ({
           item,
           price,

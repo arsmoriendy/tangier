@@ -10,6 +10,7 @@ import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
 import { toast } from "sonner"
 import { Badge } from "@/components/ui/badge"
 import { useUnits } from "@/contexts/units-ctx"
+import { Button } from "@/components/ui/button"
 
 export default function CreateItemForm() {
   const { priceGroups } = usePriceGroups()
@@ -18,6 +19,9 @@ export default function CreateItemForm() {
   const createItemFormSchema = z.object({
     name: z.string().min(1),
     unit: z.uuid(),
+    buyPrices: z.array(
+      z.object({ price: z.number().min(0), stock: z.number().min(0) })
+    ),
     sellPrices: z.array(
       z.object({ priceGroup: z.uuid(), price: z.number().min(0) })
     ),
@@ -28,6 +32,7 @@ export default function CreateItemForm() {
   const defaultValues: z.infer<typeof createItemFormSchema> = {
     name: "",
     unit: units[0]?.id,
+    buyPrices: [],
     sellPrices: priceGroups.map(({ id }) => ({ priceGroup: id, price: 0 })),
     barcodes: barcodeGroups.map(({ id }) => ({
       barcodeGroup: id,
@@ -76,6 +81,33 @@ export default function CreateItemForm() {
         </FieldSet>
 
         <div className="flex gap-2">
+          <FieldSet className="flex-1">
+            <FieldLegend>Buy prices</FieldLegend>
+
+            <form.Subscribe selector={(f) => f.values.buyPrices}>
+              {(buyPrices) =>
+                buyPrices.map((_, i) => (
+                  <div className="flex gap-2" key={i}>
+                    <form.AppField name={`buyPrices[${i}].price`}>
+                      {(f) => <f.IdrField label="Price" />}
+                    </form.AppField>
+                    <form.AppField name={`buyPrices[${i}].stock`}>
+                      {(f) => <f.NumberField label="Stock" min={0} />}
+                    </form.AppField>
+                  </div>
+                ))
+              }
+            </form.Subscribe>
+
+            <Button
+              onClick={() => {
+                form.pushFieldValue("buyPrices", { price: 0, stock: 0 })
+              }}
+            >
+              Add buy price
+            </Button>
+          </FieldSet>
+
           <FieldSet className="flex-1">
             <FieldLegend>Sell prices</FieldLegend>
             {priceGroups.map(({ id, name, hexColor }, i) => (
