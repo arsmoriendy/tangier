@@ -38,7 +38,9 @@ export function ItemsTable() {
         {itemsSnap.map((item, i) => (
           <TableRow key={i}>
             <TableCell>{item.name}</TableCell>
-            <TableCell>{item.unit.name}</TableCell>
+            <TableCell>
+              <Badge variant="outline">{item.unit.name}</Badge>
+            </TableCell>
             <TableCell className="space-y-2">
               {item.buyPrices.map((bp) => (
                 <div className="flex gap-2">
