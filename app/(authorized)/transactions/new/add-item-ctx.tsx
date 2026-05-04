@@ -6,9 +6,11 @@ import { createContext, ReactNode, useContext } from "react"
 import { proxy, useSnapshot } from "valtio"
 
 const defaultAddItemCtx: {
+  buyPrices: ItemWithRelations["buyPrices"]
   sellPrices: ItemWithRelations["sellPrices"]
   selectedPriceGroupId?: string
 } = {
+  buyPrices: [],
   sellPrices: [],
 }
 

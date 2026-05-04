@@ -23,6 +23,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Item } from "@/components/ui/item"
 
 export const AddItemForm = withForm({
   defaultValues: defaultCreateTransacionValues,
@@ -40,6 +41,7 @@ export const AddItemForm = withForm({
           value,
         ])
         addItemProxy.sellPrices = []
+        addItemProxy.buyPrices = []
         form.reset()
       },
     })
@@ -68,11 +70,9 @@ export const AddItemForm = withForm({
           <FieldLegend>Add item</FieldLegend>
 
           <Form handleSubmit={form.handleSubmit}>
-            <div className="flex gap-2">
-              <form.AppField name="name">
-                {(field) => <field.TextField label="Name" />}
-              </form.AppField>
-            </div>
+            <form.AppField name="name">
+              {(field) => <field.TextField label="Name" />}
+            </form.AppField>
 
             <RadioGroupChoiceCard
               className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
@@ -106,67 +106,120 @@ export const AddItemForm = withForm({
             </RadioGroupChoiceCard>
 
             <div className="flex gap-2">
-              <form.Subscribe selector={(f) => f.values.unit}>
-                {(unit) => (
-                  <div className="space-y-2">
-                    <FieldLabel>Unit</FieldLabel>
+              <FieldSet className="flex-1">
+                <FieldLegend>Buy price</FieldLegend>
 
-                    <Select
-                      value={unit}
-                      onValueChange={(v) => form.setFieldValue("unit", v)}
+                <form.AppField name="buyPrice">
+                  {(f) => <f.IdrField label="Custom price" />}
+                </form.AppField>
+
+                <form.Subscribe selector={(f) => f.values.buyPrice}>
+                  {(bp) => (
+                    <RadioGroupChoiceCard
+                      value={bp.toString()}
+                      onValueChange={(v) => {
+                        form.setFieldValue("buyPrice", parseFloat(v))
+                      }}
                     >
-                      <SelectTrigger>
-                        <SelectValue></SelectValue>
-                      </SelectTrigger>
+                      {addItemSnap.buyPrices.length > 0 ? (
+                        addItemSnap.buyPrices
+                          .toReversed()
+                          .map((bp, i) => (
+                            <RadioGroupChoiceItem
+                              key={i}
+                              value={bp.price.toString()}
+                              title={formatCurrency(bp.price)}
+                              description={`${bp.stock} left`}
+                            />
+                          ))
+                      ) : (
+                        <Item
+                          className="grid min-h-17 place-items-center border-dashed text-muted-foreground"
+                          variant="outline"
+                        >
+                          No recorded price
+                        </Item>
+                      )}
+                    </RadioGroupChoiceCard>
+                  )}
+                </form.Subscribe>
+              </FieldSet>
 
-                      <SelectContent position="item-aligned">
-                        {units.map((unit, i) => (
-                          <SelectItem key={i} value={unit.name}>
-                            {unit.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                )}
-              </form.Subscribe>
+              <FieldSet className="flex-1">
+                <FieldLegend>Sell price</FieldLegend>
 
-              <form.AppField
-                name="unitPrice"
-                listeners={{
-                  onChange: (v) =>
-                    form.setFieldValue(
-                      "quantifiedPrice",
-                      v.value * form.state.values.quantity
-                    ),
-                }}
-              >
-                {(field) => <field.IdrField min={0} label="Unit price" />}
-              </form.AppField>
-              <span className="mt-6 grid h-8 place-items-center">x</span>
-              <form.AppField
-                name="quantity"
-                listeners={{
-                  onChange: (v) =>
-                    form.setFieldValue(
-                      "quantifiedPrice",
-                      v.value * form.state.values.unitPrice
-                    ),
-                }}
-              >
-                {(f) => (
-                  <f.NumberField
-                    className="w-24"
-                    min={1}
-                    label="Qty"
-                    tabIndex={1}
-                  />
-                )}
-              </form.AppField>
+                <div className="flex gap-2">
+                  <form.AppField
+                    name="unitPrice"
+                    listeners={{
+                      onChange: (v) =>
+                        form.setFieldValue(
+                          "quantifiedPrice",
+                          v.value * form.state.values.quantity
+                        ),
+                    }}
+                  >
+                    {(field) => <field.IdrField min={0} label="Unit price" />}
+                  </form.AppField>
+
+                  <span className="mt-6 grid h-8 place-items-center">/</span>
+
+                  <form.Subscribe selector={(f) => f.values.unit}>
+                    {(unit) => (
+                      <div className="space-y-2">
+                        <FieldLabel>Unit</FieldLabel>
+
+                        <Select
+                          value={unit}
+                          onValueChange={(v) => form.setFieldValue("unit", v)}
+                        >
+                          <SelectTrigger>
+                            <SelectValue></SelectValue>
+                          </SelectTrigger>
+
+                          <SelectContent position="item-aligned">
+                            {units.map((unit, i) => (
+                              <SelectItem key={i} value={unit.name}>
+                                {unit.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                  </form.Subscribe>
+
+                  <span className="mt-6 grid h-8 place-items-center">x</span>
+
+                  <form.AppField
+                    name="quantity"
+                    listeners={{
+                      onChange: (v) =>
+                        form.setFieldValue(
+                          "quantifiedPrice",
+                          v.value * form.state.values.unitPrice
+                        ),
+                    }}
+                  >
+                    {(f) => (
+                      <f.NumberField
+                        className="w-24"
+                        min={1}
+                        label="Qty"
+                        tabIndex={1}
+                      />
+                    )}
+                  </form.AppField>
+                </div>
+
+                <form.AppField name="quantifiedPrice">
+                  {(field) => (
+                    <field.IdrField label="Quantified price" min={0} />
+                  )}
+                </form.AppField>
+              </FieldSet>
             </div>
-            <form.AppField name="quantifiedPrice">
-              {(field) => <field.IdrField label="Quantified price" min={0} />}
-            </form.AppField>
+
             <form.AppForm>
               <form.SubmitButton>Add item</form.SubmitButton>
             </form.AppForm>

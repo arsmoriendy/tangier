@@ -124,16 +124,20 @@ export const SearchItemForm = withForm({
                   key={i}
                   className="group cursor-pointer [&_td]:group-hover:bg-primary [&_td]:group-hover:text-primary-foreground [&_td]:group-focus-visible:bg-primary [&_td]:group-focus-visible:text-primary-foreground"
                   onClick={() => {
-                    form.setFieldValue("name", item.name)
-                    form.setFieldValue("unit", item.unit.name)
-                    form.setFieldValue(
-                      "unitPrice",
+                    const buyPrice =
+                      item.buyPrices[item.buyPrices.length - 1]?.price ?? 0
+                    const unitPrice =
                       item.sellPrices.find(
                         (p) =>
                           p.priceGroup.id === addItemSnap.selectedPriceGroupId
                       )?.price ?? 0
-                    )
+
+                    form.setFieldValue("name", item.name)
+                    form.setFieldValue("unit", item.unit.name)
+                    form.setFieldValue("unitPrice", unitPrice)
+                    form.setFieldValue("buyPrice", buyPrice)
                     addItemProxy.sellPrices = item.sellPrices
+                    addItemProxy.buyPrices = item.buyPrices
 
                     searchItemForm.reset()
                     setFoundItems([])

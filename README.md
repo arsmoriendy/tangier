@@ -7,6 +7,9 @@ Run with the bun runtime, e.g. `bun -b dev`
 ##### TODO
 
 1. Item buy price
+   - combine same prices
+   - auto decrement
+   - localstorage auto decrement
 2. Server function authorization
 3. Update and delete items
 4. Update and delete transactions
