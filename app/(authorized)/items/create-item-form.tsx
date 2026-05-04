@@ -70,7 +70,7 @@ export default function CreateItemForm() {
               units.map((u, i) => (
                 <Badge
                   key={i}
-                  className="select-none hover:bg-primary hover:text-primary-foreground"
+                  className="select-none"
                   variant={u.id === unit ? "default" : "outline"}
                   onClick={() => form.setFieldValue("unit", u.id)}
                 >

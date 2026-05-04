@@ -13,7 +13,7 @@ export function UnitFilter() {
       {units.map((u, i) => (
         <Badge
           key={i}
-          className="select-none hover:bg-primary hover:text-primary-foreground"
+          className="select-none"
           variant={u.id === itemFiltersSnap.unitId ? "default" : "outline"}
           onClick={() => {
             if (itemFiltersSnap.unitId === u.id)
