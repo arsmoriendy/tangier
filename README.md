@@ -9,16 +9,21 @@ Run with the bun runtime, e.g. `bun -b dev`
 1. Item buy price
    - combine same prices
    - auto decrement
+   - show on transaction item list
+   - update transaction schema
    - localstorage auto decrement
-2. Server function authorization
-3. Update and delete items
-4. Update and delete transactions
-5. Hold and recall
-6. Cashier name on receipt
-7. Auto set price based on quantity threshold
-8. Keyboard shortcuts
-9. Underpriced indicator
-10. Reorder transaction items / group based on new category column
-11. Stock tracking
-12. Per item quantity threshold
-13. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
+2. Update and delete items
+3. Update and delete transactions
+4. Hold and recall
+5. Cashier name on receipt
+6. Underpriced indicator
+7. Reorder transaction items
+
+###### Backlog
+
+1. Server function authorization
+2. Auto set price based on quantity threshold
+3. Keyboard shortcuts
+4. Per item quantity threshold
+5. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
+6. group transaction items based on new category column
