@@ -2,7 +2,7 @@
 
 import { Printer } from "@node-escpos/core"
 import USB from "@node-escpos/usb-adapter"
-import { TransactionWithRelations } from "@/lib/crud/transaction"
+import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { env } from "@/lib/env"
 
 const numberFormatter = new Intl.NumberFormat("id-ID", {})

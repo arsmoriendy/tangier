@@ -3,7 +3,7 @@
 import chroma from "chroma-js"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
-import { createItem } from "@/lib/crud/item"
+import { createItem } from "@/lib/crud/items"
 import z from "zod"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"

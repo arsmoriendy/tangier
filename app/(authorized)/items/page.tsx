@@ -6,10 +6,10 @@ import { BarcodeGroupsProvider } from "@/contexts/barcode-groups-ctx"
 import { ItemsProvider } from "@/contexts/items-ctx"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
 import { UnitsProvider } from "@/contexts/units-ctx"
-import { listBarcodeGroups } from "@/lib/crud/barcode-group"
-import { listItems } from "@/lib/crud/item"
-import { listPriceGroups } from "@/lib/crud/price-group"
-import { listUnits } from "@/lib/crud/unit"
+import { listBarcodeGroups } from "@/lib/crud/barcode-groups"
+import { listItems } from "@/lib/crud/items"
+import { listPriceGroups } from "@/lib/crud/price-groups"
+import { listUnits } from "@/lib/crud/units"
 
 export default async function Page() {
   const priceGroups = await listPriceGroups()

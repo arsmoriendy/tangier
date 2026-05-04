@@ -1,7 +1,7 @@
 import CreatePriceGroupForm from "@/app/(authorized)/price-groups/create-price-group-form"
 import PriceGroupTable from "@/app/(authorized)/price-groups/price-group-table"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
-import { listPriceGroups } from "@/lib/crud/price-group"
+import { listPriceGroups } from "@/lib/crud/price-groups"
 
 export default async function Page() {
   const priceGroups = await listPriceGroups()

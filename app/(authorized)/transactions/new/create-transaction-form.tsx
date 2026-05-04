@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field"
-import { createTransaction } from "@/lib/crud/transaction"
+import { createTransaction } from "@/lib/crud/transactions"
 import { printTransaction } from "@/lib/print-transaction"
 import { AddItemForm } from "@/app/(authorized)/transactions/new/add-item-form"
 import { AddItemProvider } from "@/app/(authorized)/transactions/new/add-item-ctx"

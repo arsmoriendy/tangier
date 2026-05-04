@@ -1,7 +1,7 @@
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
 import { useUnits } from "@/contexts/units-ctx"
-import { deleteUnit, updateUnit } from "@/lib/crud/unit"
+import { deleteUnit, updateUnit } from "@/lib/crud/units"
 import { units } from "@/lib/db/schema"
 import { TrashIcon } from "@phosphor-icons/react/dist/ssr"
 import z from "zod"

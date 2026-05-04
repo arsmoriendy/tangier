@@ -4,7 +4,7 @@ import { getRandomColor } from "@/app/(authorized)/price-groups/price-group-colo
 import { Form, useAppForm } from "@/components/form"
 import { FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
-import { createPriceGroup, listPriceGroups } from "@/lib/crud/price-group"
+import { createPriceGroup, listPriceGroups } from "@/lib/crud/price-groups"
 import { ArrowsClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
 import { useEffect } from "react"
 import z from "zod"

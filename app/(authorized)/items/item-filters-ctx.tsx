@@ -1,7 +1,7 @@
 "use client"
 
 import { ValtioContext } from "@/contexts/valtio-context"
-import { type listItems } from "@/lib/crud/item"
+import { type listItems } from "@/lib/crud/items"
 import { createContext, ReactNode, useContext } from "react"
 import { proxy, useSnapshot } from "valtio"
 

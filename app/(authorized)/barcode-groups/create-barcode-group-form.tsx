@@ -3,7 +3,10 @@
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
-import { createBarcodeGroup, listBarcodeGroups } from "@/lib/crud/barcode-group"
+import {
+  createBarcodeGroup,
+  listBarcodeGroups,
+} from "@/lib/crud/barcode-groups"
 import z from "zod"
 
 const createBarcodeGroupFormSchema = z.object({

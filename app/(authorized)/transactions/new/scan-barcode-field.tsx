@@ -5,7 +5,7 @@ import { defaultAddItemValues } from "@/app/(authorized)/transactions/new/add-it
 import { withForm } from "@/components/form"
 import { FieldError } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { readBarcode } from "@/lib/crud/barcode"
+import { readBarcode } from "@/lib/crud/barcodes"
 import { useState } from "react"
 
 export const ScanBarcodeField = withForm({

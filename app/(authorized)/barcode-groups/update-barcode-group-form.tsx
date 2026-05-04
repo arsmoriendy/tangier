@@ -4,7 +4,7 @@ import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
 import {
   deleteBarcodeGroup,
   updateBarcodeGroup,
-} from "@/lib/crud/barcode-group"
+} from "@/lib/crud/barcode-groups"
 import { barcodeGroups } from "@/lib/db/schema"
 import { TrashIcon } from "@phosphor-icons/react/dist/ssr"
 import z from "zod"

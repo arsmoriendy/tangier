@@ -10,7 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { countItems, listItems } from "@/lib/crud/item"
+import { countItems, listItems } from "@/lib/crud/items"
 import { useEffect } from "react"
 import { useItems } from "@/contexts/items-ctx"
 import { useItemFilters } from "@/app/(authorized)/items/item-filters-ctx"
