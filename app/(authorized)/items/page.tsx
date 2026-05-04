@@ -20,16 +20,16 @@ export default async function Page() {
   return (
     <BarcodeGroupsProvider barcodeGroups={barcodeGroups}>
       <PriceGroupsProvider priceGroups={priceGroups}>
-        <CreateItemForm />
-        <ItemsProvider items={items}>
-          <UnitsProvider units={units}>
+        <UnitsProvider units={units}>
+          <CreateItemForm />
+          <ItemsProvider items={items}>
             <ItemFiltersProvider initialValue={{}}>
               <ItemCountProvider>
                 <ItemList />
               </ItemCountProvider>
             </ItemFiltersProvider>
-          </UnitsProvider>
-        </ItemsProvider>
+          </ItemsProvider>
+        </UnitsProvider>
       </PriceGroupsProvider>
     </BarcodeGroupsProvider>
   )
