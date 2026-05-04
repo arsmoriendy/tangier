@@ -1,5 +1,6 @@
 "use client"
 
+import { Badge } from "@/components/ui/badge"
 import {
   Table,
   TableBody,
@@ -38,10 +39,13 @@ export function ItemsTable() {
           <TableRow key={i}>
             <TableCell>{item.name}</TableCell>
             <TableCell>{item.unit.name}</TableCell>
-            <TableCell>
-              {item.buyPrices
-                .map((bp) => `${formatCurrency(bp.price)} (${bp.stock} left)`)
-                .join("; ")}
+            <TableCell className="space-y-2">
+              {item.buyPrices.map((bp) => (
+                <div className="flex gap-2">
+                  <span>{formatCurrency(bp.price)}</span>
+                  <Badge variant="secondary">{bp.stock} left</Badge>
+                </div>
+              ))}
             </TableCell>
             {priceGroups.map((pg, i) => {
               const price = item.sellPrices.find(
