@@ -10,12 +10,14 @@ Run with the bun runtime, e.g. `bun -b dev`
    - combine same prices
    - localstorage auto decrement
    - calculate discount and margin
+   - underpriced indicator
 2. Update and delete items
 3. Update and delete transactions
 4. Hold and recall
-5. Cashier name on receipt
-6. Underpriced indicator
-7. Reorder transaction items
+5. Update receipt
+   - cashier name
+   - timestamp
+6. Reorder transaction items
 
 ###### Backlog
 
