@@ -110,7 +110,7 @@ export const AddItemForm = withForm({
                 <FieldLegend>Buy price</FieldLegend>
 
                 <form.AppField name="buyPrice">
-                  {(f) => <f.IdrField label="Custom price" />}
+                  {(f) => <f.IdrField />}
                 </form.AppField>
 
                 <form.Subscribe selector={(f) => f.values.buyPrice}>
@@ -159,37 +159,33 @@ export const AddItemForm = withForm({
                         ),
                     }}
                   >
-                    {(field) => <field.IdrField min={0} label="Sell price" />}
+                    {(field) => <field.IdrField min={0} />}
                   </form.AppField>
 
-                  <span className="mt-6 grid h-8 place-items-center">/</span>
+                  <span className="grid h-8 place-items-center">/</span>
 
                   <form.Subscribe selector={(f) => f.values.unit}>
                     {(unit) => (
-                      <div className="space-y-2">
-                        <FieldLabel>Unit</FieldLabel>
+                      <Select
+                        value={unit}
+                        onValueChange={(v) => form.setFieldValue("unit", v)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue></SelectValue>
+                        </SelectTrigger>
 
-                        <Select
-                          value={unit}
-                          onValueChange={(v) => form.setFieldValue("unit", v)}
-                        >
-                          <SelectTrigger>
-                            <SelectValue></SelectValue>
-                          </SelectTrigger>
-
-                          <SelectContent position="item-aligned">
-                            {units.map((unit, i) => (
-                              <SelectItem key={i} value={unit.name}>
-                                {unit.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                        <SelectContent position="item-aligned">
+                          {units.map((unit, i) => (
+                            <SelectItem key={i} value={unit.name}>
+                              {unit.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     )}
                   </form.Subscribe>
 
-                  <span className="mt-6 grid h-8 place-items-center">x</span>
+                  <span className="grid h-8 place-items-center">x</span>
 
                   <form.AppField
                     name="quantity"
@@ -202,12 +198,7 @@ export const AddItemForm = withForm({
                     }}
                   >
                     {(f) => (
-                      <f.NumberField
-                        className="w-24"
-                        min={1}
-                        label="Qty"
-                        tabIndex={1}
-                      />
+                      <f.NumberField className="w-24" min={1} tabIndex={1} />
                     )}
                   </form.AppField>
                 </div>
