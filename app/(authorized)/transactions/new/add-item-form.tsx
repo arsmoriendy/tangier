@@ -70,9 +70,37 @@ export const AddItemForm = withForm({
           <FieldLegend>Add item</FieldLegend>
 
           <Form handleSubmit={form.handleSubmit}>
-            <form.AppField name="name">
-              {(field) => <field.TextField label="Name" />}
-            </form.AppField>
+            <div className="flex gap-2">
+              <form.AppField name="name">
+                {(field) => <field.TextField label="Name" />}
+              </form.AppField>
+
+              <span className="mt-6 grid h-8 place-items-center">/</span>
+
+              <div className="space-y-2">
+                <FieldLabel>Unit</FieldLabel>
+                <form.Subscribe selector={(f) => f.values.unit}>
+                  {(unit) => (
+                    <Select
+                      value={unit}
+                      onValueChange={(v) => form.setFieldValue("unit", v)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue></SelectValue>
+                      </SelectTrigger>
+
+                      <SelectContent position="item-aligned">
+                        {units.map((unit, i) => (
+                          <SelectItem key={i} value={unit.name}>
+                            {unit.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                </form.Subscribe>
+              </div>
+            </div>
 
             <RadioGroupChoiceCard
               className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
@@ -161,29 +189,6 @@ export const AddItemForm = withForm({
                   >
                     {(field) => <field.IdrField min={0} />}
                   </form.AppField>
-
-                  <span className="grid h-8 place-items-center">/</span>
-
-                  <form.Subscribe selector={(f) => f.values.unit}>
-                    {(unit) => (
-                      <Select
-                        value={unit}
-                        onValueChange={(v) => form.setFieldValue("unit", v)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue></SelectValue>
-                        </SelectTrigger>
-
-                        <SelectContent position="item-aligned">
-                          {units.map((unit, i) => (
-                            <SelectItem key={i} value={unit.name}>
-                              {unit.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  </form.Subscribe>
 
                   <span className="grid h-8 place-items-center">x</span>
 
