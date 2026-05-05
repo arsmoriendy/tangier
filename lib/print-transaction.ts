@@ -31,11 +31,11 @@ export async function printTransaction(trx: TransactionWithRelations) {
     for (const item of trx.transactionItems) {
       printer.text(item.name).tableCustom([
         {
-          text: `${item.quantity} X ${formatNumber(item.unitPrice)}`,
+          text: `${item.quantity} X ${formatNumber(item.sellPrice)}`,
           width: 0.5,
         },
         {
-          text: formatNumber(item.quantifiedPrice),
+          text: formatNumber(item.sellPrice * item.quantity),
           width: 0.48,
           align: "right",
         },

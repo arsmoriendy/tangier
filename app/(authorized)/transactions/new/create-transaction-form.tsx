@@ -111,7 +111,7 @@ export default function CreateTransactionForm() {
                         </TableCell>
                         <TableCell>
                           <form.AppField
-                            name={`transactionItems[${i}].unitPrice`}
+                            name={`transactionItems[${i}].sellPrice`}
                             listeners={{
                               onChange: ({ value }) => {
                                 form.setFieldValue(
@@ -133,7 +133,7 @@ export default function CreateTransactionForm() {
                                 form.setFieldValue(
                                   `transactionItems[${i}].quantifiedPrice`,
                                   form.state.values.transactionItems[i]
-                                    .unitPrice * value
+                                    .sellPrice * value
                                 )
                               },
                             }}

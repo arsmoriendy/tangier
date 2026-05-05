@@ -80,7 +80,7 @@ export const AddItemForm = withForm({
               onValueChange={(v) => {
                 addItemProxy.selectedPriceGroupId = v
                 form.setFieldValue(
-                  "unitPrice",
+                  "sellPrice",
                   addItemSnap.sellPrices.find((p) => p.priceGroup.id === v)
                     ?.price ?? 0
                 )
@@ -150,7 +150,7 @@ export const AddItemForm = withForm({
 
                 <div className="flex gap-2">
                   <form.AppField
-                    name="unitPrice"
+                    name="sellPrice"
                     listeners={{
                       onChange: (v) =>
                         form.setFieldValue(
@@ -159,7 +159,7 @@ export const AddItemForm = withForm({
                         ),
                     }}
                   >
-                    {(field) => <field.IdrField min={0} label="Unit price" />}
+                    {(field) => <field.IdrField min={0} label="Sell price" />}
                   </form.AppField>
 
                   <span className="mt-6 grid h-8 place-items-center">/</span>
@@ -197,7 +197,7 @@ export const AddItemForm = withForm({
                       onChange: (v) =>
                         form.setFieldValue(
                           "quantifiedPrice",
-                          v.value * form.state.values.unitPrice
+                          v.value * form.state.values.sellPrice
                         ),
                     }}
                   >
