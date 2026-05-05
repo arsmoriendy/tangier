@@ -10,8 +10,8 @@ Run with the bun runtime, e.g. `bun -b dev`
    - combine same prices
    - auto decrement
    - show on transaction item list
-   - update transaction schema
    - localstorage auto decrement
+   - calculate discount and margin
 2. Update and delete items
 3. Update and delete transactions
 4. Hold and recall
