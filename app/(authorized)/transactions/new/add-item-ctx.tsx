@@ -9,6 +9,10 @@ const defaultAddItemCtx: {
   buyPrices: ItemWithRelations["buyPrices"]
   sellPrices: ItemWithRelations["sellPrices"]
   selectedPriceGroupId?: string
+  link?: {
+    selectedBuyPrice?: number
+    itemId: string
+  }
 } = {
   buyPrices: [],
   sellPrices: [],

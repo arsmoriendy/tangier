@@ -9,7 +9,16 @@ export const createTransactionSchema = z.object({
         buyPrice: z.number().min(0),
         sellPrice: z.number().min(0),
         quantity: z.number().min(1),
-        quantifiedPrice: z.number().min(0),
+        extraFields: z.object({
+          link: z
+            .object({
+              itemId: z.uuid(),
+              originalBuyPrice: z.number().min(0).optional(),
+              updateStock: z.boolean(),
+            })
+            .optional(),
+          quantifiedPrice: z.number().min(0),
+        }),
       })
     )
     .min(1),

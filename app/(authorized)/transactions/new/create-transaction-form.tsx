@@ -11,7 +11,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field"
+import {
+  Field,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field"
 import { createTransaction } from "@/lib/crud/transactions"
 import { printTransaction } from "@/lib/print-transaction"
 import { AddItemForm } from "@/app/(authorized)/transactions/new/add-item-form"
@@ -20,6 +26,8 @@ import {
   createTransactionSchema,
   defaultCreateTransacionValues,
 } from "@/app/(authorized)/transactions/new/create-transaction-schema"
+import { Checkbox } from "@/components/ui/checkbox"
+import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
 
 export default function CreateTransactionForm() {
   const form = useAppForm({
@@ -28,17 +36,35 @@ export default function CreateTransactionForm() {
       onMount: createTransactionSchema,
       onChange: createTransactionSchema,
     },
-    onSubmit: async ({ value }) => {
+    onSubmit: async ({ value: { transactionItems, ...value } }) => {
+      const items = transactionItems.map(({ extraFields, ...fields }) => fields)
+
+      for (const item of transactionItems) {
+        if (
+          item.extraFields.link?.updateStock &&
+          item.extraFields.link.originalBuyPrice !== undefined
+        ) {
+          await updateBuyPriceStock({
+            itemId: item.extraFields.link.itemId,
+            price: item.extraFields.link.originalBuyPrice,
+            stockDelta: -item.quantity,
+          })
+        }
+      }
+
       const { id, createdAt } = await createTransaction({
+        transactionItems: items,
         ...value,
       })
+
       await printTransaction({
         id,
         createdAt,
         totalPrice: value.totalPrice,
-        transactionItems: value.transactionItems,
+        transactionItems: items,
         customerPriceGroup: value.customerPriceGroup,
       })
+
       form.reset()
     },
   })
@@ -47,7 +73,7 @@ export default function CreateTransactionForm() {
     form.setFieldValue(
       "totalPrice",
       form.state.values.transactionItems
-        .map((i) => i.quantifiedPrice)
+        .map((i) => i.extraFields.quantifiedPrice)
         .reduce((a, i) => a + i, 0)
     )
   }
@@ -86,11 +112,30 @@ export default function CreateTransactionForm() {
                       <TableHead>Buy price</TableHead>
                       <TableHead>Sell price</TableHead>
                       <TableHead>Qty</TableHead>
+                      <TableHead>
+                        <Checkbox
+                          defaultChecked
+                          onCheckedChange={(c) => {
+                            for (const [i, item] of state.value.entries()) {
+                              if (
+                                item.extraFields.link &&
+                                item.extraFields.link.originalBuyPrice !==
+                                  undefined
+                              ) {
+                                form.setFieldValue(
+                                  `transactionItems[${i}].extraFields.link.updateStock`,
+                                  c as boolean
+                                )
+                              }
+                            }
+                          }}
+                        />
+                      </TableHead>
                       <TableHead>Quantified price</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {state.value.map((_, i) => (
+                    {state.value.map(({ extraFields: { link } }, i) => (
                       <TableRow key={i}>
                         <TableCell>
                           <form.AppField name={`transactionItems[${i}].name`}>
@@ -115,7 +160,7 @@ export default function CreateTransactionForm() {
                             listeners={{
                               onChange: ({ value }) => {
                                 form.setFieldValue(
-                                  `transactionItems[${i}].quantifiedPrice`,
+                                  `transactionItems[${i}].extraFields.quantifiedPrice`,
                                   form.state.values.transactionItems[i]
                                     .quantity * value
                                 )
@@ -131,7 +176,7 @@ export default function CreateTransactionForm() {
                             listeners={{
                               onChange: ({ value }) => {
                                 form.setFieldValue(
-                                  `transactionItems[${i}].quantifiedPrice`,
+                                  `transactionItems[${i}].extraFields.quantifiedPrice`,
                                   form.state.values.transactionItems[i]
                                     .sellPrice * value
                                 )
@@ -144,8 +189,32 @@ export default function CreateTransactionForm() {
                           </form.AppField>
                         </TableCell>
                         <TableCell>
+                          {link && link.originalBuyPrice !== undefined ? (
+                            <Field orientation="horizontal">
+                              <form.AppField
+                                name={`transactionItems[${i}].extraFields.link.updateStock`}
+                              >
+                                {(f) => (
+                                  <Checkbox
+                                    checked={f.state.value}
+                                    onCheckedChange={(c) =>
+                                      f.setValue(c as boolean)
+                                    }
+                                  />
+                                )}
+                              </form.AppField>
+                              <FieldLabel>Update stock</FieldLabel>
+                            </Field>
+                          ) : (
+                            <Field orientation="horizontal">
+                              <Checkbox disabled />
+                              <FieldLabel>Custom stock</FieldLabel>
+                            </Field>
+                          )}
+                        </TableCell>
+                        <TableCell>
                           <form.AppField
-                            name={`transactionItems[${i}].quantifiedPrice`}
+                            name={`transactionItems[${i}].extraFields.quantifiedPrice`}
                             listeners={{
                               onChange: recalculateTotalPrice,
                             }}

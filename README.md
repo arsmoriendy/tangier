@@ -8,8 +8,6 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 1. Item buy price
    - combine same prices
-   - auto decrement
-   - show on transaction item list
    - localstorage auto decrement
    - calculate discount and margin
 2. Update and delete items

@@ -35,13 +35,23 @@ export const AddItemForm = withForm({
     const form = useAppForm({
       defaultValues: { ...defaultAddItemValues, unit: units[0]?.name },
       validators: { onMount: addItemSchema, onChange: addItemSchema },
-      onSubmit: ({ value }) => {
-        createTransactionForm.setFieldValue("transactionItems", (items) => [
-          ...items,
-          value,
-        ])
+      onSubmit: ({ value: { quantifiedPrice, ...item } }) => {
+        createTransactionForm.pushFieldValue("transactionItems", {
+          ...item,
+          extraFields: {
+            quantifiedPrice,
+            link: addItemProxy.link
+              ? {
+                  itemId: addItemProxy.link.itemId,
+                  originalBuyPrice: addItemProxy.link.selectedBuyPrice,
+                  updateStock: true,
+                }
+              : undefined,
+          },
+        })
         addItemProxy.sellPrices = []
         addItemProxy.buyPrices = []
+        addItemProxy.link = undefined
         form.reset()
       },
     })
@@ -141,36 +151,34 @@ export const AddItemForm = withForm({
                   {(f) => <f.IdrField />}
                 </form.AppField>
 
-                <form.Subscribe selector={(f) => f.values.buyPrice}>
-                  {(bp) => (
-                    <RadioGroupChoiceCard
-                      value={bp.toString()}
-                      onValueChange={(v) => {
-                        form.setFieldValue("buyPrice", parseFloat(v))
-                      }}
+                <RadioGroupChoiceCard
+                  value={addItemSnap.link?.selectedBuyPrice?.toString()}
+                  onValueChange={(v) => {
+                    const price = parseFloat(v)
+                    addItemProxy.link!.selectedBuyPrice = price
+                    form.setFieldValue("buyPrice", price)
+                  }}
+                >
+                  {addItemSnap.buyPrices.length > 0 ? (
+                    addItemSnap.buyPrices
+                      .toReversed()
+                      .map((bp, i) => (
+                        <RadioGroupChoiceItem
+                          key={i}
+                          value={bp.price.toString()}
+                          title={formatCurrency(bp.price)}
+                          description={`${bp.stock} left`}
+                        />
+                      ))
+                  ) : (
+                    <Item
+                      className="grid min-h-17 place-items-center border-dashed text-muted-foreground"
+                      variant="outline"
                     >
-                      {addItemSnap.buyPrices.length > 0 ? (
-                        addItemSnap.buyPrices
-                          .toReversed()
-                          .map((bp, i) => (
-                            <RadioGroupChoiceItem
-                              key={i}
-                              value={bp.price.toString()}
-                              title={formatCurrency(bp.price)}
-                              description={`${bp.stock} left`}
-                            />
-                          ))
-                      ) : (
-                        <Item
-                          className="grid min-h-17 place-items-center border-dashed text-muted-foreground"
-                          variant="outline"
-                        >
-                          No recorded price
-                        </Item>
-                      )}
-                    </RadioGroupChoiceCard>
+                      No recorded price
+                    </Item>
                   )}
-                </form.Subscribe>
+                </RadioGroupChoiceCard>
               </FieldSet>
 
               <FieldSet className="flex-1">
