@@ -83,7 +83,8 @@ export default function CreateTransactionForm() {
                     <TableRow>
                       <TableHead>Name</TableHead>
                       <TableHead>Unit</TableHead>
-                      <TableHead>Unit price</TableHead>
+                      <TableHead>Buy price</TableHead>
+                      <TableHead>Sell price</TableHead>
                       <TableHead>Qty</TableHead>
                       <TableHead>Quantified price</TableHead>
                     </TableRow>
@@ -99,6 +100,13 @@ export default function CreateTransactionForm() {
                         <TableCell>
                           <form.AppField name={`transactionItems[${i}].unit`}>
                             {(field) => <field.TextField />}
+                          </form.AppField>
+                        </TableCell>
+                        <TableCell>
+                          <form.AppField
+                            name={`transactionItems[${i}].buyPrice`}
+                          >
+                            {(field) => <field.IdrField min={0} />}
                           </form.AppField>
                         </TableCell>
                         <TableCell>
