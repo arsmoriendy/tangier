@@ -27,3 +27,5 @@ Run with the bun runtime, e.g. `bun -b dev`
 4. Per item quantity threshold
 5. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
 6. group transaction items based on new category column
+7. backup and restore
+8. export and import
