@@ -72,12 +72,24 @@ export default function CreateTransactionForm() {
   })
 
   function recalculateTotalPrice() {
-    form.setFieldValue(
+    setIdempotentFieldValue(
       "totalPrice",
       form.state.values.transactionItems
         .map((i) => i.extraFields.quantifiedPrice)
         .reduce((a, i) => a + i, 0)
     )
+  }
+
+  function setIdempotentFieldValue<
+    T extends Parameters<typeof form.setFieldValue>,
+  >(field: T[0], value: T[1]) {
+    const oldValue = form.getFieldValue(field)
+    if (oldValue !== value)
+      form.setFieldValue(
+        field,
+        // @ts-ignore
+        value
+      )
   }
 
   return (
@@ -162,7 +174,7 @@ export default function CreateTransactionForm() {
                             name={`transactionItems[${i}].sellPrice`}
                             listeners={{
                               onChange: ({ value }) => {
-                                form.setFieldValue(
+                                setIdempotentFieldValue(
                                   `transactionItems[${i}].extraFields.quantifiedPrice`,
                                   form.state.values.transactionItems[i]
                                     .quantity * value
@@ -178,7 +190,7 @@ export default function CreateTransactionForm() {
                             name={`transactionItems[${i}].quantity`}
                             listeners={{
                               onChange: ({ value }) => {
-                                form.setFieldValue(
+                                setIdempotentFieldValue(
                                   `transactionItems[${i}].extraFields.quantifiedPrice`,
                                   form.state.values.transactionItems[i]
                                     .sellPrice * value
@@ -219,7 +231,17 @@ export default function CreateTransactionForm() {
                           <form.AppField
                             name={`transactionItems[${i}].extraFields.quantifiedPrice`}
                             listeners={{
-                              onChange: recalculateTotalPrice,
+                              onChange: ({ value }) => {
+                                const newSellPrice =
+                                  value /
+                                  form.state.values.transactionItems[i].quantity
+
+                                setIdempotentFieldValue(
+                                  `transactionItems[${i}].sellPrice`,
+                                  newSellPrice
+                                )
+                                recalculateTotalPrice()
+                              },
                             }}
                           >
                             {(field) => <field.IdrField min={0} />}
