@@ -10,6 +10,7 @@ Run with the bun runtime, e.g. `bun -b dev`
    - calculate discount and margin
    - underpriced indicator
 2. Update and delete items
+   - prune empty stock
 3. Update and delete transactions
 4. Hold and recall
 5. Update receipt
