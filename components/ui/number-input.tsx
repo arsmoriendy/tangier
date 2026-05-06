@@ -23,7 +23,6 @@ export function NumberInput({
   className,
   onWheel,
   onKeyDown,
-  onValueChange,
   unstyled,
   value: valueProp,
   ...props
@@ -41,11 +40,8 @@ export function NumberInput({
       getInputRef={inputRef}
       value={value}
       className={!unstyled ? cn(inputClass, className) : className}
-      onValueChange={(v, s) => {
-        v.floatValue = clamp(v.floatValue ?? defaultValue)
-        setValue(v.floatValue)
-        onValueChange?.(v, s)
-      }}
+      min={min}
+      max={max}
       onKeyDown={(e) => {
         if (e.key == "ArrowUp") {
           e.preventDefault()
