@@ -48,13 +48,21 @@ export async function createItem({
     sellPrices = sellPrices.filter((p) => p.price > 0)
     barcodes = barcodes.filter((b) => b.barcode.length > 0)
 
+    type Price = number
+    type Stock = number
+    const buyPriceStockMap = new Map<Price, Stock>()
+    for (const bp of buyPrices) {
+      const oldStock = buyPriceStockMap.get(bp.price)
+      if (oldStock === undefined) buyPriceStockMap.set(bp.price, bp.stock)
+      else buyPriceStockMap.set(bp.price, oldStock + bp.stock)
+    }
+
     buyPrices.length > 0 &&
       (await tx.insert(buyPricesTbl).values(
-        buyPrices.map(({ price, stock }) => ({
-          item,
-          price,
-          stock,
-        }))
+        buyPriceStockMap
+          .entries()
+          .map(([price, stock]) => ({ item, price, stock }))
+          .toArray()
       ))
 
     sellPrices.length > 0 &&
