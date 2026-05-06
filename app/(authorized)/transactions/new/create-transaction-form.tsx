@@ -28,8 +28,10 @@ import {
 } from "@/app/(authorized)/transactions/new/create-transaction-schema"
 import { Checkbox } from "@/components/ui/checkbox"
 import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
+import { useLocalStorage } from "@/contexts/local-storage-ctx"
 
 export default function CreateTransactionForm() {
+  const { getLocalStorage, setLocalStorage } = useLocalStorage()
   const form = useAppForm({
     defaultValues: defaultCreateTransacionValues,
     validators: {
@@ -114,8 +116,9 @@ export default function CreateTransactionForm() {
                       <TableHead>Qty</TableHead>
                       <TableHead>
                         <Checkbox
-                          defaultChecked
+                          checked={getLocalStorage.decrementStock}
                           onCheckedChange={(c) => {
+                            setLocalStorage.decrementStock = c as boolean
                             for (const [i, item] of state.value.entries()) {
                               if (
                                 item.extraFields.link &&

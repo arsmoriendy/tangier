@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Item } from "@/components/ui/item"
+import { useLocalStorage } from "@/contexts/local-storage-ctx"
 
 export const AddItemForm = withForm({
   defaultValues: defaultCreateTransacionValues,
@@ -31,6 +32,7 @@ export const AddItemForm = withForm({
     const { priceGroups } = usePriceGroups()
     const { units } = useUnits()
     const { addItemProxy, addItemSnap } = useAddItem()
+    const { getLocalStorage } = useLocalStorage()
 
     const form = useAppForm({
       defaultValues: { ...defaultAddItemValues, unit: units[0]?.name },
@@ -44,7 +46,7 @@ export const AddItemForm = withForm({
               ? {
                   itemId: addItemProxy.link.itemId,
                   originalBuyPrice: addItemProxy.link.selectedBuyPrice,
-                  updateStock: true,
+                  updateStock: getLocalStorage.decrementStock,
                 }
               : undefined,
           },

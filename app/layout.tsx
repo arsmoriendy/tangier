@@ -5,6 +5,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
+import { LocalStorageProvider } from "@/contexts/local-storage-ctx"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -34,8 +35,10 @@ export default function RootLayout({
     >
       <body>
         <ThemeProvider>
-          {children}
-          <Toaster />
+          <LocalStorageProvider>
+            {children}
+            <Toaster />
+          </LocalStorageProvider>
         </ThemeProvider>
       </body>
     </html>
