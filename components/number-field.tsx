@@ -33,7 +33,9 @@ export default function NumberField({
       <NumberInput
         id={id}
         value={field.state.value}
-        onValueChange={({ floatValue }) => field.handleChange(floatValue!)}
+        onValueChange={(floatValue) =>
+          floatValue !== field.state.value && field.handleChange(floatValue)
+        }
         onBlur={field.handleBlur}
         aria-invalid={isInvalid}
         {...inputProps}

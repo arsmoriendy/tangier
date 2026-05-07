@@ -5,14 +5,15 @@ import { NumericFormat, NumericFormatProps } from "react-number-format"
 
 export type NumberInputProps = Omit<
   NumericFormatProps,
-  "defaultValue" | "step" | "min" | "max" | "value"
+  "defaultValue" | "step" | "min" | "max" | "value" | "onValueChange"
 > & {
   defaultValue?: number
   step?: number
   min?: number
   max?: number
   unstyled?: true
-  value: number
+  value?: number
+  onValueChange?: (value: number) => any
 }
 
 export function NumberInput({
@@ -23,39 +24,48 @@ export function NumberInput({
   className,
   onWheel,
   onKeyDown,
+  onValueChange,
   unstyled,
   value: valueProp,
   ...props
 }: NumberInputProps) {
-  const [value, setValue] = useState(defaultValue)
+  const [shadowValue, setShadowValue] = useState(valueProp ?? defaultValue)
   const clamp = (v: number): number => Math.min(max, Math.max(min, v))
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
-    setValue(valueProp!)
-  }, [valueProp])
+    if (valueProp !== undefined && valueProp === shadowValue) return
+    onValueChange?.(shadowValue)
+  }, [shadowValue])
 
   return (
     <NumericFormat
       getInputRef={inputRef}
-      value={value}
+      value={valueProp ?? shadowValue}
       className={!unstyled ? cn(inputClass, className) : className}
       min={min}
       max={max}
+      onValueChange={({ floatValue }) => {
+        if (
+          floatValue !== undefined &&
+          (valueProp ?? shadowValue) !== floatValue
+        )
+          setShadowValue(floatValue)
+      }}
       onKeyDown={(e) => {
         if (e.key == "ArrowUp") {
           e.preventDefault()
-          setValue((old) => clamp(old + step))
+          setShadowValue((old) => clamp(old + step))
         }
         if (e.key == "ArrowDown") {
           e.preventDefault()
-          setValue((old) => clamp(old - step))
+          setShadowValue((old) => clamp(old - step))
         }
         onKeyDown?.(e)
       }}
       onWheel={(e) => {
         if (document.activeElement === inputRef.current) {
-          setValue((old) => clamp(e.deltaY < 0 ? old + step : old - step))
+          setShadowValue((old) => clamp(e.deltaY < 0 ? old + step : old - step))
         }
         onWheel?.(e)
       }}
