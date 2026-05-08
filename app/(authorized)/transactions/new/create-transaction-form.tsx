@@ -29,6 +29,8 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { cn } from "@/lib/utils"
+import { formatCurrency } from "@/lib/i18n/currency"
 
 export default function CreateTransactionForm() {
   const { getLocalStorage, setLocalStorage } = useLocalStorage()
@@ -152,24 +154,24 @@ export default function CreateTransactionForm() {
                   <TableBody>
                     {state.value.map(({ extraFields: { link } }, i) => (
                       <TableRow key={i}>
-                        <TableCell>
+                        <TableCell className="align-top">
                           <form.AppField name={`transactionItems[${i}].name`}>
                             {(field) => <field.TextField />}
                           </form.AppField>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="align-top">
                           <form.AppField name={`transactionItems[${i}].unit`}>
                             {(field) => <field.TextField />}
                           </form.AppField>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="align-top">
                           <form.AppField
                             name={`transactionItems[${i}].buyPrice`}
                           >
                             {(field) => <field.IdrField min={0} />}
                           </form.AppField>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="align-top">
                           <form.AppField
                             name={`transactionItems[${i}].sellPrice`}
                             listeners={{
@@ -184,8 +186,36 @@ export default function CreateTransactionForm() {
                           >
                             {(field) => <field.IdrField min={0} />}
                           </form.AppField>
+                          <form.Subscribe
+                            selector={(f) => [
+                              f.values.transactionItems[i].buyPrice,
+                              f.values.transactionItems[i].sellPrice,
+                            ]}
+                          >
+                            {([bp, sp]) => {
+                              const margin = sp - bp
+                              const discount = ((bp - sp) / bp) * 100
+                              return (
+                                margin !== 0 && (
+                                  <small
+                                    className={cn(
+                                      margin < 0
+                                        ? "text-destructive"
+                                        : "text-green-500"
+                                    )}
+                                  >
+                                    Margin: {margin > 0 && "+"}
+                                    {formatCurrency(margin)}{" "}
+                                    {margin < 0 && (
+                                      <>({discount.toFixed(2)}% discount)</>
+                                    )}
+                                  </small>
+                                )
+                              )
+                            }}
+                          </form.Subscribe>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="align-top">
                           <form.AppField
                             name={`transactionItems[${i}].quantity`}
                             listeners={{
@@ -227,7 +257,7 @@ export default function CreateTransactionForm() {
                             </Field>
                           )}
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="align-top">
                           <form.AppField
                             name={`transactionItems[${i}].extraFields.quantifiedPrice`}
                             listeners={{
@@ -247,7 +277,7 @@ export default function CreateTransactionForm() {
                             {(field) => <field.IdrField min={0} />}
                           </form.AppField>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="align-top">
                           <Button
                             variant="destructive"
                             type="button"
