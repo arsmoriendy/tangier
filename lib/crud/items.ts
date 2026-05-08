@@ -86,15 +86,22 @@ export async function createItem({
 }
 
 export async function updateItem({
+  id,
   name,
   unit,
-  id,
-  sellPrices,
-  buyPrices,
-  barcodes,
-}: ItemWithRelations) {
+  buyPrices = [],
+  sellPrices = [],
+  barcodes = [],
+}: {
+  id: string
+  name: string
+  unit: string
+  sellPrices?: { priceGroup: string; price: number }[]
+  buyPrices?: { price: number; stock: number }[]
+  barcodes?: { barcodeGroup: string; barcode: string }[]
+}) {
   await db.transaction(async (tx) => {
-    await tx.update(items).set({ name, unit: unit.id }).where(eq(items.id, id))
+    await tx.update(items).set({ name, unit }).where(eq(items.id, id))
 
     sellPrices = sellPrices.filter((p) => p.price > 0)
     barcodes = barcodes.filter((b) => b.barcode.length > 0)
@@ -108,7 +115,7 @@ export async function updateItem({
       else buyPriceStockMap.set(bp.price, oldStock + bp.stock)
     }
 
-    tx.delete(buyPricesTbl).where(eq(buyPricesTbl.item, id))
+    await tx.delete(buyPricesTbl).where(eq(buyPricesTbl.item, id))
     buyPrices.length > 0 &&
       (await tx.insert(buyPricesTbl).values(
         buyPriceStockMap
@@ -117,23 +124,23 @@ export async function updateItem({
           .toArray()
       ))
 
-    tx.delete(sellPricesTbl).where(eq(sellPricesTbl.item, id))
+    await tx.delete(sellPricesTbl).where(eq(sellPricesTbl.item, id))
     sellPrices.length > 0 &&
       (await tx.insert(sellPricesTbl).values(
         sellPrices.map(({ price, priceGroup }) => ({
           item: id,
           price,
-          priceGroup: priceGroup.id,
+          priceGroup: priceGroup,
         }))
       ))
 
-    tx.delete(barcodesTbl).where(eq(barcodesTbl.item, id))
+    await tx.delete(barcodesTbl).where(eq(barcodesTbl.item, id))
     barcodes.length > 0 &&
       (await tx.insert(barcodesTbl).values(
         barcodes.map(({ barcode, barcodeGroup }) => ({
           item: id,
           barcode,
-          barcodeGroup: barcodeGroup.id,
+          barcodeGroup: barcodeGroup,
         }))
       ))
   })

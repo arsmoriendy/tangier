@@ -3,7 +3,7 @@
 import chroma from "chroma-js"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
-import { createItem, ItemWithRelations } from "@/lib/crud/items"
+import { createItem, ItemWithRelations, updateItem } from "@/lib/crud/items"
 import z from "zod"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
@@ -53,13 +53,17 @@ export default function ItemForm(props: {
             price,
             stock,
           })),
-          sellPrices: props.item.sellPrices.map(({ price, priceGroup }) => ({
-            price,
-            priceGroup: priceGroup.id,
+          sellPrices: priceGroups.map(({ id }) => ({
+            priceGroup: id,
+            price:
+              props.item!.sellPrices.find((sp) => sp.priceGroup.id === id)
+                ?.price ?? 0,
           })),
-          barcodes: props.item.barcodes.map(({ barcode, barcodeGroup }) => ({
-            barcode,
-            barcodeGroup: barcodeGroup.id,
+          barcodes: barcodeGroups.map(({ id }) => ({
+            barcodeGroup: id,
+            barcode:
+              props.item!.barcodes.find((b) => b.barcodeGroup.id === id)
+                ?.barcode ?? "",
           })),
         }
       : defaultValues,
@@ -68,9 +72,14 @@ export default function ItemForm(props: {
       onMount: createItemFormSchema,
     },
     onSubmit: async ({ value }) => {
-      await createItem(value)
+      if (props.item) {
+        await updateItem({ ...value, id: props.item.id })
+        toast.success("Item updated")
+      } else {
+        await createItem(value)
+        toast.success("Item created")
+      }
       form.reset()
-      toast.success("Successfully created item")
     },
   })
 
@@ -232,7 +241,9 @@ export default function ItemForm(props: {
       </div>
 
       <form.AppForm>
-        <form.SubmitButton>Create item</form.SubmitButton>
+        <form.SubmitButton>
+          {props.item ? "Update item" : "Create item"}
+        </form.SubmitButton>
       </form.AppForm>
     </Form>
   )
