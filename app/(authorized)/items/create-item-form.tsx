@@ -89,77 +89,96 @@ export default function CreateItemForm() {
             <FieldLegend>Buy prices</FieldLegend>
 
             <form.Subscribe selector={(f) => f.values.buyPrices}>
-              {(buyPrices) =>
-                buyPrices.map(({ price: bp }, i) => (
-                  <div key={i}>
-                    <div className="flex items-end gap-2">
-                      <form.AppField name={`buyPrices[${i}].price`}>
-                        {(f) => <f.IdrField label="Price" />}
-                      </form.AppField>
-                      <form.AppField name={`buyPrices[${i}].stock`}>
-                        {(f) => (
-                          <f.NumberField
-                            className="w-24"
-                            label="Stock"
-                            min={0}
-                          />
-                        )}
-                      </form.AppField>
-                      <Button
-                        variant="destructive"
-                        size="icon"
-                        type="button"
-                        onClick={() => {
-                          form.removeFieldValue("buyPrices", i)
-                        }}
-                      >
-                        <TrashIcon />
-                      </Button>
-                    </div>
-                    <div className="flex gap-2">
-                      <form.Subscribe selector={(f) => f.values.sellPrices}>
-                        {(sps) =>
-                          sps.map(({ price: sp, priceGroup }, i) => {
-                            const margin = sp - bp
-                            const discount = ((bp - sp) / bp) * 100
-                            const pg = priceGroups.find(
-                              (pg) => pg.id === priceGroup
-                            )!
-                            return (
-                              margin !== 0 && (
-                                <small
-                                  key={i}
-                                  className={cn(
-                                    margin < 0
-                                      ? "text-destructive"
-                                      : "text-green-500"
-                                  )}
-                                >
-                                  {pg.name} margin: {margin > 0 && "+"}
-                                  {formatCurrency(margin)}{" "}
-                                  {margin < 0 && (
-                                    <>({discount.toFixed(2)}% discount)</>
-                                  )}
-                                </small>
+              {(buyPrices) => (
+                <>
+                  {buyPrices.map(({ price: bp }, i) => (
+                    <div key={i}>
+                      <div className="flex items-end gap-2">
+                        <form.AppField name={`buyPrices[${i}].price`}>
+                          {(f) => <f.IdrField label="Price" />}
+                        </form.AppField>
+                        <form.AppField name={`buyPrices[${i}].stock`}>
+                          {(f) => (
+                            <f.NumberField
+                              className="w-24"
+                              label="Stock"
+                              min={0}
+                            />
+                          )}
+                        </form.AppField>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          type="button"
+                          onClick={() => {
+                            form.removeFieldValue("buyPrices", i)
+                          }}
+                        >
+                          <TrashIcon />
+                        </Button>
+                      </div>
+                      <div className="flex gap-2">
+                        <form.Subscribe selector={(f) => f.values.sellPrices}>
+                          {(sps) =>
+                            sps.map(({ price: sp, priceGroup }, i) => {
+                              const margin = sp - bp
+                              const discount = ((bp - sp) / bp) * 100
+                              const pg = priceGroups.find(
+                                (pg) => pg.id === priceGroup
+                              )!
+                              return (
+                                margin !== 0 && (
+                                  <small
+                                    key={i}
+                                    className={cn(
+                                      margin < 0
+                                        ? "text-destructive"
+                                        : "text-green-500"
+                                    )}
+                                  >
+                                    {pg.name} margin: {margin > 0 && "+"}
+                                    {formatCurrency(margin)}{" "}
+                                    {margin < 0 && (
+                                      <>({discount.toFixed(2)}% discount)</>
+                                    )}
+                                  </small>
+                                )
                               )
-                            )
-                          })
-                        }
-                      </form.Subscribe>
+                            })
+                          }
+                        </form.Subscribe>
+                      </div>
                     </div>
-                  </div>
-                ))
-              }
-            </form.Subscribe>
+                  ))}
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      form.pushFieldValue("buyPrices", { price: 0, stock: 0 })
+                    }}
+                  >
+                    Add buy price
+                  </Button>
 
-            <Button
-              type="button"
-              onClick={() => {
-                form.pushFieldValue("buyPrices", { price: 0, stock: 0 })
-              }}
-            >
-              Add buy price
-            </Button>
+                  <Button
+                    disabled={
+                      buyPrices.find((bp) => bp.stock === 0) === undefined
+                    }
+                    type="button"
+                    variant="destructive"
+                    onClick={() => {
+                      form.setFieldValue(
+                        "buyPrices",
+                        form.state.values.buyPrices.filter(
+                          (bp) => bp.stock !== 0
+                        )
+                      )
+                    }}
+                  >
+                    Prune empty stock prices
+                  </Button>
+                </>
+              )}
+            </form.Subscribe>
           </FieldSet>
 
           <FieldSet className="flex-1">
