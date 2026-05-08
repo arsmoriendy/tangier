@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select"
 import { Item } from "@/components/ui/item"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { cn } from "@/lib/utils"
 
 export const AddItemForm = withForm({
   defaultValues: defaultCreateTransacionValues,
@@ -185,7 +186,6 @@ export const AddItemForm = withForm({
 
               <FieldSet className="flex-1">
                 <FieldLegend>Sell price</FieldLegend>
-
                 <div className="flex gap-2">
                   <form.AppField
                     name="sellPrice"
@@ -217,6 +217,28 @@ export const AddItemForm = withForm({
                     )}
                   </form.AppField>
                 </div>
+
+                <form.Subscribe
+                  selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
+                >
+                  {([bp, sp]) => {
+                    const margin = sp - bp
+                    const discount = ((bp - sp) / bp) * 100
+                    return (
+                      margin !== 0 && (
+                        <small
+                          className={cn(
+                            margin < 0 ? "text-destructive" : "text-green-500"
+                          )}
+                        >
+                          Margin: {margin > 0 && "+"}
+                          {formatCurrency(margin)}{" "}
+                          {margin < 0 && <>({discount.toFixed(2)}% discount)</>}
+                        </small>
+                      )
+                    )
+                  }}
+                </form.Subscribe>
 
                 <form.AppField name="quantifiedPrice">
                   {(field) => (
