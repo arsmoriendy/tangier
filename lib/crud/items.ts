@@ -5,7 +5,7 @@ import {
   items,
   sellPrices as sellPricesTbl,
   buyPrices as buyPricesTbl,
-  barcodes as barcodesTable,
+  barcodes as barcodesTbl,
   buyPrices,
 } from "@/lib/db/schema"
 import { and, asc, count, eq, ilike } from "drizzle-orm"
@@ -75,11 +75,65 @@ export async function createItem({
       ))
 
     barcodes.length > 0 &&
-      (await tx.insert(barcodesTable).values(
+      (await tx.insert(barcodesTbl).values(
         barcodes.map(({ barcode, barcodeGroup }) => ({
           item,
           barcode,
           barcodeGroup,
+        }))
+      ))
+  })
+}
+
+export async function updateItem({
+  name,
+  unit,
+  id,
+  sellPrices,
+  buyPrices,
+  barcodes,
+}: ItemWithRelations) {
+  await db.transaction(async (tx) => {
+    await tx.update(items).set({ name, unit: unit.id }).where(eq(items.id, id))
+
+    sellPrices = sellPrices.filter((p) => p.price > 0)
+    barcodes = barcodes.filter((b) => b.barcode.length > 0)
+
+    type Price = number
+    type Stock = number
+    const buyPriceStockMap = new Map<Price, Stock>()
+    for (const bp of buyPrices) {
+      const oldStock = buyPriceStockMap.get(bp.price)
+      if (oldStock === undefined) buyPriceStockMap.set(bp.price, bp.stock)
+      else buyPriceStockMap.set(bp.price, oldStock + bp.stock)
+    }
+
+    tx.delete(buyPricesTbl).where(eq(buyPricesTbl.item, id))
+    buyPrices.length > 0 &&
+      (await tx.insert(buyPricesTbl).values(
+        buyPriceStockMap
+          .entries()
+          .map(([price, stock]) => ({ item: id, price, stock }))
+          .toArray()
+      ))
+
+    tx.delete(sellPricesTbl).where(eq(sellPricesTbl.item, id))
+    sellPrices.length > 0 &&
+      (await tx.insert(sellPricesTbl).values(
+        sellPrices.map(({ price, priceGroup }) => ({
+          item: id,
+          price,
+          priceGroup: priceGroup.id,
+        }))
+      ))
+
+    tx.delete(barcodesTbl).where(eq(barcodesTbl.item, id))
+    barcodes.length > 0 &&
+      (await tx.insert(barcodesTbl).values(
+        barcodes.map(({ barcode, barcodeGroup }) => ({
+          item: id,
+          barcode,
+          barcodeGroup: barcodeGroup.id,
         }))
       ))
   })
