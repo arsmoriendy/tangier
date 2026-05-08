@@ -233,9 +233,9 @@ export default function CreateTransactionForm() {
                             )}
                           </form.AppField>
                         </TableCell>
-                        <TableCell>
+                        <TableCell className="align-top">
                           {link && link.originalBuyPrice !== undefined ? (
-                            <Field orientation="horizontal">
+                            <Field orientation="horizontal" className="h-8">
                               <form.AppField
                                 name={`transactionItems[${i}].extraFields.link.updateStock`}
                               >
