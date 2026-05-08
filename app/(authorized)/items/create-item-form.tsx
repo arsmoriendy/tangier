@@ -91,8 +91,8 @@ export default function CreateItemForm() {
             <form.Subscribe selector={(f) => f.values.buyPrices}>
               {(buyPrices) =>
                 buyPrices.map(({ price: bp }, i) => (
-                  <>
-                    <div className="flex items-end gap-2" key={i}>
+                  <div key={i}>
+                    <div className="flex items-end gap-2">
                       <form.AppField name={`buyPrices[${i}].price`}>
                         {(f) => <f.IdrField label="Price" />}
                       </form.AppField>
@@ -147,7 +147,7 @@ export default function CreateItemForm() {
                         }
                       </form.Subscribe>
                     </div>
-                  </>
+                  </div>
                 ))
               }
             </form.Subscribe>
