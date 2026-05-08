@@ -12,6 +12,9 @@ import { Badge } from "@/components/ui/badge"
 import { useUnits } from "@/contexts/units-ctx"
 import { Button } from "@/components/ui/button"
 import { TrashIcon } from "@phosphor-icons/react"
+import { sellPrices } from "@/lib/db/schema"
+import { cn } from "@/lib/utils"
+import { formatCurrency } from "@/lib/i18n/currency"
 
 export default function CreateItemForm() {
   const { priceGroups } = usePriceGroups()
@@ -87,27 +90,64 @@ export default function CreateItemForm() {
 
             <form.Subscribe selector={(f) => f.values.buyPrices}>
               {(buyPrices) =>
-                buyPrices.map((_, i) => (
-                  <div className="flex items-end gap-2" key={i}>
-                    <form.AppField name={`buyPrices[${i}].price`}>
-                      {(f) => <f.IdrField label="Price" />}
-                    </form.AppField>
-                    <form.AppField name={`buyPrices[${i}].stock`}>
-                      {(f) => (
-                        <f.NumberField className="w-24" label="Stock" min={0} />
-                      )}
-                    </form.AppField>
-                    <Button
-                      variant="destructive"
-                      size="icon"
-                      type="button"
-                      onClick={() => {
-                        form.removeFieldValue("buyPrices", i)
-                      }}
-                    >
-                      <TrashIcon />
-                    </Button>
-                  </div>
+                buyPrices.map(({ price: bp }, i) => (
+                  <>
+                    <div className="flex items-end gap-2" key={i}>
+                      <form.AppField name={`buyPrices[${i}].price`}>
+                        {(f) => <f.IdrField label="Price" />}
+                      </form.AppField>
+                      <form.AppField name={`buyPrices[${i}].stock`}>
+                        {(f) => (
+                          <f.NumberField
+                            className="w-24"
+                            label="Stock"
+                            min={0}
+                          />
+                        )}
+                      </form.AppField>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        type="button"
+                        onClick={() => {
+                          form.removeFieldValue("buyPrices", i)
+                        }}
+                      >
+                        <TrashIcon />
+                      </Button>
+                    </div>
+                    <div className="flex gap-2">
+                      <form.Subscribe selector={(f) => f.values.sellPrices}>
+                        {(sps) =>
+                          sps.map(({ price: sp, priceGroup }, i) => {
+                            const margin = sp - bp
+                            const discount = ((bp - sp) / bp) * 100
+                            const pg = priceGroups.find(
+                              (pg) => pg.id === priceGroup
+                            )!
+                            return (
+                              margin !== 0 && (
+                                <small
+                                  key={i}
+                                  className={cn(
+                                    margin < 0
+                                      ? "text-destructive"
+                                      : "text-green-500"
+                                  )}
+                                >
+                                  {pg.name} margin: {margin > 0 && "+"}
+                                  {formatCurrency(margin)}{" "}
+                                  {margin < 0 && (
+                                    <>({discount.toFixed(2)}% discount)</>
+                                  )}
+                                </small>
+                              )
+                            )
+                          })
+                        }
+                      </form.Subscribe>
+                    </div>
+                  </>
                 ))
               }
             </form.Subscribe>
