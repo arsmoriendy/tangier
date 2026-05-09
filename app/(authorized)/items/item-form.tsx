@@ -16,7 +16,8 @@ import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
 
 export default function ItemForm(props: {
-  item?: Readonly<ItemWithRelations>
+  item?: DeepReadonly<ItemWithRelations>
+  afterUpdate?: (newItem: ItemWithRelations) => any
 }) {
   const { priceGroups } = usePriceGroups()
   const { barcodeGroups } = useBarcodeGroups()
@@ -73,7 +74,8 @@ export default function ItemForm(props: {
     },
     onSubmit: async ({ value }) => {
       if (props.item) {
-        await updateItem({ ...value, id: props.item.id })
+        const newItem = await updateItem({ ...value, id: props.item.id })
+        props.afterUpdate?.(newItem)
         toast.success("Item updated")
       } else {
         await createItem(value)
