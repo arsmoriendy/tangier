@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { transactionItems, transactions } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
+import { and, eq, gte, lte } from "drizzle-orm"
 
 export async function createTransaction({
   transactionItems: items,
@@ -33,3 +33,13 @@ export async function readTransaction(id: string) {
 export type TransactionWithRelations = NonNullable<
   Awaited<ReturnType<typeof readTransaction>>
 >
+
+export async function listTransactions(params: { from: Date; to: Date }) {
+  return await db.query.transactions.findMany({
+    where: and(
+      gte(transactions.createdAt, params.from.toUTCString()),
+      lte(transactions.createdAt, params.to.toUTCString())
+    ),
+    with: { transactionItems: { columns: { transaction: false } } },
+  })
+}
