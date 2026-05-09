@@ -1,7 +1,7 @@
 "use client"
 
 import { Form, useAppForm } from "@/components/form"
-import { TrashIcon } from "@phosphor-icons/react"
+import { DotsSixVerticalIcon, TrashIcon } from "@phosphor-icons/react"
 import {
   Table,
   TableBody,
@@ -123,6 +123,7 @@ export default function CreateTransactionForm() {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead />
                       <TableHead>Name</TableHead>
                       <TableHead>Unit</TableHead>
                       <TableHead>Buy price</TableHead>
@@ -153,7 +154,27 @@ export default function CreateTransactionForm() {
                   </TableHeader>
                   <TableBody>
                     {state.value.map(({ extraFields: { link } }, i) => (
-                      <TableRow key={i}>
+                      <TableRow
+                        key={i}
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData("text/plain", i.toString())
+                        }}
+                        onDragOver={(e) => e.preventDefault()}
+                        onDrop={(e) => {
+                          const sourceIndex = parseInt(
+                            e.dataTransfer.getData("text/plain")
+                          )
+                          form.swapFieldValues(
+                            "transactionItems",
+                            i,
+                            sourceIndex
+                          )
+                        }}
+                      >
+                        <TableCell className="cursor-grab align-top">
+                          <DotsSixVerticalIcon className="h-8" />
+                        </TableCell>
                         <TableCell className="align-top">
                           <form.AppField name={`transactionItems[${i}].name`}>
                             {(field) => <field.TextField />}
@@ -251,7 +272,7 @@ export default function CreateTransactionForm() {
                               <FieldLabel>Update stock</FieldLabel>
                             </Field>
                           ) : (
-                            <Field orientation="horizontal">
+                            <Field orientation="horizontal" className="h-8">
                               <Checkbox disabled />
                               <FieldLabel>Custom stock</FieldLabel>
                             </Field>

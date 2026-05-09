@@ -6,10 +6,9 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Reorder transaction items
-2. Update and delete transactions
-3. Hold and recall
-4. Update receipt
+1. Update and delete transactions
+2. Hold and recall
+3. Update receipt
    - cashier name
    - timestamp
 
