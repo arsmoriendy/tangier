@@ -6,7 +6,6 @@ import {
   sellPrices as sellPricesTbl,
   buyPrices as buyPricesTbl,
   barcodes as barcodesTbl,
-  buyPrices,
 } from "@/lib/db/schema"
 import { and, asc, count, eq, ilike } from "drizzle-orm"
 
@@ -100,7 +99,7 @@ export async function updateItem({
   buyPrices?: { price: number; stock: number }[]
   barcodes?: { barcodeGroup: string; barcode: string }[]
 }) {
-  await db.transaction(async (tx) => {
+  return await db.transaction(async (tx) => {
     await tx.update(items).set({ name, unit }).where(eq(items.id, id))
 
     sellPrices = sellPrices.filter((p) => p.price > 0)
@@ -143,6 +142,26 @@ export async function updateItem({
           barcodeGroup: barcodeGroup,
         }))
       ))
+
+    return (await tx.query.items.findFirst({
+      where: eq(items.id, id),
+      columns: { unit: false },
+      with: {
+        unit: true,
+        barcodes: {
+          columns: { barcode: true },
+          with: { barcodeGroup: true },
+        },
+        sellPrices: {
+          columns: { price: true },
+          with: { priceGroup: true },
+        },
+        buyPrices: {
+          orderBy: [asc(buyPricesTbl.price)],
+          columns: { item: false },
+        },
+      },
+    }))!
   })
 }
 
@@ -177,7 +196,7 @@ export async function listItems({
         with: { priceGroup: true },
       },
       buyPrices: {
-        orderBy: [asc(buyPrices.price)],
+        orderBy: [asc(buyPricesTbl.price)],
         columns: { item: false },
       },
     },
