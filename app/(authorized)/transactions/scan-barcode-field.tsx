@@ -1,7 +1,7 @@
 "use client"
 
-import { useAddItem } from "@/app/(authorized)/transactions/new/add-item-ctx"
-import { defaultAddItemValues } from "@/app/(authorized)/transactions/new/add-item-schema"
+import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
+import { defaultAddItemValues } from "@/app/(authorized)/transactions/add-item-schema"
 import { withForm } from "@/components/form"
 import { FieldError } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"

@@ -6,15 +6,15 @@ import {
 import { FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useEffect } from "react"
-import { SearchItemForm } from "@/app/(authorized)/transactions/new/search-item-form"
+import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import {
   addItemSchema,
   defaultAddItemValues,
-} from "@/app/(authorized)/transactions/new/add-item-schema"
-import { useAddItem } from "@/app/(authorized)/transactions/new/add-item-ctx"
-import { defaultCreateTransacionValues } from "@/app/(authorized)/transactions/new/create-transaction-schema"
-import { ScanBarcodeField } from "@/app/(authorized)/transactions/new/scan-barcode-field"
+} from "@/app/(authorized)/transactions/add-item-schema"
+import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
+import { defaultCreateTransacionValues } from "@/app/(authorized)/transactions/transaction-schema"
+import { ScanBarcodeField } from "@/app/(authorized)/transactions/scan-barcode-field"
 import { useUnits } from "@/contexts/units-ctx"
 import {
   Select,

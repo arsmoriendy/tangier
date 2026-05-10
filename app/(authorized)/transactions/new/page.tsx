@@ -1,4 +1,4 @@
-import CreateTransactionForm from "@/app/(authorized)/transactions/new/create-transaction-form"
+import TransactionForm from "@/app/(authorized)/transactions/transaction-form"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
 import { UnitsProvider } from "@/contexts/units-ctx"
 import { listPriceGroups } from "@/lib/crud/price-groups"
@@ -10,7 +10,7 @@ export default async function Page() {
   return (
     <PriceGroupsProvider priceGroups={priceGroups}>
       <UnitsProvider units={units}>
-        <CreateTransactionForm />
+        <TransactionForm />
       </UnitsProvider>
     </PriceGroupsProvider>
   )

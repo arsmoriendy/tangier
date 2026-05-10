@@ -20,12 +20,12 @@ import {
 } from "@/components/ui/field"
 import { createTransaction } from "@/lib/crud/transactions"
 import { printTransaction } from "@/lib/print-transaction"
-import { AddItemForm } from "@/app/(authorized)/transactions/new/add-item-form"
-import { AddItemProvider } from "@/app/(authorized)/transactions/new/add-item-ctx"
+import { AddItemForm } from "@/app/(authorized)/transactions/add-item-form"
+import { AddItemProvider } from "@/app/(authorized)/transactions/add-item-ctx"
 import {
   createTransactionSchema,
   defaultCreateTransacionValues,
-} from "@/app/(authorized)/transactions/new/create-transaction-schema"
+} from "@/app/(authorized)/transactions/transaction-schema"
 import { Checkbox } from "@/components/ui/checkbox"
 import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
@@ -33,7 +33,7 @@ import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useSession } from "@/contexts/session-ctx"
 
-export default function CreateTransactionForm() {
+export default function TransactionForm() {
   const session = useSession()
   const { getLocalStorage, setLocalStorage } = useLocalStorage()
   const form = useAppForm({
