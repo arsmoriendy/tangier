@@ -1,7 +1,7 @@
-import { useItemFilters } from "@/app/(authorized)/items/item-filters-ctx"
 import { Form, useAppForm } from "@/components/form"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react"
 import z from "zod"
+import { useItemFilters } from "./item-filters-ctx"
 
 export function SearchBar() {
   const { itemFiltersProxy } = useItemFilters()

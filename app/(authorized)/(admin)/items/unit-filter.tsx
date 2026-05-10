@@ -1,8 +1,8 @@
 "use client"
 
-import { useItemFilters } from "@/app/(authorized)/items/item-filters-ctx"
 import { Badge } from "@/components/ui/badge"
 import { useUnits } from "@/contexts/units-ctx"
+import { useItemFilters } from "./item-filters-ctx"
 
 export function UnitFilter() {
   const { units } = useUnits()

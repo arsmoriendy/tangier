@@ -1,7 +1,5 @@
 "use client"
 
-import { ItemsTable } from "@/app/(authorized)/items/items-table"
-import { SearchBar } from "@/app/(authorized)/items/search-bar"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import {
   Pagination,
@@ -13,10 +11,12 @@ import {
 import { countItems, listItems } from "@/lib/crud/items"
 import { useEffect } from "react"
 import { useItems } from "@/contexts/items-ctx"
-import { useItemFilters } from "@/app/(authorized)/items/item-filters-ctx"
-import { useItemCount } from "@/app/(authorized)/items/item-count-ctx"
 import { subscribe } from "valtio"
-import { UnitFilter } from "@/app/(authorized)/items/unit-filter"
+import { useItemFilters } from "./item-filters-ctx"
+import { useItemCount } from "./item-count-ctx"
+import { SearchBar } from "./search-bar"
+import { UnitFilter } from "./unit-filter"
+import { ItemsTable } from "./items-table"
 
 export default function CreateItemForm() {
   const itemsPerPage = 10

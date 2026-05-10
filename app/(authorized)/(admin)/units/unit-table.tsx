@@ -1,6 +1,5 @@
 "use client"
 
-import UpdateUnitForm from "@/app/(authorized)/units/update-unit-form"
 import {
   Dialog,
   DialogContent,
@@ -12,6 +11,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { useUnits } from "@/contexts/units-ctx"
 import { units } from "@/lib/db/schema"
 import { useState } from "react"
+import UpdateUnitForm from "./update-unit-form"
 
 function UnitRow({ unit }: { unit: typeof units.$inferSelect }) {
   const [openDialog, setDialogOpen] = useState(false)

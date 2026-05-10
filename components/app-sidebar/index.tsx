@@ -67,61 +67,63 @@ export function AppSidebar() {
               )}
             </DynamicSidebarLink>
 
-            <DynamicSidebarLink href="/items">
-              {({ href, ...props }) => (
-                <SidebarMenuButton asChild {...props}>
-                  <Link href={href}>
-                    <PackageIcon />
-                    Items
-                  </Link>
-                </SidebarMenuButton>
-              )}
-            </DynamicSidebarLink>
-
-            <DynamicSidebarLink href="/units">
-              {({ href, ...props }) => (
-                <SidebarMenuButton asChild {...props}>
-                  <Link href={href!}>
-                    <TagIcon />
-                    Units
-                  </Link>
-                </SidebarMenuButton>
-              )}
-            </DynamicSidebarLink>
-
-            <DynamicSidebarLink href="/price-groups">
-              {({ href, ...props }) => (
-                <SidebarMenuButton asChild {...props}>
-                  <Link href={href!}>
-                    <MoneyIcon />
-                    Price groups
-                  </Link>
-                </SidebarMenuButton>
-              )}
-            </DynamicSidebarLink>
-
-            <DynamicSidebarLink href="/barcode-groups">
-              {({ href, ...props }) => (
-                <SidebarMenuButton asChild {...props}>
-                  <Link href={href!}>
-                    <BarcodeIcon />
-                    Barcode groups
-                  </Link>
-                </SidebarMenuButton>
-              )}
-            </DynamicSidebarLink>
-
             {session.user.role === "admin" && (
-              <DynamicSidebarLink href="/users">
-                {({ href, ...props }) => (
-                  <SidebarMenuButton asChild {...props}>
-                    <Link href={href!}>
-                      <UsersIcon />
-                      Users
-                    </Link>
-                  </SidebarMenuButton>
-                )}
-              </DynamicSidebarLink>
+              <>
+                <DynamicSidebarLink href="/items">
+                  {({ href, ...props }) => (
+                    <SidebarMenuButton asChild {...props}>
+                      <Link href={href}>
+                        <PackageIcon />
+                        Items
+                      </Link>
+                    </SidebarMenuButton>
+                  )}
+                </DynamicSidebarLink>
+
+                <DynamicSidebarLink href="/units">
+                  {({ href, ...props }) => (
+                    <SidebarMenuButton asChild {...props}>
+                      <Link href={href!}>
+                        <TagIcon />
+                        Units
+                      </Link>
+                    </SidebarMenuButton>
+                  )}
+                </DynamicSidebarLink>
+
+                <DynamicSidebarLink href="/price-groups">
+                  {({ href, ...props }) => (
+                    <SidebarMenuButton asChild {...props}>
+                      <Link href={href!}>
+                        <MoneyIcon />
+                        Price groups
+                      </Link>
+                    </SidebarMenuButton>
+                  )}
+                </DynamicSidebarLink>
+
+                <DynamicSidebarLink href="/barcode-groups">
+                  {({ href, ...props }) => (
+                    <SidebarMenuButton asChild {...props}>
+                      <Link href={href!}>
+                        <BarcodeIcon />
+                        Barcode groups
+                      </Link>
+                    </SidebarMenuButton>
+                  )}
+                </DynamicSidebarLink>
+
+                <DynamicSidebarLink href="/users">
+                  {({ href, ...props }) => (
+                    <SidebarMenuButton asChild {...props}>
+                      <Link href={href!}>
+                        <UsersIcon />
+                        Users
+                      </Link>
+                    </SidebarMenuButton>
+                  )}
+                </DynamicSidebarLink>
+              </>
             )}
           </SidebarMenu>
         </SidebarGroup>

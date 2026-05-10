@@ -1,6 +1,5 @@
 "use client"
 
-import UpdatePriceGroupForm from "@/app/(authorized)/price-groups/update-price-group-form"
 import {
   Dialog,
   DialogContent,
@@ -18,6 +17,7 @@ import {
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { priceGroups } from "@/lib/db/schema"
 import { useState } from "react"
+import UpdatePriceGroupForm from "./update-price-group-form"
 
 function PriceGroupRow({
   priceGroup,

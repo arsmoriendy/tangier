@@ -1,4 +1,3 @@
-import { getRandomColor } from "@/app/(authorized)/price-groups/price-group-colors"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
 import { FieldLabel } from "@/components/ui/field"
@@ -7,6 +6,7 @@ import { deletePriceGroup, updatePriceGroup } from "@/lib/crud/price-groups"
 import { priceGroups } from "@/lib/db/schema"
 import { ArrowsClockwiseIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr"
 import z from "zod"
+import { getRandomColor } from "./price-group-colors"
 
 const createPriceGroupFormSchema = z.object({
   name: z.string().min(1),

@@ -1,6 +1,5 @@
 "use client"
 
-import UpdateBarcodeGroupForm from "@/app/(authorized)/barcode-groups/update-barcode-group-form"
 import {
   Dialog,
   DialogContent,
@@ -12,6 +11,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
 import { barcodeGroups } from "@/lib/db/schema"
 import { useState } from "react"
+import UpdateBarcodeGroupForm from "./update-barcode-group-form"
 
 function BarcodeGroupRow({
   barcodeGroup,

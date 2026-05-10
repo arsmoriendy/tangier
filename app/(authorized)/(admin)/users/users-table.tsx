@@ -1,6 +1,5 @@
 "use client"
 
-import { useUsers } from "@/app/(authorized)/users/users-ctx"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -12,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { authClient } from "@/lib/auth-client"
+import { useUsers } from "./users-ctx"
 
 export function UsersTable() {
   const { usersProxy, usersSnap } = useUsers()

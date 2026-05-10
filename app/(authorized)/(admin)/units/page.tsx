@@ -1,7 +1,7 @@
-import CreateUnitForm from "@/app/(authorized)/units/create-unit-form"
-import UnitTable from "@/app/(authorized)/units/unit-table"
 import { UnitsProvider } from "@/contexts/units-ctx"
 import { listUnits } from "@/lib/crud/units"
+import CreateUnitForm from "./create-unit-form"
+import UnitTable from "./unit-table"
 
 export default async function Page() {
   const units = await listUnits()

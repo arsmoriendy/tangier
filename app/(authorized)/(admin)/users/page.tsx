@@ -1,7 +1,7 @@
-import { UsersProvider } from "@/app/(authorized)/users/users-ctx"
-import { UsersTable } from "@/app/(authorized)/users/users-table"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { db } from "@/lib/db"
+import { UsersProvider } from "./users-ctx"
+import { UsersTable } from "./users-table"
 
 export default async function Page() {
   const users = await db.query.user.findMany()
