@@ -128,7 +128,9 @@ export default function CreateTransactionForm() {
                       <TableHead />
                       <TableHead>Name</TableHead>
                       <TableHead>Unit</TableHead>
-                      <TableHead>Buy price</TableHead>
+                      {session.user.role === "admin" && (
+                        <TableHead>Buy price</TableHead>
+                      )}
                       <TableHead>Sell price</TableHead>
                       <TableHead>Qty</TableHead>
                       <TableHead>
@@ -187,13 +189,15 @@ export default function CreateTransactionForm() {
                             {(field) => <field.TextField />}
                           </form.AppField>
                         </TableCell>
-                        <TableCell className="align-top">
-                          <form.AppField
-                            name={`transactionItems[${i}].buyPrice`}
-                          >
-                            {(field) => <field.IdrField min={0} />}
-                          </form.AppField>
-                        </TableCell>
+                        {session.user.role === "admin" && (
+                          <TableCell className="align-top">
+                            <form.AppField
+                              name={`transactionItems[${i}].buyPrice`}
+                            >
+                              {(field) => <field.IdrField min={0} />}
+                            </form.AppField>
+                          </TableCell>
+                        )}
                         <TableCell className="align-top">
                           <form.AppField
                             name={`transactionItems[${i}].sellPrice`}

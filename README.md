@@ -6,11 +6,10 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Hide buy price for non admins
-2. Combine name and search field
-3. Update and delete transactions
-4. Hold and recall
-5. Update receipt
+1. Combine name and search field
+2. Update and delete transactions
+3. Hold and recall
+4. Update receipt
    - cashier name
    - timestamp
 
