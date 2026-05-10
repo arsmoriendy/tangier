@@ -3,7 +3,12 @@
 import chroma from "chroma-js"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
-import { createItem, ItemWithRelations, updateItem } from "@/lib/crud/items"
+import {
+  createItem,
+  deleteItem,
+  ItemWithRelations,
+  updateItem,
+} from "@/lib/crud/items"
 import z from "zod"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
@@ -18,6 +23,7 @@ import { formatCurrency } from "@/lib/i18n/currency"
 export default function ItemForm(props: {
   item?: DeepReadonly<ItemWithRelations>
   afterUpdate?: (newItem: ItemWithRelations) => any
+  afterDelete?: () => any
 }) {
   const { priceGroups } = usePriceGroups()
   const { barcodeGroups } = useBarcodeGroups()
@@ -242,11 +248,28 @@ export default function ItemForm(props: {
         </FieldSet>
       </div>
 
-      <form.AppForm>
-        <form.SubmitButton>
-          {props.item ? "Update item" : "Create item"}
-        </form.SubmitButton>
-      </form.AppForm>
+      <div className="flex gap-2">
+        <form.AppForm>
+          <form.SubmitButton>
+            {props.item ? "Update item" : "Create item"}
+          </form.SubmitButton>
+        </form.AppForm>
+
+        {props.item && (
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={async () => {
+              await deleteItem({ itemId: props.item!.id })
+              toast.error("Item deleted")
+              props.afterDelete?.()
+            }}
+          >
+            <TrashIcon />
+            Delete item
+          </Button>
+        )}
+      </div>
     </Form>
   )
 }

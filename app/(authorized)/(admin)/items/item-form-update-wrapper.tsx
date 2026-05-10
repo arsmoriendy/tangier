@@ -21,6 +21,7 @@ export function ItemFormUpdateWrapper({
 }) {
   const { itemsProxy } = useItems()
   const [openDialog, setOpenDialog] = useState(false)
+  const itemIdx = itemsProxy.findIndex((item) => item.id === props.item.id)
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -33,8 +34,11 @@ export function ItemFormUpdateWrapper({
         <ItemForm
           item={props.item}
           afterUpdate={(newItem) => {
-            const i = itemsProxy.findIndex((item) => item.id === props.item.id)
-            itemsProxy[i] = newItem
+            itemsProxy[itemIdx] = newItem
+            setOpenDialog(false)
+          }}
+          afterDelete={() => {
+            itemsProxy.splice(itemIdx, 1)
             setOpenDialog(false)
           }}
         />

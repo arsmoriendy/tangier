@@ -204,3 +204,7 @@ export async function listItems({
 }
 
 export type ItemWithRelations = Awaited<ReturnType<typeof listItems>>[number]
+
+export async function deleteItem(params: { itemId: string }) {
+  await db.delete(items).where(eq(items.id, params.itemId))
+}

@@ -7,10 +7,9 @@ Run with the bun runtime, e.g. `bun -b dev`
 ##### TODO
 
 1. Combine name and search field
-2. Delete item
-3. Update and delete transactions
-4. Hold and recall
-5. Update receipt
+2. Update and delete transactions
+3. Hold and recall
+4. Update receipt
    - cashier name
    - timestamp
 
