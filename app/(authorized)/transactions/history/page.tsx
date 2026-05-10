@@ -10,7 +10,14 @@ export default async function Page() {
   const trxList = await listTransactions({ from, to })
 
   return (
-    <FiltersProvider initialValue={{ from, to }}>
+    <FiltersProvider
+      initialValue={{
+        to,
+        from,
+        offset: 0,
+        limit: 10,
+      }}
+    >
       <TrxProvider initialValue={trxList}>
         <Filters />
         <TrxList />

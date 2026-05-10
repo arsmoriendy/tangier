@@ -5,7 +5,7 @@ import { type listTransactions } from "@/lib/crud/transactions"
 import { createContext, ReactNode, useContext } from "react"
 import { proxy, useSnapshot } from "valtio"
 
-type Filters = Parameters<typeof listTransactions>[0]
+type Filters = NonNullable<Parameters<typeof listTransactions>[0]>
 
 const filtersCtx = createContext<ValtioContext<Filters> | undefined>(undefined)
 

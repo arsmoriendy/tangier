@@ -35,16 +35,16 @@ export type TransactionWithRelations = NonNullable<
 >
 
 export async function listTransactions({
-  from,
-  to,
+  to = new Date(),
+  from = new Date(to.getTime() - 3_600_000 * 3),
   offset = 0,
   limit = 10,
 }: {
-  from: Date
-  to: Date
+  from?: Date
+  to?: Date
   offset?: number
   limit?: number
-}) {
+} = {}) {
   return await db.query.transactions.findMany({
     offset,
     limit,

@@ -17,12 +17,15 @@ export function Filters() {
     setTrx.splice(0, setTrx.length, ...newTrxList)
   })
 
+  const end = new Date()
+  const start = new Date(end.getTime() - 3_600_000 * 3)
+
   return (
     <div className="flex gap-2">
       <DatetimeRangeField
         value={{
-          start: fromDate(getFilters.from, tz),
-          end: fromDate(getFilters.to, tz),
+          start: fromDate(getFilters.from ?? start, tz),
+          end: fromDate(getFilters.to ?? end, tz),
         }}
         onChange={async (v) => {
           if (!v) return
