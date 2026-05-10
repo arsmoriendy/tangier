@@ -6,20 +6,20 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Combine name and search field
-2. Update and delete transactions
-3. Hold and recall
-4. Update receipt
+1. Update and delete transactions
+2. Hold and recall
+3. Update receipt
    - cashier name
    - timestamp
 
 ###### Backlog
 
-1. Server function authorization
-2. Auto set price based on quantity threshold
-3. Keyboard shortcuts
-4. Per item quantity threshold
-5. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
-6. group transaction items based on new category column
-7. backup and restore
-8. export and import
+1. Combine name and search field
+2. Server function authorization
+3. Auto set price based on quantity threshold
+4. Keyboard shortcuts
+5. Per item quantity threshold
+6. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
+7. group transaction items based on new category column
+8. backup and restore
+9. export and import
