@@ -26,10 +26,12 @@ import {
 import { Item } from "@/components/ui/item"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { cn } from "@/lib/utils"
+import { useSession } from "@/contexts/session-ctx"
 
 export const AddItemForm = withForm({
   defaultValues: defaultCreateTransacionValues,
   render: function Render({ form: createTransactionForm }) {
+    const session = useSession()
     const { priceGroups } = usePriceGroups()
     const { units } = useUnits()
     const { addItemProxy, addItemSnap } = useAddItem()
@@ -218,27 +220,31 @@ export const AddItemForm = withForm({
                   </form.AppField>
                 </div>
 
-                <form.Subscribe
-                  selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
-                >
-                  {([bp, sp]) => {
-                    const margin = sp - bp
-                    const discount = ((bp - sp) / bp) * 100
-                    return (
-                      margin !== 0 && (
-                        <small
-                          className={cn(
-                            margin < 0 ? "text-destructive" : "text-green-500"
-                          )}
-                        >
-                          Margin: {margin > 0 && "+"}
-                          {formatCurrency(margin)}{" "}
-                          {margin < 0 && <>({discount.toFixed(2)}% discount)</>}
-                        </small>
+                {session.user.role === "admin" && (
+                  <form.Subscribe
+                    selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
+                  >
+                    {([bp, sp]) => {
+                      const margin = sp - bp
+                      const discount = ((bp - sp) / bp) * 100
+                      return (
+                        margin !== 0 && (
+                          <small
+                            className={cn(
+                              margin < 0 ? "text-destructive" : "text-green-500"
+                            )}
+                          >
+                            Margin: {margin > 0 && "+"}
+                            {formatCurrency(margin)}{" "}
+                            {margin < 0 && (
+                              <>({discount.toFixed(2)}% discount)</>
+                            )}
+                          </small>
+                        )
                       )
-                    )
-                  }}
-                </form.Subscribe>
+                    }}
+                  </form.Subscribe>
+                )}
 
                 <form.AppField name="quantifiedPrice">
                   {(field) => (

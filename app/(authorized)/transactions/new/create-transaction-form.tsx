@@ -31,8 +31,10 @@ import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
+import { useSession } from "@/contexts/session-ctx"
 
 export default function CreateTransactionForm() {
+  const session = useSession()
   const { getLocalStorage, setLocalStorage } = useLocalStorage()
   const form = useAppForm({
     defaultValues: defaultCreateTransacionValues,
@@ -207,34 +209,36 @@ export default function CreateTransactionForm() {
                           >
                             {(field) => <field.IdrField min={0} />}
                           </form.AppField>
-                          <form.Subscribe
-                            selector={(f) => [
-                              f.values.transactionItems[i].buyPrice,
-                              f.values.transactionItems[i].sellPrice,
-                            ]}
-                          >
-                            {([bp, sp]) => {
-                              const margin = sp - bp
-                              const discount = ((bp - sp) / bp) * 100
-                              return (
-                                margin !== 0 && (
-                                  <small
-                                    className={cn(
-                                      margin < 0
-                                        ? "text-destructive"
-                                        : "text-green-500"
-                                    )}
-                                  >
-                                    Margin: {margin > 0 && "+"}
-                                    {formatCurrency(margin)}{" "}
-                                    {margin < 0 && (
-                                      <>({discount.toFixed(2)}% discount)</>
-                                    )}
-                                  </small>
+                          {session.user.role === "admin" && (
+                            <form.Subscribe
+                              selector={(f) => [
+                                f.values.transactionItems[i].buyPrice,
+                                f.values.transactionItems[i].sellPrice,
+                              ]}
+                            >
+                              {([bp, sp]) => {
+                                const margin = sp - bp
+                                const discount = ((bp - sp) / bp) * 100
+                                return (
+                                  margin !== 0 && (
+                                    <small
+                                      className={cn(
+                                        margin < 0
+                                          ? "text-destructive"
+                                          : "text-green-500"
+                                      )}
+                                    >
+                                      Margin: {margin > 0 && "+"}
+                                      {formatCurrency(margin)}{" "}
+                                      {margin < 0 && (
+                                        <>({discount.toFixed(2)}% discount)</>
+                                      )}
+                                    </small>
+                                  )
                                 )
-                              )
-                            }}
-                          </form.Subscribe>
+                              }}
+                            </form.Subscribe>
+                          )}
                         </TableCell>
                         <TableCell className="align-top">
                           <form.AppField
