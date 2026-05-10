@@ -19,15 +19,19 @@ export function TrxPagination() {
     "cursor-not-allowed text-muted-foreground hover:text-muted-foreground"
   const [count, setCount] = useState(0)
 
+  function updateCount() {
+    countTransactions({
+      from: setFilters.from,
+      to: setFilters.to,
+      id: setFilters.id,
+    }).then(setCount)
+  }
+
   useEffect(() => {
-    countTransactions({ from: setFilters.from, to: setFilters.to }).then(
-      setCount
-    )
+    updateCount()
 
     return subscribe(setFilters, () => {
-      countTransactions({ from: setFilters.from, to: setFilters.to }).then(
-        setCount
-      )
+      updateCount()
     })
   })
 

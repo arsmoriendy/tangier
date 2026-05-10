@@ -5,15 +5,17 @@ import { transactionItems, transactions } from "@/lib/db/schema"
 import { and, asc, count, desc, eq, gte, ilike, lte, sql } from "drizzle-orm"
 
 export async function countTransactions({
+  id = "",
   to = new Date(),
   from = new Date(to.getTime() - 3_600_000 * 3),
-}: { from?: Date; to?: Date } = {}) {
+}: { id?: string; from?: Date; to?: Date } = {}) {
   return (
     await db
       .select({ count: count() })
       .from(transactions)
       .where(
         and(
+          ilike(sql`${transactions.id}::text`, `%${id}%`),
           gte(transactions.createdAt, from.toUTCString()),
           lte(transactions.createdAt, to.toUTCString())
         )
