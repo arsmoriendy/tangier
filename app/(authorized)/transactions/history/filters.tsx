@@ -5,11 +5,18 @@ import { useFilters } from "./filters-ctx"
 import { fromDate } from "@internationalized/date"
 import { useTrx } from "./trx-ctx"
 import { listTransactions } from "@/lib/crud/transactions"
+import { subscribe } from "valtio"
 
 export function Filters() {
   const { getFilters, setFilters } = useFilters()
   const { setTrx } = useTrx()
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+  subscribe(setFilters, async () => {
+    const newTrxList = await listTransactions(setFilters)
+    setTrx.splice(0, setTrx.length, ...newTrxList)
+  })
+
   return (
     <div className="flex gap-2">
       <DatetimeRangeField
@@ -22,12 +29,6 @@ export function Filters() {
 
           setFilters.from = v.start.toDate()
           setFilters.to = v.end.toDate()
-
-          const newTrxList = await listTransactions({
-            from: setFilters.from,
-            to: setFilters.to,
-          })
-          setTrx.splice(0, setTrx.length, ...newTrxList)
         }}
       />
     </div>
