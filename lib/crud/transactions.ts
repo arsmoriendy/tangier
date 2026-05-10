@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { transactionItems, transactions } from "@/lib/db/schema"
-import { and, eq, gte, lte } from "drizzle-orm"
+import { and, desc, eq, gte, lte } from "drizzle-orm"
 
 export async function createTransaction({
   transactionItems: items,
@@ -53,5 +53,6 @@ export async function listTransactions({
       lte(transactions.createdAt, to.toUTCString())
     ),
     with: { transactionItems: { columns: { transaction: false } } },
+    orderBy: desc(transactions.createdAt),
   })
 }
