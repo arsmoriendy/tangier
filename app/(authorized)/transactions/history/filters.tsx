@@ -6,15 +6,18 @@ import { fromDate } from "@internationalized/date"
 import { useTrx } from "./trx-ctx"
 import { listTransactions } from "@/lib/crud/transactions"
 import { subscribe } from "valtio"
+import { useEffect } from "react"
 
 export function Filters() {
   const { getFilters, setFilters } = useFilters()
   const { setTrx } = useTrx()
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-  subscribe(setFilters, async () => {
-    const newTrxList = await listTransactions(setFilters)
-    setTrx.splice(0, setTrx.length, ...newTrxList)
+  useEffect(() => {
+    return subscribe(setFilters, async () => {
+      const newTrxList = await listTransactions(setFilters)
+      setTrx.splice(0, setTrx.length, ...newTrxList)
+    })
   })
 
   const end = new Date()
@@ -30,6 +33,7 @@ export function Filters() {
         onChange={async (v) => {
           if (!v) return
 
+          setFilters.offset = 0
           setFilters.from = v.start.toDate()
           setFilters.to = v.end.toDate()
         }}

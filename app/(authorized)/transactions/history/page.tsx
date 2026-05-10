@@ -3,6 +3,7 @@ import { TrxProvider } from "./trx-ctx"
 import { TrxList } from "./trx-list"
 import { FiltersProvider } from "./filters-ctx"
 import { Filters } from "./filters"
+import { TrxPagination } from "./trx-pagination"
 
 export default async function Page() {
   const to = new Date()
@@ -19,8 +20,11 @@ export default async function Page() {
       }}
     >
       <TrxProvider initialValue={trxList}>
-        <Filters />
-        <TrxList />
+        <div className="space-y-2">
+          <Filters />
+          <TrxList />
+          <TrxPagination />
+        </div>
       </TrxProvider>
     </FiltersProvider>
   )
