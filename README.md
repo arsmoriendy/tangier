@@ -7,8 +7,9 @@ Run with the bun runtime, e.g. `bun -b dev`
 ##### TODO
 
 1. Update and delete transactions
-2. Hold and recall
-3. Update receipt
+2. Shift transaction items instead of swap
+3. Hold and recall
+4. Update receipt
    - cashier name
    - timestamp
 
@@ -16,9 +17,9 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 1. Combine name and search field
 2. Server function authorization
-3. Auto set price based on quantity threshold
-4. Keyboard shortcuts
-5. Per item quantity threshold
+3. Per item quantity threshold
+4. Auto set price based on quantity threshold
+5. Keyboard shortcuts
 6. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
 7. group transaction items based on new category column
 8. backup and restore
