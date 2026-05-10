@@ -1,11 +1,10 @@
-"use client"
-
 import { Geist, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import { LocalStorageProvider } from "@/contexts/local-storage-ctx"
+import { I18nProvider } from "@/components/ui/i18n-provider"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -36,7 +35,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <LocalStorageProvider>
-            {children}
+            <I18nProvider locale="en-ID">{children}</I18nProvider>
             <Toaster />
           </LocalStorageProvider>
         </ThemeProvider>
