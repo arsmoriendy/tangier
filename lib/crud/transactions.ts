@@ -34,11 +34,23 @@ export type TransactionWithRelations = NonNullable<
   Awaited<ReturnType<typeof readTransaction>>
 >
 
-export async function listTransactions(params: { from: Date; to: Date }) {
+export async function listTransactions({
+  from,
+  to,
+  offset = 0,
+  limit = 10,
+}: {
+  from: Date
+  to: Date
+  offset?: number
+  limit?: number
+}) {
   return await db.query.transactions.findMany({
+    offset,
+    limit,
     where: and(
-      gte(transactions.createdAt, params.from.toUTCString()),
-      lte(transactions.createdAt, params.to.toUTCString())
+      gte(transactions.createdAt, from.toUTCString()),
+      lte(transactions.createdAt, to.toUTCString())
     ),
     with: { transactionItems: { columns: { transaction: false } } },
   })
