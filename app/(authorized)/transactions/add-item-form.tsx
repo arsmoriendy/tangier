@@ -13,7 +13,7 @@ import {
   defaultAddItemValues,
 } from "@/app/(authorized)/transactions/add-item-schema"
 import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
-import { defaultCreateTransacionValues } from "@/app/(authorized)/transactions/transaction-schema"
+import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
 import { ScanBarcodeField } from "@/app/(authorized)/transactions/scan-barcode-field"
 import { useUnits } from "@/contexts/units-ctx"
 import {
@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils"
 import { useSession } from "@/contexts/session-ctx"
 
 export const AddItemForm = withForm({
-  defaultValues: defaultCreateTransacionValues,
+  defaultValues: defaultTransactionValues,
   render: function Render({ form: createTransactionForm }) {
     const session = useSession()
     const { priceGroups } = usePriceGroups()

@@ -18,13 +18,16 @@ import {
   FieldLegend,
   FieldSet,
 } from "@/components/ui/field"
-import { createTransaction } from "@/lib/crud/transactions"
+import {
+  createTransaction,
+  TransactionWithRelations,
+} from "@/lib/crud/transactions"
 import { printTransaction } from "@/lib/print-transaction"
 import { AddItemForm } from "@/app/(authorized)/transactions/add-item-form"
 import { AddItemProvider } from "@/app/(authorized)/transactions/add-item-ctx"
 import {
-  createTransactionSchema,
-  defaultCreateTransacionValues,
+  transactionSchema,
+  defaultTransactionValues,
 } from "@/app/(authorized)/transactions/transaction-schema"
 import { Checkbox } from "@/components/ui/checkbox"
 import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
@@ -33,14 +36,27 @@ import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useSession } from "@/contexts/session-ctx"
 
-export default function TransactionForm() {
+export default function TransactionForm(props: {
+  transaction?: TransactionWithRelations
+  onUpdate?: (trx: TransactionWithRelations) => any
+  onDelete?: () => any
+}) {
   const session = useSession()
   const { getLocalStorage, setLocalStorage } = useLocalStorage()
   const form = useAppForm({
-    defaultValues: defaultCreateTransacionValues,
+    defaultValues: props.transaction
+      ? ({
+          totalPrice: props.transaction.totalPrice,
+          customerPriceGroup: props.transaction.customerPriceGroup,
+          transactionItems: props.transaction.transactionItems.map((trx) => ({
+            ...trx,
+            extraFields: { quantifiedPrice: 0, link: undefined },
+          })),
+        } satisfies typeof defaultTransactionValues)
+      : defaultTransactionValues,
     validators: {
-      onMount: createTransactionSchema,
-      onChange: createTransactionSchema,
+      onMount: transactionSchema,
+      onChange: transactionSchema,
     },
     onSubmit: async ({ value: { transactionItems, ...value } }) => {
       const items = transactionItems.map(({ extraFields, ...fields }) => fields)

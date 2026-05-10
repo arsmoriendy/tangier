@@ -1,6 +1,6 @@
 import z from "zod"
 
-export const createTransactionSchema = z.object({
+export const transactionSchema = z.object({
   transactionItems: z
     .array(
       z.object({
@@ -26,9 +26,7 @@ export const createTransactionSchema = z.object({
   customerPriceGroup: z.string(),
 })
 
-export const defaultCreateTransacionValues: z.infer<
-  typeof createTransactionSchema
-> = {
+export const defaultTransactionValues: z.infer<typeof transactionSchema> = {
   transactionItems: [],
   totalPrice: 0,
   customerPriceGroup: "",
