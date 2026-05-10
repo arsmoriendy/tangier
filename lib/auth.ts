@@ -7,7 +7,7 @@ import { count, eq } from "drizzle-orm"
 import { user } from "@/lib/db/auth-schema"
 
 export const auth = betterAuth({
-  emailAndPassword: { enabled: true },
+  emailAndPassword: { enabled: true, minPasswordLength: 3 },
   user: {
     changeEmail: { enabled: true, updateEmailWithoutVerification: true },
     deleteUser: {
