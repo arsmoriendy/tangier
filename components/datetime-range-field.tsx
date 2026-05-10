@@ -40,22 +40,30 @@ export function DatetimeRangeField<T extends DateValue>({
   className?: string
 }) {
   return (
-    <DateRangePicker {...props}>
-      <Label className={labelClass}>{label}</Label>
-      <Group className={cn(inputClass, "flex items-center gap-2 pr-0 text-sm")}>
-        <DateInput slot="start">
-          {(segment) => <DateSegment segment={segment} />}
-        </DateInput>
-        <DateInput slot="end">
-          {(segment) => <DateSegment segment={segment} />}
-        </DateInput>
+    <DateRangePicker className={className} {...props}>
+      <Label className={cn(labelClass, "mb-2")}>{label}</Label>
+      <Group className={cn(inputClass, "flex items-center gap-2 pl-0 text-sm")}>
         <Button className={buttonVariants({ size: "icon", variant: "ghost" })}>
           <CalendarBlankIcon />
         </Button>
+
+        <div className="flex gap-2">
+          <span className="text-muted-foreground">from</span>
+          <DateInput slot="start">
+            {(segment) => <DateSegment segment={segment} />}
+          </DateInput>
+        </div>
+
+        <div className="flex gap-2">
+          <span className="text-muted-foreground">to</span>
+          <DateInput slot="end">
+            {(segment) => <DateSegment segment={segment} />}
+          </DateInput>
+        </div>
       </Group>
       <Popover
         className="border bg-popover p-2 text-popover-foreground"
-        placement="bottom end"
+        placement="bottom start"
       >
         <RangeCalendar>
           <div className="mb-2 flex items-center justify-between gap-2">

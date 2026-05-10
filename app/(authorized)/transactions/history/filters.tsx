@@ -7,6 +7,8 @@ import { useTrx } from "./trx-ctx"
 import { listTransactions } from "@/lib/crud/transactions"
 import { subscribe } from "valtio"
 import { useEffect } from "react"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 
 export function Filters() {
   const { getFilters, setFilters } = useFilters()
@@ -24,8 +26,19 @@ export function Filters() {
   const start = new Date(end.getTime() - 3_600_000 * 3)
 
   return (
-    <div className="flex gap-2">
+    <div className="space-y-2">
+      <div className="flex-1 space-y-2">
+        <Label>Id</Label>
+        <Input
+          onChange={(v) => {
+            setFilters.offset = 0
+            setFilters.id = v.target.value
+          }}
+        />
+      </div>
       <DatetimeRangeField
+        className="flex-1"
+        label="Time range"
         value={{
           start: fromDate(getFilters.from ?? start, tz),
           end: fromDate(getFilters.to ?? end, tz),

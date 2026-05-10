@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { transactionItems, transactions } from "@/lib/db/schema"
-import { and, count, desc, eq, gte, lte } from "drizzle-orm"
+import { and, asc, count, desc, eq, gte, ilike, lte, sql } from "drizzle-orm"
 
 export async function countTransactions({
   to = new Date(),
@@ -52,11 +52,13 @@ export type TransactionWithRelations = NonNullable<
 >
 
 export async function listTransactions({
+  id = "",
   to = new Date(),
   from = new Date(to.getTime() - 3_600_000 * 3),
   offset = 0,
   limit = 10,
 }: {
+  id?: string
   from?: Date
   to?: Date
   offset?: number
@@ -66,10 +68,11 @@ export async function listTransactions({
     offset,
     limit,
     where: and(
+      ilike(sql`${transactions.id}::text`, `%${id}%`),
       gte(transactions.createdAt, from.toUTCString()),
       lte(transactions.createdAt, to.toUTCString())
     ),
     with: { transactionItems: { columns: { transaction: false } } },
-    orderBy: desc(transactions.createdAt),
+    orderBy: [desc(transactions.createdAt), asc(transactions.id)],
   })
 }
