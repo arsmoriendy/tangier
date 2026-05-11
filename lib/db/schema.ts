@@ -8,6 +8,7 @@ import {
   timestamp,
   uniqueIndex,
   integer,
+  boolean,
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 
@@ -152,6 +153,11 @@ export const transactionItems = pgTable(
     buyPrice: numeric("buy_price", { mode: "number" }).notNull(),
     sellPrice: numeric("sell_price", { mode: "number" }).notNull(),
     quantity: integer().notNull(),
+
+    // item link
+    id: uuid(),
+    originalBuyPrice: numeric("original_buy_price", { mode: "number" }),
+    updateStock: boolean().default(false).notNull(),
   },
   (table) => [
     foreignKey({

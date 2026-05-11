@@ -9,14 +9,12 @@ export const transactionSchema = z.object({
         buyPrice: z.number().min(0),
         sellPrice: z.number().min(0),
         quantity: z.number().min(1),
+
+        id: z.uuid().nullable(),
+        originalBuyPrice: z.number().min(0).nullable(),
+        updateStock: z.boolean(),
+
         extraFields: z.object({
-          link: z
-            .object({
-              itemId: z.uuid(),
-              originalBuyPrice: z.number().min(0).optional(),
-              updateStock: z.boolean(),
-            })
-            .optional(),
           quantifiedPrice: z.number().min(0),
         }),
       })

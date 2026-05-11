@@ -50,7 +50,7 @@ export default function TransactionForm(props: {
           customerPriceGroup: props.transaction.customerPriceGroup,
           transactionItems: props.transaction.transactionItems.map((trx) => ({
             ...trx,
-            extraFields: { quantifiedPrice: 0, link: undefined },
+            extraFields: { quantifiedPrice: trx.sellPrice * trx.quantity },
           })),
         } satisfies typeof defaultTransactionValues)
       : defaultTransactionValues,
@@ -59,16 +59,18 @@ export default function TransactionForm(props: {
       onChange: transactionSchema,
     },
     onSubmit: async ({ value: { transactionItems, ...value } }) => {
-      const items = transactionItems.map(({ extraFields, ...fields }) => fields)
+      const items = transactionItems.map(
+        ({ extraFields, updateStock, ...fields }) => ({
+          updateStock: updateStock ? true : false,
+          ...fields,
+        })
+      )
 
       for (const item of transactionItems) {
-        if (
-          item.extraFields.link?.updateStock &&
-          item.extraFields.link.originalBuyPrice !== undefined
-        ) {
+        if (item.id && item.updateStock && item.originalBuyPrice !== null) {
           await updateBuyPriceStock({
-            itemId: item.extraFields.link.itemId,
-            price: item.extraFields.link.originalBuyPrice,
+            itemId: item.id,
+            price: item.originalBuyPrice,
             stockDelta: -item.quantity,
           })
         }
@@ -155,13 +157,9 @@ export default function TransactionForm(props: {
                           onCheckedChange={(c) => {
                             setLocalStorage.decrementStock = c as boolean
                             for (const [i, item] of state.value.entries()) {
-                              if (
-                                item.extraFields.link &&
-                                item.extraFields.link.originalBuyPrice !==
-                                  undefined
-                              ) {
+                              if (item.originalBuyPrice !== null) {
                                 form.setFieldValue(
-                                  `transactionItems[${i}].extraFields.link.updateStock`,
+                                  `transactionItems[${i}].updateStock`,
                                   c as boolean
                                 )
                               }
@@ -173,7 +171,7 @@ export default function TransactionForm(props: {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {state.value.map(({ extraFields: { link } }, i) => (
+                    {state.value.map(({ originalBuyPrice }, i) => (
                       <TableRow
                         key={i}
                         draggable
@@ -279,10 +277,10 @@ export default function TransactionForm(props: {
                           </form.AppField>
                         </TableCell>
                         <TableCell className="align-top">
-                          {link && link.originalBuyPrice !== undefined ? (
+                          {originalBuyPrice !== null ? (
                             <Field orientation="horizontal" className="h-8">
                               <form.AppField
-                                name={`transactionItems[${i}].extraFields.link.updateStock`}
+                                name={`transactionItems[${i}].updateStock`}
                               >
                                 {(f) => (
                                   <Checkbox

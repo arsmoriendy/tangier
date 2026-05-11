@@ -43,15 +43,11 @@ export const AddItemForm = withForm({
       onSubmit: ({ value: { quantifiedPrice, ...item } }) => {
         createTransactionForm.pushFieldValue("transactionItems", {
           ...item,
+          id: addItemProxy.link?.itemId ?? null,
+          originalBuyPrice: addItemProxy.link?.selectedBuyPrice ?? null,
+          updateStock: getLocalStorage.decrementStock,
           extraFields: {
             quantifiedPrice,
-            link: addItemProxy.link
-              ? {
-                  itemId: addItemProxy.link.itemId,
-                  originalBuyPrice: addItemProxy.link.selectedBuyPrice,
-                  updateStock: getLocalStorage.decrementStock,
-                }
-              : undefined,
           },
         })
         addItemProxy.sellPrices = []
