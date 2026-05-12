@@ -1,7 +1,11 @@
 "use client"
 
 import { Form, useAppForm } from "@/components/form"
-import { DotsSixVerticalIcon, TrashIcon } from "@phosphor-icons/react"
+import {
+  DotsSixVerticalIcon,
+  PrinterIcon,
+  TrashIcon,
+} from "@phosphor-icons/react"
 import {
   Table,
   TableBody,
@@ -21,6 +25,7 @@ import {
 import {
   createTransaction,
   TransactionWithRelations,
+  updateTransaction,
 } from "@/lib/crud/transactions"
 import { printTransaction } from "@/lib/print-transaction"
 import { AddItemForm } from "@/app/(authorized)/transactions/add-item-form"
@@ -35,9 +40,10 @@ import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useSession } from "@/contexts/session-ctx"
+import { toast } from "sonner"
 
 export default function TransactionForm(props: {
-  transaction?: TransactionWithRelations
+  transaction?: DeepReadonly<TransactionWithRelations>
   onUpdate?: (trx: TransactionWithRelations) => any
   onDelete?: () => any
 }) {
@@ -60,25 +66,57 @@ export default function TransactionForm(props: {
     },
     onSubmit: async ({ value: { transactionItems, ...value } }) => {
       const items = transactionItems.map(
-        ({ extraFields, updateStock, ...fields }) => ({
-          updateStock: updateStock ? true : false,
-          ...fields,
-        })
+        ({ extraFields, ...otherFields }) => otherFields
       )
 
-      for (const item of transactionItems) {
+      // unique stock per buyPriceId
+      const bpStockMap = new Map<string, number>()
+      for (const item of transactionItems)
         if (item.updateStock && item.buyPriceId !== null) {
-          await updateBuyPriceStock({
-            id: item.buyPriceId,
-            stockDelta: -item.quantity,
-          })
+          const qty = bpStockMap.get(item.buyPriceId)
+          bpStockMap.set(
+            item.buyPriceId,
+            qty === undefined ? item.quantity : qty + item.quantity
+          )
         }
+
+      for (const [id, stock] of bpStockMap) {
+        let stockDelta = -stock
+
+        // account for old quantity if any
+        if (props.transaction !== undefined)
+          for (const item of props.transaction.transactionItems)
+            if (item.updateStock && item.buyPriceId === id)
+              stockDelta += item.quantity
+
+        await updateBuyPriceStock({
+          id,
+          stockDelta,
+        })
       }
 
-      const { id, createdAt } = await createTransaction({
-        transactionItems: items,
-        ...value,
-      })
+      var id: string
+      var createdAt: string
+      if (props.transaction !== undefined) {
+        id = props.transaction.id
+        createdAt = props.transaction.createdAt
+
+        await updateTransaction({
+          id: props.transaction.id,
+          transactionItems: items,
+          ...value,
+        })
+
+        toast.success("Transaction updated")
+        props.onUpdate?.({ id, createdAt, transactionItems: items, ...value })
+      } else {
+        var { id, createdAt } = await createTransaction({
+          transactionItems: items,
+          ...value,
+        })
+
+        toast.success("Transaction created")
+      }
 
       await printTransaction({
         id,
@@ -128,7 +166,9 @@ export default function TransactionForm(props: {
                 {(field) => <field.IdrField min={0} label="Total price" />}
               </form.AppField>
               <form.AppForm>
-                <form.SubmitButton>Save and print</form.SubmitButton>
+                <form.SubmitButton>
+                  <PrinterIcon /> Save and print
+                </form.SubmitButton>
               </form.AppForm>
             </div>
             <form.AppField

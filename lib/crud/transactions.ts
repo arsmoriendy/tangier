@@ -42,6 +42,27 @@ export async function createTransaction({
   })
 }
 
+export async function updateTransaction({
+  transactionItems: items,
+  id,
+  ...transaction
+}: Omit<TransactionWithRelations, "createdAt">) {
+  return await db.transaction(async (trx) => {
+    await trx
+      .update(transactions)
+      .set(transaction)
+      .where(eq(transactions.id, id))
+
+    await trx
+      .delete(transactionItems)
+      .where(eq(transactionItems.transaction, id))
+
+    await trx
+      .insert(transactionItems)
+      .values(items.map((i) => ({ ...i, transaction: id })))
+  })
+}
+
 export async function readTransaction(id: string) {
   return await db.query.transactions.findFirst({
     where: eq(transactions.id, id),
