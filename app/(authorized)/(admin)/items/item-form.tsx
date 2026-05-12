@@ -32,7 +32,11 @@ export default function ItemForm(props: {
     name: z.string().min(1),
     unit: z.uuid(),
     buyPrices: z.array(
-      z.object({ price: z.number().min(0), stock: z.number().min(0) })
+      z.object({
+        id: z.uuid().optional(),
+        price: z.number().min(0),
+        stock: z.number().min(0),
+      })
     ),
     sellPrices: z.array(
       z.object({ priceGroup: z.uuid(), price: z.number().min(0) })
@@ -56,7 +60,8 @@ export default function ItemForm(props: {
       ? {
           name: props.item.name,
           unit: props.item.unit.id,
-          buyPrices: props.item.buyPrices.map(({ price, stock }) => ({
+          buyPrices: props.item.buyPrices.map(({ price, stock, id }) => ({
+            id,
             price,
             stock,
           })),

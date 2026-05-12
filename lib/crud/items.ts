@@ -7,7 +7,7 @@ import {
   buyPrices as buyPricesTbl,
   barcodes as barcodesTbl,
 } from "@/lib/db/schema"
-import { and, asc, count, eq, ilike } from "drizzle-orm"
+import { and, asc, count, eq, ilike, notInArray } from "drizzle-orm"
 
 export async function countItems({
   name = "",
@@ -96,7 +96,7 @@ export async function updateItem({
   name: string
   unit: string
   sellPrices?: { priceGroup: string; price: number }[]
-  buyPrices?: { price: number; stock: number }[]
+  buyPrices?: { id?: string; price: number; stock: number }[]
   barcodes?: { barcodeGroup: string; barcode: string }[]
 }) {
   return await db.transaction(async (tx) => {
@@ -107,17 +107,45 @@ export async function updateItem({
 
     type Price = number
     type Stock = number
-    const buyPriceStockMap = new Map<Price, Stock>()
-    for (const bp of buyPrices) {
-      const oldStock = buyPriceStockMap.get(bp.price)
-      if (oldStock === undefined) buyPriceStockMap.set(bp.price, bp.stock)
-      else buyPriceStockMap.set(bp.price, oldStock + bp.stock)
+    const newBpMap = new Map<Price, Stock>()
+    const oldBps: ((typeof buyPrices)[number] & { id: string })[] = []
+
+    for (const { id, stock, price } of buyPrices) {
+      if (id !== undefined) {
+        oldBps.push({ id, stock, price })
+        continue
+      }
+
+      const oldStock = newBpMap.get(price)
+      const newStock = oldStock === undefined ? stock : oldStock + stock
+      newBpMap.set(price, newStock)
     }
 
-    await tx.delete(buyPricesTbl).where(eq(buyPricesTbl.item, id))
-    buyPrices.length > 0 &&
+    await tx.delete(buyPricesTbl).where(
+      and(
+        notInArray(
+          buyPricesTbl.id,
+          oldBps.map((obp) => obp.id)
+        ),
+        eq(buyPricesTbl.item, id)
+      )
+    )
+
+    for (const obp of oldBps) {
+      const nbpStock = newBpMap.get(obp.price)
+      if (nbpStock !== undefined) {
+        obp.stock += nbpStock
+        newBpMap.delete(obp.price)
+      }
+      await tx
+        .update(buyPricesTbl)
+        .set({ ...obp, item: id })
+        .where(eq(buyPricesTbl.id, obp.id))
+    }
+
+    newBpMap.size > 0 &&
       (await tx.insert(buyPricesTbl).values(
-        buyPriceStockMap
+        newBpMap
           .entries()
           .map(([price, stock]) => ({ item: id, price, stock }))
           .toArray()

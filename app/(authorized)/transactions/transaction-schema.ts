@@ -10,8 +10,7 @@ export const transactionSchema = z.object({
         sellPrice: z.number().min(0),
         quantity: z.number().min(1),
 
-        id: z.uuid().nullable(),
-        originalBuyPrice: z.number().min(0).nullable(),
+        buyPriceId: z.uuid().nullable(),
         updateStock: z.boolean(),
 
         extraFields: z.object({

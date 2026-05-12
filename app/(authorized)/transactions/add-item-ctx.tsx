@@ -2,17 +2,15 @@
 
 import { ValtioContext } from "@/contexts/valtio-context"
 import { ItemWithRelations } from "@/lib/crud/items"
+import { type buyPrices } from "@/lib/db/schema"
 import { createContext, ReactNode, useContext } from "react"
 import { proxy, useSnapshot } from "valtio"
 
 const defaultAddItemCtx: {
   buyPrices: ItemWithRelations["buyPrices"]
   sellPrices: ItemWithRelations["sellPrices"]
-  selectedPriceGroupId?: string
-  link?: {
-    selectedBuyPrice?: number
-    itemId: string
-  }
+  selectedSellPriceId?: string
+  buyPrice?: Omit<typeof buyPrices.$inferSelect, "item">
 } = {
   buyPrices: [],
   sellPrices: [],

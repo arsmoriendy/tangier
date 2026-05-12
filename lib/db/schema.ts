@@ -84,6 +84,7 @@ export const priceGroups = pgTable(
 export const buyPrices = pgTable(
   "buy_prices",
   {
+    id: uuid().notNull().primaryKey().defaultRandom(),
     item: uuid("item").notNull(),
     price: numeric({ mode: "number" }).notNull(),
     stock: integer().notNull().default(0),
@@ -99,10 +100,6 @@ export const buyPrices = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
-    primaryKey({
-      columns: [table.item, table.price],
-      name: "buy_prices_pkey",
-    }),
   ]
 )
 
@@ -150,13 +147,12 @@ export const transactionItems = pgTable(
     transaction: uuid().notNull(),
     name: varchar().notNull(),
     unit: varchar().notNull(),
-    buyPrice: numeric("buy_price", { mode: "number" }).notNull(),
     sellPrice: numeric("sell_price", { mode: "number" }).notNull(),
     quantity: integer().notNull(),
+    buyPrice: numeric("buy_price", { mode: "number" }).notNull(),
 
-    // item link
-    id: uuid(),
-    originalBuyPrice: numeric("original_buy_price", { mode: "number" }),
+    // for updates and recalls
+    buyPriceId: uuid("buy_price_id"),
     updateStock: boolean().default(false).notNull(),
   },
   (table) => [
@@ -167,9 +163,10 @@ export const transactionItems = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
-    primaryKey({
-      columns: [table.name, table.transaction],
-      name: "transaction_items_pk",
-    }),
+    foreignKey({
+      columns: [table.buyPriceId],
+      foreignColumns: [buyPrices.id],
+      name: "buy_prices_fk",
+    }).onUpdate("cascade"),
   ]
 )

@@ -43,8 +43,7 @@ export const AddItemForm = withForm({
       onSubmit: ({ value: { quantifiedPrice, ...item } }) => {
         createTransactionForm.pushFieldValue("transactionItems", {
           ...item,
-          id: addItemProxy.link?.itemId ?? null,
-          originalBuyPrice: addItemProxy.link?.selectedBuyPrice ?? null,
+          buyPriceId: addItemProxy.buyPrice?.id ?? null,
           updateStock: getLocalStorage.decrementStock,
           extraFields: {
             quantifiedPrice,
@@ -52,13 +51,13 @@ export const AddItemForm = withForm({
         })
         addItemProxy.sellPrices = []
         addItemProxy.buyPrices = []
-        addItemProxy.link = undefined
+        addItemProxy.buyPrice = undefined
         form.reset()
       },
     })
 
     useEffect(() => {
-      addItemProxy.selectedPriceGroupId = priceGroups[0]?.id
+      addItemProxy.selectedSellPriceId = priceGroups[0]?.id
       createTransactionForm.setFieldValue(
         "customerPriceGroup",
         priceGroups[0]?.name
@@ -115,9 +114,9 @@ export const AddItemForm = withForm({
 
             <RadioGroupChoiceCard
               className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-              value={addItemSnap.selectedPriceGroupId}
+              value={addItemSnap.selectedSellPriceId}
               onValueChange={(v) => {
-                addItemProxy.selectedPriceGroupId = v
+                addItemProxy.selectedSellPriceId = v
                 form.setFieldValue(
                   "sellPrice",
                   addItemSnap.sellPrices.find((p) => p.priceGroup.id === v)
@@ -154,10 +153,12 @@ export const AddItemForm = withForm({
                   </form.AppField>
 
                   <RadioGroupChoiceCard
-                    value={addItemSnap.link?.selectedBuyPrice?.toString()}
+                    value={addItemSnap.buyPrice?.id}
                     onValueChange={(v) => {
                       const price = parseFloat(v)
-                      addItemProxy.link!.selectedBuyPrice = price
+                      addItemProxy.buyPrice = addItemProxy.buyPrices.find(
+                        (bp) => bp.id === v
+                      )!
                       form.setFieldValue("buyPrice", price)
                     }}
                   >
@@ -167,7 +168,7 @@ export const AddItemForm = withForm({
                         .map((bp, i) => (
                           <RadioGroupChoiceItem
                             key={i}
-                            value={bp.price.toString()}
+                            value={bp.id}
                             title={formatCurrency(bp.price)}
                             description={`${bp.stock} left`}
                           />

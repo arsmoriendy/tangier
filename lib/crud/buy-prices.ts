@@ -2,19 +2,17 @@
 
 import { db } from "@/lib/db"
 import { buyPrices } from "@/lib/db/schema"
-import { and, eq, sql } from "drizzle-orm"
+import { eq, sql } from "drizzle-orm"
 
 export async function updateBuyPriceStock({
-  itemId,
-  price,
+  id,
   stockDelta,
 }: {
-  itemId: string
-  price: number
+  id: string
   stockDelta: number
 }) {
   await db
     .update(buyPrices)
     .set({ stock: sql`${buyPrices.stock} + ${stockDelta}` })
-    .where(and(eq(buyPrices.item, itemId), eq(buyPrices.price, price)))
+    .where(eq(buyPrices.id, id))
 }

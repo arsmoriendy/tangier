@@ -67,10 +67,9 @@ export default function TransactionForm(props: {
       )
 
       for (const item of transactionItems) {
-        if (item.id && item.updateStock && item.originalBuyPrice !== null) {
+        if (item.updateStock && item.buyPriceId !== null) {
           await updateBuyPriceStock({
-            itemId: item.id,
-            price: item.originalBuyPrice,
+            id: item.buyPriceId,
             stockDelta: -item.quantity,
           })
         }
@@ -157,7 +156,7 @@ export default function TransactionForm(props: {
                           onCheckedChange={(c) => {
                             setLocalStorage.decrementStock = c as boolean
                             for (const [i, item] of state.value.entries()) {
-                              if (item.originalBuyPrice !== null) {
+                              if (item.buyPriceId !== null) {
                                 form.setFieldValue(
                                   `transactionItems[${i}].updateStock`,
                                   c as boolean
@@ -171,7 +170,7 @@ export default function TransactionForm(props: {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {state.value.map(({ originalBuyPrice }, i) => (
+                    {state.value.map(({ buyPriceId }, i) => (
                       <TableRow
                         key={i}
                         draggable
@@ -277,7 +276,7 @@ export default function TransactionForm(props: {
                           </form.AppField>
                         </TableCell>
                         <TableCell className="align-top">
-                          {originalBuyPrice !== null ? (
+                          {buyPriceId !== null ? (
                             <Field orientation="horizontal" className="h-8">
                               <form.AppField
                                 name={`transactionItems[${i}].updateStock`}
