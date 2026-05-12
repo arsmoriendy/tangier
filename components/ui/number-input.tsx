@@ -20,6 +20,7 @@ export function NumberInput({
   step = 1,
   min = -Infinity,
   max = Infinity,
+  autoComplete = "off",
   className,
   onWheel,
   onKeyDown,
@@ -49,6 +50,7 @@ export function NumberInput({
   return (
     <NumericFormat
       getInputRef={inputRef}
+      autoComplete={autoComplete}
       value={valueProp}
       className={!unstyled ? cn(inputClass, className) : className}
       min={min}
