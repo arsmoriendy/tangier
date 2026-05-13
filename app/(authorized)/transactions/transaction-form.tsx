@@ -183,7 +183,7 @@ export default function TransactionForm(props: {
             >
               {({ state }) => (
                 <Table className="border-separate border-spacing-0">
-                  <TableHeader>
+                  <TableHeader className="[&_th]:border-b">
                     <TableRow>
                       <TableHead />
                       <TableHead>Name</TableHead>
