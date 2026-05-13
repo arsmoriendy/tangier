@@ -6,9 +6,8 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Shift transaction items instead of swap
-2. Hold and recall
-3. Update receipt
+1. Hold and recall
+2. Update receipt
    - cashier name
    - timestamp
 
