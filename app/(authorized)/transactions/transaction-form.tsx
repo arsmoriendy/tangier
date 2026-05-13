@@ -45,7 +45,6 @@ import { toast } from "sonner"
 export default function TransactionForm(props: {
   transaction?: DeepReadonly<TransactionWithRelations>
   onUpdate?: (trx: TransactionWithRelations) => any
-  onDelete?: () => any
 }) {
   const session = useSession()
   const { getLocalStorage, setLocalStorage } = useLocalStorage()

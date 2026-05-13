@@ -17,9 +17,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import TransactionForm from "../transaction-form"
+import { useState } from "react"
 
 export function TrxList() {
-  const { getTrx } = useTrx()
+  const { getTrx, setTrx } = useTrx()
   return (
     <Table>
       <TableHeader>
@@ -32,9 +33,10 @@ export function TrxList() {
       </TableHeader>
       <TableBody>
         {getTrx.map((trx, i) => {
+          const [open, setOpen] = useState(false)
           const createdDate = new Date(trx.createdAt)
           return (
-            <Dialog key={i}>
+            <Dialog key={i} open={open} onOpenChange={setOpen}>
               <DialogTrigger asChild>
                 <TableRow className="cursor-pointer">
                   <TableCell>{trx.id}</TableCell>
@@ -47,7 +49,13 @@ export function TrxList() {
               <DialogContent className="max-h-[92vh] w-[92vw] overflow-auto pt-0 sm:max-w-[92vw]">
                 <DialogTitle className="mt-2">Update transaction</DialogTitle>
 
-                <TransactionForm transaction={trx} />
+                <TransactionForm
+                  transaction={trx}
+                  onUpdate={(trx) => {
+                    setTrx[i] = trx
+                    setOpen(false)
+                  }}
+                />
               </DialogContent>
             </Dialog>
           )
