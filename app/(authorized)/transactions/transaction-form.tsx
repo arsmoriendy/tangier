@@ -213,6 +213,7 @@ export default function TransactionForm(props: {
                         </label>
                       </TableHead>
                       <TableHead>Quantified price</TableHead>
+                      <TableHead />
                     </TableRow>
                   </TableHeader>
                   <TableBody>
