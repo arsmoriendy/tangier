@@ -225,10 +225,10 @@ export default function TransactionForm(props: {
                           const sourceIndex = parseInt(
                             e.dataTransfer.getData("text/plain")
                           )
-                          form.swapFieldValues(
+                          form.moveFieldValues(
                             "transactionItems",
-                            i,
-                            sourceIndex
+                            sourceIndex,
+                            i
                           )
                         }}
                       >
