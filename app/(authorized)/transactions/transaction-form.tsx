@@ -182,7 +182,7 @@ export default function TransactionForm(props: {
               }}
             >
               {({ state }) => (
-                <Table>
+                <Table className="border-separate border-spacing-0">
                   <TableHeader>
                     <TableRow>
                       <TableHead />
@@ -219,8 +219,27 @@ export default function TransactionForm(props: {
                         draggable
                         onDragStart={(e) => {
                           e.dataTransfer.setData("text/plain", i.toString())
+                          e.currentTarget.setAttribute("data-state", "selected")
                         }}
-                        onDragOver={(e) => e.preventDefault()}
+                        onDragEnd={(e) => {
+                          e.currentTarget.removeAttribute("data-state")
+                        }}
+                        onDragOver={(e) => {
+                          e.preventDefault()
+
+                          const rect = e.currentTarget.getBoundingClientRect()
+                          const y = e.clientY - rect.top
+                          const yPct = y / rect.height
+
+                          e.currentTarget.removeAttribute("data-drop")
+                          e.currentTarget.setAttribute(
+                            "data-drop",
+                            yPct > 0.5 ? "bottom" : "top"
+                          )
+                        }}
+                        onDragLeave={(e) => {
+                          e.currentTarget.removeAttribute("data-drop")
+                        }}
                         onDrop={(e) => {
                           const sourceIndex = parseInt(
                             e.dataTransfer.getData("text/plain")
@@ -229,12 +248,15 @@ export default function TransactionForm(props: {
                           const y = e.clientY - rect.top
                           const yPct = y / rect.height
 
+                          e.currentTarget.removeAttribute("data-drop")
+
                           form.moveFieldValues(
                             "transactionItems",
                             sourceIndex,
                             yPct > 0.5 ? i + 1 : i
                           )
                         }}
+                        className="[&_td]:border-primary data-[drop=bottom]:[&_td]:border-b data-[drop=top]:[&_td]:border-t"
                       >
                         <TableCell className="cursor-grab align-top">
                           <DotsSixVerticalIcon className="h-8" />
