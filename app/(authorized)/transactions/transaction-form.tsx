@@ -194,20 +194,23 @@ export default function TransactionForm(props: {
                       <TableHead>Sell price</TableHead>
                       <TableHead>Qty</TableHead>
                       <TableHead>
-                        <Checkbox
-                          checked={getLocalStorage.decrementStock}
-                          onCheckedChange={(c) => {
-                            setLocalStorage.decrementStock = c as boolean
-                            for (const [i, item] of state.value.entries()) {
-                              if (item.buyPriceId !== null) {
-                                form.setFieldValue(
-                                  `transactionItems[${i}].updateStock`,
-                                  c as boolean
-                                )
+                        <label className="flex items-center gap-2">
+                          <Checkbox
+                            checked={getLocalStorage.decrementStock}
+                            onCheckedChange={(c) => {
+                              setLocalStorage.decrementStock = c as boolean
+                              for (const [i, item] of state.value.entries()) {
+                                if (item.buyPriceId !== null) {
+                                  form.setFieldValue(
+                                    `transactionItems[${i}].updateStock`,
+                                    c as boolean
+                                  )
+                                }
                               }
-                            }
-                          }}
-                        />
+                            }}
+                          />
+                          Update stock
+                        </label>
                       </TableHead>
                       <TableHead>Quantified price</TableHead>
                     </TableRow>
