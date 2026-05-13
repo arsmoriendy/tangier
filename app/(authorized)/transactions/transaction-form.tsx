@@ -118,13 +118,17 @@ export default function TransactionForm(props: {
         toast.success("Transaction created")
       }
 
-      await printTransaction({
-        id,
-        createdAt,
-        totalPrice: value.totalPrice,
-        transactionItems: items,
-        customerPriceGroup: value.customerPriceGroup,
-      })
+      try {
+        await printTransaction({
+          id,
+          createdAt,
+          totalPrice: value.totalPrice,
+          transactionItems: items,
+          customerPriceGroup: value.customerPriceGroup,
+        })
+      } catch (e) {
+        toast.error("Unable to print transaction", { description: `${e}` })
+      }
 
       form.reset()
     },
