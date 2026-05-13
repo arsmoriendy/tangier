@@ -225,10 +225,14 @@ export default function TransactionForm(props: {
                           const sourceIndex = parseInt(
                             e.dataTransfer.getData("text/plain")
                           )
+                          const rect = e.currentTarget.getBoundingClientRect()
+                          const y = e.clientY - rect.top
+                          const yPct = y / rect.height
+
                           form.moveFieldValues(
                             "transactionItems",
                             sourceIndex,
-                            i
+                            yPct > 0.5 ? i + 1 : i
                           )
                         }}
                       >
