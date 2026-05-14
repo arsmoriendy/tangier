@@ -102,15 +102,23 @@ export default function TransactionForm(props: {
 
         await updateTransaction({
           id: props.transaction.id,
+          cashier: session.user.name,
           transactionItems: items,
           ...value,
         })
 
         toast.success("Transaction updated")
-        props.onUpdate?.({ id, createdAt, transactionItems: items, ...value })
+        props.onUpdate?.({
+          id,
+          createdAt,
+          cashier: session.user.name,
+          transactionItems: items,
+          ...value,
+        })
       } else {
         var { id, createdAt } = await createTransaction({
           transactionItems: items,
+          cashier: session.user.name,
           ...value,
         })
 
@@ -121,6 +129,7 @@ export default function TransactionForm(props: {
         await printTransaction({
           id,
           createdAt,
+          cashier: session.user.name,
           totalPrice: value.totalPrice,
           transactionItems: items,
           customerPriceGroup: value.customerPriceGroup,

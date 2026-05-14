@@ -7,9 +7,6 @@ Run with the bun runtime, e.g. `bun -b dev`
 ##### TODO
 
 1. Hold and recall
-2. Update receipt
-   - cashier name
-   - timestamp
 
 ###### Backlog
 

@@ -4,6 +4,7 @@ import { Printer } from "@node-escpos/core"
 import USB from "@node-escpos/usb-adapter"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { env } from "@/lib/env"
+import { format } from "date-fns"
 
 const numberFormatter = new Intl.NumberFormat("id-ID", {})
 const formatNumber = numberFormatter.format
@@ -16,6 +17,8 @@ export async function printTransaction(trx: TransactionWithRelations) {
 
   const device = new USB(vid, pid)
   const printer = new Printer(device, { encoding: "ascii", width })
+
+  const crtDate = new Date(trx.createdAt)
 
   function twoCols(...params: [string, string][]) {
     for (const row of params) {
@@ -42,14 +45,13 @@ export async function printTransaction(trx: TransactionWithRelations) {
 
     printer.font("a").align("lt").size(1, 1).style("normal")
 
-    const crtDate = new Date(trx.createdAt)
-    const isoDate = crtDate.toISOString()
-    const isoTime = crtDate.toTimeString()
+    printer.align("ct").text(trx.id).align("lt")
 
     twoCols(
-      [`Cashier : `, trx.createdAt],
-      [`Id      : ${trx.id}`, trx.createdAt],
-      [`Cust.   : ${trx.customerPriceGroup}`, trx.createdAt]
+      [`Cashier : `, trx.cashier],
+      [`Cust.   : `, trx.customerPriceGroup],
+      [`Date    : `, format(crtDate, "yyyy-MM-dd")],
+      [`Time    : `, format(crtDate, "HH:mm:ss")]
     )
 
     // print items
@@ -63,10 +65,10 @@ export async function printTransaction(trx: TransactionWithRelations) {
     }
     printer.drawLine()
 
-    printer
-      .align("rt")
-      .size(2, 2) // TODO:
-      .text(`Total : ${formatNumber(trx.totalPrice)}`)
+    twoCols([
+      `${trx.transactionItems.length} items`,
+      `Total : ${formatNumber(trx.totalPrice)}`,
+    ])
 
     printer.feed(3)
     await printer.cut().close()
