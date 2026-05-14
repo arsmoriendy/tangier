@@ -45,9 +45,8 @@ export async function printTransaction(trx: TransactionWithRelations) {
 
     printer.font("a").align("lt").size(1, 1).style("normal")
 
-    printer.align("ct").text(trx.id).align("lt")
-
     twoCols(
+      [`Last ID : `, trx.id.slice(24)],
       [`Cashier : `, trx.cashier],
       [`Cust.   : `, trx.customerPriceGroup],
       [`Date    : `, format(crtDate, "yyyy-MM-dd")],
@@ -65,9 +64,16 @@ export async function printTransaction(trx: TransactionWithRelations) {
     }
     printer.drawLine()
 
-    twoCols([
-      `${trx.transactionItems.length} items`,
-      `Total : ${formatNumber(trx.totalPrice)}`,
+    printer.tableCustom([
+      {
+        text: `${trx.transactionItems.length} items`,
+        width: 0.3,
+      },
+      {
+        text: `Total : ${formatNumber(trx.totalPrice)}`,
+        width: 0.68,
+        align: "right",
+      },
     ])
 
     printer.feed(3)
