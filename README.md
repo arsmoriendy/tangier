@@ -6,14 +6,15 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
+1. Combine name and search field
+2. Keyboard shortcuts
+
 ###### Backlog
 
-1. Combine name and search field
-2. Server function authorization
-3. Per item quantity threshold
-4. Auto set price based on quantity threshold
-5. Keyboard shortcuts
-6. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
-7. group transaction items based on new category column
-8. backup and restore
-9. export and import
+1. Server function authorization
+2. Per item quantity threshold
+3. Auto set price based on quantity threshold
+4. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
+5. group transaction items based on new category column
+6. backup and restore
+7. export and import
