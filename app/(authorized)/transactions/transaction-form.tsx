@@ -52,34 +52,49 @@ import {
 import { useHeld } from "./held-ctx"
 import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
+import { usePriceGroups } from "@/contexts/price-groups-ctx"
 
 export default function TransactionForm(props: {
   transaction?: DeepReadonly<TransactionWithRelations>
   onUpdate?: (trx: TransactionWithRelations) => any
 }) {
   const session = useSession()
+  const { priceGroups } = usePriceGroups()
   const { setHeld, getHeld } = useHeld()
   const { getLocalStorage, setLocalStorage } = useLocalStorage()
   const [openRecallDialog, setOpenRecallDialog] = useState(false)
   const form = useAppForm({
-    defaultValues: props.transaction
-      ? ({
+    defaultValues: (props.transaction
+      ? {
           totalPrice: props.transaction.totalPrice,
-          customerPriceGroup: props.transaction.customerPriceGroup,
+          priceGroup: priceGroups.find(
+            (pg) => pg.name === props.transaction!.customerPriceGroup
+          )?.id,
           transactionItems: props.transaction.transactionItems.map((trx) => ({
             ...trx,
             extraFields: { quantifiedPrice: trx.sellPrice * trx.quantity },
           })),
-        } satisfies typeof defaultTransactionValues)
-      : defaultTransactionValues,
+        }
+      : {
+          ...defaultTransactionValues,
+          priceGroup: priceGroups.at(0)?.id,
+        }) as typeof defaultTransactionValues,
     validators: {
       onMount: transactionSchema,
       onChange: transactionSchema,
     },
-    onSubmit: async ({ value: { transactionItems, ...value } }) => {
+    onSubmit: async ({ value: { transactionItems, priceGroup, ...value } }) => {
       const items = transactionItems.map(
         ({ extraFields, ...otherFields }) => otherFields
       )
+      const customerPriceGroup =
+        priceGroups.find((pg) => pg.id === priceGroup)?.name ?? ""
+      const trx = {
+        cashier: session.user.name,
+        transactionItems: items,
+        customerPriceGroup,
+        ...value,
+      }
 
       // unique stock per buyPriceId
       const bpStockMap = new Map<string, number>()
@@ -115,25 +130,17 @@ export default function TransactionForm(props: {
 
         await updateTransaction({
           id: props.transaction.id,
-          cashier: session.user.name,
-          transactionItems: items,
-          ...value,
+          ...trx,
         })
 
         toast.success("Transaction updated")
         props.onUpdate?.({
           id,
           createdAt,
-          cashier: session.user.name,
-          transactionItems: items,
-          ...value,
+          ...trx,
         })
       } else {
-        var { id, createdAt } = await createTransaction({
-          transactionItems: items,
-          cashier: session.user.name,
-          ...value,
-        })
+        var { id, createdAt } = await createTransaction(trx)
 
         toast.success("Transaction created")
       }
@@ -145,7 +152,7 @@ export default function TransactionForm(props: {
           cashier: session.user.name,
           totalPrice: value.totalPrice,
           transactionItems: items,
-          customerPriceGroup: value.customerPriceGroup,
+          customerPriceGroup,
         })
       } catch (e) {
         toast.error("Unable to print transaction", { description: `${e}` })
@@ -177,14 +184,17 @@ export default function TransactionForm(props: {
   }
 
   async function hold() {
-    const { transactionItems, ...value } = form.state.values
+    const { transactionItems, priceGroup, ...value } = form.state.values
     const items = transactionItems.map(
       ({ extraFields, ...otherFields }) => otherFields
     )
+    const customerPriceGroup =
+      priceGroups.find((pg) => pg.id === priceGroup)?.name ?? ""
 
     const trx = {
       transactionItems: items,
       cashier: session.user.name,
+      customerPriceGroup,
       held: true,
       ...value,
     }

@@ -11,7 +11,7 @@ import { useState } from "react"
 export const ScanBarcodeField = withForm({
   defaultValues: defaultAddItemValues,
   render: function Render({ form }) {
-    const { addItemProxy, addItemSnap } = useAddItem()
+    const { addItemProxy } = useAddItem()
     const [barcode, setBarcode] = useState("")
     const [error, setError] = useState<string | undefined>(undefined)
     const [loading, setLoading] = useState(false)
@@ -38,12 +38,6 @@ export const ScanBarcodeField = withForm({
             const { item } = res
             form.setFieldValue("name", item.name)
             form.setFieldValue("unit", item.unit.name)
-            form.setFieldValue(
-              "sellPrice",
-              item.sellPrices.find(
-                (p) => p.priceGroup.id === addItemSnap.selectedSellPriceId
-              )?.price ?? 0
-            )
             addItemProxy.sellPrices = item.sellPrices
           }}
         />

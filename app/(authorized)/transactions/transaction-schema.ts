@@ -20,12 +20,11 @@ export const transactionSchema = z.object({
     )
     .min(1),
   totalPrice: z.number().min(0),
-  customerPriceGroup: z.string(),
+  priceGroup: z.string().optional(),
   held: z.boolean().optional(),
 })
 
 export const defaultTransactionValues: z.infer<typeof transactionSchema> = {
   transactionItems: [],
   totalPrice: 0,
-  customerPriceGroup: "",
 }

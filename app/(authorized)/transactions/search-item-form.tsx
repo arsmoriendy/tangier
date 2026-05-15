@@ -127,15 +127,9 @@ export const SearchItemForm = withForm({
                     const buyPrice = item.buyPrices.at(
                       item.buyPrices.length - 1
                     )
-                    const sellPrice =
-                      item.sellPrices.find(
-                        (p) =>
-                          p.priceGroup.id === addItemSnap.selectedSellPriceId
-                      )?.price ?? 0
 
                     form.setFieldValue("name", item.name)
                     form.setFieldValue("unit", item.unit.name)
-                    form.setFieldValue("sellPrice", sellPrice)
                     form.setFieldValue("buyPrice", buyPrice?.price ?? 0)
                     addItemProxy.sellPrices = item.sellPrices
                     addItemProxy.buyPrices = item.buyPrices

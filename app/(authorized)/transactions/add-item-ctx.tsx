@@ -9,7 +9,6 @@ import { proxy, useSnapshot } from "valtio"
 const defaultAddItemCtx: {
   buyPrices: ItemWithRelations["buyPrices"]
   sellPrices: ItemWithRelations["sellPrices"]
-  selectedSellPriceId?: string
   buyPrice?: Omit<typeof buyPrices.$inferSelect, "item">
 } = {
   buyPrices: [],

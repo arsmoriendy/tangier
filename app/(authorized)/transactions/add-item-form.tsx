@@ -5,8 +5,8 @@ import {
 } from "@/components/ui/choice-card"
 import { FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { formatCurrency } from "@/lib/i18n/currency"
-import { useEffect } from "react"
 import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
+import { subscribeKey } from "valtio/utils"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import {
   addItemSchema,
@@ -57,13 +57,14 @@ export const AddItemForm = withForm({
       },
     })
 
-    useEffect(() => {
-      addItemProxy.selectedSellPriceId = priceGroups[0]?.id
-      createTransactionForm.setFieldValue(
-        "customerPriceGroup",
-        priceGroups[0]?.name
-      )
-    }, [])
+    subscribeKey(addItemProxy, "sellPrices", (sps) => {
+      const sellPrice = sps.find(
+        (sp) =>
+          sp.priceGroup.id === createTransactionForm.state.values.priceGroup
+      )?.price
+
+      if (sellPrice !== undefined) form.setFieldValue("sellPrice", sellPrice)
+    })
 
     return (
       <>
@@ -113,36 +114,38 @@ export const AddItemForm = withForm({
               </div>
             </div>
 
-            <RadioGroupChoiceCard
-              className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-              value={addItemSnap.selectedSellPriceId}
-              onValueChange={(v) => {
-                addItemProxy.selectedSellPriceId = v
-                form.setFieldValue(
-                  "sellPrice",
-                  addItemSnap.sellPrices.find((p) => p.priceGroup.id === v)
-                    ?.price ?? 0
-                )
-                createTransactionForm.setFieldValue(
-                  "customerPriceGroup",
-                  priceGroups.find((pgs) => pgs.id === v)!.name
-                )
-              }}
+            <createTransactionForm.Subscribe
+              selector={(f) => f.values.priceGroup}
             >
-              {priceGroups.map((pg, i) => (
-                <RadioGroupChoiceItem
-                  key={i}
-                  style={{ backgroundColor: `#${pg.hexColor}` }}
-                  value={pg.id}
-                  title={formatCurrency(
-                    addItemSnap.sellPrices.find(
-                      (p) => p.priceGroup.id === pg.id
-                    )?.price ?? 0
-                  )}
-                  description={pg.name}
-                />
-              ))}
-            </RadioGroupChoiceCard>
+              {(priceGroup) => (
+                <RadioGroupChoiceCard
+                  className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+                  value={priceGroup}
+                  onValueChange={(v) => {
+                    form.setFieldValue(
+                      "sellPrice",
+                      addItemSnap.sellPrices.find((p) => p.priceGroup.id === v)
+                        ?.price ?? 0
+                    )
+                    createTransactionForm.setFieldValue("priceGroup", v)
+                  }}
+                >
+                  {priceGroups.map((pg, i) => (
+                    <RadioGroupChoiceItem
+                      key={i}
+                      style={{ backgroundColor: `#${pg.hexColor}` }}
+                      value={pg.id}
+                      title={formatCurrency(
+                        addItemSnap.sellPrices.find(
+                          (p) => p.priceGroup.id === pg.id
+                        )?.price ?? 0
+                      )}
+                      description={pg.name}
+                    />
+                  ))}
+                </RadioGroupChoiceCard>
+              )}
+            </createTransactionForm.Subscribe>
 
             <div className="flex gap-2">
               {session.user.role === "admin" && (
