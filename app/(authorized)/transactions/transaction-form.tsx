@@ -228,7 +228,7 @@ export default function TransactionForm(props: {
         className="relative flex flex-1 flex-col"
       >
         <FieldSet className="flex-1">
-          <FieldLegend>Transaction details</FieldLegend>
+          <FieldLegend>Transaction items</FieldLegend>
           <FieldGroup>
             <form.AppField
               name="transactionItems"
