@@ -6,8 +6,6 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Hold and recall
-
 ###### Backlog
 
 1. Combine name and search field

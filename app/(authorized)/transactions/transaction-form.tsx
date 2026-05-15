@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/field"
 import {
   createTransaction,
+  listTransactions,
   TransactionWithRelations,
   updateTransaction,
 } from "@/lib/crud/transactions"
@@ -43,14 +44,8 @@ import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useSession } from "@/contexts/session-ctx"
 import { toast } from "sonner"
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { useHeld } from "./held-ctx"
-import { Badge } from "@/components/ui/badge"
 import { useState } from "react"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 
@@ -63,6 +58,9 @@ export default function TransactionForm(props: {
   const { setHeld, getHeld } = useHeld()
   const { getLocalStorage, setLocalStorage } = useLocalStorage()
   const [openRecallDialog, setOpenRecallDialog] = useState(false)
+  const [recalledTrx, setRecalledTrx] = useState<
+    TransactionWithRelations | undefined
+  >(undefined)
   const form = useAppForm({
     defaultValues: (props.transaction
       ? {
@@ -93,6 +91,7 @@ export default function TransactionForm(props: {
         cashier: session.user.name,
         transactionItems: items,
         customerPriceGroup,
+        held: false,
         ...value,
       }
 
@@ -199,11 +198,21 @@ export default function TransactionForm(props: {
       ...value,
     }
 
-    const { id, createdAt } = await createTransaction(trx)
+    var id: string
+    var createdAt: string
+    if (recalledTrx) {
+      id = recalledTrx.id
+      createdAt = recalledTrx.createdAt
+
+      await updateTransaction({
+        id,
+        ...trx,
+      })
+    } else {
+      var { id, createdAt } = await createTransaction(trx)
+    }
 
     toast.success("Transaction held", { icon: <HandIcon /> })
-
-    setHeld.push({ id, createdAt, ...trx })
 
     form.reset()
   }
@@ -481,18 +490,29 @@ export default function TransactionForm(props: {
                 <HandIcon /> Hold
               </Button>
 
+              <Button
+                type="button"
+                onClick={async () => {
+                  setHeld.splice(
+                    0,
+                    setHeld.length,
+                    ...(await listTransactions({
+                      held: true,
+                      from: new Date(0),
+                      to: new Date(),
+                    }))
+                  )
+                  setOpenRecallDialog(true)
+                }}
+              >
+                <ClockCountdownIcon />
+                Recall
+              </Button>
+
               <Dialog
                 open={openRecallDialog}
                 onOpenChange={setOpenRecallDialog}
               >
-                <DialogTrigger asChild>
-                  <Button type="button" disabled={getHeld.length < 1}>
-                    <ClockCountdownIcon />
-                    Recall
-                    <Badge variant="secondary">{getHeld.length}</Badge>
-                  </Button>
-                </DialogTrigger>
-
                 <DialogContent>
                   <DialogTitle>Recall transaction</DialogTitle>
 
@@ -514,8 +534,15 @@ export default function TransactionForm(props: {
                             key={trx.id}
                             className="cursor-pointer"
                             onClick={async () => {
-                              setHeld.splice(i, 1)
+                              setRecalledTrx(trx as DeepMutable<typeof trx>)
 
+                              form.setFieldValue(
+                                "priceGroup",
+                                priceGroups.find(
+                                  (pg) => pg.name === trx.customerPriceGroup
+                                )?.id
+                              )
+                              form.setFieldValue("totalPrice", trx.totalPrice)
                               form.setFieldValue(
                                 "transactionItems",
                                 (
@@ -532,6 +559,11 @@ export default function TransactionForm(props: {
                               )
 
                               setOpenRecallDialog(false)
+
+                              await updateTransaction({
+                                id: trx.id,
+                                held: false,
+                              })
                             }}
                           >
                             <TableCell>{date.toLocaleDateString()}</TableCell>
