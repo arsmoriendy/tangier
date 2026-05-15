@@ -46,20 +46,22 @@ export async function updateTransaction({
   transactionItems: items,
   id,
   ...transaction
-}: Omit<TransactionWithRelations, "createdAt">) {
+}: Partial<Omit<TransactionWithRelations, "createdAt">> & { id: string }) {
   return await db.transaction(async (trx) => {
     await trx
       .update(transactions)
       .set(transaction)
       .where(eq(transactions.id, id))
 
-    await trx
-      .delete(transactionItems)
-      .where(eq(transactionItems.transaction, id))
+    if (items) {
+      await trx
+        .delete(transactionItems)
+        .where(eq(transactionItems.transaction, id))
 
-    await trx
-      .insert(transactionItems)
-      .values(items.map((i) => ({ ...i, transaction: id })))
+      await trx
+        .insert(transactionItems)
+        .values(items.map((i) => ({ ...i, transaction: id })))
+    }
   })
 }
 
@@ -70,8 +72,9 @@ export async function readTransaction(id: string) {
   })
 }
 
-export type TransactionWithRelations = NonNullable<
-  Awaited<ReturnType<typeof readTransaction>>
+export type TransactionWithRelations = PartialKey<
+  NonNullable<Awaited<ReturnType<typeof readTransaction>>>,
+  "held"
 >
 
 export async function listTransactions({
@@ -80,12 +83,14 @@ export async function listTransactions({
   from = new Date(to.getTime() - 3_600_000 * 3),
   offset = 0,
   limit = 10,
+  held = false,
 }: {
   id?: string
   from?: Date
   to?: Date
   offset?: number
   limit?: number
+  held?: boolean
 } = {}) {
   return await db.query.transactions.findMany({
     offset,
@@ -93,7 +98,8 @@ export async function listTransactions({
     where: and(
       ilike(sql`${transactions.id}::text`, `%${id}%`),
       gte(transactions.createdAt, from.toUTCString()),
-      lte(transactions.createdAt, to.toUTCString())
+      lte(transactions.createdAt, to.toUTCString()),
+      eq(transactions.held, held)
     ),
     with: { transactionItems: { columns: { transaction: false } } },
     orderBy: [desc(transactions.createdAt), asc(transactions.id)],

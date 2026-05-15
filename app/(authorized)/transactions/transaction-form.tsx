@@ -2,7 +2,9 @@
 
 import { Form, useAppForm } from "@/components/form"
 import {
+  ClockCountdownIcon,
   DotsSixVerticalIcon,
+  HandIcon,
   PrinterIcon,
   TrashIcon,
 } from "@phosphor-icons/react"
@@ -41,13 +43,24 @@ import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useSession } from "@/contexts/session-ctx"
 import { toast } from "sonner"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { useHeld } from "./held-ctx"
+import { Badge } from "@/components/ui/badge"
+import { useState } from "react"
 
 export default function TransactionForm(props: {
   transaction?: DeepReadonly<TransactionWithRelations>
   onUpdate?: (trx: TransactionWithRelations) => any
 }) {
   const session = useSession()
+  const { setHeld, getHeld } = useHeld()
   const { getLocalStorage, setLocalStorage } = useLocalStorage()
+  const [openRecallDialog, setOpenRecallDialog] = useState(false)
   const form = useAppForm({
     defaultValues: props.transaction
       ? ({
@@ -163,26 +176,41 @@ export default function TransactionForm(props: {
       )
   }
 
+  async function hold() {
+    const { transactionItems, ...value } = form.state.values
+    const items = transactionItems.map(
+      ({ extraFields, ...otherFields }) => otherFields
+    )
+
+    const trx = {
+      transactionItems: items,
+      cashier: session.user.name,
+      held: true,
+      ...value,
+    }
+
+    const { id, createdAt } = await createTransaction(trx)
+
+    toast.success("Transaction held", { icon: <HandIcon /> })
+
+    setHeld.push({ id, createdAt, ...trx })
+
+    form.reset()
+  }
+
   return (
-    <div className="space-y-2">
+    <div className="flex h-full flex-col gap-2">
       <AddItemProvider>
         <AddItemForm form={form} />
       </AddItemProvider>
 
-      <FieldSet>
-        <FieldLegend>Transaction details</FieldLegend>
-        <FieldGroup>
-          <Form handleSubmit={form.handleSubmit}>
-            <div className="flex items-end gap-1">
-              <form.AppField name="totalPrice">
-                {(field) => <field.IdrField min={0} label="Total price" />}
-              </form.AppField>
-              <form.AppForm>
-                <form.SubmitButton>
-                  <PrinterIcon /> Save and print
-                </form.SubmitButton>
-              </form.AppForm>
-            </div>
+      <Form
+        handleSubmit={form.handleSubmit}
+        className="relative flex flex-1 flex-col"
+      >
+        <FieldSet className="flex-1">
+          <FieldLegend>Transaction details</FieldLegend>
+          <FieldGroup>
             <form.AppField
               name="transactionItems"
               mode="array"
@@ -385,20 +413,12 @@ export default function TransactionForm(props: {
                           <form.AppField
                             name={`transactionItems[${i}].extraFields.quantifiedPrice`}
                             listeners={{
-                              onChange: ({ value }) => {
-                                const newSellPrice =
-                                  value /
-                                  form.state.values.transactionItems[i].quantity
-
-                                setIdempotentFieldValue(
-                                  `transactionItems[${i}].sellPrice`,
-                                  newSellPrice
-                                )
+                              onChange: () => {
                                 recalculateTotalPrice()
                               },
                             }}
                           >
-                            {(field) => <field.IdrField min={0} />}
+                            {(field) => <field.IdrField min={0} disabled />}
                           </form.AppField>
                         </TableCell>
                         <TableCell className="align-top">
@@ -420,9 +440,105 @@ export default function TransactionForm(props: {
                 </Table>
               )}
             </form.AppField>
-          </Form>
-        </FieldGroup>
-      </FieldSet>
+          </FieldGroup>
+        </FieldSet>
+
+        <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
+          <span className="flex h-8 items-center text-sm">Total price :</span>
+          <form.AppField name="totalPrice">
+            {(field) => <field.IdrField min={0} className="flex-1" />}
+          </form.AppField>
+
+          <form.AppForm>
+            <form.SubmitButton>
+              <PrinterIcon /> Save and print
+            </form.SubmitButton>
+          </form.AppForm>
+
+          <Button
+            type="button"
+            variant="destructive"
+            onClick={() => {
+              form.reset()
+            }}
+          >
+            Reset
+          </Button>
+
+          {!props.transaction && (
+            <>
+              <Button type="button" onClick={hold}>
+                <HandIcon /> Hold
+              </Button>
+
+              <Dialog
+                open={openRecallDialog}
+                onOpenChange={setOpenRecallDialog}
+              >
+                <DialogTrigger asChild>
+                  <Button type="button" disabled={getHeld.length < 1}>
+                    <ClockCountdownIcon />
+                    Recall
+                    <Badge variant="secondary">{getHeld.length}</Badge>
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent>
+                  <DialogTitle>Recall transaction</DialogTitle>
+
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Time</TableHead>
+                        <TableHead>Item count</TableHead>
+                        <TableHead>Total price</TableHead>
+                      </TableRow>
+                    </TableHeader>
+
+                    <TableBody>
+                      {getHeld.map((trx, i) => {
+                        const date = new Date(trx.createdAt)
+                        return (
+                          <TableRow
+                            key={trx.id}
+                            className="cursor-pointer"
+                            onClick={async () => {
+                              setHeld.splice(i, 1)
+
+                              form.setFieldValue(
+                                "transactionItems",
+                                (
+                                  trx.transactionItems as DeepMutable<
+                                    typeof trx.transactionItems
+                                  >
+                                ).map((item) => ({
+                                  ...item,
+                                  extraFields: {
+                                    quantifiedPrice:
+                                      item.quantity * item.sellPrice,
+                                  },
+                                }))
+                              )
+
+                              setOpenRecallDialog(false)
+                            }}
+                          >
+                            <TableCell>{date.toLocaleDateString()}</TableCell>
+                            <TableCell>{date.toLocaleTimeString()}</TableCell>
+                            <TableCell>{trx.transactionItems.length}</TableCell>
+                            <TableCell>{trx.totalPrice}</TableCell>
+                          </TableRow>
+                        )
+                      })}
+                    </TableBody>
+                  </Table>
+                </DialogContent>
+              </Dialog>
+            </>
+          )}
+        </div>
+      </Form>
     </div>
   )
 }

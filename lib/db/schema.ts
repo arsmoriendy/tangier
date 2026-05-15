@@ -137,6 +137,7 @@ export const transactions = pgTable("transactions", {
   cashier: varchar().notNull(),
   totalPrice: numeric("total_price", { mode: "number" }).notNull(),
   customerPriceGroup: varchar("customer_price_group").notNull(),
+  held: boolean().default(false).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

@@ -21,6 +21,7 @@ export const transactionSchema = z.object({
     .min(1),
   totalPrice: z.number().min(0),
   customerPriceGroup: z.string(),
+  held: z.boolean().optional(),
 })
 
 export const defaultTransactionValues: z.infer<typeof transactionSchema> = {

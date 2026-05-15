@@ -27,6 +27,7 @@ import { Item } from "@/components/ui/item"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { cn } from "@/lib/utils"
 import { useSession } from "@/contexts/session-ctx"
+import { Button } from "@/components/ui/button"
 
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
@@ -253,9 +254,24 @@ export const AddItemForm = withForm({
               </FieldSet>
             </div>
 
-            <form.AppForm>
-              <form.SubmitButton>Add item</form.SubmitButton>
-            </form.AppForm>
+            <div className="flex gap-2">
+              <form.AppForm>
+                <form.SubmitButton>Add item</form.SubmitButton>
+              </form.AppForm>
+
+              <Button
+                variant="destructive"
+                type="reset"
+                onClick={() => {
+                  addItemProxy.sellPrices = []
+                  addItemProxy.buyPrices = []
+                  addItemProxy.buyPrice = undefined
+                  form.reset()
+                }}
+              >
+                Reset
+              </Button>
+            </div>
           </Form>
         </FieldSet>
       </>

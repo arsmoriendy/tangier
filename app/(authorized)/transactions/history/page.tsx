@@ -8,6 +8,7 @@ import { listUnits } from "@/lib/crud/units"
 import { listPriceGroups } from "@/lib/crud/price-groups"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
 import { UnitsProvider } from "@/contexts/units-ctx"
+import { HeldProvider } from "../held-ctx"
 
 export default async function Page() {
   const to = new Date()
@@ -25,17 +26,19 @@ export default async function Page() {
         limit: 10,
       }}
     >
-      <TrxProvider initialValue={trxList}>
-        <PriceGroupsProvider priceGroups={priceGroups}>
-          <UnitsProvider units={units}>
-            <div className="space-y-2">
-              <Filters />
-              <TrxList />
-              <TrxPagination />
-            </div>
-          </UnitsProvider>
-        </PriceGroupsProvider>
-      </TrxProvider>
+      <HeldProvider initialValue={[]}>
+        <TrxProvider initialValue={trxList}>
+          <PriceGroupsProvider priceGroups={priceGroups}>
+            <UnitsProvider units={units}>
+              <div className="space-y-2">
+                <Filters />
+                <TrxList />
+                <TrxPagination />
+              </div>
+            </UnitsProvider>
+          </PriceGroupsProvider>
+        </TrxProvider>
+      </HeldProvider>
     </FiltersProvider>
   )
 }
