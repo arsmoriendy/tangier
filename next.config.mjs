@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   optimizePackageImports: ["@phosphor-icons/react"],
-  serverExternalPackages: ["usb"],
+  // serverExternalPackages: ["usb"],
   output: "standalone",
 }
 
