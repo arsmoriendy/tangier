@@ -11,10 +11,10 @@ export function SearchBar() {
     validators: {
       onChange: formSchema,
       onMount: formSchema,
-      onSubmit: async ({ value: { name } }) => {
-        itemFiltersProxy.name = name
-        itemFiltersProxy.offset = 0
-      },
+    },
+    onSubmit: async ({ value: { name } }) => {
+      itemFiltersProxy.name = name
+      itemFiltersProxy.offset = 0
     },
   })
 
