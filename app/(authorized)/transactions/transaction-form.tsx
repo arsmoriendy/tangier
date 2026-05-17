@@ -527,7 +527,7 @@ export default function TransactionForm(props: {
                     </TableHeader>
 
                     <TableBody>
-                      {getHeld.map((trx, i) => {
+                      {getHeld.map((trx) => {
                         const date = new Date(trx.createdAt)
                         return (
                           <TableRow

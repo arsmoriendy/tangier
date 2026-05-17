@@ -3,7 +3,7 @@ import {
   RadioGroupChoiceCard,
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
-import { FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
+import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
 import { subscribeKey } from "valtio/utils"
@@ -15,14 +15,6 @@ import {
 import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
 import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
 import { ScanBarcodeField } from "@/app/(authorized)/transactions/scan-barcode-field"
-import { useUnits } from "@/contexts/units-ctx"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Item } from "@/components/ui/item"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { cn } from "@/lib/utils"
@@ -34,12 +26,11 @@ export const AddItemForm = withForm({
   render: function Render({ form: createTransactionForm }) {
     const session = useSession()
     const { priceGroups } = usePriceGroups()
-    const { units } = useUnits()
     const { addItemProxy, addItemSnap } = useAddItem()
     const { getLocalStorage } = useLocalStorage()
 
     const form = useAppForm({
-      defaultValues: { ...defaultAddItemValues, unit: units[0]?.name },
+      defaultValues: defaultAddItemValues,
       validators: { onMount: addItemSchema, onChange: addItemSchema },
       onSubmit: ({ value: { quantifiedPrice, ...item } }) => {
         createTransactionForm.pushFieldValue("transactionItems", {
@@ -69,51 +60,16 @@ export const AddItemForm = withForm({
     return (
       <>
         <FieldSet>
-          <FieldLegend>Search item</FieldLegend>
-          <SearchItemForm form={form} />
-        </FieldSet>
-
-        <FieldSet>
           <FieldLegend>Scan barcode</FieldLegend>
           <ScanBarcodeField form={form} />
         </FieldSet>
 
-        <FieldSet>
+        <FieldSet className="gap-0">
           <FieldLegend>Add item</FieldLegend>
 
+          <SearchItemForm form={form} />
+
           <Form handleSubmit={form.handleSubmit}>
-            <div className="flex gap-2">
-              <form.AppField name="name">
-                {(field) => <field.TextField label="Name" />}
-              </form.AppField>
-
-              <span className="mt-6 grid h-8 place-items-center">/</span>
-
-              <div className="space-y-2">
-                <FieldLabel>Unit</FieldLabel>
-                <form.Subscribe selector={(f) => f.values.unit}>
-                  {(unit) => (
-                    <Select
-                      value={unit}
-                      onValueChange={(v) => form.setFieldValue("unit", v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue></SelectValue>
-                      </SelectTrigger>
-
-                      <SelectContent position="item-aligned">
-                        {units.map((unit, i) => (
-                          <SelectItem key={i} value={unit.name}>
-                            {unit.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  )}
-                </form.Subscribe>
-              </div>
-            </div>
-
             <createTransactionForm.Subscribe
               selector={(f) => f.values.priceGroup}
             >
@@ -256,6 +212,23 @@ export const AddItemForm = withForm({
                 </form.AppField>
               </FieldSet>
             </div>
+
+            <form.Subscribe selector={(f) => [f.errors]}>
+              {([errors]) =>
+                errors.map((e) =>
+                  e
+                    ? Object.entries(e).map(([k, v], i) => (
+                        <span
+                          className="block text-xs text-destructive"
+                          key={i}
+                        >
+                          {k}: {v.map((v) => v.message).join(", ")}
+                        </span>
+                      ))
+                    : undefined
+                )
+              }
+            </form.Subscribe>
 
             <div className="flex gap-2">
               <form.AppForm>

@@ -2,7 +2,7 @@ import z from "zod"
 
 export const addItemSchema = z.object({
   name: z.string().min(1),
-  unit: z.string(),
+  unit: z.string().min(1),
   buyPrice: z.number().min(0),
   sellPrice: z.number().min(0),
   quantity: z.number().min(1),
