@@ -170,9 +170,7 @@ export const AddItemForm = withForm({
                         ),
                     }}
                   >
-                    {(f) => (
-                      <f.NumberField className="w-24" min={1} tabIndex={1} />
-                    )}
+                    {(f) => <f.NumberField className="w-24" min={1} />}
                   </form.AppField>
                 </div>
 

@@ -67,7 +67,6 @@ export const SearchItemForm = withForm({
           <form.AppField name="name">
             {(field) => (
               <field.TextField
-                tabIndex={2}
                 id="search-item-name"
                 label="Name"
                 onChange={(e) => {
