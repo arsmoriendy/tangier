@@ -8,10 +8,9 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Favicon
-2. Combine name and search field
-3. Keyboard shortcuts
-4. Delete dialogs
+1. Combine name and search field
+2. Keyboard shortcuts
+3. Delete dialogs
 
 ###### Backlog
 
