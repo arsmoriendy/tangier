@@ -10,6 +10,7 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 1. Keyboard shortcuts
 2. Delete dialogs
+3. Localization
 
 ###### Backlog
 
@@ -20,3 +21,4 @@ Run with the bun runtime, e.g. `bun -b dev`
 5. group transaction items based on new category column
 6. backup and restore
 7. export and import
+8. Keep focus on barcode, auto add
