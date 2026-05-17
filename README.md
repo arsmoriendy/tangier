@@ -11,7 +11,6 @@ Run with the bun runtime, e.g. `bun -b dev`
 1. Keyboard shortcuts
 2. Delete dialogs
 3. Localization
-4. Toaster / sonner close button
 
 ###### Backlog
 
