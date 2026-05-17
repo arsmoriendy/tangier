@@ -19,11 +19,13 @@ import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { useSession } from "@/contexts/session-ctx"
 import { authClient } from "@/lib/auth-client"
 import { SignOutIcon, TrashIcon, UserCircleIcon } from "@phosphor-icons/react"
+import { useTranslations } from "next-intl"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
 
 export function UserSidebarItem() {
   const session = useSession()
+  const t = useTranslations("Sidebar.account")
   return (
     <SidebarMenuItem>
       <DropdownMenu>
@@ -34,7 +36,7 @@ export function UserSidebarItem() {
             </div>
             <div className="space-y-0.5">
               <small className="block text-muted-foreground">
-                Signed in as
+                {t("header")}
               </small>
               <span>{session.user.name}</span>
             </div>
@@ -46,17 +48,17 @@ export function UserSidebarItem() {
           className="relative left-2 min-w-3xs"
         >
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Manage account</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("title")}</DropdownMenuLabel>
 
             <Dialog>
               <DialogTrigger asChild>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  Change username
+                  {t("changeUsername.title")}
                 </DropdownMenuItem>
               </DialogTrigger>
 
               <DialogContent>
-                <DialogTitle>Change username</DialogTitle>
+                <DialogTitle>{t("changeUsername.title")}</DialogTitle>
                 <ChangeUsernameForm />
               </DialogContent>
             </Dialog>
@@ -64,12 +66,12 @@ export function UserSidebarItem() {
             <Dialog>
               <DialogTrigger asChild>
                 <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                  Change password
+                  {t("changePassword.title")}
                 </DropdownMenuItem>
               </DialogTrigger>
 
               <DialogContent>
-                <DialogTitle>Change password</DialogTitle>
+                <DialogTitle>{t("changePassword.title")}</DialogTitle>
                 <ChangePasswordForm />
               </DialogContent>
             </Dialog>
@@ -84,7 +86,7 @@ export function UserSidebarItem() {
               }}
             >
               <SignOutIcon />
-              Sign out
+              {t("signOut")}
             </DropdownMenuItem>
 
             <DropdownMenuItem
@@ -99,7 +101,7 @@ export function UserSidebarItem() {
               }}
             >
               <TrashIcon />
-              Delete account
+              {t("deleteAccount")}
             </DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>

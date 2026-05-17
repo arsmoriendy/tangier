@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { DesktopIcon, MoonIcon, SunIcon } from "@phosphor-icons/react"
-import { capitalize } from "es-toolkit"
+import { useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
 import { ReactNode, useEffect, useState } from "react"
 
@@ -21,6 +21,7 @@ export function ThemeSidebarItem() {
     system: <DesktopIcon />,
     dark: <MoonIcon />,
   }
+  const t = useTranslations("Sidebar.theme")
 
   useEffect(() => {
     setMounted(true)
@@ -33,7 +34,7 @@ export function ThemeSidebarItem() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <SidebarMenuButton>
-            {themeIconMap[theme ?? ""] ?? <DesktopIcon />} Theme
+            {themeIconMap[theme ?? ""] ?? <DesktopIcon />} {t("title")}
           </SidebarMenuButton>
         </DropdownMenuTrigger>
 
@@ -43,11 +44,11 @@ export function ThemeSidebarItem() {
           className="relative left-2"
         >
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Theme</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("title")}</DropdownMenuLabel>
             <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
               {Object.entries(themeIconMap).map(([theme, icon], i) => (
                 <DropdownMenuRadioItem key={i} value={theme}>
-                  {icon} {capitalize(theme)}
+                  {icon} {t(theme)}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>

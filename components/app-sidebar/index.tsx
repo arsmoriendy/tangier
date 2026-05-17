@@ -25,10 +25,12 @@ import {
   BarcodeIcon,
   TagIcon,
 } from "@phosphor-icons/react/ssr"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 
 export function AppSidebar() {
   const session = useSession()
+  const t = useTranslations("Sidebar")
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -43,7 +45,7 @@ export function AppSidebar() {
                   <SidebarMenuButton asChild {...props}>
                     <Link href="/transactions/new">
                       <BasketIcon />
-                      Transactions
+                      {t("transactions.title")}
                     </Link>
                   </SidebarMenuButton>
 
@@ -51,14 +53,14 @@ export function AppSidebar() {
                     <DynamicSidebarLink href="/transactions/new">
                       {({ href, ...props }) => (
                         <SidebarMenuSubButton asChild {...props}>
-                          <Link href={href}>New</Link>
+                          <Link href={href}>{t("transactions.new")}</Link>
                         </SidebarMenuSubButton>
                       )}
                     </DynamicSidebarLink>
                     <DynamicSidebarLink href="/transactions/history">
                       {({ href, ...props }) => (
                         <SidebarMenuSubButton asChild {...props}>
-                          <Link href={href}>History</Link>
+                          <Link href={href}>{t("transactions.history")}</Link>
                         </SidebarMenuSubButton>
                       )}
                     </DynamicSidebarLink>
@@ -74,7 +76,7 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild {...props}>
                       <Link href={href}>
                         <PackageIcon />
-                        Items
+                        {t("items")}
                       </Link>
                     </SidebarMenuButton>
                   )}
@@ -85,7 +87,7 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild {...props}>
                       <Link href={href!}>
                         <TagIcon />
-                        Units
+                        {t("units")}
                       </Link>
                     </SidebarMenuButton>
                   )}
@@ -96,7 +98,7 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild {...props}>
                       <Link href={href!}>
                         <MoneyIcon />
-                        Price groups
+                        {t("priceGroups")}
                       </Link>
                     </SidebarMenuButton>
                   )}
@@ -107,7 +109,7 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild {...props}>
                       <Link href={href!}>
                         <BarcodeIcon />
-                        Barcode groups
+                        {t("barcodeGroups")}
                       </Link>
                     </SidebarMenuButton>
                   )}
@@ -118,7 +120,7 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild {...props}>
                       <Link href={href!}>
                         <UsersIcon />
-                        Users
+                        {t("users")}
                       </Link>
                     </SidebarMenuButton>
                   )}

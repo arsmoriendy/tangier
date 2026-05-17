@@ -1,1 +1,37 @@
-{}
+{
+  "Sidebar": {
+    "transactions": {
+      "title": "Transactions",
+      "new": "New",
+      "history": "History"
+    },
+    "items": "Items",
+    "units": "Units",
+    "priceGroups": "Price groups",
+    "barcodeGroups": "Barcode groups",
+    "users": "Users",
+    "theme": {
+      "title": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "account": {
+      "header": "Signed in as",
+      "title": "Manage account",
+      "changeUsername": {
+        "title": "Change username",
+        "newUsername": "New username"
+      },
+      "changePassword": {
+        "title": "Change password",
+        "currentPassword": "Current password",
+        "newPassword": "New password",
+        "confirmPassword": "Confirm new password",
+        "errors": { "passwordMatch": "Passwords don't match" }
+      },
+      "signOut": "Sign out",
+      "deleteAccount": "Delete account"
+    }
+  }
+}

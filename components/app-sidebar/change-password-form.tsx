@@ -2,6 +2,7 @@
 
 import { Form, useAppForm } from "@/components/form"
 import { authClient } from "@/lib/auth-client"
+import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 import z from "zod"
 
@@ -31,16 +32,17 @@ export function ChangePasswordForm() {
       toast.success("Password changed")
     },
   })
+  const t = useTranslations("Sidebar.account.changePassword")
 
   return (
     <Form handleSubmit={form.handleSubmit}>
       <form.AppForm>
         <form.AppField name="currentPassword">
-          {(f) => <f.TextField label="Current password" type="password" />}
+          {(f) => <f.TextField label={t("currentPassword")} type="password" />}
         </form.AppField>
 
         <form.AppField name="newPassword">
-          {(f) => <f.TextField label="New password" type="password" />}
+          {(f) => <f.TextField label={t("newPassword")} type="password" />}
         </form.AppField>
 
         <form.AppField
@@ -49,14 +51,14 @@ export function ChangePasswordForm() {
             onChangeListenTo: ["newPassword"],
             onChange: ({ value, fieldApi }) => {
               if (value !== fieldApi.form.getFieldValue("newPassword"))
-                return { message: "Passwords don't match" }
+                return { message: t("errors.passwordMatch") }
             },
           }}
         >
-          {(f) => <f.TextField label="Confirm new password" type="password" />}
+          {(f) => <f.TextField label={t("confirmPassword")} type="password" />}
         </form.AppField>
 
-        <form.SubmitButton>Change username</form.SubmitButton>
+        <form.SubmitButton>{t("title")}</form.SubmitButton>
       </form.AppForm>
     </Form>
   )
