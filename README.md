@@ -8,11 +8,10 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Unactivated sign out and home redirect
-2. Favicon
-3. Combine name and search field
-4. Keyboard shortcuts
-5. Delete dialogs
+1. Favicon
+2. Combine name and search field
+3. Keyboard shortcuts
+4. Delete dialogs
 
 ###### Backlog
 
