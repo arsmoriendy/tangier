@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/sonner"
 import { LocalStorageProvider } from "@/contexts/local-storage-ctx"
 import { I18nProvider } from "@/components/ui/i18n-provider"
+import { NextIntlClientProvider } from "next-intl"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -39,8 +40,12 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <LocalStorageProvider>
-            <I18nProvider locale="en-ID">{children}</I18nProvider>
-            <Toaster />
+            <NextIntlClientProvider>
+              <I18nProvider>
+                {children}
+                <Toaster />
+              </I18nProvider>
+            </NextIntlClientProvider>
           </LocalStorageProvider>
         </ThemeProvider>
       </body>
