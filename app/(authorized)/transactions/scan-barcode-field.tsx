@@ -29,6 +29,7 @@ export const ScanBarcodeField = withForm({
             if (!res) {
               setError("No items with specified barcode")
               setLoading(false)
+              setBarcode("")
               return
             }
             setError(undefined)
