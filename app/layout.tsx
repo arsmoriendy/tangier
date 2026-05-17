@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { LocalStorageProvider } from "@/contexts/local-storage-ctx"
 import { I18nProvider } from "@/components/ui/i18n-provider"
 import { NextIntlClientProvider } from "next-intl"
+import { ZodConfig } from "@/lib/zod-config"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -42,8 +43,10 @@ export default function RootLayout({
           <LocalStorageProvider>
             <NextIntlClientProvider>
               <I18nProvider>
-                {children}
-                <Toaster />
+                <ZodConfig>
+                  {children}
+                  <Toaster />
+                </ZodConfig>
               </I18nProvider>
             </NextIntlClientProvider>
           </LocalStorageProvider>
