@@ -77,6 +77,10 @@ export type TransactionWithRelations = PartialKey<
   "held"
 >
 
+export async function deleteTransaction(id: string) {
+  await db.delete(transactions).where(eq(transactions.id, id))
+}
+
 export async function listTransactions({
   id = "",
   to = new Date(),

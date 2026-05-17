@@ -26,6 +26,7 @@ import {
 } from "@/components/ui/field"
 import {
   createTransaction,
+  deleteTransaction,
   listTransactions,
   TransactionWithRelations,
   updateTransaction,
@@ -121,6 +122,7 @@ export default function TransactionForm(props: {
         })
       }
 
+      // TODO: account for recalled trx
       var id: string
       var createdAt: string
       if (props.transaction !== undefined) {
@@ -513,7 +515,7 @@ export default function TransactionForm(props: {
                 open={openRecallDialog}
                 onOpenChange={setOpenRecallDialog}
               >
-                <DialogContent>
+                <DialogContent className="sm:max-w-2xl">
                   <DialogTitle>Recall transaction</DialogTitle>
 
                   <Table>
@@ -521,13 +523,15 @@ export default function TransactionForm(props: {
                       <TableRow>
                         <TableHead>Date</TableHead>
                         <TableHead>Time</TableHead>
+                        <TableHead>Customer</TableHead>
                         <TableHead>Item count</TableHead>
                         <TableHead>Total price</TableHead>
+                        <TableHead>Delete</TableHead>
                       </TableRow>
                     </TableHeader>
 
                     <TableBody>
-                      {getHeld.map((trx) => {
+                      {getHeld.map((trx, i) => {
                         const date = new Date(trx.createdAt)
                         return (
                           <TableRow
@@ -559,17 +563,33 @@ export default function TransactionForm(props: {
                               )
 
                               setOpenRecallDialog(false)
-
-                              await updateTransaction({
-                                id: trx.id,
-                                held: false,
-                              })
                             }}
                           >
                             <TableCell>{date.toLocaleDateString()}</TableCell>
                             <TableCell>{date.toLocaleTimeString()}</TableCell>
+                            <TableCell>{trx.customerPriceGroup}</TableCell>
                             <TableCell>{trx.transactionItems.length}</TableCell>
-                            <TableCell>{trx.totalPrice}</TableCell>
+                            <TableCell>
+                              {formatCurrency(trx.totalPrice)}
+                            </TableCell>
+                            <TableCell>
+                              <Button
+                                className="cursor-pointer"
+                                variant="destructive"
+                                size="icon"
+                                onClick={async (e) => {
+                                  e.stopPropagation()
+                                  if (trx.id === recalledTrx?.id) {
+                                    setRecalledTrx(undefined)
+                                    form.reset()
+                                  }
+                                  await deleteTransaction(trx.id)
+                                  setHeld.splice(i, 1)
+                                }}
+                              >
+                                <TrashIcon />
+                              </Button>
+                            </TableCell>
                           </TableRow>
                         )
                       })}
