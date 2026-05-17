@@ -10,6 +10,10 @@
     "priceGroups": "Price groups",
     "barcodeGroups": "Barcode groups",
     "users": "Users",
+    "language": {
+      "title": "Language",
+      "header": "Choose language"
+    },
     "theme": {
       "title": "Theme",
       "light": "Light",

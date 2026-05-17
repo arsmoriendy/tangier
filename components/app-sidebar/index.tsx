@@ -27,6 +27,7 @@ import {
 } from "@phosphor-icons/react/ssr"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
+import { LanguageSidebarItem } from "./language-sidebar-item"
 
 export function AppSidebar() {
   const session = useSession()
@@ -132,6 +133,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenu className="gap-2">
+          <LanguageSidebarItem />
           <ThemeSidebarItem />
           <hr />
           <UserSidebarItem />
