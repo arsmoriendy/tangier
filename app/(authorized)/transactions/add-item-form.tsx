@@ -59,17 +59,14 @@ export const AddItemForm = withForm({
 
     return (
       <>
-        <FieldSet>
-          <FieldLegend>Scan barcode</FieldLegend>
-          <ScanBarcodeField form={form} />
-        </FieldSet>
-
         <FieldSet className="gap-0">
           <FieldLegend>Add item</FieldLegend>
 
           <SearchItemForm form={form} />
 
-          <Form handleSubmit={form.handleSubmit}>
+          <ScanBarcodeField form={form} />
+
+          <Form className="mt-2" handleSubmit={form.handleSubmit}>
             <createTransactionForm.Subscribe
               selector={(f) => f.values.priceGroup}
             >

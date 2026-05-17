@@ -3,7 +3,7 @@
 import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
 import { defaultAddItemValues } from "@/app/(authorized)/transactions/add-item-schema"
 import { withForm } from "@/components/form"
-import { FieldError } from "@/components/ui/field"
+import { FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { readBarcode } from "@/lib/crud/barcodes"
 import { useState } from "react"
@@ -18,6 +18,7 @@ export const ScanBarcodeField = withForm({
 
     return (
       <div className="space-y-2">
+        <FieldLabel>Scan barcode</FieldLabel>
         <Input
           aria-invalid={error ? "true" : "false"}
           value={barcode}
