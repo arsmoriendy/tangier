@@ -32,6 +32,9 @@ export default function RootLayout({
         jetbrainsMono.variable
       )}
     >
+      <head>
+        <title>Tangier</title>
+      </head>
       <body>
         <ThemeProvider>
           <LocalStorageProvider>
