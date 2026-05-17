@@ -36,9 +36,14 @@ export const ScanBarcodeField = withForm({
             setBarcode("")
 
             const { item } = res
+            const buyPrice = item.buyPrices.at(item.buyPrices.length - 1)
+
             form.setFieldValue("name", item.name)
             form.setFieldValue("unit", item.unit.name)
+            form.setFieldValue("buyPrice", buyPrice?.price ?? 0)
             addItemProxy.sellPrices = item.sellPrices
+            addItemProxy.buyPrices = item.buyPrices
+            addItemProxy.buyPrice = buyPrice
           }}
         />
         {error && <FieldError>{error}</FieldError>}
