@@ -122,15 +122,14 @@ export default function TransactionForm(props: {
         })
       }
 
-      // TODO: account for recalled trx
       var id: string
       var createdAt: string
-      if (props.transaction !== undefined) {
-        id = props.transaction.id
-        createdAt = props.transaction.createdAt
+      if (props.transaction !== undefined || recalledTrx !== undefined) {
+        id = props.transaction?.id ?? recalledTrx!.id
+        createdAt = props.transaction?.createdAt ?? recalledTrx!.createdAt
 
         await updateTransaction({
-          id: props.transaction.id,
+          id,
           ...trx,
         })
 
