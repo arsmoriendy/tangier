@@ -34,6 +34,7 @@ export default function RootLayout({
     >
       <head>
         <title>Tangier</title>
+        <link rel="icon" href="/icon.svg" />
       </head>
       <body>
         <ThemeProvider>
