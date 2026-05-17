@@ -9,8 +9,8 @@ import z from "zod"
 export function ChangePasswordForm() {
   const schema = z.object({
     currentPassword: z.string(),
-    newPassword: z.string().min(8),
-    confirmNewPassword: z.string().min(8),
+    newPassword: z.string().min(3),
+    confirmNewPassword: z.string().min(3),
   })
   const form = useAppForm({
     defaultValues: {
