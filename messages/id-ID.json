@@ -1,0 +1,41 @@
+{
+  "Sidebar": {
+    "transactions": {
+      "title": "Transaksi",
+      "new": "Baru",
+      "history": "Riwayat"
+    },
+    "items": "Barang",
+    "units": "Satuan",
+    "priceGroups": "Kelompok harga",
+    "barcodeGroups": "Kelompok barcode",
+    "users": "Pengguna",
+    "language": {
+      "title": "Bahasa",
+      "header": "Pilih bahasa"
+    },
+    "theme": {
+      "title": "Tema",
+      "light": "Terang",
+      "dark": "Gelap",
+      "system": "Sistem"
+    },
+    "account": {
+      "header": "Masuk sebagai",
+      "title": "Kelola akun",
+      "changeUsername": {
+        "title": "Ganti nama pengguna",
+        "newUsername": "Nama pengguna baru"
+      },
+      "changePassword": {
+        "title": "Ganti kata sandi",
+        "currentPassword": "Kata sandi sekarang",
+        "newPassword": "Kata sandi baru",
+        "confirmPassword": "Konfirmasi kata sandi baru",
+        "errors": { "passwordMatch": "Kata sandi tidak cocok" }
+      },
+      "signOut": "Keluar",
+      "deleteAccount": "Hapus akun"
+    }
+  }
+}
