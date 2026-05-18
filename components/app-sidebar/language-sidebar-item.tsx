@@ -15,7 +15,7 @@ import { useLocale, useTranslations } from "next-intl"
 import { setLocale } from "@/lib/set-locale"
 
 export function LanguageSidebarItem() {
-  const t = useTranslations("Sidebar.language")
+  const t = useTranslations("sidebar.language")
   const locale = useLocale()
   const localeMap = { "id-ID": "Bahasa Indonesia", "en-ID": "English" }
 

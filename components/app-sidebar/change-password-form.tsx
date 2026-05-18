@@ -32,7 +32,7 @@ export function ChangePasswordForm() {
       toast.success("Password changed")
     },
   })
-  const t = useTranslations("Sidebar.account.changePassword")
+  const t = useTranslations("sidebar.account.changePassword")
 
   return (
     <Form handleSubmit={form.handleSubmit}>

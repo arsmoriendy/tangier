@@ -25,7 +25,7 @@ import { toast } from "sonner"
 
 export function UserSidebarItem() {
   const session = useSession()
-  const t = useTranslations("Sidebar.account")
+  const t = useTranslations("sidebar.account")
   return (
     <SidebarMenuItem>
       <DropdownMenu>

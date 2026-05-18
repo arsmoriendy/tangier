@@ -31,7 +31,7 @@ import { LanguageSidebarItem } from "./language-sidebar-item"
 
 export function AppSidebar() {
   const session = useSession()
-  const t = useTranslations("Sidebar")
+  const t = useTranslations("sidebar")
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>

@@ -21,7 +21,7 @@ export function ThemeSidebarItem() {
     system: <DesktopIcon />,
     dark: <MoonIcon />,
   }
-  const t = useTranslations("Sidebar.theme")
+  const t = useTranslations("sidebar.theme")
 
   useEffect(() => {
     setMounted(true)

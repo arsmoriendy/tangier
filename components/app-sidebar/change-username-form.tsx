@@ -35,7 +35,7 @@ export function ChangeUsernameForm() {
       window.location.reload()
     },
   })
-  const t = useTranslations("Sidebar.account.changeUsername")
+  const t = useTranslations("sidebar.account.changeUsername")
 
   return (
     <Form handleSubmit={form.handleSubmit}>
