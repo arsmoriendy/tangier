@@ -8,9 +8,8 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Keyboard shortcuts
-2. Delete dialogs
-3. Localization
+1. Localization
+2. Remove / replace qty threshold
 
 ###### Backlog
 
@@ -22,3 +21,5 @@ Run with the bun runtime, e.g. `bun -b dev`
 6. backup and restore
 7. export and import
 8. Keep focus on barcode, auto add
+9. Keyboard shortcuts
+10. Delete dialogs
