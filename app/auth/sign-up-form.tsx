@@ -5,6 +5,7 @@ import { Form, useAppForm } from "@/components/form"
 import { FieldError } from "@/components/ui/field"
 import { authClient } from "@/lib/auth-client"
 import { kebabCase } from "es-toolkit"
+import { useTranslations } from "next-intl"
 import { redirect } from "next/navigation"
 import { useState } from "react"
 import z from "zod"
@@ -22,6 +23,8 @@ const registerDefaultValues: z.infer<typeof registerSchema> = {
 }
 
 export function SignUpForm() {
+  const t = useTranslations("auth")
+  const tc = useTranslations("common")
   const form = useAppForm({
     defaultValues: registerDefaultValues,
     validators: { onMount: registerSchema, onChange: registerSchema },
@@ -52,14 +55,14 @@ export function SignUpForm() {
         <form.AppField name="username">
           {(f) => (
             <f.TextField
-              label="Username"
+              label={tc("username")}
               onChange={(e) => (e.target.value = kebabCase(e.target.value))}
             />
           )}
         </form.AppField>
 
         <form.AppField name="password">
-          {(f) => <f.TextField type="password" label="Password" />}
+          {(f) => <f.TextField type="password" label={tc("password")} />}
         </form.AppField>
 
         <form.AppField
@@ -68,14 +71,14 @@ export function SignUpForm() {
             onChangeListenTo: ["password"],
             onChange: ({ value, fieldApi }) => {
               if (value !== fieldApi.form.getFieldValue("password"))
-                return { message: "Passwords don't match" }
+                return { message: t("errors.passwordMatch") }
             },
           }}
         >
-          {(f) => <f.TextField type="password" label="Confirm password" />}
+          {(f) => <f.TextField type="password" label={t("confirmPassword")} />}
         </form.AppField>
 
-        <form.SubmitButton>Sign up</form.SubmitButton>
+        <form.SubmitButton>{t("signUp")}</form.SubmitButton>
 
         {formError && <FieldError>{formError}</FieldError>}
       </form.AppForm>

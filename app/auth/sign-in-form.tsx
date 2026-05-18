@@ -5,6 +5,7 @@ import { Form, useAppForm } from "@/components/form"
 import { FieldError } from "@/components/ui/field"
 import { authClient } from "@/lib/auth-client"
 import { kebabCase } from "es-toolkit"
+import { useTranslations } from "next-intl"
 import { redirect } from "next/navigation"
 import { useState } from "react"
 import z from "zod"
@@ -20,6 +21,8 @@ const registerDefaultValues: z.infer<typeof registerSchema> = {
 }
 
 export function SignInForm() {
+  const t = useTranslations("auth")
+  const tc = useTranslations("common")
   const form = useAppForm({
     defaultValues: registerDefaultValues,
     validators: { onMount: registerSchema, onChange: registerSchema },
@@ -49,17 +52,17 @@ export function SignInForm() {
         <form.AppField name="username">
           {(f) => (
             <f.TextField
-              label="Username"
+              label={tc("username")}
               onChange={(e) => (e.target.value = kebabCase(e.target.value))}
             />
           )}
         </form.AppField>
 
         <form.AppField name="password">
-          {(f) => <f.TextField type="password" label="Password" />}
+          {(f) => <f.TextField type="password" label={tc("password")} />}
         </form.AppField>
 
-        <form.SubmitButton>Sign in</form.SubmitButton>
+        <form.SubmitButton>{t("signIn")}</form.SubmitButton>
 
         {formError && <FieldError>{formError}</FieldError>}
       </form.AppForm>

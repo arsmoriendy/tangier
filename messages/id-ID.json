@@ -3,16 +3,18 @@
     "reset": "Reset",
     "name": "Nama",
     "unit": "Satuan",
-    "buyPrice": "Harga beli",
-    "sellPrice": "Harga jual",
     "buyPrices": "Harga beli",
     "sellPrices": "Harga jual",
+    "buyPrice": "Harga beli",
+    "sellPrice": "Harga jual",
     "quantifiedPrice": "Harga terkuantifikasi",
     "stockLeft": "Tersisa {count}",
     "margin": "Margin",
     "discountPerc": "Diskon {perc}%",
     "totalPrice": "Total harga",
-    "id": "Id"
+    "id": "Id",
+    "username": "Nama pengguna",
+    "password": "Kata sandi"
   },
   "sidebar": {
     "transactions": {
@@ -181,6 +183,18 @@
     "toast": {
       "updated": "Pengguna diperbarui",
       "deleted": "Pengguna dihapus"
+    }
+  },
+  "auth": {
+    "signIn": "Masuk",
+    "signUp": "Daftar",
+    "confirmPassword": "Konfirmasi kata sandi",
+    "errors": {
+      "passwordMatch": "Kata sandi tidak cocok"
+    },
+    "inactive": {
+      "message": "Mohon tunggu administrator untuk mengaktifkan akun Anda",
+      "refresh": "Coba lagi"
     }
   }
 }

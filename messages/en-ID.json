@@ -12,7 +12,9 @@
     "margin": "Margin",
     "discountPerc": "{perc}% discount",
     "totalPrice": "Total price",
-    "id": "Id"
+    "id": "Id",
+    "username": "Username",
+    "password": "Password"
   },
   "sidebar": {
     "transactions": {
@@ -179,6 +181,18 @@
     "toast": {
       "updated": "User updated",
       "deleted": "User deleted"
+    }
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "confirmPassword": "Confirm password",
+    "errors": {
+      "passwordMatch": "Passwords don't match"
+    },
+    "inactive": {
+      "message": "Please wait for an administrator to activate your account",
+      "refresh": "Refresh"
     }
   }
 }
