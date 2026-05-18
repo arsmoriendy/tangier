@@ -3,6 +3,8 @@
     "reset": "Reset",
     "name": "Name",
     "unit": "Unit",
+    "buyPrices": "Buy prices",
+    "sellPrices": "Sell prices",
     "buyPrice": "Buy price",
     "sellPrice": "Sell price",
     "quantifiedPrice": "Quantified price",
@@ -88,6 +90,9 @@
   "items": {
     "createNew": "Create new item",
     "form": {
+      "barcodes": "Barcodes",
+      "addBuyPrice": "Add buy price",
+      "pruneEmptyStockPrices": "Prune empty stock prices",
       "create": "Create item",
       "update": "Update item",
       "delete": "Delete item"

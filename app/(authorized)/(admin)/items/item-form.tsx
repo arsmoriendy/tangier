@@ -126,7 +126,7 @@ export default function ItemForm(props: {
 
       <div className="flex gap-2">
         <FieldSet className="flex-1">
-          <FieldLegend>{t("form.buyPrices")}</FieldLegend>
+          <FieldLegend>{tc("buyPrices")}</FieldLegend>
 
           <form.Subscribe selector={(f) => f.values.buyPrices}>
             {(buyPrices) => (
@@ -220,7 +220,7 @@ export default function ItemForm(props: {
         </FieldSet>
 
         <FieldSet className="flex-1">
-          <FieldLegend>{t("form.sellPrices")}</FieldLegend>
+          <FieldLegend>{tc("sellPrices")}</FieldLegend>
           {priceGroups.map(({ id, name, hexColor }, i) => (
             <div key={i}>
               <form.Field name={`sellPrices[${i}].priceGroup`}>

@@ -5,6 +5,8 @@
     "unit": "Satuan",
     "buyPrice": "Harga beli",
     "sellPrice": "Harga jual",
+    "buyPrices": "Harga beli",
+    "sellPrices": "Harga jual",
     "quantifiedPrice": "Harga terkuantifikasi",
     "stockLeft": "Tersisa {count}",
     "margin": "Margin",
@@ -90,8 +92,6 @@
   "items": {
     "createNew": "Buat barang baru",
     "form": {
-      "buyPrices": "Harga beli",
-      "sellPrices": "Harga jual",
       "barcodes": "Barcode",
       "addBuyPrice": "Tambah harga beli",
       "pruneEmptyStockPrices": "Hapus harga stok kosong",
