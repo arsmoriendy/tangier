@@ -8,8 +8,7 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Remove / replace qty threshold
-2. UUID v7
+1. UUID v7
 
 ###### Backlog
 

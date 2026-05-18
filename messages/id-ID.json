@@ -16,7 +16,8 @@
     "username": "Nama pengguna",
     "password": "Kata sandi",
     "next": "Berikutnya",
-    "previous": "Sebelumnya"
+    "previous": "Sebelumnya",
+    "priority": "Prioritas"
   },
   "sidebar": {
     "transactions": {
@@ -136,7 +137,6 @@
   "priceGroups": {
     "createNew": "Buat kelompok harga baru",
     "form": {
-      "quantityThreshold": "Min qty",
       "color": "Warna",
       "description": "Deskripsi",
       "create": "Buat kelompok harga",
@@ -146,7 +146,6 @@
     },
     "table": {
       "name": "Nama",
-      "quantityThreshold": "Min qty",
       "color": "Warna",
       "description": "Deskripsi",
       "priceGroupList": "Daftar kelompok harga"

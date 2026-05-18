@@ -13,7 +13,7 @@ import { getRandomColor } from "./price-group-colors"
 const createPriceGroupFormSchema = z.object({
   name: z.string().min(1),
   description: z.string().optional(),
-  quantityThreshold: z.number().min(0),
+  priority: z.number().min(0),
   hexColor: z.string().min(3).max(6),
 })
 
@@ -24,7 +24,7 @@ export default function CreatePriceGroupForm() {
   const defaultValues: z.infer<typeof createPriceGroupFormSchema> = {
     name: "",
     hexColor: "",
-    quantityThreshold: 0,
+    priority: 0,
     description: "",
   }
 
@@ -57,13 +57,9 @@ export default function CreatePriceGroupForm() {
             children={(f) => <f.TextField label={ct("name")} />}
           />
 
-          <form.AppField name="quantityThreshold">
+          <form.AppField name="priority">
             {(f) => (
-              <f.NumberField
-                className="w-18"
-                label={t("form.quantityThreshold")}
-                min={0}
-              />
+              <f.NumberField className="w-18" label={ct("priority")} min={0} />
             )}
           </form.AppField>
 

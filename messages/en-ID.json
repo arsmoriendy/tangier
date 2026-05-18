@@ -16,7 +16,8 @@
     "username": "Username",
     "password": "Password",
     "next": "Next",
-    "previous": "Previous"
+    "previous": "Previous",
+    "priority": "Priority"
   },
   "sidebar": {
     "transactions": {
@@ -134,7 +135,6 @@
   "priceGroups": {
     "createNew": "Create new price group",
     "form": {
-      "quantityThreshold": "Min qty",
       "color": "Color",
       "description": "Description",
       "create": "Create price group",
@@ -144,7 +144,6 @@
     },
     "table": {
       "name": "Name",
-      "quantityThreshold": "Min qty",
       "color": "Color",
       "description": "Description",
       "priceGroupList": "Price group list"

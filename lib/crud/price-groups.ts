@@ -23,7 +23,7 @@ export async function deletePriceGroup(id: string) {
 
 export async function listPriceGroups(
   args: Parameters<typeof db.query.priceGroups.findMany>[0] = {
-    orderBy: [asc(priceGroups.quantityThreshold), asc(priceGroups.name)],
+    orderBy: [asc(priceGroups.priority), asc(priceGroups.name)],
   }
 ) {
   return await db.query.priceGroups.findMany(args)

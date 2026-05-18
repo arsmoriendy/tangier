@@ -76,7 +76,7 @@ export const priceGroups = pgTable(
     name: varchar().notNull(),
     hexColor: varchar("hex_color", { length: 6 }).notNull(),
     description: varchar(),
-    quantityThreshold: integer().default(0),
+    priority: integer().default(0),
   },
   (table) => [uniqueIndex("name_index").on(table.name)]
 )

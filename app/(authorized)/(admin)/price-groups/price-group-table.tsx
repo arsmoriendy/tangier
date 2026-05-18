@@ -33,7 +33,7 @@ function PriceGroupRow({
       <DialogTrigger asChild>
         <TableRow className="cursor-pointer">
           <TableCell>{priceGroup.name}</TableCell>
-          <TableCell>{priceGroup.quantityThreshold}</TableCell>
+          <TableCell>{priceGroup.priority}</TableCell>
           <TableCell>
             #{priceGroup.hexColor}
             <div
@@ -59,13 +59,14 @@ function PriceGroupRow({
 export default function PriceGroupTable() {
   const { priceGroups } = usePriceGroups()
   const t = useTranslations("priceGroups")
+  const ct = useTranslations("common")
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>{t("table.name")}</TableHead>
-          <TableHead>{t("table.quantityThreshold")}</TableHead>
+          <TableHead>{ct("priority")}</TableHead>
           <TableHead>{t("table.color")}</TableHead>
           <TableHead>{t("table.description")}</TableHead>
         </TableRow>
