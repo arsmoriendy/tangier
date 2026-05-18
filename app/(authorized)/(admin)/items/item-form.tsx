@@ -19,12 +19,15 @@ import { Button } from "@/components/ui/button"
 import { TrashIcon } from "@phosphor-icons/react"
 import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
+import { useTranslations } from "next-intl"
 
 export default function ItemForm(props: {
   item?: DeepReadonly<ItemWithRelations>
   afterUpdate?: (newItem: ItemWithRelations) => any
   afterDelete?: () => any
 }) {
+  const t = useTranslations("items")
+  const tc = useTranslations("common")
   const { priceGroups } = usePriceGroups()
   const { barcodeGroups } = useBarcodeGroups()
   const { units } = useUnits()
@@ -87,10 +90,10 @@ export default function ItemForm(props: {
       if (props.item) {
         const newItem = await updateItem({ ...value, id: props.item.id })
         props.afterUpdate?.(newItem)
-        toast.success("Item updated")
+        toast.success(t("toast.updated"))
       } else {
         await createItem(value)
-        toast.success("Item created")
+        toast.success(t("toast.created"))
       }
       form.reset()
     },
@@ -99,11 +102,11 @@ export default function ItemForm(props: {
   return (
     <Form handleSubmit={form.handleSubmit}>
       <form.AppField name="name">
-        {(f) => <f.TextField label="Name" />}
+        {(f) => <f.TextField label={tc("name")} />}
       </form.AppField>
 
       <FieldSet className="flex-row flex-wrap gap-2">
-        <FieldLegend>Unit</FieldLegend>
+        <FieldLegend>{tc("unit")}</FieldLegend>
 
         <form.Subscribe selector={(f) => f.values.unit}>
           {(unit) =>
@@ -123,7 +126,7 @@ export default function ItemForm(props: {
 
       <div className="flex gap-2">
         <FieldSet className="flex-1">
-          <FieldLegend>Buy prices</FieldLegend>
+          <FieldLegend>{t("form.buyPrices")}</FieldLegend>
 
           <form.Subscribe selector={(f) => f.values.buyPrices}>
             {(buyPrices) => (
@@ -132,13 +135,13 @@ export default function ItemForm(props: {
                   <div key={i}>
                     <div className="flex items-end gap-2">
                       <form.AppField name={`buyPrices[${i}].price`}>
-                        {(f) => <f.IdrField label="Price" />}
+                        {(f) => <f.IdrField label={tc("buyPrice")} />}
                       </form.AppField>
                       <form.AppField name={`buyPrices[${i}].stock`}>
                         {(f) => (
                           <f.NumberField
                             className="w-24"
-                            label="Stock"
+                            label={tc("stockLeft", { count: 0 })}
                             min={0}
                           />
                         )}
@@ -193,7 +196,7 @@ export default function ItemForm(props: {
                     form.pushFieldValue("buyPrices", { price: 0, stock: 0 })
                   }}
                 >
-                  Add buy price
+                  {t("form.addBuyPrice")}
                 </Button>
 
                 <Button
@@ -209,7 +212,7 @@ export default function ItemForm(props: {
                     )
                   }}
                 >
-                  Prune empty stock prices
+                  {t("form.pruneEmptyStockPrices")}
                 </Button>
               </>
             )}
@@ -217,7 +220,7 @@ export default function ItemForm(props: {
         </FieldSet>
 
         <FieldSet className="flex-1">
-          <FieldLegend>Sell prices</FieldLegend>
+          <FieldLegend>{t("form.sellPrices")}</FieldLegend>
           {priceGroups.map(({ id, name, hexColor }, i) => (
             <div key={i}>
               <form.Field name={`sellPrices[${i}].priceGroup`}>
@@ -239,7 +242,7 @@ export default function ItemForm(props: {
         </FieldSet>
 
         <FieldSet className="flex-1">
-          <FieldLegend>Barcodes</FieldLegend>
+          <FieldLegend>{t("form.barcodes")}</FieldLegend>
           {barcodeGroups.map(({ id, name }, i) => (
             <div key={i}>
               <form.Field name={`barcodes[${i}].barcodeGroup`}>
@@ -256,7 +259,7 @@ export default function ItemForm(props: {
       <div className="flex gap-2">
         <form.AppForm>
           <form.SubmitButton>
-            {props.item ? "Update item" : "Create item"}
+            {props.item ? t("form.update") : t("form.create")}
           </form.SubmitButton>
         </form.AppForm>
 
@@ -266,12 +269,12 @@ export default function ItemForm(props: {
             variant="destructive"
             onClick={async () => {
               await deleteItem({ itemId: props.item!.id })
-              toast.error("Item deleted")
+              toast.error(t("toast.deleted"))
               props.afterDelete?.()
             }}
           >
             <TrashIcon />
-            Delete item
+            {t("form.delete")}
           </Button>
         )}
       </div>

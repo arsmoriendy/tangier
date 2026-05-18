@@ -5,7 +5,6 @@
     "unit": "Satuan",
     "buyPrice": "Harga beli",
     "sellPrice": "Harga jual",
-    "sellPrices": "Harga jual",
     "quantifiedPrice": "Harga terkuantifikasi",
     "stockLeft": "Tersisa {count}",
     "margin": "Margin",
@@ -86,6 +85,32 @@
         "time": "Waktu"
       },
       "updateTransaction": "Perbarui transaksi"
+    }
+  },
+  "items": {
+    "createNew": "Buat barang baru",
+    "form": {
+      "buyPrices": "Harga beli",
+      "sellPrices": "Harga jual",
+      "barcodes": "Barcode",
+      "addBuyPrice": "Tambah harga beli",
+      "pruneEmptyStockPrices": "Hapus harga stok kosong",
+      "create": "Buat barang",
+      "update": "Perbarui barang",
+      "delete": "Hapus barang"
+    },
+    "table": {
+      "buyPrices": "Harga beli",
+      "sellPrices": "Harga jual",
+      "itemList": "Daftar barang"
+    },
+    "search": {
+      "placeholder": "Cari nama"
+    },
+    "toast": {
+      "created": "Barang dibuat",
+      "updated": "Barang diperbarui",
+      "deleted": "Barang dihapus"
     }
   }
 }

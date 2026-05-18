@@ -1,16 +1,8 @@
-import { BarcodeGroupsProvider } from "@/contexts/barcode-groups-ctx"
-import { ItemsProvider } from "@/contexts/items-ctx"
-import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
-import { UnitsProvider } from "@/contexts/units-ctx"
 import { listBarcodeGroups } from "@/lib/crud/barcode-groups"
 import { listItems } from "@/lib/crud/items"
 import { listPriceGroups } from "@/lib/crud/price-groups"
 import { listUnits } from "@/lib/crud/units"
-import { FieldLegend, FieldSet } from "@/components/ui/field"
-import ItemForm from "./item-form"
-import { ItemFiltersProvider } from "./item-filters-ctx"
-import { ItemCountProvider } from "./item-count-ctx"
-import ItemList from "./item-list"
+import ItemsPageClient from "./page-client"
 
 export default async function Page() {
   const priceGroups = await listPriceGroups()
@@ -19,22 +11,11 @@ export default async function Page() {
   const units = await listUnits()
 
   return (
-    <BarcodeGroupsProvider barcodeGroups={barcodeGroups}>
-      <PriceGroupsProvider priceGroups={priceGroups}>
-        <UnitsProvider units={units}>
-          <FieldSet>
-            <FieldLegend>Create new item</FieldLegend>
-            <ItemForm />
-          </FieldSet>
-          <ItemsProvider items={items}>
-            <ItemFiltersProvider initialValue={{}}>
-              <ItemCountProvider>
-                <ItemList />
-              </ItemCountProvider>
-            </ItemFiltersProvider>
-          </ItemsProvider>
-        </UnitsProvider>
-      </PriceGroupsProvider>
-    </BarcodeGroupsProvider>
+    <ItemsPageClient 
+      priceGroups={priceGroups}
+      barcodeGroups={barcodeGroups}
+      items={items}
+      units={units}
+    />
   )
 }

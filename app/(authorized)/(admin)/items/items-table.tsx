@@ -12,20 +12,25 @@ import {
 import { useItems } from "@/contexts/items-ctx"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { formatCurrency } from "@/lib/i18n/currency"
+import { useTranslations } from "next-intl"
 import { ItemFormUpdateWrapper } from "./item-form-update-wrapper"
 
 export function ItemsTable() {
   const { itemsSnap } = useItems()
   const { priceGroups } = usePriceGroups()
+  const t = useTranslations("items")
+  const tCommon = useTranslations("common")
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead rowSpan={2}>Name</TableHead>
-          <TableHead rowSpan={2}>Unit</TableHead>
-          <TableHead rowSpan={2}>Buy prices</TableHead>
-          <TableHead colSpan={priceGroups.length}>Sell prices</TableHead>
+          <TableHead rowSpan={2}>{tCommon("name")}</TableHead>
+          <TableHead rowSpan={2}>{tCommon("unit")}</TableHead>
+          <TableHead rowSpan={2}>{t("table.buyPrices")}</TableHead>
+          <TableHead colSpan={priceGroups.length}>
+            {t("table.sellPrices")}
+          </TableHead>
         </TableRow>
 
         <TableRow>
@@ -47,7 +52,9 @@ export function ItemsTable() {
                 {item.buyPrices.map((bp, i) => (
                   <div key={i} className="contents">
                     <span>{formatCurrency(bp.price)}</span>
-                    <Badge variant="secondary">{bp.stock} left</Badge>
+                    <Badge variant="secondary">
+                      {tCommon("stockLeft", { count: bp.stock })}
+                    </Badge>
                   </div>
                 ))}
               </TableCell>

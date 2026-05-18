@@ -17,11 +17,13 @@ import { useItemCount } from "./item-count-ctx"
 import { SearchBar } from "./search-bar"
 import { UnitFilter } from "./unit-filter"
 import { ItemsTable } from "./items-table"
+import { useTranslations } from "next-intl"
 
 export default function CreateItemForm() {
   const itemsPerPage = 10
   const disabledClass =
     "cursor-not-allowed text-muted-foreground hover:text-muted-foreground"
+  const t = useTranslations("items")
 
   const { itemsProxy } = useItems()
   const { itemFiltersProxy, itemFiltersSnap } = useItemFilters()
@@ -50,7 +52,7 @@ export default function CreateItemForm() {
 
   return (
     <FieldSet>
-      <FieldLegend>Item list</FieldLegend>
+      <FieldLegend>{t("table.itemList")}</FieldLegend>
 
       <SearchBar />
 

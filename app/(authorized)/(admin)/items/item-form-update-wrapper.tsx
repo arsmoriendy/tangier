@@ -11,6 +11,7 @@ import { useItems } from "@/contexts/items-ctx"
 import { ReactNode, useState } from "react"
 import ItemForm from "./item-form"
 import { ItemWithRelations } from "@/lib/crud/items"
+import { useTranslations } from "next-intl"
 
 export function ItemFormUpdateWrapper({
   children,
@@ -21,6 +22,7 @@ export function ItemFormUpdateWrapper({
 }) {
   const { itemsProxy } = useItems()
   const [openDialog, setOpenDialog] = useState(false)
+  const t = useTranslations("items")
   const itemIdx = itemsProxy.findIndex((item) => item.id === props.item.id)
 
   return (
@@ -28,7 +30,7 @@ export function ItemFormUpdateWrapper({
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-h-[92vh] w-[92vw] overflow-auto pt-0 sm:max-w-[92vw]">
         <DialogHeader>
-          <DialogTitle className="mt-4">Update item</DialogTitle>
+          <DialogTitle className="mt-4">{t("form.update")}</DialogTitle>
         </DialogHeader>
 
         <ItemForm

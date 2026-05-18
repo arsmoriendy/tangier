@@ -5,7 +5,6 @@
     "unit": "Unit",
     "buyPrice": "Buy price",
     "sellPrice": "Sell price",
-    "sellPrices": "Sell prices",
     "quantifiedPrice": "Quantified price",
     "stockLeft": "{count} left",
     "margin": "Margin",
@@ -84,6 +83,32 @@
         "time": "Time"
       },
       "updateTransaction": "Update transaction"
+    }
+  },
+  "items": {
+    "createNew": "Create new item",
+    "form": {
+      "buyPrices": "Buy prices",
+      "sellPrices": "Sell prices",
+      "barcodes": "Barcodes",
+      "addBuyPrice": "Add buy price",
+      "pruneEmptyStockPrices": "Prune empty stock prices",
+      "create": "Create item",
+      "update": "Update item",
+      "delete": "Delete item"
+    },
+    "table": {
+      "buyPrices": "Buy prices",
+      "sellPrices": "Sell prices",
+      "itemList": "Item list"
+    },
+    "search": {
+      "placeholder": "Search name"
+    },
+    "toast": {
+      "created": "Item created",
+      "updated": "Item updated",
+      "deleted": "Item deleted"
     }
   }
 }
