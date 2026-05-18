@@ -18,7 +18,12 @@ interface PageProps {
   units: any[]
 }
 
-export default function ItemsPageClient({ priceGroups, barcodeGroups, items, units }: PageProps) {
+export default function ItemsPageClient({
+  priceGroups,
+  barcodeGroups,
+  items,
+  units,
+}: PageProps) {
   const t = useTranslations("items")
 
   return (

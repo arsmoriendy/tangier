@@ -75,4 +75,3 @@ export const transactionItemsRelations = relations(
 export const transactionsRelations = relations(transactions, ({ many }) => ({
   transactionItems: many(transactionItems),
 }))
-

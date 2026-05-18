@@ -11,7 +11,7 @@ export default async function Page() {
   const units = await listUnits()
 
   return (
-    <ItemsPageClient 
+    <ItemsPageClient
       priceGroups={priceGroups}
       barcodeGroups={barcodeGroups}
       items={items}
