@@ -28,6 +28,7 @@ import {
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { LanguageSidebarItem } from "./language-sidebar-item"
+import { Trigger } from "./trigger"
 
 export function AppSidebar() {
   const session = useSession()
@@ -35,7 +36,12 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <SidebarTrigger />
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <Trigger />
+          </SidebarMenuItem>
+        </SidebarMenu>
+        <hr />
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
