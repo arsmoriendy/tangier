@@ -8,9 +8,7 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Localization
-   - pagination
-2. Remove / replace qty threshold
+1. Remove / replace qty threshold
 
 ###### Backlog
 

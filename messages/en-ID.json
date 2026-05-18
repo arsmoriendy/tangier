@@ -14,7 +14,9 @@
     "totalPrice": "Total price",
     "id": "Id",
     "username": "Username",
-    "password": "Password"
+    "password": "Password",
+    "next": "Next",
+    "previous": "Previous"
   },
   "sidebar": {
     "transactions": {

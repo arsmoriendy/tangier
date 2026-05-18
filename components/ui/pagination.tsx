@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 
 import { cn } from "@/lib/utils"
@@ -7,6 +9,7 @@ import {
   CaretRightIcon,
   DotsThreeIcon,
 } from "@phosphor-icons/react"
+import { useTranslations } from "next-intl"
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
@@ -67,9 +70,11 @@ function PaginationLink({
 
 function PaginationPrevious({
   className,
-  text = "Previous",
+  text: textProp,
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+  const t = useTranslations("common")
+  const text = textProp ?? t("previous")
   return (
     <PaginationLink
       aria-label="Go to previous page"
@@ -85,9 +90,11 @@ function PaginationPrevious({
 
 function PaginationNext({
   className,
-  text = "Next",
+  text: textProp,
   ...props
 }: React.ComponentProps<typeof PaginationLink> & { text?: string }) {
+  const t = useTranslations("common")
+  const text = textProp ?? t("next")
   return (
     <PaginationLink
       aria-label="Go to next page"

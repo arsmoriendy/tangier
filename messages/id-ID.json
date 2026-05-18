@@ -14,7 +14,9 @@
     "totalPrice": "Total harga",
     "id": "Id",
     "username": "Nama pengguna",
-    "password": "Kata sandi"
+    "password": "Kata sandi",
+    "next": "Berikutnya",
+    "previous": "Sebelumnya"
   },
   "sidebar": {
     "transactions": {
