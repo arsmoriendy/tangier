@@ -69,7 +69,7 @@
       },
       "items": {
         "title": "Barang transaksi",
-        "updateStock": "Update stok",
+        "updateStock": "Perbarui stok",
         "customStock": "Stok kustom"
       },
       "saveAndPrint": "Simpan dan cetak"
