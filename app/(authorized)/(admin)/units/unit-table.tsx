@@ -12,9 +12,11 @@ import { useUnits } from "@/contexts/units-ctx"
 import { units } from "@/lib/db/schema"
 import { useState } from "react"
 import UpdateUnitForm from "./update-unit-form"
+import { useTranslations } from "next-intl"
 
 function UnitRow({ unit }: { unit: typeof units.$inferSelect }) {
   const [openDialog, setDialogOpen] = useState(false)
+  const t = useTranslations("units")
 
   return (
     <Dialog open={openDialog} onOpenChange={setDialogOpen}>
@@ -24,7 +26,7 @@ function UnitRow({ unit }: { unit: typeof units.$inferSelect }) {
         </TableRow>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Update unit</DialogTitle>
+        <DialogTitle>{t("form.update")}</DialogTitle>
         <UpdateUnitForm
           unit={unit}
           onSubmit={() => setDialogOpen(false)}
@@ -37,9 +39,11 @@ function UnitRow({ unit }: { unit: typeof units.$inferSelect }) {
 
 export default function UnitTable() {
   const { units } = useUnits()
+  const t = useTranslations("units")
+
   return (
     <FieldSet>
-      <FieldLegend>Unit list</FieldLegend>
+      <FieldLegend>{t("table.unitList")}</FieldLegend>
       <Table>
         <TableBody>
           {units.map((unit) => (

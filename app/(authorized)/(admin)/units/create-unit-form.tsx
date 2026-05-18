@@ -4,6 +4,7 @@ import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { useUnits } from "@/contexts/units-ctx"
 import { createUnit, listUnits } from "@/lib/crud/units"
+import { useTranslations } from "next-intl"
 import z from "zod"
 
 const createUnitFormSchema = z.object({
@@ -12,6 +13,7 @@ const createUnitFormSchema = z.object({
 
 export default function CreateUnitForm() {
   const { setUnits } = useUnits()
+  const t = useTranslations("units")
   const defaultValues: z.infer<typeof createUnitFormSchema> = {
     name: "",
   }
@@ -31,16 +33,16 @@ export default function CreateUnitForm() {
 
   return (
     <FieldSet>
-      <FieldLegend>Add unit</FieldLegend>
+      <FieldLegend>{t("createNew")}</FieldLegend>
 
       <Form handleSubmit={form.handleSubmit}>
         <form.AppField
           name="name"
-          children={(f) => <f.TextField label="Name" />}
+          children={(f) => <f.TextField label={t("form.name")} />}
         />
 
         <form.AppForm>
-          <form.SubmitButton>Create unit</form.SubmitButton>
+          <form.SubmitButton>{t("form.create")}</form.SubmitButton>
         </form.AppForm>
       </Form>
     </FieldSet>

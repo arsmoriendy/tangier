@@ -4,6 +4,7 @@ import { useUnits } from "@/contexts/units-ctx"
 import { deleteUnit, updateUnit } from "@/lib/crud/units"
 import { units } from "@/lib/db/schema"
 import { TrashIcon } from "@phosphor-icons/react/dist/ssr"
+import { useTranslations } from "next-intl"
 import z from "zod"
 
 const updateUnitFormSchema = z.object({
@@ -16,6 +17,7 @@ export default function UpdateUnitForm(props: {
   unit: typeof units.$inferSelect
 }) {
   const { units: allUnits, setUnits } = useUnits()
+  const t = useTranslations("units")
   const defaultValues: z.infer<typeof updateUnitFormSchema> = {
     name: props.unit.name,
   }
@@ -39,12 +41,12 @@ export default function UpdateUnitForm(props: {
     <Form handleSubmit={form.handleSubmit}>
       <form.AppField
         name="name"
-        children={(f) => <f.TextField label="Name" />}
+        children={(f) => <f.TextField label={t("form.name")} />}
       />
 
       <form.AppForm>
         <div className="flex gap-2">
-          <form.SubmitButton>Update unit</form.SubmitButton>
+          <form.SubmitButton>{t("form.update")}</form.SubmitButton>
           <Button
             type="button"
             variant="destructive"
@@ -55,7 +57,7 @@ export default function UpdateUnitForm(props: {
             }}
           >
             <TrashIcon />
-            Delete unit
+            {t("form.delete")}
           </Button>
         </div>
       </form.AppForm>

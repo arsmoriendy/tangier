@@ -112,5 +112,22 @@
       "updated": "Barang diperbarui",
       "deleted": "Barang dihapus"
     }
+  },
+  "units": {
+    "createNew": "Buat satuan baru",
+    "form": {
+      "name": "Nama",
+      "create": "Buat satuan",
+      "update": "Perbarui satuan",
+      "delete": "Hapus satuan"
+    },
+    "table": {
+      "unitList": "Daftar satuan"
+    },
+    "toast": {
+      "created": "Satuan dibuat",
+      "updated": "Satuan diperbarui",
+      "deleted": "Satuan dihapus"
+    }
   }
 }

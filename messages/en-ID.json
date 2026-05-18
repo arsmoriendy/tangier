@@ -110,5 +110,22 @@
       "updated": "Item updated",
       "deleted": "Item deleted"
     }
+  },
+  "units": {
+    "createNew": "Create new unit",
+    "form": {
+      "name": "Name",
+      "create": "Create unit",
+      "update": "Update unit",
+      "delete": "Delete unit"
+    },
+    "table": {
+      "unitList": "Unit list"
+    },
+    "toast": {
+      "created": "Unit created",
+      "updated": "Unit updated",
+      "deleted": "Unit deleted"
+    }
   }
 }
