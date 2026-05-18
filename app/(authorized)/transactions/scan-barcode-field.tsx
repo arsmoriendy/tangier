@@ -6,6 +6,7 @@ import { withForm } from "@/components/form"
 import { FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { readBarcode } from "@/lib/crud/barcodes"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 
 export const ScanBarcodeField = withForm({
@@ -15,10 +16,11 @@ export const ScanBarcodeField = withForm({
     const [barcode, setBarcode] = useState("")
     const [error, setError] = useState<string | undefined>(undefined)
     const [loading, setLoading] = useState(false)
+    const t = useTranslations("transactions.form.addItem.scanBarcode")
 
     return (
       <div className="space-y-2">
-        <FieldLabel>Scan barcode</FieldLabel>
+        <FieldLabel>{t("title")}</FieldLabel>
         <Input
           aria-invalid={error ? "true" : "false"}
           value={barcode}
@@ -28,7 +30,7 @@ export const ScanBarcodeField = withForm({
             setLoading(true)
             const res = await readBarcode(value)
             if (!res) {
-              setError("No items with specified barcode")
+              setError(t("errors.notFound"))
               setLoading(false)
               setBarcode("")
               return

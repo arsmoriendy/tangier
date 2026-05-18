@@ -1,4 +1,17 @@
 {
+  "common": {
+    "reset": "Reset",
+    "name": "Name",
+    "unit": "Unit",
+    "buyPrice": "Buy price",
+    "sellPrice": "Sell price",
+    "sellPrices": "Sell prices",
+    "quantifiedPrice": "Quantified price",
+    "stockLeft": "{count} left",
+    "margin": "Margin",
+    "discountPerc": "{perc}% discount",
+    "totalPrice": "Total price"
+  },
   "sidebar": {
     "transactions": {
       "title": "Transactions",
@@ -36,6 +49,28 @@
       },
       "signOut": "Sign out",
       "deleteAccount": "Delete account"
+    }
+  },
+  "transactions": {
+    "form": {
+      "addItem": {
+        "title": "Add item",
+        "scanBarcode": {
+          "title": "Scan barcode",
+          "errors": { "notFound": "No items with specified barcode" }
+        },
+        "searchItem": {
+          "title": "Select item",
+          "errors": { "unitNotFound": "Unit not found" }
+        },
+        "noPrice": "No recorded price"
+      },
+      "items": {
+        "title": "Transaction items",
+        "updateStock": "Update stock",
+        "customStock": "Custom stock"
+      },
+      "saveAndPrint": "Save and print"
     }
   }
 }

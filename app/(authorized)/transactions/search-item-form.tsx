@@ -30,6 +30,7 @@ import { listItems } from "@/lib/crud/items"
 import { ItemWithRelations } from "@/lib/crud/items"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
+import { useTranslations } from "next-intl"
 import { useState } from "react"
 import z from "zod"
 
@@ -61,6 +62,9 @@ export const SearchItemForm = withForm({
     const [foundItems, setFoundItems] = useState<ItemWithRelations[]>([])
     const [dialogIsOpen, setDialogOpened] = useState(false)
 
+    const t = useTranslations("transactions.form.addItem.searchItem")
+    const c = useTranslations("common")
+
     return (
       <>
         <Form handleSubmit={searchItemForm.handleSubmit} className="flex gap-2">
@@ -68,7 +72,7 @@ export const SearchItemForm = withForm({
             {(field) => (
               <field.TextField
                 id="search-item-name"
-                label="Name"
+                label={c("name")}
                 onChange={(e) => {
                   searchItemForm.setFieldValue("name", e.currentTarget.value)
                 }}
@@ -81,7 +85,7 @@ export const SearchItemForm = withForm({
           <form.Subscribe selector={(f) => f.values.unit}>
             {(unitName) => (
               <div className="space-y-2">
-                <FieldLabel>Unit</FieldLabel>
+                <FieldLabel>{c("unit")}</FieldLabel>
                 <Combobox
                   items={units.map((unit) => ({
                     value: unit.id,
@@ -105,7 +109,7 @@ export const SearchItemForm = withForm({
                 >
                   <ComboboxInput />
                   <ComboboxContent>
-                    <ComboboxEmpty>Not found</ComboboxEmpty>
+                    <ComboboxEmpty>{t("errors.unitNotFound")}</ComboboxEmpty>
                     <ComboboxList>
                       {(unit) => (
                         <ComboboxItem key={unit.value} value={unit}>
@@ -128,18 +132,16 @@ export const SearchItemForm = withForm({
 
         <Dialog open={dialogIsOpen} onOpenChange={setDialogOpened}>
           <DialogContent className="max-h-[92vh] w-[92vw] overflow-auto pt-0 sm:max-w-[92vw]">
-            <DialogTitle className="mt-4">Select item</DialogTitle>
-            <DialogDescription>
-              Pick a price cell to add the corresponding item with the selected
-              price
-            </DialogDescription>
+            <DialogTitle className="mt-4">{t("title")}</DialogTitle>
 
             <Table className="border-separate border-spacing-0 [&_td]:border-b [&_th]:border-b [&_tr]:bg-popover [&_tr]:hover:bg-muted">
               <TableHeader className="sticky top-0">
                 <TableRow>
-                  <TableHead rowSpan={2}>Name</TableHead>
-                  <TableHead rowSpan={2}>Unit</TableHead>
-                  <TableHead colSpan={priceGroups.length}>Prices</TableHead>
+                  <TableHead rowSpan={2}>{c("name")}</TableHead>
+                  <TableHead rowSpan={2}>{c("unit")}</TableHead>
+                  <TableHead colSpan={priceGroups.length}>
+                    {c("sellPrices")}
+                  </TableHead>
                 </TableRow>
 
                 <TableRow>

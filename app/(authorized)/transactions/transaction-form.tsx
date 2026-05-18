@@ -49,6 +49,8 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { useHeld } from "./held-ctx"
 import { useState } from "react"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
+import { ResetButton } from "@/components/reset-button"
+import { useTranslations } from "next-intl"
 
 export default function TransactionForm(props: {
   transaction?: DeepReadonly<TransactionWithRelations>
@@ -218,6 +220,9 @@ export default function TransactionForm(props: {
     form.reset()
   }
 
+  const t = useTranslations("transactions.form")
+  const c = useTranslations("common")
+
   return (
     <div className="flex h-full flex-col gap-2">
       <AddItemProvider>
@@ -229,7 +234,7 @@ export default function TransactionForm(props: {
         className="relative flex flex-1 flex-col"
       >
         <FieldSet className="flex-1">
-          <FieldLegend>Transaction items</FieldLegend>
+          <FieldLegend>{t("items.title")}</FieldLegend>
           <FieldGroup>
             <form.AppField
               name="transactionItems"
@@ -243,12 +248,12 @@ export default function TransactionForm(props: {
                   <TableHeader className="[&_th]:border-b">
                     <TableRow>
                       <TableHead />
-                      <TableHead>Name</TableHead>
-                      <TableHead>Unit</TableHead>
+                      <TableHead>{c("name")}</TableHead>
+                      <TableHead>{c("unit")}</TableHead>
                       {session.user.role === "admin" && (
-                        <TableHead>Buy price</TableHead>
+                        <TableHead>{c("buyPrice")}</TableHead>
                       )}
-                      <TableHead>Sell price</TableHead>
+                      <TableHead>{c("sellPrice")}</TableHead>
                       <TableHead>Qty</TableHead>
                       <TableHead>
                         <label className="flex items-center gap-2">
@@ -266,10 +271,10 @@ export default function TransactionForm(props: {
                               }
                             }}
                           />
-                          Update stock
+                          {t("items.updateStock")}
                         </label>
                       </TableHead>
-                      <TableHead>Quantified price</TableHead>
+                      <TableHead>{c("quantifiedPrice")}</TableHead>
                       <TableHead />
                     </TableRow>
                   </TableHeader>
@@ -375,10 +380,16 @@ export default function TransactionForm(props: {
                                           : "text-green-500"
                                       )}
                                     >
-                                      Margin: {margin > 0 && "+"}
+                                      {c("margin")}: {margin > 0 && "+"}
                                       {formatCurrency(margin)}{" "}
                                       {margin < 0 && (
-                                        <>({discount.toFixed(2)}% discount)</>
+                                        <>
+                                          (
+                                          {c("discountPerc", {
+                                            perc: discount.toFixed(2),
+                                          })}
+                                          )
+                                        </>
                                       )}
                                     </small>
                                   )
@@ -420,12 +431,12 @@ export default function TransactionForm(props: {
                                   />
                                 )}
                               </form.AppField>
-                              <FieldLabel>Update stock</FieldLabel>
+                              <FieldLabel>{t("items.updateStock")}</FieldLabel>
                             </Field>
                           ) : (
                             <Field orientation="horizontal" className="h-8">
                               <Checkbox disabled />
-                              <FieldLabel>Custom stock</FieldLabel>
+                              <FieldLabel>{t("items.customStock")}</FieldLabel>
                             </Field>
                           )}
                         </TableCell>
@@ -464,26 +475,24 @@ export default function TransactionForm(props: {
         </FieldSet>
 
         <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
-          <span className="flex h-8 items-center text-sm">Total price :</span>
+          <span className="flex h-8 items-center text-sm">
+            {c("totalPrice")} :
+          </span>
           <form.AppField name="totalPrice">
             {(field) => <field.IdrField min={0} className="flex-1" />}
           </form.AppField>
 
           <form.AppForm>
             <form.SubmitButton>
-              <PrinterIcon /> Save and print
+              <PrinterIcon /> {t("saveAndPrint")}
             </form.SubmitButton>
           </form.AppForm>
 
-          <Button
-            type="button"
-            variant="destructive"
+          <ResetButton
             onClick={() => {
               form.reset()
             }}
-          >
-            Reset
-          </Button>
+          />
 
           {!props.transaction && (
             <>

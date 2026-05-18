@@ -1,4 +1,17 @@
 {
+  "common": {
+    "reset": "Reset",
+    "name": "Nama",
+    "unit": "Satuan",
+    "buyPrice": "Harga beli",
+    "sellPrice": "Harga jual",
+    "sellPrices": "Harga jual",
+    "quantifiedPrice": "Harga terkuantifikasi",
+    "stockLeft": "{count} tersisa",
+    "margin": "Margin",
+    "discountPerc": "{perc}% diskon",
+    "totalPrice": "Total harga"
+  },
   "sidebar": {
     "transactions": {
       "title": "Transaksi",
@@ -36,6 +49,28 @@
       },
       "signOut": "Keluar",
       "deleteAccount": "Hapus akun"
+    }
+  },
+  "transactions": {
+    "form": {
+      "addItem": {
+        "title": "Tambah barang",
+        "scanBarcode": {
+          "title": "Pindai barcode",
+          "errors": { "notFound": "Tidak ada barang dengan barcode yang ditentukan" }
+        },
+        "searchItem": {
+          "title": "Pilih barang",
+          "errors": { "unitNotFound": "Satuan tidak ditemukan" }
+        },
+        "noPrice": "Tidak ada harga yang tercatat"
+      },
+      "items": {
+        "title": "Barang transaksi",
+        "updateStock": "Update stok",
+        "customStock": "Stok kustom"
+      },
+      "saveAndPrint": "Simpan dan cetak"
     }
   }
 }

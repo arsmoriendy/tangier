@@ -19,7 +19,8 @@ import { Item } from "@/components/ui/item"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { cn } from "@/lib/utils"
 import { useSession } from "@/contexts/session-ctx"
-import { Button } from "@/components/ui/button"
+import { ResetButton } from "@/components/reset-button"
+import { useTranslations } from "next-intl"
 
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
@@ -57,10 +58,13 @@ export const AddItemForm = withForm({
       if (sellPrice !== undefined) form.setFieldValue("sellPrice", sellPrice)
     })
 
+    const t = useTranslations("transactions.form.addItem")
+    const c = useTranslations("common")
+
     return (
       <>
         <FieldSet className="gap-0">
-          <FieldLegend>Add item</FieldLegend>
+          <FieldLegend>{t("title")}</FieldLegend>
 
           <SearchItemForm form={form} />
 
@@ -103,7 +107,7 @@ export const AddItemForm = withForm({
             <div className="flex gap-2">
               {session.user.role === "admin" && (
                 <FieldSet className="flex-1">
-                  <FieldLegend>Buy price</FieldLegend>
+                  <FieldLegend>{c("buyPrice")}</FieldLegend>
 
                   <form.AppField name="buyPrice">
                     {(f) => <f.IdrField />}
@@ -135,7 +139,7 @@ export const AddItemForm = withForm({
                         className="grid min-h-17 place-items-center border-dashed text-muted-foreground"
                         variant="outline"
                       >
-                        No recorded price
+                        {t("noPrice")}
                       </Item>
                     )}
                   </RadioGroupChoiceCard>
@@ -143,7 +147,7 @@ export const AddItemForm = withForm({
               )}
 
               <FieldSet className="flex-1">
-                <FieldLegend>Sell price</FieldLegend>
+                <FieldLegend>{c("sellPrice")}</FieldLegend>
                 <div className="flex gap-2">
                   <form.AppField
                     name="sellPrice"
@@ -188,10 +192,16 @@ export const AddItemForm = withForm({
                               margin < 0 ? "text-destructive" : "text-green-500"
                             )}
                           >
-                            Margin: {margin > 0 && "+"}
+                            {c("margin")}: {margin > 0 && "+"}
                             {formatCurrency(margin)}{" "}
                             {margin < 0 && (
-                              <>({discount.toFixed(2)}% discount)</>
+                              <>
+                                (
+                                {c("discountPerc", {
+                                  perc: discount.toFixed(2),
+                                })}
+                                )
+                              </>
                             )}
                           </small>
                         )
@@ -202,7 +212,7 @@ export const AddItemForm = withForm({
 
                 <form.AppField name="quantifiedPrice">
                   {(field) => (
-                    <field.IdrField label="Quantified price" min={0} />
+                    <field.IdrField label={c("quantifiedPrice")} min={0} />
                   )}
                 </form.AppField>
               </FieldSet>
@@ -227,21 +237,17 @@ export const AddItemForm = withForm({
 
             <div className="flex gap-2">
               <form.AppForm>
-                <form.SubmitButton>Add item</form.SubmitButton>
+                <form.SubmitButton>{t("title")}</form.SubmitButton>
               </form.AppForm>
 
-              <Button
-                variant="destructive"
-                type="reset"
+              <ResetButton
                 onClick={() => {
                   addItemProxy.sellPrices = []
                   addItemProxy.buyPrices = []
                   addItemProxy.buyPrice = undefined
                   form.reset()
                 }}
-              >
-                Reset
-              </Button>
+              />
             </div>
           </Form>
         </FieldSet>
