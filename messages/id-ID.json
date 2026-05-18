@@ -168,5 +168,19 @@
       "updated": "Kelompok barcode diperbarui",
       "deleted": "Kelompok barcode dihapus"
     }
+  },
+  "users": {
+    "title": "Kelola pengguna",
+    "table": {
+      "adminRole": "Peran admin",
+      "activeState": "Status aktif",
+      "delete": "Hapus",
+      "admin": "Admin",
+      "active": "Aktif"
+    },
+    "toast": {
+      "updated": "Pengguna diperbarui",
+      "deleted": "Pengguna dihapus"
+    }
   }
 }

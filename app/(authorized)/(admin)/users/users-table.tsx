@@ -11,19 +11,24 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { authClient } from "@/lib/auth-client"
+import { useTranslations } from "next-intl"
+import { toast } from "sonner"
 import { useUsers } from "./users-ctx"
 
 export function UsersTable() {
   const { usersProxy, usersSnap } = useUsers()
+  const tc = useTranslations("common")
+  const t = useTranslations("users.table")
+  const tt = useTranslations("users.toast")
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Admin role</TableHead>
-          <TableHead>Active state</TableHead>
-          <TableHead>Delete</TableHead>
+          <TableHead>{tc("name")}</TableHead>
+          <TableHead>{t("adminRole")}</TableHead>
+          <TableHead>{t("activeState")}</TableHead>
+          <TableHead>{t("delete")}</TableHead>
         </TableRow>
       </TableHeader>
 
@@ -46,9 +51,10 @@ export function UsersTable() {
                         data: { role },
                       })
                       usersProxy.find((u) => u.id === user.id)!.role = role
+                      toast.success(tt("updated"))
                     }}
                   />
-                  <label htmlFor={`${user.id}-admin`}>Admin</label>
+                  <label htmlFor={`${user.id}-admin`}>{t("admin")}</label>
                 </div>
               </TableCell>
               <TableCell>
@@ -63,9 +69,10 @@ export function UsersTable() {
                         data: { active: checked },
                       })
                       usersProxy.find((u) => u.id === user.id)!.active = checked
+                      toast.success(tt("updated"))
                     }}
                   />
-                  <label htmlFor={`${user.id}-active`}>Active</label>
+                  <label htmlFor={`${user.id}-active`}>{t("active")}</label>
                 </div>
               </TableCell>
               <TableCell>
@@ -77,9 +84,10 @@ export function UsersTable() {
                       userId: user.id,
                     })
                     usersProxy.splice(i, 1)
+                    toast.error(tt("deleted"))
                   }}
                 >
-                  Delete
+                  {t("delete")}
                 </Button>
               </TableCell>
             </TableRow>

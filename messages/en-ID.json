@@ -161,5 +161,19 @@
       "updated": "Barcode group updated",
       "deleted": "Barcode group deleted"
     }
+  },
+  "users": {
+    "title": "Manage users",
+    "table": {
+      "adminRole": "Admin role",
+      "activeState": "Active state",
+      "delete": "Delete",
+      "admin": "Admin",
+      "active": "Active"
+    },
+    "toast": {
+      "updated": "User updated",
+      "deleted": "User deleted"
+    }
   }
 }
