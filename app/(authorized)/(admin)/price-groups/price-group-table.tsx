@@ -59,7 +59,7 @@ function PriceGroupRow({
 export default function PriceGroupTable() {
   const { priceGroups } = usePriceGroups()
   const t = useTranslations("priceGroups")
-  
+
   return (
     <Table>
       <TableHeader>
