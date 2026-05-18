@@ -131,7 +131,7 @@ export const AddItemForm = withForm({
                             key={i}
                             value={bp.id}
                             title={formatCurrency(bp.price)}
-                            description={`${bp.stock} left`}
+                            description={c("stockLeft", { count: bp.stock })}
                           />
                         ))
                     ) : (

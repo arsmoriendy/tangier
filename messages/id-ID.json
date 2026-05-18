@@ -7,9 +7,9 @@
     "sellPrice": "Harga jual",
     "sellPrices": "Harga jual",
     "quantifiedPrice": "Harga terkuantifikasi",
-    "stockLeft": "{count} tersisa",
+    "stockLeft": "Tersisa {count}",
     "margin": "Margin",
-    "discountPerc": "{perc}% diskon",
+    "discountPerc": "Diskon {perc}%",
     "totalPrice": "Total harga"
   },
   "sidebar": {
@@ -57,7 +57,9 @@
         "title": "Tambah barang",
         "scanBarcode": {
           "title": "Pindai barcode",
-          "errors": { "notFound": "Tidak ada barang dengan barcode yang ditentukan" }
+          "errors": {
+            "notFound": "Tidak ada barang dengan barcode yang ditentukan"
+          }
         },
         "searchItem": {
           "title": "Pilih barang",
