@@ -17,7 +17,7 @@ const createBarcodeGroupFormSchema = z.object({
 export default function CreateBarcodeGroupForm() {
   const { setBarcodeGroups } = useBarcodeGroups()
   const t = useTranslations("barcodeGroups")
-  const commonT = useTranslations("common")
+  const ct = useTranslations("common")
   const defaultValues: z.infer<typeof createBarcodeGroupFormSchema> = {
     name: "",
   }
@@ -42,7 +42,7 @@ export default function CreateBarcodeGroupForm() {
       <Form handleSubmit={form.handleSubmit}>
         <form.AppField
           name="name"
-          children={(f) => <f.TextField label={commonT("name")} />}
+          children={(f) => <f.TextField label={ct("name")} />}
         />
 
         <form.AppForm>

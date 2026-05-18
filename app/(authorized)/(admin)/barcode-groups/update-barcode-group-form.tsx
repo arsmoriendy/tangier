@@ -21,7 +21,7 @@ export default function UpdateBarcodeGroupForm(props: {
 }) {
   const { barcodeGroups, setBarcodeGroups } = useBarcodeGroups()
   const t = useTranslations("barcodeGroups")
-  const commonT = useTranslations("common")
+  const ct = useTranslations("common")
   const defaultValues: z.infer<typeof updateBarcodeGroupFormSchema> = {
     name: props.barcodeGroup.name,
   }
@@ -47,7 +47,7 @@ export default function UpdateBarcodeGroupForm(props: {
     <Form handleSubmit={form.handleSubmit}>
       <form.AppField
         name="name"
-        children={(f) => <f.TextField label={commonT("name")} />}
+        children={(f) => <f.TextField label={ct("name")} />}
       />
 
       <form.AppForm>
