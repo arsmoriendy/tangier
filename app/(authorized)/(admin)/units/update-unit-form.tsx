@@ -18,6 +18,7 @@ export default function UpdateUnitForm(props: {
 }) {
   const { units: allUnits, setUnits } = useUnits()
   const t = useTranslations("units")
+  const commonT = useTranslations("common")
   const defaultValues: z.infer<typeof updateUnitFormSchema> = {
     name: props.unit.name,
   }
@@ -41,7 +42,7 @@ export default function UpdateUnitForm(props: {
     <Form handleSubmit={form.handleSubmit}>
       <form.AppField
         name="name"
-        children={(f) => <f.TextField label={t("form.name")} />}
+        children={(f) => <f.TextField label={commonT("name")} />}
       />
 
       <form.AppForm>

@@ -116,7 +116,6 @@
   "units": {
     "createNew": "Buat satuan baru",
     "form": {
-      "name": "Nama",
       "create": "Buat satuan",
       "update": "Perbarui satuan",
       "delete": "Hapus satuan"
@@ -133,7 +132,6 @@
   "priceGroups": {
     "createNew": "Buat kelompok harga baru",
     "form": {
-      "name": "Nama",
       "quantityThreshold": "Min qty",
       "color": "Warna",
       "description": "Deskripsi",

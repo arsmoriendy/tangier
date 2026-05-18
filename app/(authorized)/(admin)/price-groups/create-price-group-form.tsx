@@ -20,6 +20,7 @@ const createPriceGroupFormSchema = z.object({
 export default function CreatePriceGroupForm() {
   const { setPriceGroups } = usePriceGroups()
   const t = useTranslations("priceGroups")
+  const commonT = useTranslations("common")
   const defaultValues: z.infer<typeof createPriceGroupFormSchema> = {
     name: "",
     hexColor: "",
@@ -53,7 +54,7 @@ export default function CreatePriceGroupForm() {
         <div className="flex gap-2">
           <form.AppField
             name="name"
-            children={(f) => <f.TextField label={t("form.name")} />}
+            children={(f) => <f.TextField label={commonT("name")} />}
           />
 
           <form.AppField name="quantityThreshold">

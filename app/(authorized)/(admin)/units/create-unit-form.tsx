@@ -14,6 +14,7 @@ const createUnitFormSchema = z.object({
 export default function CreateUnitForm() {
   const { setUnits } = useUnits()
   const t = useTranslations("units")
+  const commonT = useTranslations("common")
   const defaultValues: z.infer<typeof createUnitFormSchema> = {
     name: "",
   }
@@ -38,7 +39,7 @@ export default function CreateUnitForm() {
       <Form handleSubmit={form.handleSubmit}>
         <form.AppField
           name="name"
-          children={(f) => <f.TextField label={t("form.name")} />}
+          children={(f) => <f.TextField label={commonT("name")} />}
         />
 
         <form.AppForm>

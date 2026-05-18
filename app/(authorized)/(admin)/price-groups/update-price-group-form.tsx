@@ -23,6 +23,7 @@ export default function UpdatePriceGroupForm(props: {
 }) {
   const { priceGroups, setPriceGroups } = usePriceGroups()
   const t = useTranslations("priceGroups")
+  const commonT = useTranslations("common")
   const defaultValues: z.infer<typeof createPriceGroupFormSchema> = {
     name: props.priceGroup.name,
     hexColor: props.priceGroup.hexColor,
@@ -51,7 +52,7 @@ export default function UpdatePriceGroupForm(props: {
     <Form handleSubmit={form.handleSubmit}>
       <form.AppField
         name="name"
-        children={(f) => <f.TextField label={t("form.name")} />}
+        children={(f) => <f.TextField label={commonT("name")} />}
       />
 
       <form.AppField name="quantityThreshold">

@@ -109,7 +109,6 @@
   "units": {
     "createNew": "Create new unit",
     "form": {
-      "name": "Name",
       "create": "Create unit",
       "update": "Update unit",
       "delete": "Delete unit"
@@ -126,7 +125,6 @@
   "priceGroups": {
     "createNew": "Create new price group",
     "form": {
-      "name": "Name",
       "quantityThreshold": "Min qty",
       "color": "Color",
       "description": "Description",
