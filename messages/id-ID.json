@@ -189,6 +189,10 @@
   "auth": {
     "signIn": "Masuk",
     "signUp": "Daftar",
+    "welcome": {
+      "title": "Selamat datang",
+      "message": "Buat akun baru, atau masuk kembali"
+    },
     "confirmPassword": "Konfirmasi kata sandi",
     "errors": {
       "passwordMatch": "Kata sandi tidak cocok"

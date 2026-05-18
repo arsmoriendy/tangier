@@ -2,12 +2,21 @@ import { SignInForm } from "@/app/auth/sign-in-form"
 import { SignUpForm } from "@/app/auth/sign-up-form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getTranslations } from "next-intl/server"
+import Image from "next/image"
 
 export default async function Page() {
   const t = await getTranslations("auth")
+  const iconSize = 72
 
   return (
-    <div className="grid min-h-screen place-items-center p-2">
+    <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-6">
+      <Image src="/icon.svg" alt="icon" width={iconSize} height={iconSize} />
+
+      <div className="flex flex-col items-center gap-2">
+        <h1 className="font-bold">{t("welcome.title")}</h1>
+        <p className="text-sm text-muted-foreground">{t("welcome.message")}</p>
+      </div>
+
       <Tabs defaultValue="sign-in" className="sm:min-w-sm">
         <TabsList className="w-full">
           <TabsTrigger value="sign-up">{t("signUp")}</TabsTrigger>

@@ -187,6 +187,10 @@
   "auth": {
     "signIn": "Sign in",
     "signUp": "Sign up",
+    "welcome": {
+      "title": "Welcome",
+      "message": "Make an account, or sign back in"
+    },
     "confirmPassword": "Confirm password",
     "errors": {
       "passwordMatch": "Passwords don't match"
