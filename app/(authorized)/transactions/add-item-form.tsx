@@ -59,7 +59,7 @@ export const AddItemForm = withForm({
     })
 
     const t = useTranslations("transactions.form.addItem")
-    const c = useTranslations("common")
+    const tc = useTranslations("common")
 
     return (
       <>
@@ -107,7 +107,7 @@ export const AddItemForm = withForm({
             <div className="flex gap-2">
               {session.user.role === "admin" && (
                 <FieldSet className="flex-1">
-                  <FieldLegend>{c("buyPrice")}</FieldLegend>
+                  <FieldLegend>{tc("buyPrice")}</FieldLegend>
 
                   <form.AppField name="buyPrice">
                     {(f) => <f.IdrField />}
@@ -131,7 +131,7 @@ export const AddItemForm = withForm({
                             key={i}
                             value={bp.id}
                             title={formatCurrency(bp.price)}
-                            description={c("stockLeft", { count: bp.stock })}
+                            description={tc("stockLeft", { count: bp.stock })}
                           />
                         ))
                     ) : (
@@ -147,7 +147,7 @@ export const AddItemForm = withForm({
               )}
 
               <FieldSet className="flex-1">
-                <FieldLegend>{c("sellPrice")}</FieldLegend>
+                <FieldLegend>{tc("sellPrice")}</FieldLegend>
                 <div className="flex gap-2">
                   <form.AppField
                     name="sellPrice"
@@ -192,12 +192,12 @@ export const AddItemForm = withForm({
                               margin < 0 ? "text-destructive" : "text-green-500"
                             )}
                           >
-                            {c("margin")}: {margin > 0 && "+"}
+                            {tc("margin")}: {margin > 0 && "+"}
                             {formatCurrency(margin)}{" "}
                             {margin < 0 && (
                               <>
                                 (
-                                {c("discountPerc", {
+                                {tc("discountPerc", {
                                   perc: discount.toFixed(2),
                                 })}
                                 )
@@ -212,7 +212,7 @@ export const AddItemForm = withForm({
 
                 <form.AppField name="quantifiedPrice">
                   {(field) => (
-                    <field.IdrField label={c("quantifiedPrice")} min={0} />
+                    <field.IdrField label={tc("quantifiedPrice")} min={0} />
                   )}
                 </form.AppField>
               </FieldSet>

@@ -63,7 +63,7 @@ export const SearchItemForm = withForm({
     const [dialogIsOpen, setDialogOpened] = useState(false)
 
     const t = useTranslations("transactions.form.addItem.searchItem")
-    const c = useTranslations("common")
+    const tc = useTranslations("common")
 
     return (
       <>
@@ -72,7 +72,7 @@ export const SearchItemForm = withForm({
             {(field) => (
               <field.TextField
                 id="search-item-name"
-                label={c("name")}
+                label={tc("name")}
                 onChange={(e) => {
                   searchItemForm.setFieldValue("name", e.currentTarget.value)
                 }}
@@ -85,7 +85,7 @@ export const SearchItemForm = withForm({
           <form.Subscribe selector={(f) => f.values.unit}>
             {(unitName) => (
               <div className="space-y-2">
-                <FieldLabel>{c("unit")}</FieldLabel>
+                <FieldLabel>{tc("unit")}</FieldLabel>
                 <Combobox
                   items={units.map((unit) => ({
                     value: unit.id,
@@ -137,10 +137,10 @@ export const SearchItemForm = withForm({
             <Table className="border-separate border-spacing-0 [&_td]:border-b [&_th]:border-b [&_tr]:bg-popover [&_tr]:hover:bg-muted">
               <TableHeader className="sticky top-0">
                 <TableRow>
-                  <TableHead rowSpan={2}>{c("name")}</TableHead>
-                  <TableHead rowSpan={2}>{c("unit")}</TableHead>
+                  <TableHead rowSpan={2}>{tc("name")}</TableHead>
+                  <TableHead rowSpan={2}>{tc("unit")}</TableHead>
                   <TableHead colSpan={priceGroups.length}>
-                    {c("sellPrices")}
+                    {tc("sellPrices")}
                   </TableHead>
                 </TableRow>
 

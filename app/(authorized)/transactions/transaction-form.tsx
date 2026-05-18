@@ -221,7 +221,7 @@ export default function TransactionForm(props: {
   }
 
   const t = useTranslations("transactions.form")
-  const c = useTranslations("common")
+  const tc = useTranslations("common")
 
   return (
     <div className="flex h-full flex-col gap-2">
@@ -248,12 +248,12 @@ export default function TransactionForm(props: {
                   <TableHeader className="[&_th]:border-b">
                     <TableRow>
                       <TableHead />
-                      <TableHead>{c("name")}</TableHead>
-                      <TableHead>{c("unit")}</TableHead>
+                      <TableHead>{tc("name")}</TableHead>
+                      <TableHead>{tc("unit")}</TableHead>
                       {session.user.role === "admin" && (
-                        <TableHead>{c("buyPrice")}</TableHead>
+                        <TableHead>{tc("buyPrice")}</TableHead>
                       )}
-                      <TableHead>{c("sellPrice")}</TableHead>
+                      <TableHead>{tc("sellPrice")}</TableHead>
                       <TableHead>Qty</TableHead>
                       <TableHead>
                         <label className="flex items-center gap-2">
@@ -274,7 +274,7 @@ export default function TransactionForm(props: {
                           {t("items.updateStock")}
                         </label>
                       </TableHead>
-                      <TableHead>{c("quantifiedPrice")}</TableHead>
+                      <TableHead>{tc("quantifiedPrice")}</TableHead>
                       <TableHead />
                     </TableRow>
                   </TableHeader>
@@ -380,12 +380,12 @@ export default function TransactionForm(props: {
                                           : "text-green-500"
                                       )}
                                     >
-                                      {c("margin")}: {margin > 0 && "+"}
+                                      {tc("margin")}: {margin > 0 && "+"}
                                       {formatCurrency(margin)}{" "}
                                       {margin < 0 && (
                                         <>
                                           (
-                                          {c("discountPerc", {
+                                          {tc("discountPerc", {
                                             perc: discount.toFixed(2),
                                           })}
                                           )
@@ -476,7 +476,7 @@ export default function TransactionForm(props: {
 
         <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
           <span className="flex h-8 items-center text-sm">
-            {c("totalPrice")} :
+            {tc("totalPrice")} :
           </span>
           <form.AppField name="totalPrice">
             {(field) => <field.IdrField min={0} className="flex-1" />}

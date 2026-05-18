@@ -19,14 +19,14 @@ export function ItemsTable() {
   const { itemsSnap } = useItems()
   const { priceGroups } = usePriceGroups()
   const t = useTranslations("items")
-  const tCommon = useTranslations("common")
+  const tc = useTranslations("common")
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead rowSpan={2}>{tCommon("name")}</TableHead>
-          <TableHead rowSpan={2}>{tCommon("unit")}</TableHead>
+          <TableHead rowSpan={2}>{tc("name")}</TableHead>
+          <TableHead rowSpan={2}>{tc("unit")}</TableHead>
           <TableHead rowSpan={2}>{t("table.buyPrices")}</TableHead>
           <TableHead colSpan={priceGroups.length}>
             {t("table.sellPrices")}
@@ -53,7 +53,7 @@ export function ItemsTable() {
                   <div key={i} className="contents">
                     <span>{formatCurrency(bp.price)}</span>
                     <Badge variant="secondary">
-                      {tCommon("stockLeft", { count: bp.stock })}
+                      {tc("stockLeft", { count: bp.stock })}
                     </Badge>
                   </div>
                 ))}
