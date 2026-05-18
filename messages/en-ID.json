@@ -127,5 +127,30 @@
       "updated": "Unit updated",
       "deleted": "Unit deleted"
     }
+  },
+  "priceGroups": {
+    "createNew": "Create new price group",
+    "form": {
+      "name": "Name",
+      "quantityThreshold": "Min qty",
+      "color": "Color",
+      "description": "Description",
+      "create": "Create price group",
+      "update": "Update price group",
+      "delete": "Delete price group",
+      "randomColor": "Random color"
+    },
+    "table": {
+      "name": "Name",
+      "quantityThreshold": "Min qty",
+      "color": "Color",
+      "description": "Description",
+      "priceGroupList": "Price group list"
+    },
+    "toast": {
+      "created": "Price group created",
+      "updated": "Price group updated",
+      "deleted": "Price group deleted"
+    }
   }
 }

@@ -18,6 +18,7 @@ import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { priceGroups } from "@/lib/db/schema"
 import { useState } from "react"
 import UpdatePriceGroupForm from "./update-price-group-form"
+import { useTranslations } from "next-intl"
 
 function PriceGroupRow({
   priceGroup,
@@ -25,6 +26,7 @@ function PriceGroupRow({
   priceGroup: typeof priceGroups.$inferSelect
 }) {
   const [openDialog, setDialogOpen] = useState(false)
+  const t = useTranslations("priceGroups")
 
   return (
     <Dialog open={openDialog} onOpenChange={setDialogOpen}>
@@ -43,7 +45,7 @@ function PriceGroupRow({
         </TableRow>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Update price group</DialogTitle>
+        <DialogTitle>{t("form.update")}</DialogTitle>
         <UpdatePriceGroupForm
           onSumbit={() => setDialogOpen(false)}
           onDelete={() => setDialogOpen(false)}
@@ -56,14 +58,16 @@ function PriceGroupRow({
 
 export default function PriceGroupTable() {
   const { priceGroups } = usePriceGroups()
+  const t = useTranslations("priceGroups")
+  
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead>Min qty</TableHead>
-          <TableHead>Color</TableHead>
-          <TableHead>Description</TableHead>
+          <TableHead>{t("table.name")}</TableHead>
+          <TableHead>{t("table.quantityThreshold")}</TableHead>
+          <TableHead>{t("table.color")}</TableHead>
+          <TableHead>{t("table.description")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

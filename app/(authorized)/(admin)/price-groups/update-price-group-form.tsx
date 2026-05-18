@@ -5,6 +5,7 @@ import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { deletePriceGroup, updatePriceGroup } from "@/lib/crud/price-groups"
 import { priceGroups } from "@/lib/db/schema"
 import { ArrowsClockwiseIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr"
+import { useTranslations } from "next-intl"
 import z from "zod"
 import { getRandomColor } from "./price-group-colors"
 
@@ -21,6 +22,7 @@ export default function UpdatePriceGroupForm(props: {
   priceGroup: typeof priceGroups.$inferSelect
 }) {
   const { priceGroups, setPriceGroups } = usePriceGroups()
+  const t = useTranslations("priceGroups")
   const defaultValues: z.infer<typeof createPriceGroupFormSchema> = {
     name: props.priceGroup.name,
     hexColor: props.priceGroup.hexColor,
@@ -49,22 +51,23 @@ export default function UpdatePriceGroupForm(props: {
     <Form handleSubmit={form.handleSubmit}>
       <form.AppField
         name="name"
-        children={(f) => <f.TextField label="Name" />}
+        children={(f) => <f.TextField label={t("form.name")} />}
       />
 
       <form.AppField name="quantityThreshold">
-        {(f) => <f.NumberField label="Min qty" min={0} />}
+        {(f) => <f.NumberField label={t("form.quantityThreshold")} min={0} />}
       </form.AppField>
 
       <form.AppField name="hexColor">
         {(f) => (
           <div className="space-y-2">
-            <FieldLabel>Color</FieldLabel>
+            <FieldLabel>{t("form.color")}</FieldLabel>
             <div className="flex gap-2">
               <form.Subscribe selector={(state) => state.values.hexColor}>
                 {(hexColor) => (
                   <div
                     className="group relative grid size-8 cursor-pointer place-items-center"
+                    title={t("form.randomColor")}
                     onClick={() =>
                       form.setFieldValue("hexColor", getRandomColor())
                     }
@@ -85,12 +88,12 @@ export default function UpdatePriceGroupForm(props: {
 
       <form.AppField
         name="description"
-        children={(f) => <f.TextField label="Description" />}
+        children={(f) => <f.TextField label={t("form.description")} />}
       />
 
       <form.AppForm>
         <div className="flex gap-2">
-          <form.SubmitButton>Update price group</form.SubmitButton>
+          <form.SubmitButton>{t("form.update")}</form.SubmitButton>
           <Button
             type="button"
             variant="destructive"
@@ -103,7 +106,7 @@ export default function UpdatePriceGroupForm(props: {
             }}
           >
             <TrashIcon />
-            Delete price group
+            {t("form.delete")}
           </Button>
         </div>
       </form.AppForm>

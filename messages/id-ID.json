@@ -129,5 +129,30 @@
       "updated": "Satuan diperbarui",
       "deleted": "Satuan dihapus"
     }
+  },
+  "priceGroups": {
+    "createNew": "Buat kelompok harga baru",
+    "form": {
+      "name": "Nama",
+      "quantityThreshold": "Min qty",
+      "color": "Warna",
+      "description": "Deskripsi",
+      "create": "Buat kelompok harga",
+      "update": "Perbarui kelompok harga",
+      "delete": "Hapus kelompok harga",
+      "randomColor": "Warna acak"
+    },
+    "table": {
+      "name": "Nama",
+      "quantityThreshold": "Min qty",
+      "color": "Warna",
+      "description": "Deskripsi",
+      "priceGroupList": "Daftar kelompok harga"
+    },
+    "toast": {
+      "created": "Kelompok harga dibuat",
+      "updated": "Kelompok harga diperbarui",
+      "deleted": "Kelompok harga dihapus"
+    }
   }
 }

@@ -6,6 +6,7 @@ import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { createPriceGroup, listPriceGroups } from "@/lib/crud/price-groups"
 import { ArrowsClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
 import { useEffect } from "react"
+import { useTranslations } from "next-intl"
 import z from "zod"
 import { getRandomColor } from "./price-group-colors"
 
@@ -18,6 +19,7 @@ const createPriceGroupFormSchema = z.object({
 
 export default function CreatePriceGroupForm() {
   const { setPriceGroups } = usePriceGroups()
+  const t = useTranslations("priceGroups")
   const defaultValues: z.infer<typeof createPriceGroupFormSchema> = {
     name: "",
     hexColor: "",
@@ -45,28 +47,29 @@ export default function CreatePriceGroupForm() {
 
   return (
     <FieldSet>
-      <FieldLegend>Add price group</FieldLegend>
+      <FieldLegend>{t("createNew")}</FieldLegend>
 
       <Form handleSubmit={form.handleSubmit}>
         <div className="flex gap-2">
           <form.AppField
             name="name"
-            children={(f) => <f.TextField label="Name" />}
+            children={(f) => <f.TextField label={t("form.name")} />}
           />
 
           <form.AppField name="quantityThreshold">
-            {(f) => <f.NumberField className="w-18" label="Min qty" min={0} />}
+            {(f) => <f.NumberField className="w-18" label={t("form.quantityThreshold")} min={0} />}
           </form.AppField>
 
           <form.AppField name="hexColor">
             {(f) => (
               <div className="space-y-2">
-                <FieldLabel>Color</FieldLabel>
+                <FieldLabel>{t("form.color")}</FieldLabel>
                 <div className="flex gap-2">
                   <form.Subscribe selector={(state) => state.values.hexColor}>
                     {(hexColor) => (
                       <div
                         className="group relative grid size-8 cursor-pointer place-items-center"
+                        title={t("form.randomColor")}
                         onClick={() =>
                           form.setFieldValue("hexColor", getRandomColor())
                         }
@@ -87,11 +90,11 @@ export default function CreatePriceGroupForm() {
         </div>
 
         <form.AppField name="description">
-          {(f) => <f.TextField label="Description" />}
+          {(f) => <f.TextField label={t("form.description")} />}
         </form.AppField>
 
         <form.AppForm>
-          <form.SubmitButton>Create price group</form.SubmitButton>
+          <form.SubmitButton>{t("form.create")}</form.SubmitButton>
         </form.AppForm>
       </Form>
     </FieldSet>
