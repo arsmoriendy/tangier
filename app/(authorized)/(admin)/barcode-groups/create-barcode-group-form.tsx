@@ -3,6 +3,7 @@
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
+import { useTranslations } from "next-intl"
 import {
   createBarcodeGroup,
   listBarcodeGroups,
@@ -15,6 +16,8 @@ const createBarcodeGroupFormSchema = z.object({
 
 export default function CreateBarcodeGroupForm() {
   const { setBarcodeGroups } = useBarcodeGroups()
+  const t = useTranslations("barcodeGroups")
+  const commonT = useTranslations("common")
   const defaultValues: z.infer<typeof createBarcodeGroupFormSchema> = {
     name: "",
   }
@@ -34,16 +37,16 @@ export default function CreateBarcodeGroupForm() {
 
   return (
     <FieldSet>
-      <FieldLegend>Add barcode group</FieldLegend>
+      <FieldLegend>{t("createNew")}</FieldLegend>
 
       <Form handleSubmit={form.handleSubmit}>
         <form.AppField
           name="name"
-          children={(f) => <f.TextField label="Name" />}
+          children={(f) => <f.TextField label={commonT("name")} />}
         />
 
         <form.AppForm>
-          <form.SubmitButton>Create barcode group</form.SubmitButton>
+          <form.SubmitButton>{t("form.create")}</form.SubmitButton>
         </form.AppForm>
       </Form>
     </FieldSet>

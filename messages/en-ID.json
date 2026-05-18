@@ -88,11 +88,6 @@
   "items": {
     "createNew": "Create new item",
     "form": {
-      "buyPrices": "Buy prices",
-      "sellPrices": "Sell prices",
-      "barcodes": "Barcodes",
-      "addBuyPrice": "Add buy price",
-      "pruneEmptyStockPrices": "Prune empty stock prices",
       "create": "Create item",
       "update": "Update item",
       "delete": "Delete item"
@@ -151,6 +146,22 @@
       "created": "Price group created",
       "updated": "Price group updated",
       "deleted": "Price group deleted"
+    }
+  },
+  "barcodeGroups": {
+    "createNew": "Create new barcode group",
+    "form": {
+      "create": "Create barcode group",
+      "update": "Update barcode group",
+      "delete": "Delete barcode group"
+    },
+    "table": {
+      "barcodeGroupList": "Barcode group list"
+    },
+    "toast": {
+      "created": "Barcode group created",
+      "updated": "Barcode group updated",
+      "deleted": "Barcode group deleted"
     }
   }
 }

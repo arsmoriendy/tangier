@@ -1,6 +1,7 @@
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
+import { useTranslations } from "next-intl"
 import {
   deleteBarcodeGroup,
   updateBarcodeGroup,
@@ -19,6 +20,8 @@ export default function UpdateBarcodeGroupForm(props: {
   barcodeGroup: typeof barcodeGroups.$inferSelect
 }) {
   const { barcodeGroups, setBarcodeGroups } = useBarcodeGroups()
+  const t = useTranslations("barcodeGroups")
+  const commonT = useTranslations("common")
   const defaultValues: z.infer<typeof updateBarcodeGroupFormSchema> = {
     name: props.barcodeGroup.name,
   }
@@ -44,12 +47,12 @@ export default function UpdateBarcodeGroupForm(props: {
     <Form handleSubmit={form.handleSubmit}>
       <form.AppField
         name="name"
-        children={(f) => <f.TextField label="Name" />}
+        children={(f) => <f.TextField label={commonT("name")} />}
       />
 
       <form.AppForm>
         <div className="flex gap-2">
-          <form.SubmitButton>Update barcode group</form.SubmitButton>
+          <form.SubmitButton>{t("form.update")}</form.SubmitButton>
           <Button
             type="button"
             variant="destructive"
@@ -62,7 +65,7 @@ export default function UpdateBarcodeGroupForm(props: {
             }}
           >
             <TrashIcon />
-            Delete barcode group
+            {t("form.delete")}
           </Button>
         </div>
       </form.AppForm>

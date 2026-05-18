@@ -9,6 +9,7 @@ import {
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
+import { useTranslations } from "next-intl"
 import { barcodeGroups } from "@/lib/db/schema"
 import { useState } from "react"
 import UpdateBarcodeGroupForm from "./update-barcode-group-form"
@@ -19,6 +20,7 @@ function BarcodeGroupRow({
   barcodeGroup: typeof barcodeGroups.$inferSelect
 }) {
   const [openDialog, setDialogOpen] = useState(false)
+  const t = useTranslations("barcodeGroups")
 
   return (
     <Dialog open={openDialog} onOpenChange={setDialogOpen}>
@@ -28,7 +30,7 @@ function BarcodeGroupRow({
         </TableRow>
       </DialogTrigger>
       <DialogContent>
-        <DialogTitle>Update barcode group</DialogTitle>
+        <DialogTitle>{t("form.update")}</DialogTitle>
         <UpdateBarcodeGroupForm
           barcodeGroup={barcodeGroup}
           onSubmit={() => setDialogOpen(false)}
@@ -41,9 +43,11 @@ function BarcodeGroupRow({
 
 export default function BarcodeGroupsTable() {
   const { barcodeGroups } = useBarcodeGroups()
+  const t = useTranslations("barcodeGroups")
+
   return (
     <FieldSet>
-      <FieldLegend>Barcode group list</FieldLegend>
+      <FieldLegend>{t("table.barcodeGroupList")}</FieldLegend>
       <Table>
         <TableBody>
           {barcodeGroups.map((bg, i) => (

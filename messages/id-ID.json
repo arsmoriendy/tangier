@@ -154,5 +154,21 @@
       "updated": "Kelompok harga diperbarui",
       "deleted": "Kelompok harga dihapus"
     }
+  },
+  "barcodeGroups": {
+    "createNew": "Buat kelompok barcode baru",
+    "form": {
+      "create": "Buat kelompok barcode",
+      "update": "Perbarui kelompok barcode",
+      "delete": "Hapus kelompok barcode"
+    },
+    "table": {
+      "barcodeGroupList": "Daftar kelompok barcode"
+    },
+    "toast": {
+      "created": "Kelompok barcode dibuat",
+      "updated": "Kelompok barcode diperbarui",
+      "deleted": "Kelompok barcode dihapus"
+    }
   }
 }
