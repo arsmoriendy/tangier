@@ -29,6 +29,7 @@ import { Heading } from "react-aria-components/RangeCalendar"
 import { buttonVariants } from "./ui/button"
 import { inputClass } from "./ui/input"
 import { labelClass } from "./ui/label"
+import { useTranslations } from "next-intl"
 
 export function DatetimeRangeField<T extends DateValue>({
   label,
@@ -39,6 +40,8 @@ export function DatetimeRangeField<T extends DateValue>({
   label?: string
   className?: string
 }) {
+  const t = useTranslations("transactions.history")
+
   return (
     <DateRangePicker className={className} {...props}>
       <Label className={cn(labelClass, "mb-2")}>{label}</Label>
@@ -48,14 +51,14 @@ export function DatetimeRangeField<T extends DateValue>({
         </Button>
 
         <div className="flex gap-2">
-          <span className="text-muted-foreground">from</span>
+          <span className="text-muted-foreground">{t("filters.from")}</span>
           <DateInput slot="start">
             {(segment) => <DateSegment segment={segment} />}
           </DateInput>
         </div>
 
         <div className="flex gap-2">
-          <span className="text-muted-foreground">to</span>
+          <span className="text-muted-foreground">{t("filters.to")}</span>
           <DateInput slot="end">
             {(segment) => <DateSegment segment={segment} />}
           </DateInput>

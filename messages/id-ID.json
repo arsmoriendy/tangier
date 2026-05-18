@@ -10,7 +10,8 @@
     "stockLeft": "Tersisa {count}",
     "margin": "Margin",
     "discountPerc": "Diskon {perc}%",
-    "totalPrice": "Total harga"
+    "totalPrice": "Total harga",
+    "id": "Id"
   },
   "sidebar": {
     "transactions": {
@@ -73,6 +74,18 @@
         "customStock": "Stok kustom"
       },
       "saveAndPrint": "Simpan dan cetak"
+    },
+    "history": {
+      "filters": {
+        "timeRange": "Rentang waktu",
+        "from": "Dari",
+        "to": "Hingga"
+      },
+      "table": {
+        "date": "Tanggal",
+        "time": "Waktu"
+      },
+      "updateTransaction": "Perbarui transaksi"
     }
   }
 }

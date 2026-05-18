@@ -10,7 +10,8 @@
     "stockLeft": "{count} left",
     "margin": "Margin",
     "discountPerc": "{perc}% discount",
-    "totalPrice": "Total price"
+    "totalPrice": "Total price",
+    "id": "Id"
   },
   "sidebar": {
     "transactions": {
@@ -71,6 +72,18 @@
         "customStock": "Custom stock"
       },
       "saveAndPrint": "Save and print"
+    },
+    "history": {
+      "filters": {
+        "timeRange": "Time range",
+        "from": "From",
+        "to": "To"
+      },
+      "table": {
+        "date": "Date",
+        "time": "Time"
+      },
+      "updateTransaction": "Update transaction"
     }
   }
 }

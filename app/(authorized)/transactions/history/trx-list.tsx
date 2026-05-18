@@ -9,17 +9,20 @@ import {
 } from "@/components/ui/table"
 import { useTrx } from "./trx-ctx"
 import { TrxDialog } from "./trx-dialog"
+import { useTranslations } from "next-intl"
 
 export function TrxList() {
+  const t = useTranslations("transactions.history")
+  const tc = useTranslations("common")
   const { getTrx } = useTrx()
   return (
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Id</TableHead>
-          <TableHead>Total price</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Time</TableHead>
+          <TableHead>{tc("id")}</TableHead>
+          <TableHead>{tc("totalPrice")}</TableHead>
+          <TableHead>{t("table.date")}</TableHead>
+          <TableHead>{t("table.time")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

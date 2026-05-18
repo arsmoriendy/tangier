@@ -9,8 +9,11 @@ import { subscribe } from "valtio"
 import { useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useTranslations } from "next-intl"
 
 export function Filters() {
+  const t = useTranslations("transactions.history")
+  const tc = useTranslations("common")
   const { getFilters, setFilters } = useFilters()
   const { setTrx } = useTrx()
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -28,7 +31,7 @@ export function Filters() {
   return (
     <div className="space-y-2">
       <div className="flex-1 space-y-2">
-        <Label>Id</Label>
+        <Label>{tc("id")}</Label>
         <Input
           onChange={(v) => {
             setFilters.offset = 0
@@ -38,7 +41,7 @@ export function Filters() {
       </div>
       <DatetimeRangeField
         className="flex-1"
-        label="Time range"
+        label={t("filters.timeRange")}
         value={{
           start: fromDate(getFilters.from ?? start, tz),
           end: fromDate(getFilters.to ?? end, tz),

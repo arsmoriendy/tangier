@@ -12,12 +12,14 @@ import { formatCurrency } from "@/lib/i18n/currency"
 import { useState } from "react"
 import TransactionForm from "../transaction-form"
 import { useTrx } from "./trx-ctx"
+import { useTranslations } from "next-intl"
 
 export function TrxDialog({
   trx,
 }: {
   trx: DeepReadonly<TransactionWithRelations>
 }) {
+  const t = useTranslations("transactions.history")
   const [open, setOpen] = useState(false)
   const createdDate = new Date(trx.createdAt)
   const { setTrx } = useTrx()
@@ -34,7 +36,7 @@ export function TrxDialog({
       </DialogTrigger>
 
       <DialogContent className="max-h-[92vh] w-[92vw] overflow-auto pt-0 sm:max-w-[92vw]">
-        <DialogTitle className="mt-2">Update transaction</DialogTitle>
+        <DialogTitle className="mt-2">{t("updateTransaction")}</DialogTitle>
 
         <TransactionForm
           transaction={trx}
