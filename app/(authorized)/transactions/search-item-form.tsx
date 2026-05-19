@@ -9,8 +9,14 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox"
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { FieldLabel } from "@/components/ui/field"
+import { Kbd } from "@/components/ui/kbd"
 import {
   Table,
   TableBody,
@@ -19,14 +25,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { useUnits } from "@/contexts/units-ctx"
 import { listItems } from "@/lib/crud/items"
 import { ItemWithRelations } from "@/lib/crud/items"
-import { formatCurrency } from "@/lib/i18n/currency"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
-import { useState } from "react"
+import { useRef, useState } from "react"
 import z from "zod"
 
 const searchItemSchema = z.object({
@@ -40,7 +44,6 @@ export const SearchItemForm = withForm({
   render: function Render({ form }) {
     const { addItemProxy } = useAddItem()
     const { units } = useUnits()
-    const { priceGroups } = usePriceGroups()
     const searchItemForm = useAppForm({
       defaultValues: defaultSearchItemValues,
       validators: {
@@ -59,6 +62,23 @@ export const SearchItemForm = withForm({
 
     const t = useTranslations("transactions.form.addItem.searchItem")
     const tc = useTranslations("common")
+
+    const itemsRef = useRef<HTMLTableRowElement[]>([])
+
+    function selectItem(item: ItemWithRelations) {
+      const buyPrice = item.buyPrices.at(item.buyPrices.length - 1)
+
+      form.setFieldValue("name", item.name)
+      form.setFieldValue("unit", item.unit.name)
+      form.setFieldValue("buyPrice", buyPrice?.price ?? 0)
+      addItemProxy.sellPrices = item.sellPrices
+      addItemProxy.buyPrices = item.buyPrices
+      addItemProxy.buyPrice = buyPrice
+
+      searchItemForm.reset()
+      setFoundItems([])
+      setDialogOpened(false)
+    }
 
     return (
       <>
@@ -126,23 +146,18 @@ export const SearchItemForm = withForm({
         </Form>
 
         <Dialog open={dialogIsOpen} onOpenChange={setDialogOpened}>
-          <DialogContent className="max-h-[92vh] w-[92vw] overflow-auto pt-0 sm:max-w-[92vw]">
+          <DialogContent className="overflow-auto pt-0">
             <DialogTitle className="mt-4">{t("title")}</DialogTitle>
+
+            <DialogDescription>
+              {t.rich("description", { Kbd: (chunks) => <Kbd>{chunks}</Kbd> })}
+            </DialogDescription>
 
             <Table className="border-separate border-spacing-0 [&_td]:border-b [&_th]:border-b [&_tr]:bg-popover [&_tr]:hover:bg-muted">
               <TableHeader className="sticky top-0">
                 <TableRow>
-                  <TableHead rowSpan={2}>{tc("name")}</TableHead>
-                  <TableHead rowSpan={2}>{tc("unit")}</TableHead>
-                  <TableHead colSpan={priceGroups.length}>
-                    {tc("sellPrices")}
-                  </TableHead>
-                </TableRow>
-
-                <TableRow>
-                  {priceGroups.map((pg, i) => (
-                    <TableHead key={i}>{pg.name}</TableHead>
-                  ))}
+                  <TableHead>{tc("name")}</TableHead>
+                  <TableHead>{tc("unit")}</TableHead>
                 </TableRow>
               </TableHeader>
 
@@ -150,37 +165,27 @@ export const SearchItemForm = withForm({
                 {foundItems.map((item, i) => (
                   <TableRow
                     key={i}
-                    className="group cursor-pointer [&_td]:group-hover:bg-primary [&_td]:group-hover:text-primary-foreground [&_td]:group-focus-visible:bg-primary [&_td]:group-focus-visible:text-primary-foreground"
-                    onClick={() => {
-                      const buyPrice = item.buyPrices.at(
-                        item.buyPrices.length - 1
-                      )
+                    tabIndex={i + 1}
+                    ref={(el) => {
+                      el && (itemsRef.current[i] = el)
+                    }}
+                    role="button"
+                    className="group cursor-pointer focus:outline-none [&_td]:group-hover:bg-primary [&_td]:group-hover:text-primary-foreground [&_td]:group-focus-visible:bg-primary [&_td]:group-focus-visible:text-primary-foreground"
+                    onClick={() => selectItem(item)}
+                    onKeyDown={(e) => {
+                      if (e.key === "ArrowUp")
+                        i !== 0 && itemsRef.current?.at(i - 1)?.focus()
+                      else if (e.key === "ArrowDown")
+                        itemsRef.current?.at(i + 1)?.focus()
+                      else if (e.key === "Enter" || e.key === " ")
+                        selectItem(item)
+                      else return
 
-                      form.setFieldValue("name", item.name)
-                      form.setFieldValue("unit", item.unit.name)
-                      form.setFieldValue("buyPrice", buyPrice?.price ?? 0)
-                      addItemProxy.sellPrices = item.sellPrices
-                      addItemProxy.buyPrices = item.buyPrices
-                      addItemProxy.buyPrice = buyPrice
-
-                      searchItemForm.reset()
-                      setFoundItems([])
-                      setDialogOpened(false)
+                      e.preventDefault()
                     }}
                   >
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.unit.name}</TableCell>
-                    {priceGroups.map((pg, i) => {
-                      const price = item.sellPrices.find(
-                        (p) => p.priceGroup.id === pg.id
-                      )?.price
-
-                      return (
-                        <TableCell key={i}>
-                          {formatCurrency(price ?? 0)}
-                        </TableCell>
-                      )
-                    })}
                   </TableRow>
                 ))}
               </TableBody>
