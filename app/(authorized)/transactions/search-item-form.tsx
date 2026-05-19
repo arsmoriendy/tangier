@@ -9,12 +9,7 @@ import {
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { FieldLabel } from "@/components/ui/field"
 import {
   Table,
@@ -71,8 +66,8 @@ export const SearchItemForm = withForm({
           <form.AppField name="name">
             {(field) => (
               <field.TextField
-                id="search-item-name"
                 label={tc("name")}
+                hotkeys={["Ctrl+k", "F3"]}
                 onChange={(e) => {
                   searchItemForm.setFieldValue("name", e.currentTarget.value)
                 }}
