@@ -8,6 +8,9 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
+1. Keyboard shortcuts
+2. Unit error indicator
+
 ###### Backlog
 
 1. Server function authorization
@@ -18,5 +21,4 @@ Run with the bun runtime, e.g. `bun -b dev`
 6. backup and restore
 7. export and import
 8. Keep focus on barcode, auto add
-9. Keyboard shortcuts
-10. Delete dialogs
+9. Delete dialogs

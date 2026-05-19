@@ -30,7 +30,7 @@ import { listItems } from "@/lib/crud/items"
 import { ItemWithRelations } from "@/lib/crud/items"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
-import { useRef, useState } from "react"
+import { RefObject, useRef, useState } from "react"
 import z from "zod"
 
 const searchItemSchema = z.object({
@@ -38,10 +38,15 @@ const searchItemSchema = z.object({
   unitId: z.string().optional(),
 })
 const defaultSearchItemValues: z.infer<typeof searchItemSchema> = { name: "" }
+const defaultProps: {
+  afterSelect?: () => any
+  nameRef?: RefObject<HTMLInputElement | null>
+} = {}
 
 export const SearchItemForm = withForm({
   defaultValues: defaultAddItemValues,
-  render: function Render({ form }) {
+  props: defaultProps,
+  render: function Render({ form, afterSelect, nameRef }) {
     const { addItemProxy } = useAddItem()
     const { units } = useUnits()
     const searchItemForm = useAppForm({
@@ -78,6 +83,7 @@ export const SearchItemForm = withForm({
       searchItemForm.reset()
       setFoundItems([])
       setDialogOpened(false)
+      afterSelect?.()
     }
 
     return (
@@ -87,6 +93,7 @@ export const SearchItemForm = withForm({
             {(field) => (
               <field.TextField
                 label={tc("name")}
+                ref={nameRef}
                 hotkeys={["Ctrl+k", "F3"]}
                 onChange={(e) => {
                   searchItemForm.setFieldValue("name", e.currentTarget.value)

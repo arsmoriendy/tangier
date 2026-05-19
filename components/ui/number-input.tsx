@@ -1,6 +1,6 @@
 import { inputClass } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { useEffect, useRef } from "react"
+import { RefObject, useEffect, useRef } from "react"
 import { NumericFormat, NumericFormatProps } from "react-number-format"
 
 export type NumberInputProps = Omit<
@@ -12,6 +12,7 @@ export type NumberInputProps = Omit<
   min?: number
   max?: number
   unstyled?: true
+  ref?: RefObject<HTMLInputElement | null>
   value: number
   onValueChange: (value: number) => any
 }
@@ -27,14 +28,14 @@ export function NumberInput({
   onValueChange,
   unstyled,
   value: valueProp,
+  ref = useRef<HTMLInputElement>(null),
   ...props
 }: NumberInputProps) {
   const clamp = (v: number): number => Math.min(max, Math.max(min, v))
-  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     function handleWheel(e: WheelEvent) {
-      if (document.activeElement === inputRef.current) {
+      if (document.activeElement === ref.current) {
         e.preventDefault()
         onValueChange(clamp(e.deltaY < 0 ? valueProp + step : valueProp - step))
       }
@@ -42,14 +43,14 @@ export function NumberInput({
       onWheel?.(e)
     }
 
-    inputRef.current?.addEventListener("wheel", handleWheel, { passive: false })
+    ref.current?.addEventListener("wheel", handleWheel, { passive: false })
 
-    return () => inputRef.current?.removeEventListener("wheel", handleWheel)
+    return () => ref.current?.removeEventListener("wheel", handleWheel)
   })
 
   return (
     <NumericFormat
-      getInputRef={inputRef}
+      getInputRef={ref}
       autoComplete={autoComplete}
       value={valueProp}
       className={!unstyled ? cn(inputClass, className) : className}

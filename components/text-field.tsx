@@ -7,7 +7,7 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field"
-import { ComponentProps, useRef } from "react"
+import { ComponentProps, RefObject, useRef } from "react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group"
 import { Kbd } from "./ui/kbd"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -18,20 +18,21 @@ export default function TextField({
   className,
   onChange,
   hotkeys,
+  ref = useRef<HTMLInputElement>(null),
   ...inputProps
-}: {
+}: Omit<ComponentProps<"input">, "ref"> & {
   label?: string
   description?: string
   className?: string
   hotkeys?: string[]
-} & ComponentProps<"input">) {
+  ref?: RefObject<HTMLInputElement | null>
+}) {
   const field = useFieldContext<string>()
   const id = `${field.form.formId}-${field.name}`
   const isInvalid = !field.state.meta.isValid
-  const ref = useRef<HTMLInputElement>(null)
 
   if (hotkeys !== undefined) {
-    useHotkeys(hotkeys, () => ref?.current?.focus(), { preventDefault: true })
+    useHotkeys(hotkeys, () => ref.current?.focus(), { preventDefault: true })
   }
 
   return (

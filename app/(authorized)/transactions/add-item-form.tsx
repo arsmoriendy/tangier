@@ -20,6 +20,7 @@ import { cn } from "@/lib/utils"
 import { useSession } from "@/contexts/session-ctx"
 import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
+import { useRef } from "react"
 
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
@@ -40,10 +41,14 @@ export const AddItemForm = withForm({
             quantifiedPrice,
           },
         })
+
         addItemProxy.sellPrices = []
         addItemProxy.buyPrices = []
         addItemProxy.buyPrice = undefined
+
         form.reset()
+
+        nameRef.current?.focus()
       },
     })
 
@@ -59,6 +64,9 @@ export const AddItemForm = withForm({
     const t = useTranslations("transactions.form.addItem")
     const tc = useTranslations("common")
 
+    const nameRef = useRef<HTMLInputElement>(null)
+    const qtyRef = useRef<HTMLInputElement>(null)
+
     createTransactionForm.store.subscribe(({ values: { priceGroup } }) => {
       const sellPrice =
         addItemProxy.sellPrices.find((sp) => sp.priceGroup.id === priceGroup)
@@ -73,7 +81,11 @@ export const AddItemForm = withForm({
         <FieldSet className="gap-0">
           <FieldLegend>{t("title")}</FieldLegend>
 
-          <SearchItemForm form={form} />
+          <SearchItemForm
+            form={form}
+            afterSelect={() => setTimeout(() => qtyRef.current?.focus())}
+            nameRef={nameRef}
+          />
 
           <ScanBarcodeField form={form} />
 
@@ -148,7 +160,9 @@ export const AddItemForm = withForm({
                         ),
                     }}
                   >
-                    {(f) => <f.NumberField className="w-24" min={1} />}
+                    {(f) => (
+                      <f.NumberField className="w-24" min={1} ref={qtyRef} />
+                    )}
                   </form.AppField>
                 </div>
 
