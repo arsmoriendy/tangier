@@ -81,6 +81,10 @@
         "updateStock": "Perbarui stok",
         "customStock": "Stok kustom"
       },
+      "customerGroup": {
+        "title": "Kelompok pelanggan",
+        "noDescription": "Tidak ada deskripsi"
+      },
       "saveAndPrint": "Simpan dan cetak"
     },
     "history": {

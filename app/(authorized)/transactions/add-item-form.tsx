@@ -7,7 +7,6 @@ import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
 import { subscribeKey } from "valtio/utils"
-import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import {
   addItemSchema,
   defaultAddItemValues,
@@ -26,7 +25,6 @@ export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
   render: function Render({ form: createTransactionForm }) {
     const session = useSession()
-    const { priceGroups } = usePriceGroups()
     const { addItemProxy, addItemSnap } = useAddItem()
     const { getLocalStorage } = useLocalStorage()
 
@@ -61,6 +59,15 @@ export const AddItemForm = withForm({
     const t = useTranslations("transactions.form.addItem")
     const tc = useTranslations("common")
 
+    createTransactionForm.store.subscribe(({ values: { priceGroup } }) => {
+      const sellPrice =
+        addItemProxy.sellPrices.find((sp) => sp.priceGroup.id === priceGroup)
+          ?.price ?? 0
+
+      if (form.state.values.sellPrice !== sellPrice)
+        form.setFieldValue("sellPrice", sellPrice)
+    })
+
     return (
       <>
         <FieldSet className="gap-0">
@@ -71,39 +78,6 @@ export const AddItemForm = withForm({
           <ScanBarcodeField form={form} />
 
           <Form className="mt-2" handleSubmit={form.handleSubmit}>
-            <createTransactionForm.Subscribe
-              selector={(f) => f.values.priceGroup}
-            >
-              {(priceGroup) => (
-                <RadioGroupChoiceCard
-                  className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-                  value={priceGroup}
-                  onValueChange={(v) => {
-                    form.setFieldValue(
-                      "sellPrice",
-                      addItemSnap.sellPrices.find((p) => p.priceGroup.id === v)
-                        ?.price ?? 0
-                    )
-                    createTransactionForm.setFieldValue("priceGroup", v)
-                  }}
-                >
-                  {priceGroups.map((pg, i) => (
-                    <RadioGroupChoiceItem
-                      key={i}
-                      style={{ backgroundColor: `#${pg.hexColor}` }}
-                      value={pg.id}
-                      title={formatCurrency(
-                        addItemSnap.sellPrices.find(
-                          (p) => p.priceGroup.id === pg.id
-                        )?.price ?? 0
-                      )}
-                      description={pg.name}
-                    />
-                  ))}
-                </RadioGroupChoiceCard>
-              )}
-            </createTransactionForm.Subscribe>
-
             <div className="flex gap-2">
               {session.user.role === "admin" && (
                 <FieldSet className="flex-1">

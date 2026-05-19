@@ -79,6 +79,10 @@
         "updateStock": "Update stock",
         "customStock": "Custom stock"
       },
+      "customerGroup": {
+        "title": "Customer group",
+        "noDescription": "No description"
+      },
       "saveAndPrint": "Save and print"
     },
     "history": {
