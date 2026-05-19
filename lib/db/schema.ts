@@ -11,11 +11,15 @@ import {
   boolean,
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
+import { v7 } from "uuid"
 
 export const items = pgTable(
   "items",
   {
-    id: uuid().primaryKey().notNull().defaultRandom(),
+    id: uuid()
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => v7()),
     name: varchar().notNull(),
     unit: uuid().notNull(),
   },
@@ -31,12 +35,18 @@ export const items = pgTable(
 )
 
 export const units = pgTable("units", {
-  id: uuid().primaryKey().notNull().defaultRandom(),
+  id: uuid()
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => v7()),
   name: varchar().notNull(),
 })
 
 export const barcodeGroups = pgTable("barcode_groups", {
-  id: uuid().primaryKey().notNull().defaultRandom(),
+  id: uuid()
+    .primaryKey()
+    .notNull()
+    .$defaultFn(() => v7()),
   name: varchar().notNull(),
 })
 
@@ -72,7 +82,10 @@ export const barcodes = pgTable(
 export const priceGroups = pgTable(
   "price_groups",
   {
-    id: uuid().primaryKey().notNull().defaultRandom(),
+    id: uuid()
+      .primaryKey()
+      .notNull()
+      .$defaultFn(() => v7()),
     name: varchar().notNull(),
     hexColor: varchar("hex_color", { length: 6 }).notNull(),
     description: varchar(),
@@ -84,7 +97,10 @@ export const priceGroups = pgTable(
 export const buyPrices = pgTable(
   "buy_prices",
   {
-    id: uuid().notNull().primaryKey().defaultRandom(),
+    id: uuid()
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => v7()),
     item: uuid("item").notNull(),
     price: numeric({ mode: "number" }).notNull(),
     stock: integer().notNull().default(0),
@@ -133,7 +149,10 @@ export const sellPrices = pgTable(
 )
 
 export const transactions = pgTable("transactions", {
-  id: uuid().notNull().primaryKey().defaultRandom(),
+  id: uuid()
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => v7()),
   cashier: varchar().notNull(),
   totalPrice: numeric("total_price", { mode: "number" }).notNull(),
   customerPriceGroup: varchar("customer_price_group").notNull(),

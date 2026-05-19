@@ -8,8 +8,6 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. UUID v7
-
 ###### Backlog
 
 1. Server function authorization
