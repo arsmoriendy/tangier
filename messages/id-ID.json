@@ -8,6 +8,7 @@
     "buyPrice": "Harga beli",
     "sellPrice": "Harga jual",
     "quantifiedPrice": "Harga terkuantifikasi",
+    "stock": "Stok",
     "stockLeft": "Tersisa {count}",
     "margin": "Margin",
     "discountPerc": "Diskon {perc}%",

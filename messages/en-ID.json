@@ -8,6 +8,7 @@
     "buyPrice": "Buy price",
     "sellPrice": "Sell price",
     "quantifiedPrice": "Quantified price",
+    "stock": "Stock",
     "stockLeft": "{count} left",
     "margin": "Margin",
     "discountPerc": "{perc}% discount",

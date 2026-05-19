@@ -141,7 +141,7 @@ export default function ItemForm(props: {
                         {(f) => (
                           <f.NumberField
                             className="w-24"
-                            label={tc("stockLeft", { count: 0 })}
+                            label={tc("stock")}
                             min={0}
                           />
                         )}
