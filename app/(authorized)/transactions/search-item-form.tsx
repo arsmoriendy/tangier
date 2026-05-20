@@ -26,6 +26,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useUnits } from "@/contexts/units-ctx"
+import { readBarcode } from "@/lib/crud/barcodes"
 import { listItems } from "@/lib/crud/items"
 import { ItemWithRelations } from "@/lib/crud/items"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
@@ -34,10 +35,12 @@ import { RefObject, useRef, useState } from "react"
 import z from "zod"
 
 const searchItemSchema = z.object({
-  name: z.string().min(0),
+  nameOrBarcode: z.string().min(0),
   unitId: z.string().optional(),
 })
-const defaultSearchItemValues: z.infer<typeof searchItemSchema> = { name: "" }
+const defaultSearchItemValues: z.infer<typeof searchItemSchema> = {
+  nameOrBarcode: "",
+}
 const defaultProps: {
   afterSelect?: () => any
   nameRef?: RefObject<HTMLInputElement | null>
@@ -56,6 +59,12 @@ export const SearchItemForm = withForm({
         onChange: searchItemSchema,
       },
       onSubmit: async ({ value }) => {
+        const res = await readBarcode(value.nameOrBarcode)
+        if (res !== undefined) {
+          selectItem(res.item)
+          return
+        }
+
         const items = await listItems(value)
         setFoundItems(items)
         setDialogOpened(true)
@@ -92,11 +101,14 @@ export const SearchItemForm = withForm({
           <form.AppField name="name">
             {(field) => (
               <field.TextField
-                label={tc("name")}
+                label={t("nameOrBarcode")}
                 ref={nameRef}
                 hotkeys={["Ctrl+k", "F3"]}
                 onChange={(e) => {
-                  searchItemForm.setFieldValue("name", e.currentTarget.value)
+                  searchItemForm.setFieldValue(
+                    "nameOrBarcode",
+                    e.currentTarget.value
+                  )
                 }}
               />
             )}

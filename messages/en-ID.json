@@ -68,6 +68,7 @@
           "errors": { "notFound": "No items with specified barcode" }
         },
         "searchItem": {
+          "nameOrBarcode": "Name or barcode",
           "title": "Select item",
           "description": "Use <Kbd>↑</Kbd> or <Kbd>⇧ Shift</Kbd> + <Kbd>⇥ Tab</Kbd> to focus to the previous item, and <Kbd>↓</Kbd> or <Kbd>⇥ Tab</Kbd> to focus to the next item.",
           "errors": { "unitNotFound": "Unit not found" }

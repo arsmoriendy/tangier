@@ -17,5 +17,4 @@ Run with the bun runtime, e.g. `bun -b dev`
 5. group transaction items based on new category column
 6. backup and restore
 7. export and import
-8. Keep focus on barcode, auto add
-9. Delete dialogs
+8. Delete dialogs

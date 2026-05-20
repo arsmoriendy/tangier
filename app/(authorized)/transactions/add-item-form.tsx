@@ -13,7 +13,6 @@ import {
 } from "@/app/(authorized)/transactions/add-item-schema"
 import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
 import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
-import { ScanBarcodeField } from "@/app/(authorized)/transactions/scan-barcode-field"
 import { Item } from "@/components/ui/item"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { cn } from "@/lib/utils"
@@ -86,8 +85,6 @@ export const AddItemForm = withForm({
             afterSelect={() => setTimeout(() => qtyRef.current?.focus())}
             nameRef={nameRef}
           />
-
-          <ScanBarcodeField form={form} />
 
           <Form className="mt-2" handleSubmit={form.handleSubmit}>
             <div className="flex gap-2">
