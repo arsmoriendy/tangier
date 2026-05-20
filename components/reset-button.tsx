@@ -1,15 +1,20 @@
 import { useTranslations } from "next-intl"
-import { Button, ButtonProps } from "./ui/button"
+import {
+  ButtonWithHotkeys,
+  ButtonWithHotkeysProps,
+} from "./ui/button-with-hotkeys"
+import { ArrowCounterClockwiseIcon } from "@phosphor-icons/react"
 
 export function ResetButton({
   variant = "destructive",
   type = "reset",
   ...props
-}: ButtonProps) {
+}: ButtonWithHotkeysProps) {
   const t = useTranslations("common")
   return (
-    <Button variant={variant} type={type} {...props}>
+    <ButtonWithHotkeys variant={variant} type={type} {...props}>
+      <ArrowCounterClockwiseIcon />
       {t("reset")}
-    </Button>
+    </ButtonWithHotkeys>
   )
 }

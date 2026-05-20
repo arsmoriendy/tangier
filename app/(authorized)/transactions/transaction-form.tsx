@@ -55,7 +55,6 @@ import {
   RadioGroupChoiceCard,
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
-import { Kbd } from "@/components/ui/kbd"
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 
 export default function TransactionForm(props: {
@@ -514,13 +513,8 @@ export default function TransactionForm(props: {
             {(field) => <field.IdrField min={0} className="flex-1" />}
           </form.AppField>
 
-          <form.AppForm>
-            <form.SubmitButton hotkeys={["F7"]}>
-              <PrinterIcon /> {t("saveAndPrint")}
-            </form.SubmitButton>
-          </form.AppForm>
-
           <ResetButton
+            hotkeys={["F4"]}
             onClick={() => {
               form.reset()
             }}
@@ -528,12 +522,13 @@ export default function TransactionForm(props: {
 
           {!props.transaction && (
             <>
-              <Button type="button" onClick={hold}>
+              <ButtonWithHotkeys type="button" onClick={hold} hotkeys={["F5"]}>
                 <HandIcon /> Hold
-              </Button>
+              </ButtonWithHotkeys>
 
-              <Button
+              <ButtonWithHotkeys
                 type="button"
+                hotkeys={["F6"]}
                 onClick={async () => {
                   setHeld.splice(
                     0,
@@ -549,7 +544,7 @@ export default function TransactionForm(props: {
               >
                 <ClockCountdownIcon />
                 Recall
-              </Button>
+              </ButtonWithHotkeys>
 
               <Dialog
                 open={openRecallDialog}
@@ -637,6 +632,12 @@ export default function TransactionForm(props: {
                   </Table>
                 </DialogContent>
               </Dialog>
+
+              <form.AppForm>
+                <form.SubmitButton hotkeys={["F7"]}>
+                  <PrinterIcon /> {t("saveAndPrint")}
+                </form.SubmitButton>
+              </form.AppForm>
             </>
           )}
         </div>
