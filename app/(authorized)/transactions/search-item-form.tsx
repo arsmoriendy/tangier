@@ -201,7 +201,7 @@ export const SearchItemForm = withForm({
                       el && (itemsRef.current[i] = el)
                     }}
                     role="button"
-                    className="group cursor-pointer focus:outline-none [&_td]:group-hover:bg-primary [&_td]:group-hover:text-primary-foreground [&_td]:group-focus-visible:bg-primary [&_td]:group-focus-visible:text-primary-foreground"
+                    className="group cursor-pointer focus:outline-none [&_td]:group-focus-visible:bg-primary [&_td]:group-focus-visible:text-primary-foreground"
                     onClick={() => selectItem(item)}
                     onKeyDown={(e) => {
                       if (e.key === "ArrowUp")
