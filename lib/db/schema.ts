@@ -188,6 +188,8 @@ export const transactionItems = pgTable(
       columns: [table.buyPriceId],
       foreignColumns: [buyPrices.id],
       name: "buy_prices_fk",
-    }).onUpdate("cascade"),
+    })
+      .onUpdate("cascade")
+      .onDelete("set null"),
   ]
 )
