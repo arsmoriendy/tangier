@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "intl-check": "i18n-check --unused . --locales ./messages/ --source en-ID --format next-intl",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@lingual/i18n-check": "^0.9.5",
     "@tailwindcss/postcss": "^4.2.1",
     "@types/chroma-js": "^3.1.2",
     "@types/node": "^25.5.0",
