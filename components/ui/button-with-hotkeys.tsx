@@ -24,7 +24,12 @@ export function ButtonWithHotkeys({
   return (
     <Button data-slot="button" ref={ref} {...props}>
       {children}
-      {!hideHotkeys && hotkeys?.map((hk, i) => <Kbd key={i}>{hk}</Kbd>)}
+      {!hideHotkeys &&
+        hotkeys?.map((hk, i) => (
+          <Kbd key={i} data-icon="inline-end">
+            {hk}
+          </Kbd>
+        ))}
     </Button>
   )
 }
