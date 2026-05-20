@@ -8,9 +8,6 @@ Run with the bun runtime, e.g. `bun -b dev`
 
 ##### TODO
 
-1. Keyboard shortcuts
-2. Unit error indicator
-
 ###### Backlog
 
 1. Server function authorization

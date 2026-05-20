@@ -15,7 +15,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { FieldLabel } from "@/components/ui/field"
+import { FieldError, FieldLabel } from "@/components/ui/field"
 import { Kbd } from "@/components/ui/kbd"
 import {
   Table,
@@ -104,46 +104,58 @@ export const SearchItemForm = withForm({
 
           <span className="mt-6 grid h-8 place-items-center">/</span>
 
-          <form.Subscribe selector={(f) => f.values.unit}>
-            {(unitName) => (
-              <div className="space-y-2">
-                <FieldLabel>{tc("unit")}</FieldLabel>
-                <Combobox
-                  items={units.map((unit) => ({
-                    value: unit.id,
-                    label: unit.name,
-                  }))}
-                  value={
-                    units
-                      .map((unit) => ({
-                        value: unit.id,
-                        label: unit.name,
-                      }))
-                      .find((unit) => unit.label === unitName) ?? null
-                  }
-                  itemToStringValue={(unit) => unit!.label ?? ""}
-                  onValueChange={(
-                    unit: { label: string; value: string } | null
-                  ) => {
-                    form.setFieldValue("unit", unit?.label ?? "")
-                    searchItemForm.setFieldValue("unitId", unit?.value)
-                  }}
-                >
-                  <ComboboxInput />
-                  <ComboboxContent>
-                    <ComboboxEmpty>{t("errors.unitNotFound")}</ComboboxEmpty>
-                    <ComboboxList>
-                      {(unit) => (
-                        <ComboboxItem key={unit.value} value={unit}>
-                          {unit.label}
-                        </ComboboxItem>
-                      )}
-                    </ComboboxList>
-                  </ComboboxContent>
-                </Combobox>
-              </div>
-            )}
-          </form.Subscribe>
+          <form.AppField name="unit">
+            {(field) => {
+              const isInvalid = !field.state.meta.isValid
+              return (
+                <div className="space-y-2">
+                  <FieldLabel aria-invalid={isInvalid}>{tc("unit")}</FieldLabel>
+                  <Combobox
+                    items={units.map((unit) => ({
+                      value: unit.id,
+                      label: unit.name,
+                    }))}
+                    value={
+                      units
+                        .map((unit) => ({
+                          value: unit.id,
+                          label: unit.name,
+                        }))
+                        .find((unit) => unit.label === field.state.value) ??
+                      null
+                    }
+                    itemToStringValue={(unit) => unit!.label ?? ""}
+                    onValueChange={(
+                      unit: { label: string; value: string } | null
+                    ) => {
+                      form.setFieldValue("unit", unit?.label ?? "")
+                      searchItemForm.setFieldValue("unitId", unit?.value)
+                    }}
+                  >
+                    <ComboboxInput aria-invalid={isInvalid} />
+                    <ComboboxContent>
+                      <ComboboxEmpty>{t("errors.unitNotFound")}</ComboboxEmpty>
+                      <ComboboxList>
+                        {(unit) => (
+                          <ComboboxItem key={unit.value} value={unit}>
+                            {unit.label}
+                          </ComboboxItem>
+                        )}
+                      </ComboboxList>
+                    </ComboboxContent>
+                  </Combobox>
+                  {field.state.meta.errors[0] && (
+                    <FieldError>
+                      {
+                        // @ts-ignore
+                        field.state.meta.errors[0].message
+                      }
+                    </FieldError>
+                  )}
+                </div>
+              )
+            }}
+          </form.AppField>
 
           <searchItemForm.AppForm>
             <searchItemForm.SubmitButton size="icon" className="mt-6">

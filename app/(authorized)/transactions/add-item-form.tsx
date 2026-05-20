@@ -206,23 +206,6 @@ export const AddItemForm = withForm({
               </FieldSet>
             </div>
 
-            <form.Subscribe selector={(f) => [f.errors]}>
-              {([errors]) =>
-                errors.map((e) =>
-                  e
-                    ? Object.entries(e).map(([k, v], i) => (
-                        <span
-                          className="block text-xs text-destructive"
-                          key={i}
-                        >
-                          {k}: {v.map((v) => v.message).join(", ")}
-                        </span>
-                      ))
-                    : undefined
-                )
-              }
-            </form.Subscribe>
-
             <div className="flex gap-2">
               <form.AppForm>
                 <form.SubmitButton>{t("title")}</form.SubmitButton>
