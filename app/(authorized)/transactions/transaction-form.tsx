@@ -262,10 +262,7 @@ export default function TransactionForm(props: {
         <AddItemForm form={form} />
       </AddItemProvider>
 
-      <Form
-        handleSubmit={form.handleSubmit}
-        className="relative flex flex-1 flex-col"
-      >
+      <div className="relative flex flex-1 flex-col gap-2">
         <FieldSet className="flex-1">
           <FieldLegend>{t("items.title")}</FieldLegend>
           <FieldGroup>
@@ -644,15 +641,17 @@ export default function TransactionForm(props: {
                 </DialogContent>
               </Dialog>
 
-              <form.AppForm>
-                <form.SubmitButton hotkeys={["F7"]}>
-                  <PrinterIcon /> {t("saveAndPrint")}
-                </form.SubmitButton>
-              </form.AppForm>
+              <Form handleSubmit={form.handleSubmit}>
+                <form.AppForm>
+                  <form.SubmitButton hotkeys={["F7"]}>
+                    <PrinterIcon /> {t("saveAndPrint")}
+                  </form.SubmitButton>
+                </form.AppForm>
+              </Form>
             </>
           )}
         </div>
-      </Form>
+      </div>
     </div>
   )
 }
