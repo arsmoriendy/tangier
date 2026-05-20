@@ -55,6 +55,8 @@ import {
   RadioGroupChoiceCard,
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
+import { Kbd } from "@/components/ui/kbd"
+import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 
 export default function TransactionForm(props: {
   transaction?: DeepReadonly<TransactionWithRelations>
@@ -513,7 +515,7 @@ export default function TransactionForm(props: {
           </form.AppField>
 
           <form.AppForm>
-            <form.SubmitButton>
+            <form.SubmitButton hotkeys={["F7"]}>
               <PrinterIcon /> {t("saveAndPrint")}
             </form.SubmitButton>
           </form.AppForm>

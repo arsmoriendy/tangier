@@ -32,7 +32,10 @@ export default function TextField({
   const isInvalid = !field.state.meta.isValid
 
   if (hotkeys !== undefined) {
-    useHotkeys(hotkeys, () => ref.current?.focus(), { preventDefault: true })
+    useHotkeys(hotkeys, () => ref.current?.focus(), {
+      preventDefault: true,
+      enableOnFormTags: true,
+    })
   }
 
   return (
