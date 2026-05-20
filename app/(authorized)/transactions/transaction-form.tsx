@@ -249,7 +249,7 @@ export default function TransactionForm(props: {
                   value={pg.id}
                   title={pg.name}
                   description={
-                    pg.description ?? t("customerGroup.noDescription")
+                    pg.description || t("customerGroup.noDescription")
                   }
                 />
               ))}
