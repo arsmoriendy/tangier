@@ -191,6 +191,8 @@ export default function TransactionForm(props: {
   }
 
   async function hold() {
+    if (form.state.values.transactionItems.length < 1) return
+
     const { transactionItems, priceGroup, ...value } = form.state.values
     const items = transactionItems.map(
       ({ extraFields, ...otherFields }) => otherFields
@@ -522,9 +524,18 @@ export default function TransactionForm(props: {
 
           {!props.transaction && (
             <>
-              <ButtonWithHotkeys type="button" onClick={hold} hotkeys={["F5"]}>
-                <HandIcon /> Hold
-              </ButtonWithHotkeys>
+              <form.Subscribe selector={(form) => form.canSubmit}>
+                {(canSubmit) => (
+                  <ButtonWithHotkeys
+                    type="button"
+                    onClick={hold}
+                    hotkeys={["F5"]}
+                    disabled={!canSubmit}
+                  >
+                    <HandIcon /> Hold
+                  </ButtonWithHotkeys>
+                )}
+              </form.Subscribe>
 
               <ButtonWithHotkeys
                 type="button"
