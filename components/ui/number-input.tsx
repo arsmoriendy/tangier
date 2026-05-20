@@ -26,6 +26,7 @@ export function NumberInput({
   onWheel,
   onKeyDown,
   onValueChange,
+  onFocus,
   unstyled,
   value: valueProp,
   ref = useRef<HTMLInputElement>(null),
@@ -69,6 +70,10 @@ export function NumberInput({
           onValueChange(clamp(valueProp - step))
         }
         onKeyDown?.(e)
+      }}
+      onFocus={(e) => {
+        e.currentTarget.select()
+        onFocus?.(e)
       }}
       {...props}
     />
