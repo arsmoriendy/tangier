@@ -20,7 +20,7 @@ export function ChangePasswordForm() {
     },
     validators: { onMount: schema, onChange: schema },
     onSubmit: async ({ value: { currentPassword, newPassword } }) => {
-      var { error } = await authClient.changePassword({
+      const { error } = await authClient.changePassword({
         currentPassword,
         newPassword,
       })

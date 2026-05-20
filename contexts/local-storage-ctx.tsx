@@ -16,8 +16,8 @@ const lsCtx = createContext<ValtioContext<LocalStorage> | undefined>(undefined)
 const lsKey = "tangierStore"
 
 export function LocalStorageProvider({ children }: { children: ReactNode }) {
-  let lsProxy = proxy(lsDefault)
-  let lsSnap = useSnapshot(lsProxy)
+  const lsProxy = proxy(lsDefault)
+  const lsSnap = useSnapshot(lsProxy)
 
   useEffect(() => {
     const ls = localStorage.getItem(lsKey)
