@@ -58,14 +58,14 @@ export const SearchItemForm = withForm({
         onMount: searchItemSchema,
         onChange: searchItemSchema,
       },
-      onSubmit: async ({ value }) => {
-        const res = await readBarcode(value.nameOrBarcode)
+      onSubmit: async ({ value: { nameOrBarcode, ...value } }) => {
+        const res = await readBarcode(nameOrBarcode)
         if (res !== undefined) {
           selectItem(res.item)
           return
         }
 
-        const items = await listItems(value)
+        const items = await listItems({ name: nameOrBarcode, ...value })
         setFoundItems(items)
         setDialogOpened(true)
       },
