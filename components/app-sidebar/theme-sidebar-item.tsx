@@ -48,7 +48,7 @@ export function ThemeSidebarItem() {
             <DropdownMenuRadioGroup value={theme} onValueChange={setTheme}>
               {Object.entries(themeIconMap).map(([theme, icon], i) => (
                 <DropdownMenuRadioItem key={i} value={theme}>
-                  {icon} {t(theme)}
+                  {icon} {t(theme as "light" | "dark" | "system")}
                 </DropdownMenuRadioItem>
               ))}
             </DropdownMenuRadioGroup>
