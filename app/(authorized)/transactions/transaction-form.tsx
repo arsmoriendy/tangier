@@ -640,16 +640,16 @@ export default function TransactionForm(props: {
                   </Table>
                 </DialogContent>
               </Dialog>
-
-              <Form handleSubmit={form.handleSubmit}>
-                <form.AppForm>
-                  <form.SubmitButton hotkeys={["F7"]}>
-                    <PrinterIcon /> {t("saveAndPrint")}
-                  </form.SubmitButton>
-                </form.AppForm>
-              </Form>
             </>
           )}
+
+          <Form handleSubmit={form.handleSubmit}>
+            <form.AppForm>
+              <form.SubmitButton hotkeys={["F7"]}>
+                <PrinterIcon /> {t("saveAndPrint")}
+              </form.SubmitButton>
+            </form.AppForm>
+          </Form>
         </div>
       </div>
     </div>
