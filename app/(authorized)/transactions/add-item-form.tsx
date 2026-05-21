@@ -205,7 +205,9 @@ export const AddItemForm = withForm({
 
             <div className="flex gap-2">
               <form.AppForm>
-                <form.SubmitButton>{t("title")}</form.SubmitButton>
+                <form.SubmitButton hotkeys={["Ctrl+enter"]}>
+                  {t("title")}
+                </form.SubmitButton>
               </form.AppForm>
 
               <ResetButton
