@@ -2,6 +2,7 @@ import IdrField from "@/components/idr-field"
 import NumberField from "@/components/number-field"
 import SubmitButton from "@/components/submit-button"
 import TextField from "@/components/text-field"
+import TextareaField from "@/components/textarea-field"
 import { cn } from "@/lib/utils"
 import { createFormHook, createFormHookContexts } from "@tanstack/react-form"
 import { ComponentProps } from "react"
@@ -10,7 +11,7 @@ export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts()
 
 export const { useAppForm, withForm } = createFormHook({
-  fieldComponents: { TextField, NumberField, IdrField },
+  fieldComponents: { TextField, NumberField, IdrField, TextareaField },
   formComponents: {
     SubmitButton,
   },

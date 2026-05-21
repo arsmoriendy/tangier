@@ -24,6 +24,7 @@ import {
   UsersIcon,
   BarcodeIcon,
   TagIcon,
+  ReceiptIcon,
 } from "@phosphor-icons/react/ssr"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
@@ -128,6 +129,17 @@ export function AppSidebar() {
                       <Link href={href!}>
                         <UsersIcon />
                         {t("users")}
+                      </Link>
+                    </SidebarMenuButton>
+                  )}
+                </DynamicSidebarLink>
+
+                <DynamicSidebarLink href="/receipt">
+                  {({ href, ...props }) => (
+                    <SidebarMenuButton asChild {...props}>
+                      <Link href={href!}>
+                        <ReceiptIcon />
+                        {t("receipt")}
                       </Link>
                     </SidebarMenuButton>
                   )}

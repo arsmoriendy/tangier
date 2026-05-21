@@ -3,6 +3,7 @@
 import { Printer } from "@node-escpos/core"
 import USB from "@node-escpos/usb-adapter"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
+import { listSettings } from "@/lib/crud/settings"
 import { env } from "@/lib/env"
 import { format } from "date-fns"
 
@@ -14,6 +15,8 @@ export async function printTransaction(trx: TransactionWithRelations) {
   const vid = env.PRINTER_VID
   const pid = env.PRINTER_PID
   const width = env.PRINTER_WIDTH
+
+  const settings = await listSettings()
 
   const device = new USB(vid, pid)
   const printer = new Printer(device, { encoding: "ascii", width })
@@ -43,7 +46,14 @@ export async function printTransaction(trx: TransactionWithRelations) {
       return
     }
 
-    printer.font("a").align("lt").size(1, 1).style("normal")
+    printer.font("a").align("ct").size(1, 1).style("normal")
+
+    if (settings.receiptHeader) {
+      printer.text(settings.receiptHeader)
+      printer.drawLine()
+    }
+
+    printer.align("lt")
 
     twoCols(
       [`Last ID : `, trx.id.slice(24)],
@@ -75,6 +85,11 @@ export async function printTransaction(trx: TransactionWithRelations) {
         align: "right",
       },
     ])
+
+    if (settings.receiptFooter) {
+      printer.feed(1)
+      printer.align("ct").text(settings.receiptFooter)
+    }
 
     printer.feed(3)
     await printer.cut().close()

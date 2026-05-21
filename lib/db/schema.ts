@@ -193,3 +193,9 @@ export const transactionItems = pgTable(
       .onDelete("set null"),
   ]
 )
+
+export const settings = pgTable("settings", {
+  id: integer().primaryKey().default(1),
+  receiptHeader: varchar("receipt_header"),
+  receiptFooter: varchar("receipt_footer"),
+})

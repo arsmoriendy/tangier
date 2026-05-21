@@ -31,6 +31,7 @@
     "priceGroups": "Kelompok harga",
     "barcodeGroups": "Kelompok barcode",
     "users": "Pengguna",
+    "receipt": "Struk",
     "language": {
       "title": "Bahasa",
       "header": "Pilih bahasa"
@@ -191,6 +192,15 @@
     "toast": {
       "updated": "Pengguna diperbarui",
       "deleted": "Pengguna dihapus"
+    }
+  },
+  "receipt": {
+    "title": "Konfigurasi struk",
+    "receiptHeader": "Header struk",
+    "receiptFooter": "Footer struk",
+    "save": "Simpan konfigurasi",
+    "toast": {
+      "updated": "Konfigurasi struk diperbarui"
     }
   },
   "auth": {

@@ -31,6 +31,7 @@
     "priceGroups": "Price groups",
     "barcodeGroups": "Barcode groups",
     "users": "Users",
+    "receipt": "Receipt",
     "language": {
       "title": "Language",
       "header": "Choose language"
@@ -189,6 +190,15 @@
     "toast": {
       "updated": "User updated",
       "deleted": "User deleted"
+    }
+  },
+  "receipt": {
+    "title": "Receipt configuration",
+    "receiptHeader": "Receipt header",
+    "receiptFooter": "Receipt footer",
+    "save": "Save configuration",
+    "toast": {
+      "updated": "Receipt configuration updated"
     }
   },
   "auth": {
