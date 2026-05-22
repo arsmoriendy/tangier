@@ -91,7 +91,7 @@ export async function printTransaction(trx: TransactionWithRelations) {
       printer.align("ct").text(settings.receiptFooter)
     }
 
-    printer.feed(3)
+    printer.feed(6)
     await printer.cut().close()
   })
   device.close()
