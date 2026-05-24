@@ -67,9 +67,16 @@ export async function printTransaction(trx: TransactionWithRelations) {
     printer.drawLine()
     for (const item of trx.transactionItems) {
       printer.text(item.name)
-      twoCols([
-        `${item.quantity} ${item.unit} X ${formatNumber(item.sellPrice)}`,
-        formatNumber(item.sellPrice * item.quantity),
+      printer.tableCustom([
+        {
+          text: `${item.quantity} ${item.unit} X ${formatNumber(item.sellPrice)}`,
+          width: 0.6,
+        },
+        {
+          text: formatNumber(item.sellPrice * item.quantity),
+          width: 0.38,
+          align: "right",
+        },
       ])
     }
     printer.drawLine()
