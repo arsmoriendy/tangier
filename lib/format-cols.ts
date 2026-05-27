@@ -27,12 +27,7 @@ export function formatCols({
 
   for (const [i, col] of cols.entries()) {
     const optionalGap = i === cols.length - 1 ? 0 : gap
-    const colStr = col.substring(
-      0,
-      i === prioritizeColIdx ? undefined : colWidth - optionalGap
-    )
-
-    line += pad(i).call(pad(i).call(colStr, optionalGap), colWidth)
+    line += pad(i).call(pad(i).call(col, optionalGap), colWidth)
   }
 
   return line
