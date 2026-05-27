@@ -6,6 +6,7 @@ import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { listSettings } from "@/lib/crud/settings"
 import { env } from "@/lib/env"
 import { format } from "date-fns"
+import { formatCols } from "./format-cols"
 
 const numberFormatter = new Intl.NumberFormat("id-ID", {})
 const formatNumber = numberFormatter.format
@@ -23,20 +24,15 @@ export async function printTransaction(trx: TransactionWithRelations) {
 
   const crtDate = new Date(trx.createdAt)
 
-  function twoCols(...params: [string, string][]) {
-    for (const row of params) {
-      printer.tableCustom([
-        {
-          text: row[0],
-          width: 0.5,
-        },
-        {
-          text: row[1],
-          width: 0.48,
-          align: "right",
-        },
-      ])
-    }
+  function twoCols(
+    cols: [string, string],
+    {
+      gap = 1,
+      align = ["l", "r"],
+      prioritizeColIdx = 1,
+    }: { gap?: number; align?: ("l" | "r")[]; prioritizeColIdx?: number } = {}
+  ) {
+    return formatCols({ cols, align, gap, prioritizeColIdx, width })
   }
 
   device.open(async (err) => {
@@ -55,43 +51,31 @@ export async function printTransaction(trx: TransactionWithRelations) {
 
     printer.align("lt")
 
-    twoCols(
-      [`Last ID : `, trx.id.slice(24)],
-      [`Cashier : `, trx.cashier],
-      [`Cust.   : `, trx.customerPriceGroup],
-      [`Date    : `, format(crtDate, "yyyy-MM-dd")],
-      [`Time    : `, format(crtDate, "HH:mm:ss")]
-    )
+    printer.text(twoCols([`Last ID : `, trx.id.slice(24)]))
+    printer.text(twoCols([`Cashier : `, trx.cashier]))
+    printer.text(twoCols([`Cust.   : `, trx.customerPriceGroup]))
+    printer.text(twoCols([`Date    : `, format(crtDate, "yyyy-MM-dd")]))
+    printer.text(twoCols([`Time    : `, format(crtDate, "HH:mm:ss")]))
 
     // print items
     printer.drawLine()
     for (const item of trx.transactionItems) {
       printer.text(item.name)
-      printer.tableCustom([
-        {
-          text: `${item.quantity} ${item.unit} X ${formatNumber(item.sellPrice)}`,
-          width: 0.6,
-        },
-        {
-          text: formatNumber(item.sellPrice * item.quantity),
-          width: 0.38,
-          align: "right",
-        },
-      ])
+      printer.text(
+        twoCols([
+          `${item.quantity} ${item.unit} X ${formatNumber(item.sellPrice)}`,
+          formatNumber(item.sellPrice * item.quantity),
+        ])
+      )
     }
     printer.drawLine()
 
-    printer.tableCustom([
-      {
-        text: `${trx.transactionItems.length} items`,
-        width: 0.3,
-      },
-      {
-        text: `Total : ${formatNumber(trx.totalPrice)}`,
-        width: 0.68,
-        align: "right",
-      },
-    ])
+    printer.text(
+      twoCols([
+        `${trx.transactionItems.length} items`,
+        `Total : ${formatNumber(trx.totalPrice)}`,
+      ])
+    )
 
     if (settings.receiptFooter) {
       printer.feed(1)
