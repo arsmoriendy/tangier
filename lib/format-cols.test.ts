@@ -27,6 +27,16 @@ it("handles overflowed text", () => {
   expect(
     formatCols({
       align: ["l", "r"],
+      width: 33,
+      cols: ["1 TOPLES X 44.000", "44.000"],
+      gap: 1,
+      prioritizeColIdx: 1,
+    })
+  ).toBe("1 TOPLES X 44.000        44.000")
+
+  expect(
+    formatCols({
+      align: ["l", "r"],
       width: 4,
       cols: ["foo", "bar"],
       gap: 1,
