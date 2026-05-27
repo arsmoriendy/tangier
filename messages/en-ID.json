@@ -85,7 +85,8 @@
         "title": "Customer group",
         "noDescription": "No description"
       },
-      "saveAndPrint": "Save and print"
+      "saveAndPrint": "Save and print",
+      "itemCount": "{count, plural, =1 {# item} other {# items}}"
     },
     "history": {
       "filters": {

@@ -9,7 +9,6 @@ Run with the bun runtime, e.g. `bun -b dev`
 ##### TODO
 
 1. Fix print
-2. Show item count
 
 ###### Backlog
 

@@ -277,7 +277,15 @@ export default function TransactionForm(props: {
                 <Table className="border-separate border-spacing-0">
                   <TableHeader className="[&_th]:border-b">
                     <TableRow>
-                      <TableHead />
+                      <form.Subscribe
+                        selector={(form) => form.values.transactionItems.length}
+                      >
+                        {(itemCount) => (
+                          <TableHead>
+                            {t("itemCount", { count: itemCount })}
+                          </TableHead>
+                        )}
+                      </form.Subscribe>
                       <TableHead>{tc("name")}</TableHead>
                       <TableHead>{tc("unit")}</TableHead>
                       {session.user.role === "admin" && (
@@ -355,7 +363,9 @@ export default function TransactionForm(props: {
                         className="[&_td]:border-primary data-[drop=bottom]:[&_td]:border-b data-[drop=top]:[&_td]:border-t"
                       >
                         <TableCell className="cursor-grab align-top">
-                          <DotsSixVerticalIcon className="h-8" />
+                          <span className="flex h-8 items-center justify-between gap-2">
+                            <DotsSixVerticalIcon className="inline" /> {i + 1}
+                          </span>
                         </TableCell>
                         <TableCell className="align-top">
                           <form.AppField name={`transactionItems[${i}].name`}>
@@ -505,9 +515,19 @@ export default function TransactionForm(props: {
         </FieldSet>
 
         <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
-          <span className="flex h-8 items-center text-sm">
-            {tc("totalPrice")} :
-          </span>
+          <div className="flex flex-col justify-center text-xs">
+            <span>{tc("totalPrice")} :</span>
+            <form.Subscribe
+              selector={(form) => form.values.transactionItems.length}
+            >
+              {(itemCount) => (
+                <span className="text-muted-foreground">
+                  {t("itemCount", { count: itemCount })}
+                </span>
+              )}
+            </form.Subscribe>
+          </div>
+
           <form.AppField name="totalPrice">
             {(field) => <field.IdrField min={0} className="flex-1" />}
           </form.AppField>

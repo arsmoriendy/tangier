@@ -87,7 +87,8 @@
         "title": "Kelompok pelanggan",
         "noDescription": "Tidak ada deskripsi"
       },
-      "saveAndPrint": "Simpan dan cetak"
+      "saveAndPrint": "Simpan dan cetak",
+      "itemCount": "{count} barang"
     },
     "history": {
       "filters": {
