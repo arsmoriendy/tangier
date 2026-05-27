@@ -442,7 +442,7 @@ export default function TransactionForm(props: {
                             }}
                           >
                             {(field) => (
-                              <field.NumberField min={1} className="w-10" />
+                              <field.NumberField min={1} className="w-24" />
                             )}
                           </form.AppField>
                         </TableCell>

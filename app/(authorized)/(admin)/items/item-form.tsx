@@ -208,7 +208,7 @@ export default function ItemForm(props: {
                   onClick={() => {
                     form.setFieldValue(
                       "buyPrices",
-                      form.state.values.buyPrices.filter((bp) => bp.stock !== 0)
+                      form.state.values.buyPrices.filter((bp) => bp.stock > 0)
                     )
                   }}
                 >

@@ -103,7 +103,7 @@ export const buyPrices = pgTable(
       .$defaultFn(() => v7()),
     item: uuid("item").notNull(),
     price: numeric({ mode: "number" }).notNull(),
-    stock: integer().notNull().default(0),
+    stock: numeric({ mode: "number" }).notNull().default(0),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
@@ -169,7 +169,7 @@ export const transactionItems = pgTable(
     name: varchar().notNull(),
     unit: varchar().notNull(),
     sellPrice: numeric("sell_price", { mode: "number" }).notNull(),
-    quantity: integer().notNull(),
+    quantity: numeric({ mode: "number" }).notNull(),
     buyPrice: numeric("buy_price", { mode: "number" }).notNull(),
 
     // for updates and recalls
