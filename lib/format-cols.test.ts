@@ -32,7 +32,7 @@ it("handles overflowed text", () => {
       gap: 1,
       prioritizeColIdx: 1,
     })
-  ).toBe("1 TOPLES X 44.000        44.000")
+  ).toBe("1 TOPLES X 44.000          44.000")
 
   expect(
     formatCols({
