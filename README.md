@@ -20,3 +20,4 @@ Run with the bun runtime, e.g. `bun -b dev`
 6. backup and restore
 7. export and import
 8. Delete dialogs
+9. Containerize? (docker)
