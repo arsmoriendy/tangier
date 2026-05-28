@@ -30,14 +30,15 @@ export function formatCols({
 
   for (const [i, col] of cols.entries()) {
     const optionalGap = i === cols.length - 1 ? 0 : gap
+    const gapStr = "".padEnd(optionalGap)
 
     if (i === prioritizeColIdx) {
-      line += pad(i).call(col, optionalGap)
+      line += col + gapStr
       continue
     }
 
     const colStr = col.substring(0, colWidth - optionalGap)
-    line += pad(i).call(pad(i).call(colStr, optionalGap), colWidth)
+    line += pad(i).call(colStr + gapStr, colWidth)
   }
 
   return line
