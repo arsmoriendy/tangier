@@ -2,8 +2,11 @@ import createNextIntlPlugin from "next-intl/plugin"
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  optimizePackageImports: ["@phosphor-icons/react"],
+  experimental: {
+    optimizePackageImports: ["@phosphor-icons/react"],
+  },
   serverExternalPackages: ["usb"],
+  transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
   output: "standalone",
 }
 
