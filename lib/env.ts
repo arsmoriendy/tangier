@@ -12,5 +12,5 @@ export const env = createEnv({
   },
   client: {},
   experimental__runtimeEnv: {},
-  skipValidation: true,
+  skipValidation: !!process.env.SKIP_ENV_VALIDATION,
 })
