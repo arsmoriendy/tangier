@@ -10,7 +10,12 @@ export default async function Page() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-6">
-      <Logo width={iconSize} />
+      <div className="flex flex-col items-center">
+        <Logo width={iconSize} />
+        <span>tangier</span>
+      </div>
+
+      <hr className="sm:min-w-sm" />
 
       <div className="flex flex-col items-center gap-2">
         <h1 className="font-bold">{t("welcome.title")}</h1>
