@@ -80,15 +80,17 @@
       },
       "items": {
         "title": "Barang transaksi",
-        "updateStock": "Perbarui stok",
-        "customStock": "Stok kustom"
+        "updateStock": "Perbaru stok",
+        "customStock": "Stok kustom",
+        "noItems": "Belum ada barang"
       },
       "customerGroup": {
         "title": "Kelompok pelanggan",
         "noDescription": "Tidak ada deskripsi"
       },
       "saveAndPrint": "Simpan dan cetak",
-      "itemCount": "{count} barang"
+      "itemCount": "{count} barang",
+      "removeItems": "Hapus {count} barang"
     },
     "history": {
       "filters": {

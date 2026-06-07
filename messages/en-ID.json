@@ -79,14 +79,16 @@
       "items": {
         "title": "Transaction items",
         "updateStock": "Update stock",
-        "customStock": "Custom stock"
+        "customStock": "Custom stock",
+        "noItems": "No items yet"
       },
       "customerGroup": {
         "title": "Customer group",
         "noDescription": "No description"
       },
       "saveAndPrint": "Save and print",
-      "itemCount": "{count, plural, =1 {# item} other {# items}}"
+      "itemCount": "{count, plural, =1 {# item} other {# items}}",
+      "removeItems": "Remove {count, plural, =1 {# item} other {# items}}"
     },
     "history": {
       "filters": {

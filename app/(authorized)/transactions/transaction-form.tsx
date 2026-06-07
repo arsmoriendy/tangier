@@ -12,18 +12,13 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-  FieldLegend,
-  FieldSet,
-} from "@/components/ui/field"
+import { Field, FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field"
 import {
   createTransaction,
   deleteTransaction,
@@ -227,6 +222,8 @@ export default function TransactionForm(props: {
     form.reset()
   }
 
+  const [selected, setSelected] = useState<Set<number>>(new Set())
+
   const t = useTranslations("transactions.form")
   const tc = useTranslations("common")
 
@@ -274,18 +271,22 @@ export default function TransactionForm(props: {
               }}
             >
               {({ state }) => (
-                <Table className="border-separate border-spacing-0">
+                <Table className="border-separate border-spacing-0 w-full table-fixed">
+                  <colgroup>
+                    <col className="w-1/36" />
+                    <col className="w-1/36" />
+                    <col className="w-9/36" />
+                    <col className="w-3/36" />
+                    <col className="w-6/36" />
+                    <col className="w-6/36" />
+                    <col className="w-3/36" />
+                    <col className="w-1/36" />
+                    <col className="w-6/36" />
+                  </colgroup>
                   <TableHeader className="[&_th]:border-b">
                     <TableRow>
-                      <form.Subscribe
-                        selector={(form) => form.values.transactionItems.length}
-                      >
-                        {(itemCount) => (
-                          <TableHead>
-                            {t("itemCount", { count: itemCount })}
-                          </TableHead>
-                        )}
-                      </form.Subscribe>
+                      <TableHead></TableHead>
+                      <TableHead></TableHead>
                       <TableHead>{tc("name")}</TableHead>
                       <TableHead>{tc("unit")}</TableHead>
                       {session.user.role === "admin" && (
@@ -293,30 +294,22 @@ export default function TransactionForm(props: {
                       )}
                       <TableHead>{tc("sellPrice")}</TableHead>
                       <TableHead>Qty</TableHead>
-                      <TableHead>
-                        <label className="flex items-center gap-2">
-                          <Checkbox
-                            checked={getLocalStorage.decrementStock}
-                            onCheckedChange={(c) => {
-                              setLocalStorage.decrementStock = c as boolean
-                              for (const [i, item] of state.value.entries()) {
-                                if (item.buyPriceId !== null) {
-                                  form.setFieldValue(
-                                    `transactionItems[${i}].updateStock`,
-                                    c as boolean
-                                  )
-                                }
-                              }
-                            }}
-                          />
-                          {t("items.updateStock")}
-                        </label>
-                      </TableHead>
+                      <TableHead></TableHead>
                       <TableHead>{tc("quantifiedPrice")}</TableHead>
                       <TableHead />
                     </TableRow>
                   </TableHeader>
                   <TableBody>
+                    {state.value.length < 1 && (
+                      <TableRow>
+                        <TableCell
+                          className="text-center text-muted-foreground"
+                          colSpan={9}
+                        >
+                          {t("items.noItems")}
+                        </TableCell>
+                      </TableRow>
+                    )}
                     {state.value.map(({ buyPriceId }, i) => (
                       <TableRow
                         key={i}
@@ -363,9 +356,19 @@ export default function TransactionForm(props: {
                         className="[&_td]:border-primary data-[drop=bottom]:[&_td]:border-b data-[drop=top]:[&_td]:border-t"
                       >
                         <TableCell className="cursor-grab align-top">
-                          <span className="flex h-8 items-center justify-between gap-2">
-                            <DotsSixVerticalIcon className="inline" /> {i + 1}
-                          </span>
+                          <DotsSixVerticalIcon className="h-8 inline" />
+                        </TableCell>
+                        <TableCell className="align-top">
+                          <Checkbox
+                            checked={selected.has(i)}
+                            className="my-2"
+                            onCheckedChange={(checked) => {
+                              const newSet = new Set(selected)
+                              if (checked === true) newSet.add(i)
+                              else newSet.delete(i)
+                              setSelected(newSet)
+                            }}
+                          />
                         </TableCell>
                         <TableCell className="align-top">
                           <form.AppField name={`transactionItems[${i}].name`}>
@@ -451,9 +454,7 @@ export default function TransactionForm(props: {
                               },
                             }}
                           >
-                            {(field) => (
-                              <field.NumberField min={1} className="w-24" />
-                            )}
+                            {(field) => <field.NumberField min={1} />}
                           </form.AppField>
                         </TableCell>
                         <TableCell className="align-top">
@@ -471,12 +472,10 @@ export default function TransactionForm(props: {
                                   />
                                 )}
                               </form.AppField>
-                              <FieldLabel>{t("items.updateStock")}</FieldLabel>
                             </Field>
                           ) : (
                             <Field orientation="horizontal" className="h-8">
                               <Checkbox disabled />
-                              <FieldLabel>{t("items.customStock")}</FieldLabel>
                             </Field>
                           )}
                         </TableCell>
@@ -492,22 +491,40 @@ export default function TransactionForm(props: {
                             {(field) => <field.IdrField min={0} disabled />}
                           </form.AppField>
                         </TableCell>
-                        <TableCell className="align-top">
-                          <Button
-                            variant="destructive"
-                            type="button"
-                            size="icon"
-                            onClick={() => {
-                              form.removeFieldValue("transactionItems", i)
-                              recalculateTotalPrice()
-                            }}
-                          >
-                            <TrashIcon />
-                          </Button>
-                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell />
+                      <TableCell className="flex gap-2">
+                        <Checkbox
+                          checked={getLocalStorage.decrementStock}
+                          onCheckedChange={(c) => {
+                            setLocalStorage.decrementStock = c as boolean
+                            for (const [i, item] of state.value.entries()) {
+                              if (item.buyPriceId !== null) {
+                                form.setFieldValue(
+                                  `transactionItems[${i}].updateStock`,
+                                  c as boolean
+                                )
+                              }
+                            }
+                          }}
+                        />
+                        <span className="text-muted-foreground">
+                          {t("items.updateStock")}
+                        </span>
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                  </TableFooter>
                 </Table>
               )}
             </form.AppField>
@@ -515,22 +532,28 @@ export default function TransactionForm(props: {
         </FieldSet>
 
         <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
-          <div className="flex flex-col justify-center text-xs">
+          <div className="h-8 text-sm flex items-center">
             <span>{tc("totalPrice")} :</span>
-            <form.Subscribe
-              selector={(form) => form.values.transactionItems.length}
-            >
-              {(itemCount) => (
-                <span className="text-muted-foreground">
-                  {t("itemCount", { count: itemCount })}
-                </span>
-              )}
-            </form.Subscribe>
           </div>
 
           <form.AppField name="totalPrice">
             {(field) => <field.IdrField min={0} className="flex-1" />}
           </form.AppField>
+
+          <ButtonWithHotkeys
+            hotkeys={["Ctrl+d"]}
+            variant="destructive"
+            disabled={selected.size < 1}
+            onClick={() => {
+              for (const s of selected) {
+                form.removeFieldValue("transactionItems", s)
+              }
+              setSelected(new Set())
+            }}
+          >
+            <TrashIcon />
+            {t("removeItems", { count: selected.size })}
+          </ButtonWithHotkeys>
 
           <ResetButton
             hotkeys={["F4"]}
