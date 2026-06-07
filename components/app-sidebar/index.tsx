@@ -14,7 +14,6 @@ import {
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
-  SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { useSession } from "@/contexts/session-ctx"
 import {
@@ -29,21 +28,14 @@ import {
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { LanguageSidebarItem } from "./language-sidebar-item"
-import { Trigger } from "./trigger"
+import { Header } from "@/components/app-sidebar/header"
 
 export function AppSidebar() {
   const session = useSession()
   const t = useTranslations("sidebar")
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <Trigger />
-          </SidebarMenuItem>
-        </SidebarMenu>
-        <hr />
-      </SidebarHeader>
+      <Header />
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
