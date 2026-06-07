@@ -1,8 +1,8 @@
 import { SignInForm } from "@/app/auth/sign-in-form"
 import { SignUpForm } from "@/app/auth/sign-up-form"
+import Logo from "@/components/logo"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getTranslations } from "next-intl/server"
-import Image from "next/image"
 
 export default async function Page() {
   const t = await getTranslations("auth")
@@ -10,7 +10,7 @@ export default async function Page() {
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-6">
-      <Image src="/icon.svg" alt="icon" width={iconSize} height={iconSize} />
+      <Logo width={iconSize} />
 
       <div className="flex flex-col items-center gap-2">
         <h1 className="font-bold">{t("welcome.title")}</h1>
