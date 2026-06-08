@@ -271,7 +271,7 @@ export default function TransactionForm(props: {
               }}
             >
               {({ state }) => (
-                <Table className="border-separate border-spacing-0 w-full table-fixed">
+                <Table className="w-full table-fixed border-separate border-spacing-0">
                   <colgroup>
                     <col className="w-1/36" />
                     <col className="w-1/36" />
@@ -356,7 +356,7 @@ export default function TransactionForm(props: {
                         className="[&_td]:border-primary data-[drop=bottom]:[&_td]:border-b data-[drop=top]:[&_td]:border-t"
                       >
                         <TableCell className="cursor-grab align-top">
-                          <DotsSixVerticalIcon className="h-8 inline" />
+                          <DotsSixVerticalIcon className="inline h-8" />
                         </TableCell>
                         <TableCell className="align-top">
                           <Checkbox
@@ -532,7 +532,7 @@ export default function TransactionForm(props: {
         </FieldSet>
 
         <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
-          <div className="h-8 text-sm flex items-center">
+          <div className="flex h-8 items-center text-sm">
             <span>{tc("totalPrice")} :</span>
           </div>
 

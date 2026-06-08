@@ -13,7 +13,7 @@ export function Header() {
   return (
     <SidebarHeader>
       <SidebarMenu>
-        <div className="flex gap-3 items-center">
+        <div className="flex items-center gap-3">
           <Logo className="size-8 shrink-0" />
           {state === "expanded" && (
             <>
