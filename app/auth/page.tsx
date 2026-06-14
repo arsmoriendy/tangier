@@ -3,13 +3,14 @@ import { SignUpForm } from "@/app/auth/sign-up-form"
 import Logo from "@/components/logo"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getTranslations } from "next-intl/server"
+import pkg from "package.json"
 
 export default async function Page() {
   const t = await getTranslations("auth")
   const iconSize = 72
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6 p-6">
+    <div className="relative flex min-h-screen flex-col items-center justify-center gap-6 p-6">
       <div className="flex flex-col items-center">
         <Logo width={iconSize} />
         <span>tangier</span>
@@ -32,6 +33,10 @@ export default async function Page() {
           <SignInForm />
         </TabsContent>
       </Tabs>
+
+      <span className="absolute bottom-2 text-xs text-muted-foreground">
+        Version {pkg.version}
+      </span>
     </div>
   )
 }
