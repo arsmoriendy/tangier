@@ -5,11 +5,14 @@ import { proxy, subscribe, useSnapshot } from "valtio"
 import z from "zod"
 import { ValtioContext } from "./valtio-context"
 
-const lsSchema = z.object({ decrementStock: z.boolean() })
+const lsSchema = z.object({
+  decrementStock: z.boolean(),
+  showHisotryItems: z.boolean(),
+})
 
 type LocalStorage = z.infer<typeof lsSchema>
 
-const lsDefault: LocalStorage = { decrementStock: true }
+const lsDefault: LocalStorage = { decrementStock: true, showHisotryItems: true }
 
 const lsCtx = createContext<ValtioContext<LocalStorage> | undefined>(undefined)
 

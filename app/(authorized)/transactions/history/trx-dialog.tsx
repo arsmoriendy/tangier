@@ -9,7 +9,7 @@ import {
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import TransactionForm from "../transaction-form"
 import { useTrx } from "./trx-ctx"
 import { useTranslations } from "next-intl"
@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button"
 import { PencilIcon } from "@phosphor-icons/react"
+import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { subscribeKey } from "valtio/utils"
 
 export function TrxDialog({
   trx,
@@ -30,6 +32,18 @@ export function TrxDialog({
   const [open, setOpen] = useState(false)
   const createdDate = new Date(trx.createdAt)
   const { setTrx } = useTrx()
+  const { setLocalStorage } = useLocalStorage()
+  const [showItems, setShowItems] = useState(false)
+
+  useEffect(() => {
+    setShowItems(setLocalStorage.showHisotryItems)
+    const unsub = subscribeKey(
+      setLocalStorage,
+      "showHisotryItems",
+      setShowItems
+    )
+    return unsub
+  }, [])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -38,7 +52,7 @@ export function TrxDialog({
           <span className="flex h-8 items-center">{trx.id}</span>
         </TableCell>
         <TableCell className="align-top">
-          <Collapsible defaultOpen={true}>
+          <Collapsible open={showItems} onOpenChange={setShowItems}>
             <CollapsibleTrigger asChild>
               <Button className="w-full">{t("table.showItems")}</Button>
             </CollapsibleTrigger>

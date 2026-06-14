@@ -10,17 +10,37 @@ import {
 import { useTrx } from "./trx-ctx"
 import { TrxDialog } from "./trx-dialog"
 import { useTranslations } from "next-intl"
+import { Button } from "@/components/ui/button"
+import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react"
+import { useLocalStorage } from "@/contexts/local-storage-ctx"
 
 export function TrxList() {
   const t = useTranslations("transactions.history")
   const tc = useTranslations("common")
   const { getTrx } = useTrx()
+  const { getLocalStorage, setLocalStorage } = useLocalStorage()
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead>{tc("id")}</TableHead>
-          <TableHead>{tc("items")}</TableHead>
+          <TableHead className="flex items-center justify-between">
+            {tc("items")}
+            <Button
+              size="icon-xs"
+              variant="outline"
+              onClick={() =>
+                (setLocalStorage.showHisotryItems =
+                  !setLocalStorage.showHisotryItems)
+              }
+            >
+              {getLocalStorage.showHisotryItems ? (
+                <EyeIcon />
+              ) : (
+                <EyeSlashIcon />
+              )}
+            </Button>
+          </TableHead>
           <TableHead>{tc("totalPrice")}</TableHead>
           <TableHead>{t("table.date")}</TableHead>
           <TableHead>{t("table.time")}</TableHead>
