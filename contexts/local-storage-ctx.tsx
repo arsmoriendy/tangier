@@ -12,7 +12,10 @@ const lsSchema = z.object({
 
 type LocalStorage = z.infer<typeof lsSchema>
 
-const lsDefault: LocalStorage = { decrementStock: true, showHisotryItems: true }
+const lsDefault: LocalStorage = {
+  decrementStock: true,
+  showHisotryItems: false,
+}
 
 const lsCtx = createContext<ValtioContext<LocalStorage> | undefined>(undefined)
 
