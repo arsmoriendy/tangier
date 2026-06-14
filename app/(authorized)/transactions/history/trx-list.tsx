@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useTrx } from "./trx-ctx"
-import { TrxDialog } from "./trx-dialog"
+import { TrxRow } from "./trx-row"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react"
@@ -49,7 +49,7 @@ export function TrxList() {
       </TableHeader>
       <TableBody>
         {getTrx.map((trx, i) => (
-          <TrxDialog key={i} trx={trx} />
+          <TrxRow key={i} trx={trx} />
         ))}
       </TableBody>
     </Table>
