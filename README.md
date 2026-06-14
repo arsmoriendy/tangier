@@ -22,3 +22,4 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 6. backup and restore
 7. export and import
 8. Delete dialogs
+9. Tooltips
