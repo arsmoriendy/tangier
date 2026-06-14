@@ -23,3 +23,5 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 7. export and import
 8. Delete dialogs
 9. Tooltips
+10. DB indices
+11. Version indicator
