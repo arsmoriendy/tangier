@@ -98,7 +98,8 @@
       },
       "table": {
         "date": "Date",
-        "time": "Time"
+        "time": "Time",
+        "showItems": "Show transaction items"
       },
       "updateTransaction": "Update transaction"
     }

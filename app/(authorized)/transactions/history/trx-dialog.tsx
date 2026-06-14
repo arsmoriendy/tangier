@@ -13,6 +13,13 @@ import { useState } from "react"
 import TransactionForm from "../transaction-form"
 import { useTrx } from "./trx-ctx"
 import { useTranslations } from "next-intl"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import { Button } from "@/components/ui/button"
+import { PencilIcon } from "@phosphor-icons/react"
 
 export function TrxDialog({
   trx,
@@ -26,32 +33,53 @@ export function TrxDialog({
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <TableRow className="cursor-pointer">
-          <TableCell className="align-top">{trx.id}</TableCell>
-          <TableCell className="align-top">
-            <Table>
-              <TableBody>
-                {trx.transactionItems.map((item) => (
-                  <TableRow>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{formatCurrency(item.sellPrice)}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableCell>
-          <TableCell className="align-top">
+      <TableRow className="group relative">
+        <TableCell className="align-top">
+          <span className="flex h-8 items-center">{trx.id}</span>
+        </TableCell>
+        <TableCell className="align-top">
+          <Collapsible defaultOpen={true}>
+            <CollapsibleTrigger asChild>
+              <Button className="w-full">{t("table.showItems")}</Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <Table>
+                <TableBody>
+                  {trx.transactionItems.map((item, i) => (
+                    <TableRow key={i}>
+                      <TableCell>{item.name}</TableCell>
+                      <TableCell>{formatCurrency(item.sellPrice)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CollapsibleContent>
+          </Collapsible>
+        </TableCell>
+        <TableCell className="align-top">
+          <span className="flex h-8 items-center">
             {formatCurrency(trx.totalPrice)}
-          </TableCell>
-          <TableCell className="align-top">
+          </span>
+        </TableCell>
+        <TableCell className="align-top">
+          <span className="flex h-8 items-center">
             {createdDate.toLocaleDateString()}
-          </TableCell>
-          <TableCell className="align-top">
+          </span>
+        </TableCell>
+        <TableCell className="align-top">
+          <span className="flex h-8 items-center">
             {createdDate.toLocaleTimeString()}
-          </TableCell>
-        </TableRow>
-      </DialogTrigger>
+          </span>
+        </TableCell>
+        <TableCell className="absolute top-0 left-0 hidden group-hover:flex">
+          <DialogTrigger asChild>
+            <Button>
+              <PencilIcon />
+              Edit
+            </Button>
+          </DialogTrigger>
+        </TableCell>
+      </TableRow>
 
       <DialogContent className="max-h-[92vh] w-[92vw] overflow-auto pt-0 sm:max-w-[92vw]">
         <DialogTitle className="mt-2">{t("updateTransaction")}</DialogTitle>
