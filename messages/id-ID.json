@@ -101,7 +101,8 @@
       "table": {
         "date": "Tanggal",
         "time": "Waktu",
-        "showItems": "Lihat barang transaksi"
+        "showItems": "Lihat barang transaksi",
+        "hideItems": "Smbunyikan barang transaksi"
       },
       "updateTransaction": "Perbarui transaksi"
     }

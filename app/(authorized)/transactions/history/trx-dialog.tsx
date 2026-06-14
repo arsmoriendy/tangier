@@ -19,7 +19,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button"
-import { PencilIcon } from "@phosphor-icons/react"
+import { EyeIcon, EyeSlashIcon, PencilIcon } from "@phosphor-icons/react"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { subscribeKey } from "valtio/utils"
 
@@ -54,7 +54,22 @@ export function TrxDialog({
         <TableCell className="align-top">
           <Collapsible open={showItems} onOpenChange={setShowItems}>
             <CollapsibleTrigger asChild>
-              <Button className="w-full">{t("table.showItems")}</Button>
+              <Button
+                className="w-full"
+                variant={showItems ? "destructive" : "outline"}
+              >
+                {showItems ? (
+                  <>
+                    <EyeSlashIcon />
+                    {t("table.hideItems")}
+                  </>
+                ) : (
+                  <>
+                    <EyeIcon />
+                    {t("table.showItems")}
+                  </>
+                )}
+              </Button>
             </CollapsibleTrigger>
             <CollapsibleContent>
               <Table>

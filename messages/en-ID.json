@@ -99,7 +99,8 @@
       "table": {
         "date": "Date",
         "time": "Time",
-        "showItems": "Show transaction items"
+        "showItems": "Show transaction items",
+        "hideItems": "Hide transaction items"
       },
       "updateTransaction": "Update transaction"
     }
