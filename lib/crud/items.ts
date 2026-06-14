@@ -228,6 +228,7 @@ export async function listItems({
         columns: { item: false },
       },
     },
+    orderBy: [asc(items.name)],
   })
 }
 

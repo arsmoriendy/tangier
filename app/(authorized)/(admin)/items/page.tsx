@@ -24,13 +24,13 @@ export default async function Page() {
     <BarcodeGroupsProvider barcodeGroups={barcodeGroups}>
       <PriceGroupsProvider priceGroups={priceGroups}>
         <UnitsProvider units={units}>
-          <FieldSet>
-            <FieldLegend>{t("createNew")}</FieldLegend>
-            <ItemForm />
-          </FieldSet>
           <ItemsProvider items={items}>
             <ItemFiltersProvider initialValue={{}}>
               <ItemCountProvider>
+                <FieldSet>
+                  <FieldLegend>{t("createNew")}</FieldLegend>
+                  <ItemForm />
+                </FieldSet>
                 <ItemList />
               </ItemCountProvider>
             </ItemFiltersProvider>

@@ -4,9 +4,11 @@ import chroma from "chroma-js"
 import { Form, useAppForm } from "@/components/form"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import {
+  countItems,
   createItem,
   deleteItem,
   ItemWithRelations,
+  listItems,
   updateItem,
 } from "@/lib/crud/items"
 import z from "zod"
@@ -20,6 +22,9 @@ import { TrashIcon } from "@phosphor-icons/react"
 import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useTranslations } from "next-intl"
+import { useItems } from "@/contexts/items-ctx"
+import { useItemFilters } from "@/app/(authorized)/(admin)/items/item-filters-ctx"
+import { useItemCount } from "@/app/(authorized)/(admin)/items/item-count-ctx"
 
 export default function ItemForm(props: {
   item?: DeepReadonly<ItemWithRelations>
@@ -31,6 +36,9 @@ export default function ItemForm(props: {
   const { priceGroups } = usePriceGroups()
   const { barcodeGroups } = useBarcodeGroups()
   const { units } = useUnits()
+  const { itemsProxy } = useItems()
+  const { itemFiltersProxy } = useItemFilters()
+  const { setItemCount } = useItemCount()
   const createItemFormSchema = z.object({
     name: z.string().min(1),
     unit: z.uuid(),
@@ -95,6 +103,15 @@ export default function ItemForm(props: {
         await createItem(value)
         toast.success(t("toast.created"))
       }
+
+      // update item list
+      itemsProxy.splice(
+        0,
+        itemsProxy.length,
+        ...(await listItems(itemFiltersProxy))
+      )
+      setItemCount(await countItems(itemFiltersProxy))
+
       form.reset()
     },
   })
