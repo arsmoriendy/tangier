@@ -19,7 +19,8 @@
     "next": "Berikutnya",
     "previous": "Sebelumnya",
     "priority": "Prioritas",
-    "items": "Barang"
+    "items": "Barang",
+    "delete": "Hapus"
   },
   "sidebar": {
     "transactions": {
@@ -102,7 +103,10 @@
         "date": "Tanggal",
         "time": "Waktu",
         "showItems": "Lihat barang transaksi",
-        "hideItems": "Smbunyikan barang transaksi"
+        "hideItems": "Smbunyikan barang transaksi",
+        "actions": "Aksi",
+        "delete": "Hapus transaksi",
+        "deleteDescription": "Apakah anda yakin ingin menghapus transaksi ini?"
       },
       "updateTransaction": "Perbarui transaksi"
     }

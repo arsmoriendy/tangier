@@ -44,6 +44,7 @@ export function TrxList() {
           <TableHead>{tc("totalPrice")}</TableHead>
           <TableHead>{t("table.date")}</TableHead>
           <TableHead>{t("table.time")}</TableHead>
+          <TableHead>{t("table.actions")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

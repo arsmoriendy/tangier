@@ -19,7 +19,8 @@
     "next": "Next",
     "previous": "Previous",
     "priority": "Priority",
-    "items": "Items"
+    "items": "Items",
+    "delete": "Delete"
   },
   "sidebar": {
     "transactions": {
@@ -100,7 +101,10 @@
         "date": "Date",
         "time": "Time",
         "showItems": "Show transaction items",
-        "hideItems": "Hide transaction items"
+        "hideItems": "Hide transaction items",
+        "actions": "Actions",
+        "delete": "Delete transaction",
+        "deleteDescription": "Are you sure you want to delete this transaction?"
       },
       "updateTransaction": "Update transaction"
     }
