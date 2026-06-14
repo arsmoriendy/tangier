@@ -15,8 +15,6 @@ export default async function Page() {
         <span>tangier</span>
       </div>
 
-      <hr className="sm:min-w-sm" />
-
       <div className="flex flex-col items-center gap-2">
         <h1 className="font-bold">{t("welcome.title")}</h1>
         <p className="text-sm text-muted-foreground">{t("welcome.message")}</p>
