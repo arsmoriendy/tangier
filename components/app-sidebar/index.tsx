@@ -8,7 +8,6 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -33,6 +32,7 @@ import { Header } from "@/components/app-sidebar/header"
 export function AppSidebar() {
   const session = useSession()
   const t = useTranslations("sidebar")
+  const tc = useTranslations("common")
   return (
     <Sidebar collapsible="icon">
       <Header />
@@ -76,7 +76,7 @@ export function AppSidebar() {
                     <SidebarMenuButton asChild {...props}>
                       <Link href={href}>
                         <PackageIcon />
-                        {t("items")}
+                        {tc("items")}
                       </Link>
                     </SidebarMenuButton>
                   )}

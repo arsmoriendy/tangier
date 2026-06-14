@@ -18,7 +18,8 @@
     "password": "Kata sandi",
     "next": "Berikutnya",
     "previous": "Sebelumnya",
-    "priority": "Prioritas"
+    "priority": "Prioritas",
+    "items": "Barang"
   },
   "sidebar": {
     "transactions": {
@@ -26,7 +27,6 @@
       "new": "Baru",
       "history": "Riwayat"
     },
-    "items": "Barang",
     "units": "Satuan",
     "priceGroups": "Kelompok harga",
     "barcodeGroups": "Kelompok barcode",

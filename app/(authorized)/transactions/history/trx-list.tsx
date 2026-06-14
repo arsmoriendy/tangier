@@ -20,6 +20,7 @@ export function TrxList() {
       <TableHeader>
         <TableRow>
           <TableHead>{tc("id")}</TableHead>
+          <TableHead>{tc("items")}</TableHead>
           <TableHead>{tc("totalPrice")}</TableHead>
           <TableHead>{t("table.date")}</TableHead>
           <TableHead>{t("table.time")}</TableHead>

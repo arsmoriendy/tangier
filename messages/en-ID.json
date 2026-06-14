@@ -18,7 +18,8 @@
     "password": "Password",
     "next": "Next",
     "previous": "Previous",
-    "priority": "Priority"
+    "priority": "Priority",
+    "items": "Items"
   },
   "sidebar": {
     "transactions": {
@@ -26,7 +27,6 @@
       "new": "New",
       "history": "History"
     },
-    "items": "Items",
     "units": "Units",
     "priceGroups": "Price groups",
     "barcodeGroups": "Barcode groups",

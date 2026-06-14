@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { TableCell, TableRow } from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useState } from "react"
@@ -28,10 +28,28 @@ export function TrxDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <TableRow className="cursor-pointer">
-          <TableCell>{trx.id}</TableCell>
-          <TableCell>{formatCurrency(trx.totalPrice)}</TableCell>
-          <TableCell>{createdDate.toLocaleDateString()}</TableCell>
-          <TableCell>{createdDate.toLocaleTimeString()}</TableCell>
+          <TableCell className="align-top">{trx.id}</TableCell>
+          <TableCell className="align-top">
+            <Table>
+              <TableBody>
+                {trx.transactionItems.map((item) => (
+                  <TableRow>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{formatCurrency(item.sellPrice)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableCell>
+          <TableCell className="align-top">
+            {formatCurrency(trx.totalPrice)}
+          </TableCell>
+          <TableCell className="align-top">
+            {createdDate.toLocaleDateString()}
+          </TableCell>
+          <TableCell className="align-top">
+            {createdDate.toLocaleTimeString()}
+          </TableCell>
         </TableRow>
       </DialogTrigger>
 
