@@ -6,6 +6,10 @@
 
 Run with the bun runtime, e.g. `bun -b dev`
 
+##### NixOS
+
+Use the flake, run `node-gyp build` within the `node_modules/usb` directory
+
 ##### TODO
 
 ###### Backlog
