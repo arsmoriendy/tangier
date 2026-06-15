@@ -17,11 +17,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
 import { Field, FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field"
 import {
   createTransaction,
-  deleteTransaction,
   listTransactions,
   TransactionWithRelations,
   updateTransaction,
@@ -40,7 +38,6 @@ import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useSession } from "@/contexts/session-ctx"
 import { toast } from "sonner"
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { useHeld } from "./held-ctx"
 import { useState } from "react"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
@@ -51,6 +48,7 @@ import {
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
+import { RecallDialog } from "@/app/(authorized)/transactions/recall-dialog"
 
 export default function TransactionForm(props: {
   transaction?: DeepReadonly<TransactionWithRelations>
@@ -58,12 +56,12 @@ export default function TransactionForm(props: {
 }) {
   const session = useSession()
   const { priceGroups } = usePriceGroups()
-  const { setHeld, getHeld } = useHeld()
+  const { setHeld } = useHeld()
   const { getLocalStorage, setLocalStorage } = useLocalStorage()
   const [openRecallDialog, setOpenRecallDialog] = useState(false)
-  const [recalledTrx, setRecalledTrx] = useState<
-    TransactionWithRelations | undefined
-  >(undefined)
+  const [recalledTrx] = useState<TransactionWithRelations | undefined>(
+    undefined
+  )
   const form = useAppForm({
     defaultValues: (props.transaction
       ? {
@@ -597,92 +595,11 @@ export default function TransactionForm(props: {
                 Recall
               </ButtonWithHotkeys>
 
-              <Dialog
+              <RecallDialog
+                form={form}
                 open={openRecallDialog}
-                onOpenChange={setOpenRecallDialog}
-              >
-                <DialogContent className="sm:max-w-2xl">
-                  <DialogTitle>Recall transaction</DialogTitle>
-
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Time</TableHead>
-                        <TableHead>Customer</TableHead>
-                        <TableHead>Item count</TableHead>
-                        <TableHead>Total price</TableHead>
-                        <TableHead>Delete</TableHead>
-                      </TableRow>
-                    </TableHeader>
-
-                    <TableBody>
-                      {getHeld.map((trx, i) => {
-                        const date = new Date(trx.createdAt)
-                        return (
-                          <TableRow
-                            key={trx.id}
-                            className="cursor-pointer"
-                            onClick={async () => {
-                              setRecalledTrx(trx as DeepMutable<typeof trx>)
-
-                              form.setFieldValue(
-                                "priceGroup",
-                                priceGroups.find(
-                                  (pg) => pg.name === trx.customerPriceGroup
-                                )?.id
-                              )
-                              form.setFieldValue("totalPrice", trx.totalPrice)
-                              form.setFieldValue(
-                                "transactionItems",
-                                (
-                                  trx.transactionItems as DeepMutable<
-                                    typeof trx.transactionItems
-                                  >
-                                ).map((item) => ({
-                                  ...item,
-                                  extraFields: {
-                                    quantifiedPrice:
-                                      item.quantity * item.sellPrice,
-                                  },
-                                }))
-                              )
-
-                              setOpenRecallDialog(false)
-                            }}
-                          >
-                            <TableCell>{date.toLocaleDateString()}</TableCell>
-                            <TableCell>{date.toLocaleTimeString()}</TableCell>
-                            <TableCell>{trx.customerPriceGroup}</TableCell>
-                            <TableCell>{trx.transactionItems.length}</TableCell>
-                            <TableCell>
-                              {formatCurrency(trx.totalPrice)}
-                            </TableCell>
-                            <TableCell>
-                              <Button
-                                className="cursor-pointer"
-                                variant="destructive"
-                                size="icon"
-                                onClick={async (e) => {
-                                  e.stopPropagation()
-                                  if (trx.id === recalledTrx?.id) {
-                                    setRecalledTrx(undefined)
-                                    form.reset()
-                                  }
-                                  await deleteTransaction(trx.id)
-                                  setHeld.splice(i, 1)
-                                }}
-                              >
-                                <TrashIcon />
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })}
-                    </TableBody>
-                  </Table>
-                </DialogContent>
-              </Dialog>
+                setOpen={setOpenRecallDialog}
+              />
             </>
           )}
 
