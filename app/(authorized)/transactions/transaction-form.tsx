@@ -148,6 +148,7 @@ export default function TransactionForm(props: {
         toast.error("Unable to print transaction", { description: `${e}` })
       }
 
+      setRecalledTrx(undefined)
       form.reset()
     },
   })
