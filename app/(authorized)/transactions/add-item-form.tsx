@@ -20,6 +20,7 @@ import { useSession } from "@/contexts/session-ctx"
 import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
 import { useRef } from "react"
+import { useUnits } from "@/contexts/units-ctx"
 
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
@@ -27,13 +28,16 @@ export const AddItemForm = withForm({
     const session = useSession()
     const { addItemProxy, addItemSnap } = useAddItem()
     const { getLocalStorage } = useLocalStorage()
+    const { units } = useUnits()
 
     const form = useAppForm({
       defaultValues: defaultAddItemValues,
       validators: { onMount: addItemSchema, onChange: addItemSchema },
-      onSubmit: ({ value: { quantifiedPrice, ...item } }) => {
+      onSubmit: ({ value: { quantifiedPrice, unitId, ...item } }) => {
+        const unit = units.find((u) => u.id === unitId)!.name
         createTransactionForm.pushFieldValue("transactionItems", {
           ...item,
+          unit,
           buyPriceId: addItemProxy.buyPrice?.id ?? null,
           updateStock: getLocalStorage.decrementStock,
           extraFields: {

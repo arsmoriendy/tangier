@@ -32,15 +32,7 @@ import { ItemWithRelations } from "@/lib/crud/items"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
 import { RefObject, useRef, useState } from "react"
-import z from "zod"
 
-const searchItemSchema = z.object({
-  nameOrBarcode: z.string().min(0),
-  unitId: z.string().optional(),
-})
-const defaultSearchItemValues: z.infer<typeof searchItemSchema> = {
-  nameOrBarcode: "",
-}
 const defaultProps: {
   afterSelect?: () => any
   nameRef?: RefObject<HTMLInputElement | null>
@@ -53,19 +45,17 @@ export const SearchItemForm = withForm({
     const { addItemProxy } = useAddItem()
     const { units } = useUnits()
     const searchItemForm = useAppForm({
-      defaultValues: defaultSearchItemValues,
-      validators: {
-        onMount: searchItemSchema,
-        onChange: searchItemSchema,
-      },
-      onSubmit: async ({ value: { nameOrBarcode, ...value } }) => {
-        const res = await readBarcode(nameOrBarcode)
+      onSubmit: async () => {
+        const res = await readBarcode(form.state.values.name)
         if (res !== undefined) {
           selectItem(res.item)
           return
         }
 
-        const items = await listItems({ name: nameOrBarcode, ...value })
+        const items = await listItems({
+          name: form.state.values.name,
+          unitId: form.state.values.unitId,
+        })
         setFoundItems(items)
         setDialogOpened(true)
       },
@@ -83,7 +73,7 @@ export const SearchItemForm = withForm({
       const buyPrice = item.buyPrices.at(item.buyPrices.length - 1)
 
       form.setFieldValue("name", item.name)
-      form.setFieldValue("unit", item.unit.name)
+      form.setFieldValue("unitId", item.unit.id)
       form.setFieldValue("buyPrice", buyPrice?.price ?? 0)
       addItemProxy.sellPrices = item.sellPrices
       addItemProxy.buyPrices = item.buyPrices
@@ -104,19 +94,13 @@ export const SearchItemForm = withForm({
                 label={t("nameOrBarcode")}
                 ref={nameRef}
                 hotkeys={["Ctrl+k", "F3"]}
-                onChange={(e) => {
-                  searchItemForm.setFieldValue(
-                    "nameOrBarcode",
-                    e.currentTarget.value
-                  )
-                }}
               />
             )}
           </form.AppField>
 
           <span className="mt-6 grid h-8 place-items-center">/</span>
 
-          <form.AppField name="unit">
+          <form.AppField name="unitId">
             {(field) => {
               const isInvalid = !field.state.meta.isValid
               return (
@@ -133,15 +117,14 @@ export const SearchItemForm = withForm({
                           value: unit.id,
                           label: unit.name,
                         }))
-                        .find((unit) => unit.label === field.state.value) ??
+                        .find((unit) => unit.value === field.state.value) ??
                       null
                     }
                     itemToStringValue={(unit) => unit!.label ?? ""}
                     onValueChange={(
                       unit: { label: string; value: string } | null
                     ) => {
-                      form.setFieldValue("unit", unit?.label ?? "")
-                      searchItemForm.setFieldValue("unitId", unit?.value)
+                      form.setFieldValue("unitId", unit?.value ?? "")
                     }}
                   >
                     <ComboboxInput aria-invalid={isInvalid} />
