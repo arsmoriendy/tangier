@@ -180,7 +180,7 @@ export default function TransactionForm(props: {
     }
 
     toast.success("Transaction held", { icon: <HandIcon /> })
-
+    setRecalledTrx(undefined)
     form.reset()
   }
 
