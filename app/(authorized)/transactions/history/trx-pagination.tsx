@@ -33,7 +33,7 @@ export function TrxPagination() {
     return subscribe(setFilters, () => {
       updateCount()
     })
-  })
+  }, [])
 
   return (
     <Pagination>
