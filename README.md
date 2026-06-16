@@ -24,3 +24,4 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 8. Delete dialogs
 9. Tooltips
 10. DB indices
+11. Change year on date inputs
