@@ -36,6 +36,7 @@ import {
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { RecallDialog } from "@/app/(authorized)/transactions/recall-dialog"
 import { TransactionItemTable } from "@/app/(authorized)/transactions/transaction-item-table"
+import { Badge } from "@/components/ui/badge"
 
 export default function TransactionForm(props: {
   transaction?: DeepReadonly<TransactionWithRelations>
@@ -45,9 +46,9 @@ export default function TransactionForm(props: {
   const { priceGroups } = usePriceGroups()
   const { setHeld } = useHeld()
   const [openRecallDialog, setOpenRecallDialog] = useState(false)
-  const [recalledTrx] = useState<TransactionWithRelations | undefined>(
-    undefined
-  )
+  const [recalledTrx, setRecalledTrx] = useState<
+    TransactionWithRelations | undefined
+  >(undefined)
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const t = useTranslations("transactions.form")
   const tc = useTranslations("common")
@@ -169,18 +170,13 @@ export default function TransactionForm(props: {
       ...value,
     }
 
-    var id: string
-    var createdAt: string
     if (recalledTrx) {
-      id = recalledTrx.id
-      createdAt = recalledTrx.createdAt
-
       await updateTransaction({
-        id,
+        id: recalledTrx.id,
         ...trx,
       })
     } else {
-      var { id, createdAt } = await createTransaction(trx)
+      await createTransaction(trx)
     }
 
     toast.success("Transaction held", { icon: <HandIcon /> })
@@ -233,9 +229,17 @@ export default function TransactionForm(props: {
         </FieldSet>
 
         <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
-          <div className="flex h-8 items-center text-sm">
-            <span>{tc("totalPrice")} :</span>
-          </div>
+          <Badge className="absolute -top-4 left-2">{tc("totalPrice")}</Badge>
+
+          {recalledTrx !== undefined && (
+            <Badge className="absolute -top-4 right-2 gap-2">
+              <span className="relative size-2">
+                <span className="absolute size-full animate-ping rounded-full bg-warning opacity-75"></span>
+                <span className="flex size-full rounded rounded-full bg-warning"></span>
+              </span>
+              Recalled
+            </Badge>
+          )}
 
           <form.AppField name="totalPrice">
             {(field) => <field.IdrField min={0} className="flex-1" />}
@@ -302,6 +306,8 @@ export default function TransactionForm(props: {
                 form={form}
                 open={openRecallDialog}
                 setOpen={setOpenRecallDialog}
+                recalledTrx={recalledTrx}
+                setRecalledTrx={setRecalledTrx}
               />
             </>
           )}

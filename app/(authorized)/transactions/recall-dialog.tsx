@@ -18,16 +18,23 @@ import {
 } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { TrashIcon } from "@phosphor-icons/react"
-import { useState } from "react"
 
 export const RecallDialog = withForm({
   defaultValues: defaultTransactionValues,
-  props: { open: false, setOpen: (_open: boolean) => {} },
-  render: function Render({ form, open, setOpen }) {
+  props: {
+    open: false,
+    setOpen: (_open: boolean) => {},
+    recalledTrx: undefined as undefined | TransactionWithRelations,
+    setRecalledTrx: (_trx: undefined | TransactionWithRelations) => {},
+  },
+  render: function Render({
+    form,
+    open,
+    setOpen,
+    recalledTrx,
+    setRecalledTrx,
+  }) {
     const { setHeld, getHeld } = useHeld()
-    const [recalledTrx, setRecalledTrx] = useState<
-      TransactionWithRelations | undefined
-    >(undefined)
     const { priceGroups } = usePriceGroups()
 
     return (
