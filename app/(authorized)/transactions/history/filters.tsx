@@ -23,7 +23,7 @@ export function Filters() {
       const newTrxList = await listTransactions(setFilters)
       setTrx.splice(0, setTrx.length, ...newTrxList)
     })
-  })
+  }, [])
 
   const end = new Date()
   const start = new Date(end.getTime() - 3_600_000 * 3)
