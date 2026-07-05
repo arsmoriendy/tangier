@@ -12,6 +12,10 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 
 ##### TODO
 
+1. End of day statement
+2. Persist previous total price
+3. Trx form rework
+
 ###### Backlog
 
 1. Server function authorization

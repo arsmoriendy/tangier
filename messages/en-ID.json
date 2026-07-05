@@ -7,7 +7,7 @@
     "sellPrices": "Sell prices",
     "buyPrice": "Buy price",
     "sellPrice": "Sell price",
-    "quantifiedPrice": "Quantified price",
+    "quantifiedPrice": "Qty price",
     "stock": "Stock",
     "stockLeft": "{count} left",
     "margin": "Margin",
