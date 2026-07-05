@@ -60,7 +60,7 @@ export const TransactionItemTable = withForm({
         }}
       >
         {({ state }) => (
-          <Table className="w-full table-fixed border-separate border-spacing-0">
+          <Table className="w-full table-fixed border-separate border-spacing-0 border">
             <colgroup>
               <col className="w-1/36" />
               <col className="w-1/36" />

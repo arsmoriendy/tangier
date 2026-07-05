@@ -212,16 +212,11 @@ export default function TransactionForm(props: {
       </AddItemProvider>
 
       <div className="relative flex flex-1 flex-col gap-2">
-        <FieldSet className="flex-1">
-          <FieldLegend>{t("items.title")}</FieldLegend>
-          <FieldGroup>
-            <TransactionItemTable
-              form={form}
-              selected={selected}
-              setSelected={setSelected}
-            />
-          </FieldGroup>
-        </FieldSet>
+        <TransactionItemTable
+          form={form}
+          selected={selected}
+          setSelected={setSelected}
+        />
 
         <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
           <Badge className="absolute -top-4 left-2">{tc("totalPrice")}</Badge>
