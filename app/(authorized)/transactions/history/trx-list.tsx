@@ -23,7 +23,7 @@ export function TrxList() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>{tc("id")}</TableHead>
+          <TableHead>Last ID</TableHead>
           <TableHead className="flex items-center justify-between">
             {tc("items")}
             <Button

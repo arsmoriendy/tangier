@@ -40,7 +40,7 @@ export function TrxRow({
   return (
     <TableRow>
       <TableCell className="align-top">
-        <span className="flex h-8 items-center">{trx.id}</span>
+        <span className="flex h-8 items-center">{trx.id.slice(24)}</span>
       </TableCell>
       <TableCell className="align-top">
         <Collapsible open={showItems} onOpenChange={setShowItems}>
