@@ -15,6 +15,7 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 1. End of day statement
 2. Persist previous total price
 3. Trx form rework
+4. Merge duplicate items in trx form
 
 ###### Backlog
 
