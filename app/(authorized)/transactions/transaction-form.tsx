@@ -272,7 +272,7 @@ export default function TransactionForm(props: {
                     hotkeys={["F5"]}
                     disabled={!canSubmit}
                   >
-                    <HandIcon /> Hold
+                    <HandIcon /> <span className="hidden xl:inline">Hold</span>
                   </ButtonWithHotkeys>
                 )}
               </form.Subscribe>
@@ -294,7 +294,7 @@ export default function TransactionForm(props: {
                 }}
               >
                 <ClockCountdownIcon />
-                Recall
+                <span className="hidden xl:inline">Recall</span>
               </ButtonWithHotkeys>
 
               <RecallDialog
