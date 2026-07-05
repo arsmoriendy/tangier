@@ -206,12 +206,13 @@ export const AddItemForm = withForm({
 
           <div className="flex gap-2">
             <form.AppForm>
-              <form.SubmitButton hotkeys={["Ctrl+enter"]}>
+              <form.SubmitButton size="xs" hideHotkeys hotkeys={["Ctrl+enter"]}>
                 {t("title")}
               </form.SubmitButton>
             </form.AppForm>
 
             <ResetButton
+              size="xs"
               onClick={() => {
                 addItemProxy.sellPrices = []
                 addItemProxy.buyPrices = []
