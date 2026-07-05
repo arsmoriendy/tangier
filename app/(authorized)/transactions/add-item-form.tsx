@@ -81,150 +81,146 @@ export const AddItemForm = withForm({
 
     return (
       <>
-        <FieldSet className="gap-0">
-          <FieldLegend>{t("title")}</FieldLegend>
+        <SearchItemForm
+          form={form}
+          afterSelect={() => setTimeout(() => qtyRef.current?.focus())}
+          nameRef={nameRef}
+        />
 
-          <SearchItemForm
-            form={form}
-            afterSelect={() => setTimeout(() => qtyRef.current?.focus())}
-            nameRef={nameRef}
-          />
-
-          <Form className="mt-2" handleSubmit={form.handleSubmit}>
-            <div className="flex gap-2">
-              {session.user.role === "admin" && (
-                <FieldSet className="flex-1">
-                  <FieldLegend>{tc("buyPrice")}</FieldLegend>
-
-                  <form.AppField name="buyPrice">
-                    {(f) => <f.IdrField />}
-                  </form.AppField>
-
-                  <RadioGroupChoiceCard
-                    value={addItemSnap.buyPrice?.id}
-                    onValueChange={(v) => {
-                      const price = parseFloat(v)
-                      addItemProxy.buyPrice = addItemProxy.buyPrices.find(
-                        (bp) => bp.id === v
-                      )!
-                      form.setFieldValue("buyPrice", price)
-                    }}
-                  >
-                    {addItemSnap.buyPrices.length > 0 ? (
-                      addItemSnap.buyPrices
-                        .toReversed()
-                        .map((bp, i) => (
-                          <RadioGroupChoiceItem
-                            key={i}
-                            value={bp.id}
-                            title={formatCurrency(bp.price)}
-                            description={tc("stockLeft", { count: bp.stock })}
-                          />
-                        ))
-                    ) : (
-                      <Item
-                        className="grid min-h-17 place-items-center border-dashed text-muted-foreground"
-                        variant="outline"
-                      >
-                        {t("noPrice")}
-                      </Item>
-                    )}
-                  </RadioGroupChoiceCard>
-                </FieldSet>
-              )}
-
+        <Form handleSubmit={form.handleSubmit}>
+          <div className="flex gap-2">
+            {session.user.role === "admin" && (
               <FieldSet className="flex-1">
-                <FieldLegend>{tc("sellPrice")}</FieldLegend>
-                <div className="flex gap-2">
-                  <form.AppField
-                    name="sellPrice"
-                    listeners={{
-                      onChange: (v) =>
-                        form.setFieldValue(
-                          "quantifiedPrice",
-                          v.value * form.state.values.quantity
-                        ),
-                    }}
-                  >
-                    {(field) => <field.IdrField min={0} />}
-                  </form.AppField>
+                <FieldLegend>{tc("buyPrice")}</FieldLegend>
 
-                  <span className="grid h-8 place-items-center">x</span>
+                <form.AppField name="buyPrice">
+                  {(f) => <f.IdrField />}
+                </form.AppField>
 
-                  <form.AppField
-                    name="quantity"
-                    listeners={{
-                      onChange: (v) =>
-                        form.setFieldValue(
-                          "quantifiedPrice",
-                          v.value * form.state.values.sellPrice
-                        ),
-                    }}
-                  >
-                    {(f) => (
-                      <f.NumberField className="w-24" min={1} ref={qtyRef} />
-                    )}
-                  </form.AppField>
-                </div>
+                <RadioGroupChoiceCard
+                  value={addItemSnap.buyPrice?.id}
+                  onValueChange={(v) => {
+                    const price = parseFloat(v)
+                    addItemProxy.buyPrice = addItemProxy.buyPrices.find(
+                      (bp) => bp.id === v
+                    )!
+                    form.setFieldValue("buyPrice", price)
+                  }}
+                >
+                  {addItemSnap.buyPrices.length > 0 ? (
+                    addItemSnap.buyPrices
+                      .toReversed()
+                      .map((bp, i) => (
+                        <RadioGroupChoiceItem
+                          key={i}
+                          value={bp.id}
+                          title={formatCurrency(bp.price)}
+                          description={tc("stockLeft", { count: bp.stock })}
+                        />
+                      ))
+                  ) : (
+                    <Item
+                      className="grid min-h-17 place-items-center border-dashed text-muted-foreground"
+                      variant="outline"
+                    >
+                      {t("noPrice")}
+                    </Item>
+                  )}
+                </RadioGroupChoiceCard>
+              </FieldSet>
+            )}
 
-                {session.user.role === "admin" && (
-                  <form.Subscribe
-                    selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
-                  >
-                    {([bp, sp]) => {
-                      const margin = sp - bp
-                      const discount = ((bp - sp) / bp) * 100
-                      return (
-                        margin !== 0 && (
-                          <small
-                            className={cn(
-                              margin < 0 ? "text-destructive" : "text-green-500"
-                            )}
-                          >
-                            {tc("margin")}: {margin > 0 && "+"}
-                            {formatCurrency(margin)}{" "}
-                            {margin < 0 && (
-                              <>
-                                (
-                                {tc("discountPerc", {
-                                  perc: discount.toFixed(2),
-                                })}
-                                )
-                              </>
-                            )}
-                          </small>
-                        )
-                      )
-                    }}
-                  </form.Subscribe>
-                )}
+            <FieldSet className="flex-1">
+              <FieldLegend>{tc("sellPrice")}</FieldLegend>
+              <div className="flex gap-2">
+                <form.AppField
+                  name="sellPrice"
+                  listeners={{
+                    onChange: (v) =>
+                      form.setFieldValue(
+                        "quantifiedPrice",
+                        v.value * form.state.values.quantity
+                      ),
+                  }}
+                >
+                  {(field) => <field.IdrField min={0} />}
+                </form.AppField>
 
-                <form.AppField name="quantifiedPrice">
-                  {(field) => (
-                    <field.IdrField label={tc("quantifiedPrice")} min={0} />
+                <span className="grid h-8 place-items-center">x</span>
+
+                <form.AppField
+                  name="quantity"
+                  listeners={{
+                    onChange: (v) =>
+                      form.setFieldValue(
+                        "quantifiedPrice",
+                        v.value * form.state.values.sellPrice
+                      ),
+                  }}
+                >
+                  {(f) => (
+                    <f.NumberField className="w-24" min={1} ref={qtyRef} />
                   )}
                 </form.AppField>
-              </FieldSet>
-            </div>
+              </div>
 
-            <div className="flex gap-2">
-              <form.AppForm>
-                <form.SubmitButton hotkeys={["Ctrl+enter"]}>
-                  {t("title")}
-                </form.SubmitButton>
-              </form.AppForm>
+              {session.user.role === "admin" && (
+                <form.Subscribe
+                  selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
+                >
+                  {([bp, sp]) => {
+                    const margin = sp - bp
+                    const discount = ((bp - sp) / bp) * 100
+                    return (
+                      margin !== 0 && (
+                        <small
+                          className={cn(
+                            margin < 0 ? "text-destructive" : "text-green-500"
+                          )}
+                        >
+                          {tc("margin")}: {margin > 0 && "+"}
+                          {formatCurrency(margin)}{" "}
+                          {margin < 0 && (
+                            <>
+                              (
+                              {tc("discountPerc", {
+                                perc: discount.toFixed(2),
+                              })}
+                              )
+                            </>
+                          )}
+                        </small>
+                      )
+                    )
+                  }}
+                </form.Subscribe>
+              )}
 
-              <ResetButton
-                onClick={() => {
-                  addItemProxy.sellPrices = []
-                  addItemProxy.buyPrices = []
-                  addItemProxy.buyPrice = undefined
-                  form.reset()
-                }}
-              />
-            </div>
-          </Form>
-        </FieldSet>
+              <form.AppField name="quantifiedPrice">
+                {(field) => (
+                  <field.IdrField label={tc("quantifiedPrice")} min={0} />
+                )}
+              </form.AppField>
+            </FieldSet>
+          </div>
+
+          <div className="flex gap-2">
+            <form.AppForm>
+              <form.SubmitButton hotkeys={["Ctrl+enter"]}>
+                {t("title")}
+              </form.SubmitButton>
+            </form.AppForm>
+
+            <ResetButton
+              onClick={() => {
+                addItemProxy.sellPrices = []
+                addItemProxy.buyPrices = []
+                addItemProxy.buyPrice = undefined
+                form.reset()
+              }}
+            />
+          </div>
+        </Form>
       </>
     )
   },

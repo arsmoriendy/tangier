@@ -187,31 +187,25 @@ export default function TransactionForm(props: {
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <FieldSet>
-        <FieldLegend>{t("customerGroup.title")}</FieldLegend>
-
-        <form.Subscribe selector={(f) => f.values.priceGroup}>
-          {(priceGroup) => (
-            <RadioGroupChoiceCard
-              className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-              value={priceGroup}
-              onValueChange={(id) => form.setFieldValue("priceGroup", id)}
-            >
-              {priceGroups.map((pg, i) => (
-                <RadioGroupChoiceItem
-                  key={i}
-                  style={{ backgroundColor: `#${pg.hexColor}` }}
-                  value={pg.id}
-                  title={pg.name}
-                  description={
-                    pg.description || t("customerGroup.noDescription")
-                  }
-                />
-              ))}
-            </RadioGroupChoiceCard>
-          )}
-        </form.Subscribe>
-      </FieldSet>
+      <form.Subscribe selector={(f) => f.values.priceGroup}>
+        {(priceGroup) => (
+          <RadioGroupChoiceCard
+            className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+            value={priceGroup}
+            onValueChange={(id) => form.setFieldValue("priceGroup", id)}
+          >
+            {priceGroups.map((pg, i) => (
+              <RadioGroupChoiceItem
+                key={i}
+                style={{ backgroundColor: `#${pg.hexColor}` }}
+                value={pg.id}
+                title={pg.name}
+                description={pg.description || t("customerGroup.noDescription")}
+              />
+            ))}
+          </RadioGroupChoiceCard>
+        )}
+      </form.Subscribe>
 
       <AddItemProvider>
         <AddItemForm form={form} />
