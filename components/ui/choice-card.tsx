@@ -30,9 +30,11 @@ export function RadioGroupChoiceItem({
       <Field orientation="horizontal">
         <FieldContent>
           <FieldTitle>{title}</FieldTitle>
-          <FieldDescription>{description}</FieldDescription>
+          <FieldDescription className="hidden xl:flex">
+            {description}
+          </FieldDescription>
         </FieldContent>
-        <RadioGroupItem id={id} {...props} />
+        <RadioGroupItem className="size-4.5" id={id} {...props} />
       </Field>
     </FieldLabel>
   )

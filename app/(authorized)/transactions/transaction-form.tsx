@@ -190,7 +190,7 @@ export default function TransactionForm(props: {
       <form.Subscribe selector={(f) => f.values.priceGroup}>
         {(priceGroup) => (
           <RadioGroupChoiceCard
-            className="min-h-14 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+            className="sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:min-h-14"
             value={priceGroup}
             onValueChange={(id) => form.setFieldValue("priceGroup", id)}
           >
