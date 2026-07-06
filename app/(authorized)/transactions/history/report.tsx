@@ -3,7 +3,7 @@
 import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
-import { Pie, PieChart } from "recharts"
+import { Label, Pie, PieChart, PieProps } from "recharts"
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import { useEffect } from "react"
 import { subscribe } from "valtio"
 import z from "zod"
 import {
+  Chart,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
@@ -154,27 +155,72 @@ export function Report() {
           <form.Subscribe selector={(form) => form.values.userTrx}>
             {(userTrx) => {
               const colors = getRandomColors(Object.keys(userTrx).length)
-              const data = Object.entries(userTrx).map(([user, trx], i) => ({
-                user,
-                count: trx.trxCount,
-                fill: "#" + colors[i],
-              }))
+              const salesData = Object.entries(userTrx).map(
+                ([user, trx], i) => ({
+                  user,
+                  count: trx.trxCount,
+                  fill: "#" + colors[i],
+                })
+              )
+              const revenueData = Object.entries(userTrx).map(
+                ([user, trx], i) => ({
+                  user,
+                  revenue: trx.revenue,
+                  fill: "#" + colors[i],
+                })
+              )
+              const config = Object.fromEntries(
+                Object.entries(userTrx).map(([user]) => [user, { label: user }])
+              )
+
+              const PieChartWrapper = ({
+                data,
+                label,
+                dataKey,
+              }: Pick<PieProps, "data"> & {
+                label: string
+                dataKey: string
+              }) => (
+                <Chart config={config}>
+                  <PieChart
+                    width="50%"
+                    height={240}
+                    margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                  >
+                    <ChartTooltip
+                      content={
+                        <ChartTooltipContent
+                          formatter={(_value, user) => user}
+                        />
+                      }
+                    />
+                    <Pie
+                      label
+                      stroke="0"
+                      data={data}
+                      nameKey="user"
+                      dataKey={dataKey}
+                      innerRadius={40}
+                    >
+                      <Label position="center">{label}</Label>
+                    </Pie>
+                  </PieChart>
+                </Chart>
+              )
 
               return (
-                <ChartContainer
-                  config={Object.fromEntries(
-                    Object.entries(userTrx).map(([user]) => [
-                      user,
-                      { label: user },
-                    ])
-                  )}
-                >
-                  <PieChart>
-                    <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-                    <Pie data={data} label nameKey="user" dataKey="count" />
-                    <ChartLegend content={<ChartLegendContent />} />
-                  </PieChart>
-                </ChartContainer>
+                <div className="flex">
+                  <PieChartWrapper
+                    data={salesData}
+                    dataKey="count"
+                    label="Sales"
+                  />
+                  <PieChartWrapper
+                    data={revenueData}
+                    dataKey="revenue"
+                    label="Revenue"
+                  />
+                </div>
               )
             }}
           </form.Subscribe>

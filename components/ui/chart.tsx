@@ -81,6 +81,28 @@ function ChartContainer({
   )
 }
 
+function Chart({
+  id,
+  children,
+  config,
+}: {
+  id?: string
+  config: ChartConfig
+  children: React.ComponentProps<
+    typeof RechartsPrimitive.ResponsiveContainer
+  >["children"]
+}) {
+  const uniqueId = React.useId()
+  const chartId = `chart-${id ?? uniqueId.replace(/:/g, "")}`
+
+  return (
+    <ChartContext.Provider value={{ config }}>
+      <ChartStyle id={chartId} config={config} />
+      {children}
+    </ChartContext.Provider>
+  )
+}
+
 const ChartStyle = ({ id, config }: { id: string; config: ChartConfig }) => {
   const colorConfig = Object.entries(config).filter(
     ([, config]) => config.theme ?? config.color
@@ -364,6 +386,7 @@ function getPayloadConfigFromPayload(
 }
 
 export {
+  Chart,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
