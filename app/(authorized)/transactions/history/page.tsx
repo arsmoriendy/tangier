@@ -3,12 +3,14 @@ import { TrxProvider } from "./trx-ctx"
 import { TrxList } from "./trx-list"
 import { FiltersProvider } from "./filters-ctx"
 import { Filters } from "./filters"
+import { Report } from "./report"
 import { TrxPagination } from "./trx-pagination"
 import { listUnits } from "@/lib/crud/units"
 import { listPriceGroups } from "@/lib/crud/price-groups"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
 import { UnitsProvider } from "@/contexts/units-ctx"
 import { HeldProvider } from "../held-ctx"
+import { FieldLegend, FieldSet } from "@/components/ui/field"
 
 export default async function Page() {
   const to = new Date()
@@ -31,7 +33,17 @@ export default async function Page() {
           <PriceGroupsProvider priceGroups={priceGroups}>
             <UnitsProvider units={units}>
               <div className="space-y-2">
-                <Filters />
+                <div className="flex gap-2">
+                  <FieldSet className="xl:flex-1">
+                    <FieldLegend>Filters</FieldLegend>
+                    <Filters />
+                  </FieldSet>
+
+                  <FieldSet className="flex-1">
+                    <FieldLegend>Report</FieldLegend>
+                    <Report />
+                  </FieldSet>
+                </div>
                 <TrxList />
                 <TrxPagination />
               </div>
