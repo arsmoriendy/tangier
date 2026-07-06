@@ -11,17 +11,22 @@ import {
 } from "@/components/ui/dialog"
 import { useEffect } from "react"
 import { subscribe } from "valtio"
+import z from "zod"
 
 export function Report() {
   const { setTrx } = useTrx()
 
+  const schema = z.object({
+    revenue: z.number().default(0),
+    expenses: z.number().default(0),
+    profit: z.number().default(0),
+    trxCount: z.number().default(0),
+    avgTrx: z.number().default(0),
+  })
+
   const form = useAppForm({
-    defaultValues: {
-      revenue: 0,
-      expenses: 0,
-      profit: 0,
-      trxCount: 0,
-      avgTrx: 0,
+    validators: {
+      onSubmit: schema,
     },
   })
 
