@@ -13,8 +13,11 @@ import { HeldProvider } from "../held-ctx"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 
 export default async function Page() {
-  const to = new Date()
-  const from = new Date(to.getTime() - 3_600_000 * 3)
+  const from = new Date()
+  from.setHours(0, 0, 0, 0)
+  const to = new Date(from)
+  to.setHours(23, 59, 59, 59)
+
   const trxList = await listTransactions({ from, to })
   const priceGroups = await listPriceGroups()
   const units = await listUnits()
