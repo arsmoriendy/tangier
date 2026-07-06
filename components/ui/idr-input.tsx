@@ -7,7 +7,7 @@ export type IdrInputProps = Omit<
   | "fixedDecimalScale"
   | "decimalSeparator"
   | "thousandSeparator"
->
+> & { inputClass?: string }
 
 export function IdrInput({
   step = 500,
@@ -15,6 +15,7 @@ export function IdrInput({
   disabled,
   "aria-disabled": ariaDisabled,
   "aria-invalid": ariaInvalid,
+  inputClass,
   ...props
 }: IdrInputProps) {
   return (
@@ -41,7 +42,10 @@ export function IdrInput({
         decimalSeparator=","
         thousandSeparator="."
         unstyled
-        className="w-full min-w-0 rounded-none px-2.5 py-1 text-xs transition-colors outline-none placeholder:text-muted-foreground md:text-xs"
+        className={cn(
+          "w-full min-w-0 rounded-none px-2.5 py-1 text-xs transition-colors outline-none placeholder:text-muted-foreground md:text-xs",
+          inputClass
+        )}
         {...props}
       />
     </div>

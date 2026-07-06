@@ -3,6 +3,12 @@
 import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { useEffect } from "react"
 import { subscribe } from "valtio"
 
@@ -14,6 +20,7 @@ export function Report() {
       revenue: 0,
       expenses: 0,
       profit: 0,
+      trxCount: 0,
     },
   })
 
@@ -25,10 +32,12 @@ export function Report() {
       0
     )
     const profit = revenue - expenses
+    const trxCount = setTrx.length
 
     form.setFieldValue("revenue", revenue)
     form.setFieldValue("expenses", expenses)
     form.setFieldValue("profit", profit)
+    form.setFieldValue("trxCount", trxCount)
   }
 
   useEffect(() => {
@@ -38,19 +47,29 @@ export function Report() {
 
   const Revenue = () => (
     <form.AppField name="revenue">
-      {(field) => <field.IdrField label="Revenue" />}
+      {(field) => (
+        <field.IdrField label="Revenue" disabled inputClass="bg-warning/25" />
+      )}
     </form.AppField>
   )
 
   const Expenses = () => (
     <form.AppField name="expenses">
-      {(field) => <field.IdrField label="Expenses" />}
+      {(field) => (
+        <field.IdrField
+          label="Expenses"
+          disabled
+          inputClass="bg-destructive/25"
+        />
+      )}
     </form.AppField>
   )
 
   const Profit = () => (
     <form.AppField name="profit">
-      {(field) => <field.IdrField label="Profit" />}
+      {(field) => (
+        <field.IdrField label="Profit" disabled inputClass="bg-success/25" />
+      )}
     </form.AppField>
   )
 
@@ -62,7 +81,25 @@ export function Report() {
       <Revenue />
       <Expenses />
       <Profit />
-      <Button type="button">Details</Button>
+
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button type="button">Details</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogTitle>Sales Report</DialogTitle>
+
+          <Revenue />
+          <Expenses />
+          <Profit />
+
+          <form.AppField name="trxCount">
+            {(field) => (
+              <field.NumberField label="Transaction count" disabled />
+            )}
+          </form.AppField>
+        </DialogContent>
+      </Dialog>
     </Form>
   )
 }
