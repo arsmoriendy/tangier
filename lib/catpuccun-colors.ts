@@ -20,3 +20,11 @@ export const colors = [
 export function getRandomColor() {
   return colors[Math.floor(Math.random() * (colors.length - 1))]
 }
+
+export function getRandomColors(n: number) {
+  const set = new Set([getRandomColor()])
+  while (set.size !== n) {
+    set.add(getRandomColor())
+  }
+  return [...set]
+}

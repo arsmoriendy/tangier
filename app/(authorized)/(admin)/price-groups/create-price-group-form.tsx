@@ -8,7 +8,7 @@ import { ArrowsClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
 import { useEffect } from "react"
 import { useTranslations } from "next-intl"
 import z from "zod"
-import { getRandomColor } from "./price-group-colors"
+import { getRandomColor } from "../../../../lib/catpuccun-colors"
 
 const createPriceGroupFormSchema = z.object({
   name: z.string().min(1),

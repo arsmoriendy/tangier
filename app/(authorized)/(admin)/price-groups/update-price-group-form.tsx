@@ -7,7 +7,7 @@ import { priceGroups } from "@/lib/db/schema"
 import { ArrowsClockwiseIcon, TrashIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
 import z from "zod"
-import { getRandomColor } from "./price-group-colors"
+import { getRandomColor } from "../../../../lib/catpuccun-colors"
 
 const createPriceGroupFormSchema = z.object({
   name: z.string().min(1),

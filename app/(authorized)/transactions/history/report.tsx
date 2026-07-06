@@ -3,6 +3,7 @@
 import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
+import { Pie, PieChart } from "recharts"
 import {
   Dialog,
   DialogContent,
@@ -13,6 +14,14 @@ import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { useEffect } from "react"
 import { subscribe } from "valtio"
 import z from "zod"
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+import { getRandomColors } from "@/lib/catpuccun-colors"
 
 export function Report() {
   const { setTrx } = useTrx()
@@ -141,6 +150,34 @@ export function Report() {
               )}
             </form.AppField>
           </div>
+
+          <form.Subscribe selector={(form) => form.values.userTrx}>
+            {(userTrx) => {
+              const colors = getRandomColors(Object.keys(userTrx).length)
+              const data = Object.entries(userTrx).map(([user, trx], i) => ({
+                user,
+                count: trx.trxCount,
+                fill: "#" + colors[i],
+              }))
+
+              return (
+                <ChartContainer
+                  config={Object.fromEntries(
+                    Object.entries(userTrx).map(([user]) => [
+                      user,
+                      { label: user },
+                    ])
+                  )}
+                >
+                  <PieChart>
+                    <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+                    <Pie data={data} label nameKey="user" dataKey="count" />
+                    <ChartLegend content={<ChartLegendContent />} />
+                  </PieChart>
+                </ChartContainer>
+              )
+            }}
+          </form.Subscribe>
         </DialogContent>
       </Dialog>
     </Form>
