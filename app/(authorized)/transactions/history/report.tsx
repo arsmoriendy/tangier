@@ -9,6 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { useEffect } from "react"
 import { subscribe } from "valtio"
 import z from "zod"
@@ -16,7 +17,7 @@ import z from "zod"
 export function Report() {
   const { setTrx } = useTrx()
 
-  const schema = z.object({
+  const trxSchema = z.object({
     revenue: z.number().default(0),
     expenses: z.number().default(0),
     profit: z.number().default(0),
@@ -24,28 +25,50 @@ export function Report() {
     avgTrx: z.number().default(0),
   })
 
-  const form = useAppForm({
-    validators: {
-      onSubmit: schema,
-    },
+  const schema = z.object({
+    ...trxSchema.shape,
+    userTrx: z.record(z.string(), trxSchema).default({}),
   })
 
-  function refresh() {
-    const revenue = setTrx.reduce((acc, t) => acc + t.totalPrice, 0)
-    const expenses = setTrx.reduce(
+  const defaultValues = schema.parse({})
+
+  const form = useAppForm({
+    defaultValues,
+  })
+
+  function parseTrx(
+    trx: TransactionWithRelations[]
+  ): z.infer<typeof trxSchema> {
+    const revenue = trx.reduce((acc, t) => acc + t.totalPrice, 0)
+    const expenses = trx.reduce(
       (acc, t) =>
         acc + t.transactionItems.reduce((acc, i) => acc + i.buyPrice, 0),
       0
     )
     const profit = revenue - expenses
-    const trxCount = setTrx.length
+    const trxCount = trx.length
     const avgTrx = revenue / trxCount
+
+    return { revenue, expenses, profit, trxCount, avgTrx }
+  }
+
+  function refresh() {
+    const { revenue, expenses, profit, trxCount, avgTrx } = parseTrx(setTrx)
+    const userTrx = [...new Set(setTrx.map((t) => t.cashier))].reduce(
+      (acc, user) => {
+        const trx = setTrx.filter((trx) => trx.cashier === user)
+        acc[user] = parseTrx(trx)
+        return acc
+      },
+      {} as typeof defaultValues.userTrx
+    )
 
     form.setFieldValue("revenue", revenue)
     form.setFieldValue("expenses", expenses)
     form.setFieldValue("profit", profit)
     form.setFieldValue("trxCount", trxCount)
     form.setFieldValue("avgTrx", avgTrx)
+    form.setFieldValue("userTrx", userTrx)
   }
 
   useEffect(() => {
