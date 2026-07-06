@@ -3,6 +3,7 @@
 import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
+import { useEffect } from "react"
 import { subscribe } from "valtio"
 
 export function Report() {
@@ -16,7 +17,7 @@ export function Report() {
     },
   })
 
-  subscribe(setTrx, () => {
+  function refresh() {
     const revenue = setTrx.reduce((acc, t) => acc + t.totalPrice, 0)
     const expenses = setTrx.reduce(
       (acc, t) =>
@@ -28,7 +29,12 @@ export function Report() {
     form.setFieldValue("revenue", revenue)
     form.setFieldValue("expenses", expenses)
     form.setFieldValue("profit", profit)
-  })
+  }
+
+  useEffect(() => {
+    refresh()
+    return subscribe(setTrx, refresh)
+  }, [])
 
   const Revenue = () => (
     <form.AppField name="revenue">
