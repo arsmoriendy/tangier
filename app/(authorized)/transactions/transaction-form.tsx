@@ -7,7 +7,6 @@ import {
   PrinterIcon,
   TrashIcon,
 } from "@phosphor-icons/react"
-import { FieldGroup, FieldLegend, FieldSet } from "@/components/ui/field"
 import {
   createTransaction,
   listTransactions,
@@ -201,6 +200,7 @@ export default function TransactionForm(props: {
                 value={pg.id}
                 title={pg.name}
                 description={pg.description || t("customerGroup.noDescription")}
+                descriptionClass="hidden xl:flex"
               />
             ))}
           </RadioGroupChoiceCard>

@@ -21,8 +21,13 @@ export function RadioGroupChoiceItem({
   className,
   title,
   description,
+  descriptionClass,
   ...props
-}: RadioGroupItemProps & { title: ReactNode; description: ReactNode }) {
+}: RadioGroupItemProps & {
+  title: ReactNode
+  description: ReactNode
+  descriptionClass?: string
+}) {
   const id = props.id ?? useId()
 
   return (
@@ -30,7 +35,7 @@ export function RadioGroupChoiceItem({
       <Field orientation="horizontal">
         <FieldContent>
           <FieldTitle>{title}</FieldTitle>
-          <FieldDescription className="hidden xl:flex">
+          <FieldDescription className={descriptionClass}>
             {description}
           </FieldDescription>
         </FieldContent>
