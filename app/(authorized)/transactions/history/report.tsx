@@ -21,6 +21,7 @@ export function Report() {
       expenses: 0,
       profit: 0,
       trxCount: 0,
+      avgTrx: 0,
     },
   })
 
@@ -33,11 +34,13 @@ export function Report() {
     )
     const profit = revenue - expenses
     const trxCount = setTrx.length
+    const avgTrx = revenue / trxCount
 
     form.setFieldValue("revenue", revenue)
     form.setFieldValue("expenses", expenses)
     form.setFieldValue("profit", profit)
     form.setFieldValue("trxCount", trxCount)
+    form.setFieldValue("avgTrx", avgTrx)
   }
 
   useEffect(() => {
@@ -93,11 +96,23 @@ export function Report() {
           <Expenses />
           <Profit />
 
-          <form.AppField name="trxCount">
-            {(field) => (
-              <field.NumberField label="Transaction count" disabled />
-            )}
-          </form.AppField>
+          <div className="flex gap-2">
+            <form.AppField name="trxCount">
+              {(field) => (
+                <field.NumberField label="Transaction count" disabled />
+              )}
+            </form.AppField>
+
+            <form.AppField name="avgTrx">
+              {(field) => (
+                <field.IdrField
+                  label="Average transaction revenue"
+                  disabled
+                  inputClass="bg-warning/25"
+                />
+              )}
+            </form.AppField>
+          </div>
         </DialogContent>
       </Dialog>
     </Form>
