@@ -8,8 +8,8 @@ import { listTransactions } from "@/lib/crud/transactions"
 import { subscribe } from "valtio"
 import { useEffect } from "react"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { useTranslations } from "next-intl"
+import { FieldLabel } from "@/components/ui/field"
 
 export function Filters() {
   const t = useTranslations("transactions.history")
@@ -30,8 +30,8 @@ export function Filters() {
 
   return (
     <div className="space-y-2">
-      <div className="flex-1 space-y-2">
-        <Label>{tc("id")}</Label>
+      <div className="space-y-2">
+        <FieldLabel>{tc("id")}</FieldLabel>
         <Input
           onChange={(v) => {
             setFilters.offset = 0
@@ -39,8 +39,8 @@ export function Filters() {
           }}
         />
       </div>
+
       <DatetimeRangeField
-        className="flex-1"
         label={t("filters.timeRange")}
         value={{
           start: fromDate(getFilters.from ?? start, tz),

@@ -11,12 +11,9 @@ import {
   DateInput,
   DateRangePicker,
   DateSegment,
-  FieldError,
   Group,
-  Label,
   Popover,
   RangeCalendar,
-  Text,
   CalendarGrid,
   CalendarGridHeader,
   CalendarHeaderCell,
@@ -28,8 +25,8 @@ import {
 import { Heading } from "react-aria-components/RangeCalendar"
 import { buttonVariants } from "./ui/button"
 import { inputClass } from "./ui/input"
-import { labelClass } from "./ui/label"
 import { useTranslations } from "next-intl"
+import { FieldLabel } from "@/components/ui/field"
 
 export function DatetimeRangeField<T extends DateValue>({
   label,
@@ -44,7 +41,7 @@ export function DatetimeRangeField<T extends DateValue>({
 
   return (
     <DateRangePicker className={className} {...props}>
-      <Label className={cn(labelClass, "mb-2")}>{label}</Label>
+      <FieldLabel className="mb-2">{label}</FieldLabel>
       <Group className={cn(inputClass, "flex items-center gap-2 pl-0 text-sm")}>
         <Button className={buttonVariants({ size: "icon", variant: "ghost" })}>
           <CalendarBlankIcon />
