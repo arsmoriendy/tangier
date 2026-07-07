@@ -38,6 +38,8 @@ import { TransactionItemTable } from "@/app/(authorized)/transactions/transactio
 import { Badge } from "@/components/ui/badge"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { TransactionSummaryDialog } from "@/app/(authorized)/transactions/transaction-summary-dialog"
+import { formatCurrency } from "@/lib/i18n/currency"
+import { cn } from "@/lib/utils"
 
 export default function TransactionForm(props: {
   transaction?: DeepReadonly<TransactionWithRelations>
@@ -226,7 +228,28 @@ export default function TransactionForm(props: {
         </div>
 
         <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
-          <Badge className="absolute -top-4 left-2">{tc("totalPrice")}</Badge>
+          <div className="absolute -top-4 left-2 flex gap-2">
+            <Badge>{tc("totalPrice")}</Badge>
+            <form.Subscribe selector={(f) => f.values}>
+              {(v) => {
+                const expenses = v.transactionItems.reduce(
+                  (acc, t) => (acc += t.buyPrice),
+                  0
+                )
+                const profitLoss = v.totalPrice - expenses
+                return (
+                  <Badge
+                    className={cn(
+                      profitLoss < 0 ? "bg-destructive" : "bg-success",
+                      "dark"
+                    )}
+                  >
+                    Total profit / loss: {formatCurrency(profitLoss)}
+                  </Badge>
+                )
+              }}
+            </form.Subscribe>
+          </div>
 
           {recalledTrx !== undefined && (
             <Badge className="absolute -top-4 right-2 gap-2">

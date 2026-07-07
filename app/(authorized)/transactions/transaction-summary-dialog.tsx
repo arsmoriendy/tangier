@@ -58,7 +58,6 @@ export const TransactionSummaryDialog = withForm({
                           profitLoss < 0 ? "text-destructive" : "text-success"
                         )}
                       >
-                        {profitLoss < 0 ? "-" : "+"}
                         {formatCurrency(profitLoss)}
                       </TableCell>
                     </TableRow>
