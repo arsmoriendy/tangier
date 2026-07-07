@@ -322,7 +322,10 @@ export default function TransactionForm(props: {
       <TransactionSummaryDialog
         form={form}
         open={getOpenSummary}
-        onOpenChange={setOpenSummary}
+        onOpenChange={(v) => {
+          if (!v) form.reset()
+          setOpenSummary(v)
+        }}
       />
     </div>
   )

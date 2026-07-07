@@ -72,7 +72,6 @@ export const TransactionSummaryDialog = withForm({
               hotkeys={["Enter"]}
               onClick={() => {
                 props.onOpenChange?.(false)
-                form.reset()
               }}
             >
               {t("close")}
