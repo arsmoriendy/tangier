@@ -30,9 +30,11 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { getRandomColor, getRandomColors } from "@/lib/catpuccun-colors"
+import { useTranslations } from "next-intl"
 
 export function Report() {
   const { setTrx } = useTrx()
+  const t = useTranslations("transactions.history.report")
 
   const trxSchema = z.object({
     revenue: z.number().default(0),
@@ -108,7 +110,11 @@ export function Report() {
   const Revenue = () => (
     <form.AppField name="revenue">
       {(field) => (
-        <field.IdrField label="Revenue" disabled inputClass="bg-warning/25" />
+        <field.IdrField
+          label={t("revenue")}
+          disabled
+          inputClass="bg-warning/25"
+        />
       )}
     </form.AppField>
   )
@@ -117,7 +123,7 @@ export function Report() {
     <form.AppField name="expenses">
       {(field) => (
         <field.IdrField
-          label="Expenses"
+          label={t("expenses")}
           disabled
           inputClass="bg-destructive/25"
         />
@@ -128,7 +134,11 @@ export function Report() {
   const Profit = () => (
     <form.AppField name="profit">
       {(field) => (
-        <field.IdrField label="Profit" disabled inputClass="bg-success/25" />
+        <field.IdrField
+          label={t("profit")}
+          disabled
+          inputClass="bg-success/25"
+        />
       )}
     </form.AppField>
   )
@@ -144,10 +154,10 @@ export function Report() {
 
       <Dialog>
         <DialogTrigger asChild>
-          <Button type="button">Details</Button>
+          <Button type="button">{t("details")}</Button>
         </DialogTrigger>
         <DialogContent className="max-h-[92vh] overflow-auto">
-          <DialogTitle>Sales Report</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
 
           <div className="flex gap-2">
             <Revenue />
@@ -157,15 +167,13 @@ export function Report() {
 
           <div className="flex gap-2">
             <form.AppField name="trxCount">
-              {(field) => (
-                <field.NumberField label="Transaction count" disabled />
-              )}
+              {(field) => <field.NumberField label={t("trxCount")} disabled />}
             </form.AppField>
 
             <form.AppField name="avgTrx">
               {(field) => (
                 <field.IdrField
-                  label="Average transaction revenue"
+                  label={t("avgTrx")}
                   disabled
                   inputClass="bg-warning/25"
                 />
@@ -235,12 +243,12 @@ export function Report() {
                   <PieChartWrapper
                     data={salesData}
                     dataKey="count"
-                    label="Sales"
+                    label={t("sales")}
                   />
                   <PieChartWrapper
                     data={revenueData}
                     dataKey="revenue"
-                    label="Revenue"
+                    label={t("revenue")}
                   />
                 </div>
               )
@@ -257,7 +265,7 @@ export function Report() {
               )
               const color = getRandomColor()
               return (
-                <ChartContainer config={{}}>
+                <ChartContainer config={{ sales: { label: t("sales") } }}>
                   <AreaChart accessibilityLayer data={timelineData}>
                     <CartesianGrid vertical={false} />
                     <XAxis

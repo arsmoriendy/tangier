@@ -108,7 +108,17 @@
         "delete": "Hapus transaksi",
         "deleteDescription": "Apakah anda yakin ingin menghapus transaksi ini?"
       },
-      "updateTransaction": "Perbarui transaksi"
+      "updateTransaction": "Perbarui transaksi",
+      "report": {
+        "title": "Laporan penjualan",
+        "details": "Detail",
+        "revenue": "Pendapatan",
+        "expenses": "Pengeluaran",
+        "profit": "Laba",
+        "trxCount": "Jumlah transaksi",
+        "avgTrx": "Rata-rata pendapatan transaksi",
+        "sales": "Penjualan"
+      }
     }
   },
   "items": {
