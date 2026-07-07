@@ -91,7 +91,16 @@
       },
       "saveAndPrint": "Simpan dan cetak",
       "itemCount": "{count} barang",
-      "removeItems": "Hapus {count} barang"
+      "removeItems": "Hapus {count} barang",
+      "summary": {
+        "title": "Ringkasan transaksi",
+        "show": "Tampilkan ringkasan",
+        "itemCount": "Jumlah barang",
+        "totalPrice": "Total harga",
+        "expenses": "Pengeluaran",
+        "profitLoss": "Laba / rugi",
+        "close": "Tutup"
+      }
     },
     "history": {
       "filters": {

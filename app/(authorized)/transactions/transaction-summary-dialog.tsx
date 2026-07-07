@@ -13,17 +13,19 @@ import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 import { ComponentProps } from "react"
 
 export const TransactionSummaryDialog = withForm({
   defaultValues: defaultTransactionValues,
   props: {} as ComponentProps<typeof AlertDialog>,
   render: function Render({ form, ...props }) {
+    const t = useTranslations("transactions.form.summary")
     return (
       <AlertDialog {...props}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Transaction summary</AlertDialogTitle>
+            <AlertDialogTitle>{t("title")}</AlertDialogTitle>
           </AlertDialogHeader>
           <form.Subscribe selector={(f) => f.values}>
             {(v) => {
@@ -36,21 +38,21 @@ export const TransactionSummaryDialog = withForm({
                 <Table>
                   <TableBody>
                     <TableRow>
-                      <TableCell>Item count</TableCell>
+                      <TableCell>{t("itemCount")}</TableCell>
                       <TableCell>{v.transactionItems.length}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>Total price</TableCell>
+                      <TableCell>{t("totalPrice")}</TableCell>
                       <TableCell>{formatCurrency(v.totalPrice)}</TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>Expenses</TableCell>
+                      <TableCell>{t("expenses")}</TableCell>
                       <TableCell className="text-destructive">
                         {formatCurrency(expenses)}
                       </TableCell>
                     </TableRow>
                     <TableRow>
-                      <TableCell>Profit / loss</TableCell>
+                      <TableCell>{t("profitLoss")}</TableCell>
                       <TableCell
                         className={cn(
                           profitLoss < 0 ? "text-destructive" : "text-success"
@@ -72,7 +74,7 @@ export const TransactionSummaryDialog = withForm({
                 form.reset()
               }}
             >
-              Close
+              {t("close")}
             </ButtonWithHotkeys>
           </AlertDialogFooter>
         </AlertDialogContent>

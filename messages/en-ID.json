@@ -89,7 +89,16 @@
       },
       "saveAndPrint": "Save and print",
       "itemCount": "{count, plural, =1 {# item} other {# items}}",
-      "removeItems": "Remove {count, plural, =1 {# item} other {# items}}"
+      "removeItems": "Remove {count, plural, =1 {# item} other {# items}}",
+      "summary": {
+        "title": "Transaction summary",
+        "show": "Show summary",
+        "itemCount": "Item count",
+        "totalPrice": "Total price",
+        "expenses": "Expenses",
+        "profitLoss": "Profit / loss",
+        "close": "Close"
+      }
     },
     "history": {
       "filters": {

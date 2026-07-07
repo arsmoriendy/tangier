@@ -67,6 +67,7 @@ export const AddItemForm = withForm({
 
     const t = useTranslations("transactions.form.addItem")
     const tc = useTranslations("common")
+    const tSummary = useTranslations("transactions.form.summary")
 
     const nameRef = useRef<HTMLInputElement>(null)
     const qtyRef = useRef<HTMLInputElement>(null)
@@ -231,7 +232,7 @@ export const AddItemForm = withForm({
                   (setLocalStorage.showTrxSummary = c)
                 }
               />
-              <FieldLabel>Show summary</FieldLabel>
+              <FieldLabel>{tSummary("show")}</FieldLabel>
             </Field>
           </div>
         </Form>
