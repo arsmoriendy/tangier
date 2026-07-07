@@ -6,16 +6,14 @@ import z from "zod"
 import { ValtioContext } from "./valtio-context"
 
 const lsSchema = z.object({
-  decrementStock: z.boolean(),
-  showHisotryItems: z.boolean(),
+  decrementStock: z.boolean().default(true),
+  showHisotryItems: z.boolean().default(false),
+  showTrxSummary: z.boolean().default(false),
 })
 
 type LocalStorage = z.infer<typeof lsSchema>
 
-const lsDefault: LocalStorage = {
-  decrementStock: true,
-  showHisotryItems: false,
-}
+const lsDefault: LocalStorage = lsSchema.parse({})
 
 const lsCtx = createContext<ValtioContext<LocalStorage> | undefined>(undefined)
 

@@ -36,6 +36,8 @@ import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { RecallDialog } from "@/app/(authorized)/transactions/recall-dialog"
 import { TransactionItemTable } from "@/app/(authorized)/transactions/transaction-item-table"
 import { Badge } from "@/components/ui/badge"
+import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { TransactionSummaryDialog } from "@/app/(authorized)/transactions/transaction-summary-dialog"
 
 export default function TransactionForm(props: {
   transaction?: DeepReadonly<TransactionWithRelations>
@@ -48,6 +50,8 @@ export default function TransactionForm(props: {
   const [recalledTrx, setRecalledTrx] = useState<
     TransactionWithRelations | undefined
   >(undefined)
+  const [getOpenSummary, setOpenSummary] = useState<boolean>(false)
+  const { setLocalStorage } = useLocalStorage()
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const t = useTranslations("transactions.form")
   const tc = useTranslations("common")
@@ -148,7 +152,8 @@ export default function TransactionForm(props: {
       }
 
       setRecalledTrx(undefined)
-      form.reset()
+      if (setLocalStorage.showTrxSummary) setOpenSummary(true)
+      else form.reset()
     },
   })
 
@@ -313,6 +318,12 @@ export default function TransactionForm(props: {
           </Form>
         </div>
       </div>
+
+      <TransactionSummaryDialog
+        form={form}
+        open={getOpenSummary}
+        onOpenChange={setOpenSummary}
+      />
     </div>
   )
 }

@@ -23,7 +23,9 @@ export const transactionSchema = z.object({
   priceGroup: z.string().optional(),
 })
 
-export const defaultTransactionValues: z.infer<typeof transactionSchema> = {
+export type TransactionSchema = z.infer<typeof transactionSchema>
+
+export const defaultTransactionValues: TransactionSchema = {
   transactionItems: [],
   totalPrice: 0,
 }

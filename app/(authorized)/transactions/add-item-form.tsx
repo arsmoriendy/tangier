@@ -3,7 +3,7 @@ import {
   RadioGroupChoiceCard,
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
-import { FieldLegend, FieldSet } from "@/components/ui/field"
+import { Field, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
 import { subscribeKey } from "valtio/utils"
@@ -21,13 +21,14 @@ import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
 import { useRef } from "react"
 import { useUnits } from "@/contexts/units-ctx"
+import { Checkbox } from "@/components/ui/checkbox"
 
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
   render: function Render({ form: createTransactionForm }) {
     const session = useSession()
     const { addItemProxy, addItemSnap } = useAddItem()
-    const { getLocalStorage } = useLocalStorage()
+    const { getLocalStorage, setLocalStorage } = useLocalStorage()
     const { units } = useUnits()
 
     const form = useAppForm({
@@ -204,7 +205,7 @@ export const AddItemForm = withForm({
             </FieldSet>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             <form.AppForm>
               <form.SubmitButton size="xs" hideHotkeys hotkeys={["Ctrl+enter"]}>
                 {t("title")}
@@ -220,6 +221,18 @@ export const AddItemForm = withForm({
                 form.reset()
               }}
             />
+
+            <div className="flex-1" />
+
+            <Field orientation="horizontal" className="w-auto">
+              <Checkbox
+                checked={getLocalStorage.showTrxSummary}
+                onCheckedChange={(c: boolean) =>
+                  (setLocalStorage.showTrxSummary = c)
+                }
+              />
+              <FieldLabel>Show summary</FieldLabel>
+            </Field>
           </div>
         </Form>
       </>
