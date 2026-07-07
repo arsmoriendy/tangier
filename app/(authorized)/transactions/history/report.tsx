@@ -3,7 +3,16 @@
 import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
-import { Label, Pie, PieChart, PieProps } from "recharts"
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  Label,
+  Pie,
+  PieChart,
+  PieProps,
+  XAxis,
+} from "recharts"
 import {
   Dialog,
   DialogContent,
@@ -14,8 +23,13 @@ import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { useEffect } from "react"
 import { subscribe } from "valtio"
 import z from "zod"
-import { Chart, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
-import { getRandomColors } from "@/lib/catpuccun-colors"
+import {
+  Chart,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart"
+import { getRandomColor, getRandomColors } from "@/lib/catpuccun-colors"
 
 export function Report() {
   const { setTrx } = useTrx()
@@ -31,6 +45,7 @@ export function Report() {
   const schema = z.object({
     ...trxSchema.shape,
     userTrx: z.record(z.string(), trxSchema).default({}),
+    timeline: z.record(z.string(), z.number()).default({}),
   })
 
   const defaultValues = schema.parse({})
@@ -65,6 +80,16 @@ export function Report() {
       },
       {} as typeof defaultValues.userTrx
     )
+    const timeline = setTrx.reduce(
+      (acc, t) => {
+        const createdAt = new Date(t.createdAt)
+        createdAt.setMinutes(0, 0, 0)
+        const timestamp = createdAt.toLocaleString()
+        acc[timestamp] = acc[timestamp] ? acc[timestamp] + 1 : 1
+        return acc
+      },
+      {} as typeof defaultValues.timeline
+    )
 
     form.setFieldValue("revenue", revenue)
     form.setFieldValue("expenses", expenses)
@@ -72,6 +97,7 @@ export function Report() {
     form.setFieldValue("trxCount", trxCount)
     form.setFieldValue("avgTrx", avgTrx)
     form.setFieldValue("userTrx", userTrx)
+    form.setFieldValue("timeline", timeline)
   }
 
   useEffect(() => {
@@ -120,11 +146,13 @@ export function Report() {
         <DialogTrigger asChild>
           <Button type="button">Details</Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="max-h-[92vh] overflow-auto">
           <DialogTitle>Sales Report</DialogTitle>
 
-          <Revenue />
-          <Expenses />
+          <div className="flex gap-2">
+            <Revenue />
+            <Expenses />
+          </div>
           <Profit />
 
           <div className="flex gap-2">
@@ -215,6 +243,42 @@ export function Report() {
                     label="Revenue"
                   />
                 </div>
+              )
+            }}
+          </form.Subscribe>
+
+          <form.Subscribe selector={(form) => form.values.timeline}>
+            {(timeline) => {
+              const timelineData = Object.entries(timeline).map(
+                ([k, sales]) => ({
+                  timestamp: k,
+                  sales,
+                })
+              )
+              const color = getRandomColor()
+              return (
+                <ChartContainer config={{}}>
+                  <AreaChart accessibilityLayer data={timelineData}>
+                    <CartesianGrid vertical={false} />
+                    <XAxis
+                      dataKey="timestamp"
+                      tickLine={false}
+                      axisLine={false}
+                      tickMargin={8}
+                    />
+                    <ChartTooltip
+                      cursor={false}
+                      content={<ChartTooltipContent indicator="line" />}
+                    />
+                    <Area
+                      dataKey="sales"
+                      type="natural"
+                      fillOpacity={0.4}
+                      fill={`#${color}`}
+                      stroke={`#${color}`}
+                    />
+                  </AreaChart>
+                </ChartContainer>
               )
             }}
           </form.Subscribe>
