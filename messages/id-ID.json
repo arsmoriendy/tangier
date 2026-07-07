@@ -20,7 +20,8 @@
     "previous": "Sebelumnya",
     "priority": "Prioritas",
     "items": "Barang",
-    "delete": "Hapus"
+    "delete": "Hapus",
+    "profitLoss": "Laba / rugi"
   },
   "sidebar": {
     "transactions": {
@@ -98,7 +99,6 @@
         "itemCount": "Jumlah barang",
         "totalPrice": "Total harga",
         "expenses": "Pengeluaran",
-        "profitLoss": "Laba / rugi",
         "close": "Tutup"
       }
     },
@@ -119,6 +119,7 @@
       },
       "updateTransaction": "Perbarui transaksi",
       "report": {
+        "legend": "Laporan",
         "title": "Laporan penjualan",
         "details": "Rincian",
         "revenue": "Pendapatan",

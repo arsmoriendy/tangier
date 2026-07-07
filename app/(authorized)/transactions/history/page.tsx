@@ -11,6 +11,7 @@ import { UnitsProvider } from "@/contexts/units-ctx"
 import { HeldProvider } from "../held-ctx"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { getSession } from "@/lib/get-session"
+import { getTranslations } from "next-intl/server"
 
 export default async function Page() {
   const from = new Date()
@@ -23,6 +24,7 @@ export default async function Page() {
   const units = await listUnits()
 
   const { user } = (await getSession())!
+  const t = await getTranslations("transactions.history")
 
   return (
     <FiltersProvider
@@ -44,7 +46,7 @@ export default async function Page() {
 
                   {user.role === "admin" && (
                     <FieldSet className="flex-1">
-                      <FieldLegend>Report</FieldLegend>
+                      <FieldLegend>{t("report.legend")}</FieldLegend>
                       <Report />
                     </FieldSet>
                   )}

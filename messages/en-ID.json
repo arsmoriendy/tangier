@@ -20,7 +20,8 @@
     "previous": "Previous",
     "priority": "Priority",
     "items": "Items",
-    "delete": "Delete"
+    "delete": "Delete",
+    "profitLoss": "Profit / loss"
   },
   "sidebar": {
     "transactions": {
@@ -96,7 +97,6 @@
         "itemCount": "Item count",
         "totalPrice": "Total price",
         "expenses": "Expenses",
-        "profitLoss": "Profit / loss",
         "close": "Close"
       }
     },
@@ -117,6 +117,7 @@
       },
       "updateTransaction": "Update transaction",
       "report": {
+        "legend": "Report",
         "title": "Sales report",
         "details": "Details",
         "revenue": "Revenue",

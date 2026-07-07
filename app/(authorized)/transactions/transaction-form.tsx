@@ -245,7 +245,8 @@ export default function TransactionForm(props: {
                         "dark"
                       )}
                     >
-                      Total profit / loss: {formatCurrency(profitLoss)}
+                      Total {tc("profitLoss").toLowerCase()}:{" "}
+                      {formatCurrency(profitLoss)}
                     </Badge>
                   )
                 }}

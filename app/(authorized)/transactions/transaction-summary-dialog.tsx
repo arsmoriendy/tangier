@@ -22,6 +22,7 @@ export const TransactionSummaryDialog = withForm({
   props: {} as ComponentProps<typeof AlertDialog>,
   render: function Render({ form, ...props }) {
     const t = useTranslations("transactions.form.summary")
+    const tc = useTranslations("common")
     const { user } = useSession()
     return (
       <AlertDialog {...props}>
@@ -56,7 +57,7 @@ export const TransactionSummaryDialog = withForm({
                           </TableCell>
                         </TableRow>
                         <TableRow>
-                          <TableCell>{t("profitLoss")}</TableCell>
+                          <TableCell>{tc("profitLoss")}</TableCell>
                           <TableCell
                             className={cn(
                               profitLoss < 0
