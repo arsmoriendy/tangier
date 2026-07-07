@@ -12,6 +12,7 @@ import {
   PieChart,
   PieProps,
   XAxis,
+  YAxis,
 } from "recharts"
 import {
   Dialog,
@@ -33,9 +34,11 @@ import {
 } from "@/components/ui/chart"
 import { getRandomColor, getRandomColors } from "@/lib/catpuccun-colors"
 import { useTranslations } from "next-intl"
+import { useFilters } from "@/app/(authorized)/transactions/history/filters-ctx"
 
 export function Report() {
   const { setTrx } = useTrx()
+  const { setFilters } = useFilters()
   const t = useTranslations("transactions.history.report")
 
   const trxSchema = z.object({
@@ -74,6 +77,45 @@ export function Report() {
     return { revenue, expenses, profit, trxCount, avgTrx }
   }
 
+  const msInHour = 1000 * 60 * 60
+  const msInDay = msInHour * 24
+
+  function msBetween(date1: Date, date2: Date) {
+    const diffMs = Math.abs(date2.getTime() - date1.getTime())
+    return diffMs
+  }
+
+  function parseTimeline(trx: TransactionWithRelations[]) {
+    const timeline: Record<string, number> = {}
+    if (trx.length < 1) return timeline
+
+    // initialize timeline
+    const minDate = new Date(setFilters.from!)
+    const maxDate = new Date(setFilters.to!)
+    minDate.setHours(0, 0, 0, 0)
+    maxDate.setHours(24, 0, 0, 0)
+    const duration = msBetween(maxDate, minDate)
+    const tick = duration > msInDay * 7 ? msInDay : msInHour
+    const n = duration / tick + 1
+    Array.from({ length: n }, (_, i) => {
+      const ms = minDate.getTime() + i * tick
+      const date = new Date(ms)
+      timeline[date.toLocaleString()] = 0
+    })
+    console.log(timeline)
+
+    // fill timeline
+    trx.forEach((t) => {
+      const createdAt = new Date(t.createdAt)
+      if (tick > msInHour) createdAt.setHours(0, 0, 0, 0)
+      else createdAt.setMinutes(0, 0, 0)
+      const timestamp = createdAt.toLocaleString()
+      timeline[timestamp]++
+    })
+
+    return timeline
+  }
+
   function refresh() {
     const { revenue, expenses, profit, trxCount, avgTrx } = parseTrx(setTrx)
     const userTrx = [...new Set(setTrx.map((t) => t.cashier))].reduce(
@@ -84,16 +126,7 @@ export function Report() {
       },
       {} as typeof defaultValues.userTrx
     )
-    const timeline = setTrx.reduce(
-      (acc, t) => {
-        const createdAt = new Date(t.createdAt)
-        createdAt.setMinutes(0, 0, 0)
-        const timestamp = createdAt.toLocaleString()
-        acc[timestamp] = acc[timestamp] ? acc[timestamp] + 1 : 1
-        return acc
-      },
-      {} as typeof defaultValues.timeline
-    )
+    const timeline = parseTimeline(setTrx)
 
     form.setFieldValue("revenue", revenue)
     form.setFieldValue("expenses", expenses)
@@ -272,7 +305,11 @@ export function Report() {
               const color = getRandomColor()
               return (
                 <ChartContainer config={{ sales: { label: t("sales") } }}>
-                  <AreaChart accessibilityLayer data={timelineData}>
+                  <AreaChart
+                    accessibilityLayer
+                    data={timelineData}
+                    margin={{ left: -30 }}
+                  >
                     <defs>
                       <linearGradient
                         id="fillSales"
@@ -295,12 +332,13 @@ export function Report() {
                     </defs>
                     <CartesianGrid vertical={false} />
                     <XAxis dataKey="timestamp" />
+                    <YAxis dataKey="sales" />
                     <ChartTooltip
                       content={<ChartTooltipContent indicator="line" />}
                     />
                     <Area
                       dataKey="sales"
-                      type="natural"
+                      type="step"
                       fill="url(#fillSales)"
                       stroke={`#${color}`}
                     />
