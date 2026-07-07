@@ -86,7 +86,7 @@ export async function listTransactions({
   to = new Date(),
   from = new Date(to.getTime() - 3_600_000 * 3),
   offset = 0,
-  limit = 10,
+  limit,
   held = false,
 }: {
   id?: string

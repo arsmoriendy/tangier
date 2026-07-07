@@ -4,7 +4,6 @@ import { TrxList } from "./trx-list"
 import { FiltersProvider } from "./filters-ctx"
 import { Filters } from "./filters"
 import { Report } from "./report"
-import { TrxPagination } from "./trx-pagination"
 import { listUnits } from "@/lib/crud/units"
 import { listPriceGroups } from "@/lib/crud/price-groups"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
@@ -27,8 +26,6 @@ export default async function Page() {
       initialValue={{
         to,
         from,
-        offset: 0,
-        limit: 10,
       }}
     >
       <HeldProvider initialValue={[]}>
@@ -48,7 +45,6 @@ export default async function Page() {
                   </FieldSet>
                 </div>
                 <TrxList />
-                <TrxPagination />
               </div>
             </UnitsProvider>
           </PriceGroupsProvider>
