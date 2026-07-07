@@ -11,7 +11,12 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button"
-import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react"
+import {
+  CaretDownIcon,
+  CaretUpIcon,
+  EyeIcon,
+  EyeSlashIcon,
+} from "@phosphor-icons/react"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { subscribeKey } from "valtio/utils"
 import { EditTrxDialog } from "@/app/(authorized)/transactions/history/edit-trx-dialog"
@@ -22,7 +27,6 @@ export function TrxRow({
 }: {
   trx: DeepReadonly<TransactionWithRelations>
 }) {
-  const t = useTranslations("transactions.history")
   const createdDate = new Date(trx.createdAt)
   const { setLocalStorage } = useLocalStorage()
   const [showItems, setShowItems] = useState(false)
@@ -40,26 +44,16 @@ export function TrxRow({
   return (
     <TableRow>
       <TableCell className="align-top">
-        <span className="flex h-8 items-center">{trx.id.slice(24)}</span>
+        <div className="flex h-8 flex-col items-end">
+          <small className="text-muted-foreground">{trx.id.slice(0, 24)}</small>
+          <span>{trx.id.slice(24)}</span>
+        </div>
       </TableCell>
-      <TableCell className="align-top">
+      <TableCell>
         <Collapsible open={showItems} onOpenChange={setShowItems}>
           <CollapsibleTrigger asChild>
-            <Button
-              className="w-full"
-              variant={showItems ? "destructive" : "outline"}
-            >
-              {showItems ? (
-                <>
-                  <EyeSlashIcon />
-                  {t("table.hideItems")}
-                </>
-              ) : (
-                <>
-                  <EyeIcon />
-                  {t("table.showItems")}
-                </>
-              )}
+            <Button className="w-full" size="xs" variant="outline">
+              {showItems ? <CaretUpIcon /> : <CaretDownIcon />}
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent>

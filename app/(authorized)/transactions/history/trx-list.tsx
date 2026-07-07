@@ -21,9 +21,17 @@ export function TrxList() {
   const { getLocalStorage, setLocalStorage } = useLocalStorage()
   return (
     <Table>
+      <colgroup>
+        <col className="w-1/8" />
+        <col className="w-full" />
+        <col className="w-1/8" />
+        <col className="w-1/8" />
+        <col className="w-1/8" />
+        <col className="w-1/8" />
+      </colgroup>
       <TableHeader>
         <TableRow>
-          <TableHead>Last ID</TableHead>
+          <TableHead className="text-right">Id</TableHead>
           <TableHead className="flex items-center justify-between">
             {tc("items")}
             <Button
