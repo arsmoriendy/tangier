@@ -22,6 +22,7 @@ import { useTranslations } from "next-intl"
 import { useRef } from "react"
 import { useUnits } from "@/contexts/units-ctx"
 import { Checkbox } from "@/components/ui/checkbox"
+import { isEqual } from "es-toolkit"
 
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
@@ -34,17 +35,32 @@ export const AddItemForm = withForm({
     const form = useAppForm({
       defaultValues: defaultAddItemValues,
       validators: { onMount: addItemSchema, onChange: addItemSchema },
-      onSubmit: ({ value: { quantifiedPrice, unitId, ...item } }) => {
+      onSubmit: ({ value: { quantifiedPrice, unitId, quantity, ...rest } }) => {
         const unit = units.find((u) => u.id === unitId)!.name
-        createTransactionForm.pushFieldValue("transactionItems", {
-          ...item,
+        const partialItem = {
+          ...rest,
           unit,
           buyPriceId: addItemProxy.buyPrice?.id ?? null,
           updateStock: getLocalStorage.decrementStock,
-          extraFields: {
-            quantifiedPrice,
-          },
-        })
+        }
+
+        const idx = createTransactionForm
+          .getFieldValue("transactionItems")
+          .findIndex(({ quantity, extraFields, ...i }) =>
+            isEqual(i, partialItem)
+          )
+
+        if (idx !== -1)
+          createTransactionForm.setFieldValue(
+            `transactionItems[${idx}].quantity`,
+            (q) => q + quantity
+          )
+        else
+          createTransactionForm.pushFieldValue("transactionItems", {
+            ...partialItem,
+            quantity,
+            extraFields: { quantifiedPrice },
+          })
 
         addItemProxy.sellPrices = []
         addItemProxy.buyPrices = []
