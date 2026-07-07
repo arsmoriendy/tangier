@@ -263,6 +263,11 @@ export function Report() {
                   sales,
                 })
               )
+
+              if (timelineData.length < 2) {
+                return undefined
+              }
+
               const color = getRandomColor()
               return (
                 <ChartContainer config={{ sales: { label: t("sales") } }}>
