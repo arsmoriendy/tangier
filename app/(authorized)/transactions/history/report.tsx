@@ -165,7 +165,7 @@ export function Report() {
           </div>
           <Profit />
 
-          <div className="flex gap-2">
+          <div className="flex items-end gap-2">
             <form.AppField name="trxCount">
               {(field) => <field.NumberField label={t("trxCount")} disabled />}
             </form.AppField>
