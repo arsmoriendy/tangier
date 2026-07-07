@@ -203,6 +203,7 @@ export function Report() {
                 entries.map(([user]) => [user, { label: user }])
               )
 
+              const pieChartMargin = 0
               const PieChartWrapper = ({
                 data,
                 label,
@@ -215,17 +216,15 @@ export function Report() {
                   <PieChart
                     width="50%"
                     height={240}
-                    margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                    margin={{
+                      top: pieChartMargin,
+                      right: pieChartMargin,
+                      bottom: pieChartMargin,
+                      left: pieChartMargin,
+                    }}
                   >
-                    <ChartTooltip
-                      content={
-                        <ChartTooltipContent
-                          formatter={(_value, user) => user}
-                        />
-                      }
-                    />
+                    <ChartTooltip content={<ChartTooltipContent />} />
                     <Pie
-                      label
                       stroke="0"
                       data={data}
                       nameKey="user"
