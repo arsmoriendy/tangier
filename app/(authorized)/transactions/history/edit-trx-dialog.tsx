@@ -50,7 +50,6 @@ export function EditTrxDialog({
             onUpdate={(trx) => {
               const i = setTrx.findIndex((t) => t.id === trx.id)
               setTrx[i] = trx
-              setOpen(false)
             }}
           />
         </div>
