@@ -230,25 +230,27 @@ export default function TransactionForm(props: {
         <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
           <div className="absolute -top-4 left-2 flex gap-2">
             <Badge>{tc("totalPrice")}</Badge>
-            <form.Subscribe selector={(f) => f.values}>
-              {(v) => {
-                const expenses = v.transactionItems.reduce(
-                  (acc, t) => (acc += t.buyPrice),
-                  0
-                )
-                const profitLoss = v.totalPrice - expenses
-                return (
-                  <Badge
-                    className={cn(
-                      profitLoss < 0 ? "bg-destructive" : "bg-success",
-                      "dark"
-                    )}
-                  >
-                    Total profit / loss: {formatCurrency(profitLoss)}
-                  </Badge>
-                )
-              }}
-            </form.Subscribe>
+            {session.user.role === "admin" && (
+              <form.Subscribe selector={(f) => f.values}>
+                {(v) => {
+                  const expenses = v.transactionItems.reduce(
+                    (acc, t) => (acc += t.buyPrice),
+                    0
+                  )
+                  const profitLoss = v.totalPrice - expenses
+                  return (
+                    <Badge
+                      className={cn(
+                        profitLoss < 0 ? "bg-destructive" : "bg-success",
+                        "dark"
+                      )}
+                    >
+                      Total profit / loss: {formatCurrency(profitLoss)}
+                    </Badge>
+                  )
+                }}
+              </form.Subscribe>
+            )}
           </div>
 
           {recalledTrx !== undefined && (
