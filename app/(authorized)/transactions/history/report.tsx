@@ -337,6 +337,7 @@ export function Report() {
                       content={<ChartTooltipContent indicator="line" />}
                     />
                     <Area
+                      dot
                       dataKey="sales"
                       type="step"
                       fill="url(#fillSales)"
