@@ -14,14 +14,7 @@ import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { useEffect } from "react"
 import { subscribe } from "valtio"
 import z from "zod"
-import {
-  Chart,
-  ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
+import { Chart, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { getRandomColors } from "@/lib/catpuccun-colors"
 
 export function Report() {
@@ -154,23 +147,24 @@ export function Report() {
 
           <form.Subscribe selector={(form) => form.values.userTrx}>
             {(userTrx) => {
-              const colors = getRandomColors(Object.keys(userTrx).length)
-              const salesData = Object.entries(userTrx).map(
-                ([user, trx], i) => ({
-                  user,
-                  count: trx.trxCount,
-                  fill: "#" + colors[i],
-                })
-              )
-              const revenueData = Object.entries(userTrx).map(
-                ([user, trx], i) => ({
-                  user,
-                  revenue: trx.revenue,
-                  fill: "#" + colors[i],
-                })
-              )
+              const users = Object.keys(userTrx)
+              const entries = Object.entries(userTrx)
+
+              if (users.length < 2) return undefined
+
+              const colors = getRandomColors(users.length)
+              const salesData = entries.map(([user, trx], i) => ({
+                user,
+                count: trx.trxCount,
+                fill: "#" + colors[i],
+              }))
+              const revenueData = entries.map(([user, trx], i) => ({
+                user,
+                revenue: trx.revenue,
+                fill: "#" + colors[i],
+              }))
               const config = Object.fromEntries(
-                Object.entries(userTrx).map(([user]) => [user, { label: user }])
+                entries.map(([user]) => [user, { label: user }])
               )
 
               const PieChartWrapper = ({
