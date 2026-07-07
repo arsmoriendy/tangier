@@ -3,13 +3,13 @@ import TransactionForm from "@/app/(authorized)/transactions/transaction-form"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
-import { PencilIcon } from "@phosphor-icons/react"
-import { useTranslations } from "next-intl"
+import { PencilIcon, XIcon } from "@phosphor-icons/react"
 import { useState } from "react"
 
 export function EditTrxDialog({
@@ -17,7 +17,6 @@ export function EditTrxDialog({
 }: {
   trx: DeepReadonly<TransactionWithRelations>
 }) {
-  const t = useTranslations("transactions.history")
   const [open, setOpen] = useState(false)
   const { setTrx } = useTrx()
 
@@ -29,17 +28,32 @@ export function EditTrxDialog({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-h-[92vh] w-[92vw] overflow-auto pt-0 sm:max-w-[92vw]">
-        <DialogTitle className="mt-2">{t("updateTransaction")}</DialogTitle>
+      <DialogContent
+        className="max-h-[92vh] w-[92vw] p-0 sm:max-w-[92vw]"
+        showCloseButton={false}
+      >
+        <DialogTitle className="hidden" />
 
-        <TransactionForm
-          transaction={trx}
-          onUpdate={(trx) => {
-            const i = setTrx.findIndex((t) => t.id === trx.id)
-            setTrx[i] = trx
-            setOpen(false)
-          }}
-        />
+        <Button
+          size="icon-xs"
+          className="absolute -top-3 right-4 z-50 bg-destructive"
+          asChild
+        >
+          <DialogClose>
+            <XIcon />
+          </DialogClose>
+        </Button>
+
+        <div className="max-h-[92vh] overflow-auto p-4 pb-0">
+          <TransactionForm
+            transaction={trx}
+            onUpdate={(trx) => {
+              const i = setTrx.findIndex((t) => t.id === trx.id)
+              setTrx[i] = trx
+              setOpen(false)
+            }}
+          />
+        </div>
       </DialogContent>
     </Dialog>
   )
