@@ -102,7 +102,6 @@ export function Report() {
       const date = new Date(ms)
       timeline[date.toLocaleString()] = 0
     })
-    console.log(timeline)
 
     // fill timeline
     trx.forEach((t) => {
