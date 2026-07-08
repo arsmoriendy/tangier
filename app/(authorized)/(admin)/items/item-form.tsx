@@ -25,6 +25,14 @@ import { useTranslations } from "next-intl"
 import { useItems } from "@/contexts/items-ctx"
 import { useItemFilters } from "@/app/(authorized)/(admin)/items/item-filters-ctx"
 import { useItemCount } from "@/app/(authorized)/(admin)/items/item-count-ctx"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 export default function ItemForm(props: {
   item?: DeepReadonly<ItemWithRelations>
@@ -175,37 +183,45 @@ export default function ItemForm(props: {
                         <TrashIcon />
                       </Button>
                     </div>
-                    <div className="flex gap-2">
-                      <form.Subscribe selector={(f) => f.values.sellPrices}>
-                        {(sps) =>
-                          sps.map(({ price: sp, priceGroup }, i) => {
-                            const margin = sp - bp
-                            const discount = ((bp - sp) / bp) * 100
-                            const pg = priceGroups.find(
-                              (pg) => pg.id === priceGroup
-                            )!
-                            return (
-                              margin !== 0 && (
-                                <small
-                                  key={i}
-                                  className={cn(
-                                    margin < 0
-                                      ? "text-destructive"
-                                      : "text-green-500"
-                                  )}
-                                >
-                                  {pg.name} margin: {margin > 0 && "+"}
-                                  {formatCurrency(margin)}{" "}
-                                  {margin < 0 && (
-                                    <>({discount.toFixed(2)}% discount)</>
-                                  )}
-                                </small>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead></TableHead>
+                          <TableHead>Margin</TableHead>
+                          <TableHead>Discount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+
+                      <TableBody>
+                        <form.Subscribe selector={(f) => f.values.sellPrices}>
+                          {(sps) =>
+                            sps.map(({ price: sp, priceGroup }) => {
+                              const margin = sp - bp
+                              const discount =
+                                bp === 0 ? 0 : ((bp - sp) / bp) * 100
+                              const pg = priceGroups.find(
+                                (pg) => pg.id === priceGroup
+                              )!
+                              return (
+                                <TableRow>
+                                  <TableHead>{pg.name}</TableHead>
+                                  <TableCell
+                                    className={cn(
+                                      margin > 0 && "text-success",
+                                      margin < 0 && "text-destructive"
+                                    )}
+                                  >
+                                    {margin > 0 && "+"}
+                                    {formatCurrency(margin)}
+                                  </TableCell>
+                                  <TableCell>{discount.toFixed(2)}%</TableCell>
+                                </TableRow>
                               )
-                            )
-                          })
-                        }
-                      </form.Subscribe>
-                    </div>
+                            })
+                          }
+                        </form.Subscribe>
+                      </TableBody>
+                    </Table>
                   </div>
                 ))}
                 <Button
