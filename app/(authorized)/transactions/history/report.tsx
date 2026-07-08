@@ -67,7 +67,8 @@ export function Report() {
     const revenue = trx.reduce((acc, t) => acc + t.totalPrice, 0)
     const expenses = trx.reduce(
       (acc, t) =>
-        acc + t.transactionItems.reduce((acc, i) => acc + i.buyPrice, 0),
+        acc +
+        t.transactionItems.reduce((acc, i) => acc + i.buyPrice * i.quantity, 0),
       0
     )
     const profit = revenue - expenses
