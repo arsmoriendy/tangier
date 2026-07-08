@@ -23,6 +23,7 @@ import { useRef } from "react"
 import { useUnits } from "@/contexts/units-ctx"
 import { Checkbox } from "@/components/ui/checkbox"
 import { isEqual } from "es-toolkit"
+import { ListPlusIcon } from "@phosphor-icons/react"
 
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
@@ -224,7 +225,8 @@ export const AddItemForm = withForm({
 
           <div className="flex items-center gap-2">
             <form.AppForm>
-              <form.SubmitButton size="xs" hideHotkeys hotkeys={["Ctrl+enter"]}>
+              <form.SubmitButton size="xs" hotkeys={["Ctrl + Enter"]}>
+                <ListPlusIcon />
                 {t("title")}
               </form.SubmitButton>
             </form.AppForm>
