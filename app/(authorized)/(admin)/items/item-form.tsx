@@ -204,7 +204,13 @@ export default function ItemForm(props: {
                               )!
                               return (
                                 <TableRow>
-                                  <TableHead>{pg.name}</TableHead>
+                                  <TableHead
+                                    style={{
+                                      color: `#${pg.hexColor}`,
+                                    }}
+                                  >
+                                    {pg.name}
+                                  </TableHead>
                                   <TableCell
                                     className={cn(
                                       margin > 0 && "text-success",
