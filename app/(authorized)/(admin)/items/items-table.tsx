@@ -48,13 +48,10 @@ export function ItemsTable() {
               <TableCell>
                 <Badge variant="outline">{item.unit.name}</Badge>
               </TableCell>
-              <TableCell className="grid w-fit grid-cols-2 items-center gap-2 space-y-2">
+              <TableCell className="flex w-fit flex-col items-center gap-2">
                 {item.buyPrices.map((bp, i) => (
                   <div key={i} className="contents">
                     <span>{formatCurrency(bp.price)}</span>
-                    <Badge variant="secondary">
-                      {tc("stockLeft", { count: bp.stock })}
-                    </Badge>
                   </div>
                 ))}
               </TableCell>
