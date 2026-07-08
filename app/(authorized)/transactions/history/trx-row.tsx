@@ -57,12 +57,14 @@ export function TrxRow({
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent>
-            <Table>
+            <Table className="table-fixed">
               <TableBody>
                 {trx.transactionItems.map((item, i) => (
                   <TableRow key={i}>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{formatCurrency(item.sellPrice)}</TableCell>
+                    <TableCell className="truncate">{item.name}</TableCell>
+                    <TableCell className="truncate text-right">
+                      {formatCurrency(item.sellPrice)}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
