@@ -61,17 +61,30 @@ export const TransactionItemTable = withForm({
       >
         {({ state }) => (
           <Table className="w-full table-fixed border-separate border-spacing-0">
-            <colgroup>
-              <col className="w-1/36" />
-              <col className="w-1/36" />
-              <col className="w-9/36" />
-              <col className="w-3/36" />
-              <col className="w-6/36" />
-              <col className="w-6/36" />
-              <col className="w-3/36" />
-              <col className="w-1/36" />
-              <col className="w-6/36" />
-            </colgroup>
+            {session.user.role === "admin" ? (
+              <colgroup>
+                <col className="w-1/36" />
+                <col className="w-1/36" />
+                <col className="w-9/36" />
+                <col className="w-3/36" />
+                <col className="w-6/36" />
+                <col className="w-6/36" />
+                <col className="w-3/36" />
+                <col className="w-1/36" />
+                <col className="w-6/36" />
+              </colgroup>
+            ) : (
+              <colgroup>
+                <col className="w-1/36" />
+                <col className="w-1/36" />
+                <col className="w-9/36" />
+                <col className="w-3/36" />
+                <col className="w-6/36" />
+                <col className="w-3/36" />
+                <col className="w-1/36" />
+                <col className="w-6/36" />
+              </colgroup>
+            )}
             <TableHeader className="[&_th]:border-b">
               <TableRow>
                 <TableHead></TableHead>
@@ -83,9 +96,8 @@ export const TransactionItemTable = withForm({
                 )}
                 <TableHead>{tc("sellPrice")}</TableHead>
                 <TableHead>Qty</TableHead>
-                <TableHead></TableHead>
-                <TableHead>{tc("quantifiedPrice")}</TableHead>
                 <TableHead />
+                <TableHead>{tc("quantifiedPrice")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -147,7 +159,7 @@ export const TransactionItemTable = withForm({
                   <TableCell className="cursor-grab align-top">
                     <DotsSixVerticalIcon className="inline h-8" />
                   </TableCell>
-                  <TableCell className="align-top">
+                  <TableCell className="flex justify-center px-0 align-top">
                     <Checkbox
                       checked={selected.has(i)}
                       className="my-2"
@@ -244,9 +256,12 @@ export const TransactionItemTable = withForm({
                       {(field) => <field.NumberField min={1} />}
                     </form.AppField>
                   </TableCell>
-                  <TableCell className="align-top">
+                  <TableCell className="px-0 align-top">
                     {buyPriceId !== null ? (
-                      <Field orientation="horizontal" className="h-8">
+                      <Field
+                        orientation="horizontal"
+                        className="h-8 justify-center"
+                      >
                         <form.AppField
                           name={`transactionItems[${i}].updateStock`}
                         >
@@ -286,9 +301,9 @@ export const TransactionItemTable = withForm({
                 <TableCell />
                 <TableCell />
                 <TableCell />
+                {session.user.role === "admin" && <TableCell />}
                 <TableCell />
-                <TableCell />
-                <TableCell className="flex gap-2">
+                <TableCell className="flex justify-center gap-2 px-0">
                   <Checkbox
                     checked={getLocalStorage.decrementStock}
                     onCheckedChange={(c) => {
@@ -303,11 +318,12 @@ export const TransactionItemTable = withForm({
                       }
                     }}
                   />
+                </TableCell>
+                <TableCell>
                   <span className="text-muted-foreground">
                     {t("items.updateStock")}
                   </span>
                 </TableCell>
-                <TableCell />
               </TableRow>
             </TableFooter>
           </Table>
