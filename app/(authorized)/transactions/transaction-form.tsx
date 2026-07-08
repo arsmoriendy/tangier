@@ -227,7 +227,7 @@ export default function TransactionForm(props: {
           />
         </div>
 
-        <div className="sticky bottom-0 flex gap-2 border bg-sidebar p-2 text-sidebar-foreground">
+        <div className="sticky bottom-0 flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground">
           <div className="absolute -top-4 left-2 flex gap-2">
             <Badge>{tc("totalPrice")}</Badge>
             {session.user.role === "admin" && (
@@ -267,82 +267,84 @@ export default function TransactionForm(props: {
           )}
 
           <form.AppField name="totalPrice">
-            {(field) => <field.IdrField min={0} className="flex-1" />}
+            {(field) => <field.IdrField min={0} className="max-w-xs" />}
           </form.AppField>
 
-          <ButtonWithHotkeys
-            hotkeys={["Ctrl+d"]}
-            variant="destructive"
-            disabled={selected.size < 1}
-            onClick={() => {
-              for (const s of selected) {
-                form.removeFieldValue("transactionItems", s)
-              }
-              setSelected(new Set())
-            }}
-          >
-            <TrashIcon />
-            {t("removeItems", { count: selected.size })}
-          </ButtonWithHotkeys>
+          <div className="flex gap-2">
+            <ButtonWithHotkeys
+              hotkeys={["Ctrl+d"]}
+              variant="destructive"
+              disabled={selected.size < 1}
+              onClick={() => {
+                for (const s of selected) {
+                  form.removeFieldValue("transactionItems", s)
+                }
+                setSelected(new Set())
+              }}
+            >
+              <TrashIcon />
+              {t("removeItems", { count: selected.size })}
+            </ButtonWithHotkeys>
 
-          <ResetButton
-            hotkeys={["F4"]}
-            onClick={() => {
-              form.reset()
-            }}
-          />
+            <ResetButton
+              hotkeys={["F4"]}
+              onClick={() => {
+                form.reset()
+              }}
+            />
 
-          {!props.transaction && (
-            <>
-              <form.Subscribe selector={(form) => form.canSubmit}>
-                {(canSubmit) => (
-                  <ButtonWithHotkeys
-                    type="button"
-                    onClick={hold}
-                    hotkeys={["F5"]}
-                    disabled={!canSubmit}
-                  >
-                    <HandIcon /> <span>Hold</span>
-                  </ButtonWithHotkeys>
-                )}
-              </form.Subscribe>
+            {!props.transaction && (
+              <>
+                <form.Subscribe selector={(form) => form.canSubmit}>
+                  {(canSubmit) => (
+                    <ButtonWithHotkeys
+                      type="button"
+                      onClick={hold}
+                      hotkeys={["F5"]}
+                      disabled={!canSubmit}
+                    >
+                      <HandIcon /> <span>Hold</span>
+                    </ButtonWithHotkeys>
+                  )}
+                </form.Subscribe>
 
-              <ButtonWithHotkeys
-                type="button"
-                hotkeys={["F6"]}
-                onClick={async () => {
-                  setHeld.splice(
-                    0,
-                    setHeld.length,
-                    ...(await listTransactions({
-                      held: true,
-                      from: new Date(0),
-                      to: new Date(),
-                    }))
-                  )
-                  setOpenRecallDialog(true)
-                }}
-              >
-                <ClockCountdownIcon /> <span>Recall</span>
-              </ButtonWithHotkeys>
+                <ButtonWithHotkeys
+                  type="button"
+                  hotkeys={["F6"]}
+                  onClick={async () => {
+                    setHeld.splice(
+                      0,
+                      setHeld.length,
+                      ...(await listTransactions({
+                        held: true,
+                        from: new Date(0),
+                        to: new Date(),
+                      }))
+                    )
+                    setOpenRecallDialog(true)
+                  }}
+                >
+                  <ClockCountdownIcon /> <span>Recall</span>
+                </ButtonWithHotkeys>
 
-              <RecallDialog
-                form={form}
-                open={openRecallDialog}
-                setOpen={setOpenRecallDialog}
-                recalledTrx={recalledTrx}
-                setRecalledTrx={setRecalledTrx}
-              />
-            </>
-          )}
+                <RecallDialog
+                  form={form}
+                  open={openRecallDialog}
+                  setOpen={setOpenRecallDialog}
+                  recalledTrx={recalledTrx}
+                  setRecalledTrx={setRecalledTrx}
+                />
+              </>
+            )}
 
-          <Form handleSubmit={form.handleSubmit}>
-            <form.AppForm>
-              <form.SubmitButton hotkeys={["F7"]}>
-                <PrinterIcon /> {t("saveAndPrint")}
-              </form.SubmitButton>
-            </form.AppForm>
-          </Form>
+            <Form handleSubmit={form.handleSubmit}>
+              <form.AppForm>
+                <form.SubmitButton hotkeys={["F7"]}>
+                  <PrinterIcon /> {t("saveAndPrint")}
+                </form.SubmitButton>
+              </form.AppForm>
+            </Form>
+          </div>
         </div>
       </div>
 
