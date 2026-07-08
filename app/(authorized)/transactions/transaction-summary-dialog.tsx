@@ -33,7 +33,7 @@ export const TransactionSummaryDialog = withForm({
           <form.Subscribe selector={(f) => f.values}>
             {(v) => {
               const expenses = v.transactionItems.reduce(
-                (acc, t) => (acc += t.buyPrice),
+                (acc, item) => (acc += item.buyPrice * item.quantity),
                 0
               )
               const profitLoss = v.totalPrice - expenses
