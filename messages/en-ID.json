@@ -88,9 +88,9 @@
         "title": "Customer group",
         "noDescription": "No description"
       },
-      "saveAndPrint": "Save and print",
+      "saveAndPrint": "Save|print",
       "itemCount": "{count, plural, =1 {# item} other {# items}}",
-      "removeItems": "Remove {count, plural, =1 {# item} other {# items}}",
+      "removeItems": "Remove {count}",
       "summary": {
         "title": "Transaction summary",
         "show": "Show summary",

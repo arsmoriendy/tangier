@@ -90,9 +90,9 @@
         "title": "Kelompok pelanggan",
         "noDescription": "Tidak ada deskripsi"
       },
-      "saveAndPrint": "Simpan dan cetak",
+      "saveAndPrint": "Simpan|cetak",
       "itemCount": "{count} barang",
-      "removeItems": "Hapus {count} barang",
+      "removeItems": "Hapus {count}",
       "summary": {
         "title": "Ringkasan transaksi",
         "show": "Tampilkan ringkasan",
