@@ -46,7 +46,7 @@ export default function ItemForm(props: {
       z.object({
         id: z.uuid().optional(),
         price: z.number().min(0),
-        stock: z.number().min(0),
+        stock: z.number(),
       })
     ),
     sellPrices: z.array(
