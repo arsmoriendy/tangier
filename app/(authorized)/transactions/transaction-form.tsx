@@ -239,14 +239,16 @@ export default function TransactionForm(props: {
                   )
                   const profitLoss = v.totalPrice - expenses
                   return (
-                    <Badge
-                      className={cn(
-                        profitLoss < 0 ? "bg-destructive" : "bg-success",
-                        "dark"
-                      )}
-                    >
-                      Total {tc("profitLoss").toLowerCase()}:{" "}
-                      {formatCurrency(profitLoss)}
+                    <Badge variant="secondary">
+                      <span>Margin:</span>
+                      <span
+                        className={cn(
+                          profitLoss < 0 ? "text-destructive" : "text-success"
+                        )}
+                      >
+                        {profitLoss > 0 && "+"}
+                        {formatCurrency(profitLoss)}
+                      </span>
                     </Badge>
                   )
                 }}
@@ -300,7 +302,7 @@ export default function TransactionForm(props: {
                     hotkeys={["F5"]}
                     disabled={!canSubmit}
                   >
-                    <HandIcon /> <span className="hidden xl:inline">Hold</span>
+                    <HandIcon /> <span>Hold</span>
                   </ButtonWithHotkeys>
                 )}
               </form.Subscribe>
@@ -321,8 +323,7 @@ export default function TransactionForm(props: {
                   setOpenRecallDialog(true)
                 }}
               >
-                <ClockCountdownIcon />
-                <span className="hidden xl:inline">Recall</span>
+                <ClockCountdownIcon /> <span>Recall</span>
               </ButtonWithHotkeys>
 
               <RecallDialog
