@@ -150,7 +150,7 @@ export default function ItemForm(props: {
               <>
                 {buyPrices.map(({ price: bp }, i) => (
                   <div key={i}>
-                    <div className="flex items-end gap-2">
+                    <div className="flex gap-2">
                       <form.AppField name={`buyPrices[${i}].price`}>
                         {(f) => <f.IdrField label={tc("buyPrice")} />}
                       </form.AppField>
@@ -167,6 +167,7 @@ export default function ItemForm(props: {
                         variant="destructive"
                         size="icon"
                         type="button"
+                        className="mt-6"
                         onClick={() => {
                           form.removeFieldValue("buyPrices", i)
                         }}
