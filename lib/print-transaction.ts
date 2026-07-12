@@ -45,47 +45,47 @@ export async function printTransaction(trx: TransactionWithRelations) {
     printer.font("a").align("ct").size(1, 1).style("normal")
 
     if (settings.receiptHeader) {
-      printer.text(settings.receiptHeader)
-      printer.drawLine()
+      printer.text(settings.receiptHeader).drawLine()
     }
 
-    printer.align("lt")
-
-    printer.text(twoCols([`Last ID : `, trx.id.slice(24)]))
-    printer.text(twoCols([`Cashier : `, trx.cashier]))
-    printer.text(twoCols([`Cust.   : `, trx.customerPriceGroup]))
-    printer.text(twoCols([`Date    : `, format(crtDate, "yyyy-MM-dd")]))
-    printer.text(twoCols([`Time    : `, format(crtDate, "HH:mm:ss")]))
+    printer
+      .align("lt")
+      .text(twoCols([`Last ID : `, trx.id.slice(24)]))
+      .text(twoCols([`Cashier : `, trx.cashier]))
+      .text(twoCols([`Cust.   : `, trx.customerPriceGroup]))
+      .text(twoCols([`Date    : `, format(crtDate, "yyyy-MM-dd")]))
+      .text(twoCols([`Time    : `, format(crtDate, "HH:mm:ss")]))
 
     // print items
     printer.drawLine()
     for (const item of trx.transactionItems) {
-      printer.text(item.name)
-      printer.text(
-        twoCols([
-          `${item.quantity} ${item.unit} X ${formatNumber(item.sellPrice)}`,
-          formatNumber(item.sellPrice * item.quantity),
-        ])
-      )
+      printer
+        .text(item.name)
+        .text(
+          twoCols([
+            `${item.quantity} ${item.unit} X ${formatNumber(item.sellPrice)}`,
+            formatNumber(item.sellPrice * item.quantity),
+          ])
+        )
     }
-    printer.drawLine()
+    printer //
+      .drawLine()
+      .text(`${trx.transactionItems.length} items`)
 
-    printer.text(`${trx.transactionItems.length} items`)
-
-    printer.align("rt")
     // Double height emphazised mode
     // https://download4.epson.biz/sec_pubs/pos/reference_en/escpos/esc_exclamation.html
     printer.buffer.write(Buffer.from([0x1b, 0x21, 0b0001_1000]))
-    printer.text(`Total : ${formatNumber(trx.totalPrice)}`)
+    printer
+      .align("rt")
+      .text(`Total : ${formatNumber(trx.totalPrice)}`)
+      .align("lt")
     printer.buffer.write(Buffer.from([0x1b, 0x21, 0b0000_0000])) // Reset mode
-    printer.align("lt")
 
     if (settings.receiptFooter) {
-      printer.feed(1)
-      printer.align("ct").text(settings.receiptFooter)
+      printer.text("\n").align("ct").text(settings.receiptFooter)
     }
 
-    printer.feed(6)
+    printer.text("\n\n\n\n\n\n")
     await printer.cut().close()
   })
   device.close()
