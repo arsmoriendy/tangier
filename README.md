@@ -12,9 +12,7 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 
 ##### TODO
 
-1. Hide profit, margins, etc option for admins
-2. Fix scrolling on client
-3. Bigger print font
+1. Fix trx item select using arrow keys on client
 
 ###### Backlog
 
@@ -29,3 +27,4 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 9. Tooltips
 10. DB indices
 11. Change year on date inputs
+12. Increase print speed?
