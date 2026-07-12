@@ -12,6 +12,10 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 
 ##### TODO
 
+1. Hide profit, margins, etc option for admins
+2. Fix scrolling on client
+3. Bigger print font
+
 ###### Backlog
 
 1. Server function authorization

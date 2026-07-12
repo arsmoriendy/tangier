@@ -34,6 +34,7 @@
     "barcodeGroups": "Barcode groups",
     "users": "Users",
     "receipt": "Receipt",
+    "options": "Options",
     "language": {
       "title": "Language",
       "header": "Choose language"
@@ -229,6 +230,17 @@
     "toast": {
       "updated": "Receipt configuration updated"
     }
+  },
+  "options": {
+    "title": "Options",
+    "financialInfo": "Financial information",
+    "transactionForm": "Transaction form",
+    "historyPage": "History page",
+    "itemPage": "Item page",
+    "hideTrxMarginAndDiscounts": "Hide margin and discounts",
+    "hideTrxBuyPrice": "Hide buy price",
+    "hideHistoryReports": "Hide reports",
+    "hideItemMarginAndDiscounts": "Hide margin and discounts"
   },
   "auth": {
     "signIn": "Sign in",

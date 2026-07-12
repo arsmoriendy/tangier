@@ -53,7 +53,7 @@ export default function TransactionForm(props: {
     TransactionWithRelations | undefined
   >(undefined)
   const [getOpenSummary, setOpenSummary] = useState<boolean>(false)
-  const { setLocalStorage } = useLocalStorage()
+  const { setLocalStorage, getLocalStorage } = useLocalStorage()
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const t = useTranslations("transactions.form")
   const tc = useTranslations("common")
@@ -230,30 +230,31 @@ export default function TransactionForm(props: {
         <div className="sticky bottom-0 flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground">
           <div className="absolute -top-4 left-2 flex gap-2">
             <Badge>{tc("totalPrice")}</Badge>
-            {session.user.role === "admin" && (
-              <form.Subscribe selector={(f) => f.values}>
-                {(v) => {
-                  const expenses = v.transactionItems.reduce(
-                    (acc, item) => (acc += item.buyPrice * item.quantity),
-                    0
-                  )
-                  const profitLoss = v.totalPrice - expenses
-                  return (
-                    <Badge variant="secondary">
-                      <span>Margin:</span>
-                      <span
-                        className={cn(
-                          profitLoss < 0 ? "text-destructive" : "text-success"
-                        )}
-                      >
-                        {profitLoss > 0 && "+"}
-                        {formatCurrency(profitLoss)}
-                      </span>
-                    </Badge>
-                  )
-                }}
-              </form.Subscribe>
-            )}
+            {session.user.role === "admin" &&
+              !getLocalStorage.hideTrxMarginAndDiscounts && (
+                <form.Subscribe selector={(f) => f.values}>
+                  {(v) => {
+                    const expenses = v.transactionItems.reduce(
+                      (acc, item) => (acc += item.buyPrice * item.quantity),
+                      0
+                    )
+                    const profitLoss = v.totalPrice - expenses
+                    return (
+                      <Badge variant="secondary">
+                        <span>Margin:</span>
+                        <span
+                          className={cn(
+                            profitLoss < 0 ? "text-destructive" : "text-success"
+                          )}
+                        >
+                          {profitLoss > 0 && "+"}
+                          {formatCurrency(profitLoss)}
+                        </span>
+                      </Badge>
+                    )
+                  }}
+                </form.Subscribe>
+              )}
           </div>
 
           {recalledTrx !== undefined && (

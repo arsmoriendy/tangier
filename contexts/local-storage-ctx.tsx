@@ -9,6 +9,10 @@ const lsSchema = z.object({
   decrementStock: z.boolean().default(true),
   showHisotryItems: z.boolean().default(false),
   showTrxSummary: z.boolean().default(false),
+  hideTrxMarginAndDiscounts: z.boolean().default(true),
+  hideTrxBuyPrice: z.boolean().default(true),
+  hideHistoryReports: z.boolean().default(true),
+  hideItemMarginAndDiscounts: z.boolean().default(true),
 })
 
 type LocalStorage = z.infer<typeof lsSchema>
@@ -27,7 +31,8 @@ export function LocalStorageProvider({ children }: { children: ReactNode }) {
     const ls = localStorage.getItem(lsKey)
     if (ls !== null) {
       try {
-        Object.assign(lsProxy, lsSchema.parse(JSON.parse(ls)))
+        const parsed = JSON.parse(ls)
+        Object.assign(lsProxy, lsSchema.parse(parsed))
       } catch {}
     }
 

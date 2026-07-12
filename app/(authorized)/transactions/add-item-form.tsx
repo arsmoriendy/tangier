@@ -108,46 +108,47 @@ export const AddItemForm = withForm({
 
         <Form handleSubmit={form.handleSubmit}>
           <div className="flex gap-2">
-            {session.user.role === "admin" && (
-              <FieldSet className="flex-1">
-                <FieldLegend>{tc("buyPrice")}</FieldLegend>
+            {session.user.role === "admin" &&
+              !getLocalStorage.hideTrxBuyPrice && (
+                <FieldSet className="flex-1">
+                  <FieldLegend>{tc("buyPrice")}</FieldLegend>
 
-                <form.AppField name="buyPrice">
-                  {(f) => <f.IdrField />}
-                </form.AppField>
+                  <form.AppField name="buyPrice">
+                    {(f) => <f.IdrField />}
+                  </form.AppField>
 
-                <RadioGroupChoiceCard
-                  value={addItemSnap.buyPrice?.id}
-                  onValueChange={(v) => {
-                    const price = parseFloat(v)
-                    addItemProxy.buyPrice = addItemProxy.buyPrices.find(
-                      (bp) => bp.id === v
-                    )!
-                    form.setFieldValue("buyPrice", price)
-                  }}
-                >
-                  {addItemSnap.buyPrices.length > 0 ? (
-                    addItemSnap.buyPrices
-                      .toReversed()
-                      .map((bp, i) => (
-                        <RadioGroupChoiceItem
-                          key={i}
-                          value={bp.id}
-                          title={formatCurrency(bp.price)}
-                          description={tc("stockLeft", { count: bp.stock })}
-                        />
-                      ))
-                  ) : (
-                    <Item
-                      className="grid min-h-17 place-items-center border-dashed text-muted-foreground"
-                      variant="outline"
-                    >
-                      {t("noPrice")}
-                    </Item>
-                  )}
-                </RadioGroupChoiceCard>
-              </FieldSet>
-            )}
+                  <RadioGroupChoiceCard
+                    value={addItemSnap.buyPrice?.id}
+                    onValueChange={(v) => {
+                      const price = parseFloat(v)
+                      addItemProxy.buyPrice = addItemProxy.buyPrices.find(
+                        (bp) => bp.id === v
+                      )!
+                      form.setFieldValue("buyPrice", price)
+                    }}
+                  >
+                    {addItemSnap.buyPrices.length > 0 ? (
+                      addItemSnap.buyPrices
+                        .toReversed()
+                        .map((bp, i) => (
+                          <RadioGroupChoiceItem
+                            key={i}
+                            value={bp.id}
+                            title={formatCurrency(bp.price)}
+                            description={tc("stockLeft", { count: bp.stock })}
+                          />
+                        ))
+                    ) : (
+                      <Item
+                        className="grid min-h-17 place-items-center border-dashed text-muted-foreground"
+                        variant="outline"
+                      >
+                        {t("noPrice")}
+                      </Item>
+                    )}
+                  </RadioGroupChoiceCard>
+                </FieldSet>
+              )}
 
             <FieldSet className="flex-1">
               <FieldLegend>{tc("sellPrice")}</FieldLegend>
@@ -183,37 +184,38 @@ export const AddItemForm = withForm({
                 </form.AppField>
               </div>
 
-              {session.user.role === "admin" && (
-                <form.Subscribe
-                  selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
-                >
-                  {([bp, sp]) => {
-                    const margin = sp - bp
-                    const discount = ((bp - sp) / bp) * 100
-                    return (
-                      margin !== 0 && (
-                        <small
-                          className={cn(
-                            margin < 0 ? "text-destructive" : "text-green-500"
-                          )}
-                        >
-                          {tc("margin")}: {margin > 0 && "+"}
-                          {formatCurrency(margin)}{" "}
-                          {margin < 0 && (
-                            <>
-                              (
-                              {tc("discountPerc", {
-                                perc: discount.toFixed(2),
-                              })}
-                              )
-                            </>
-                          )}
-                        </small>
+              {session.user.role === "admin" &&
+                !getLocalStorage.hideTrxMarginAndDiscounts && (
+                  <form.Subscribe
+                    selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
+                  >
+                    {([bp, sp]) => {
+                      const margin = sp - bp
+                      const discount = ((bp - sp) / bp) * 100
+                      return (
+                        margin !== 0 && (
+                          <small
+                            className={cn(
+                              margin < 0 ? "text-destructive" : "text-green-500"
+                            )}
+                          >
+                            {tc("margin")}: {margin > 0 && "+"}
+                            {formatCurrency(margin)}{" "}
+                            {margin < 0 && (
+                              <>
+                                (
+                                {tc("discountPerc", {
+                                  perc: discount.toFixed(2),
+                                })}
+                                )
+                              </>
+                            )}
+                          </small>
+                        )
                       )
-                    )
-                  }}
-                </form.Subscribe>
-              )}
+                    }}
+                  </form.Subscribe>
+                )}
 
               <form.AppField name="quantifiedPrice">
                 {(field) => (

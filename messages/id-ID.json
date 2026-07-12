@@ -34,6 +34,7 @@
     "barcodeGroups": "Kelompok barcode",
     "users": "Pengguna",
     "receipt": "Struk",
+    "options": "Setelan",
     "language": {
       "title": "Bahasa",
       "header": "Pilih bahasa"
@@ -231,6 +232,17 @@
     "toast": {
       "updated": "Konfigurasi struk diperbarui"
     }
+  },
+  "options": {
+    "title": "Setelan",
+    "financialInfo": "Informasi keuangan",
+    "transactionForm": "Form transaksi",
+    "historyPage": "Halaman riwayat",
+    "itemPage": "Halaman barang",
+    "hideTrxMarginAndDiscounts": "Sembunyikan margin dan diskon",
+    "hideTrxBuyPrice": "Sembunyikan harga beli",
+    "hideHistoryReports": "Sembunyikan laporan",
+    "hideItemMarginAndDiscounts": "Sembunyikan margin dan diskon"
   },
   "auth": {
     "signIn": "Masuk",

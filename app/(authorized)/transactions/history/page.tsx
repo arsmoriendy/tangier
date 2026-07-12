@@ -1,9 +1,9 @@
 import { listTransactions } from "@/lib/crud/transactions"
+import { ReportFieldSet } from "./report-fieldset"
 import { TrxProvider } from "./trx-ctx"
 import { TrxList } from "./trx-list"
 import { FiltersProvider } from "./filters-ctx"
 import { Filters } from "./filters"
-import { Report } from "./report"
 import { listUnits } from "@/lib/crud/units"
 import { listPriceGroups } from "@/lib/crud/price-groups"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
@@ -11,7 +11,6 @@ import { UnitsProvider } from "@/contexts/units-ctx"
 import { HeldProvider } from "../held-ctx"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { getSession } from "@/lib/get-session"
-import { getTranslations } from "next-intl/server"
 
 export default async function Page() {
   const from = new Date()
@@ -24,7 +23,6 @@ export default async function Page() {
   const units = await listUnits()
 
   const { user } = (await getSession())!
-  const t = await getTranslations("transactions.history")
 
   return (
     <FiltersProvider
@@ -44,12 +42,7 @@ export default async function Page() {
                     <Filters />
                   </FieldSet>
 
-                  {user.role === "admin" && (
-                    <FieldSet className="flex-1">
-                      <FieldLegend>{t("report.legend")}</FieldLegend>
-                      <Report />
-                    </FieldSet>
-                  )}
+                  {user.role === "admin" && <ReportFieldSet />}
                 </div>
                 <TrxList />
               </div>

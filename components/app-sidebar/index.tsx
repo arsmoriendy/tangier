@@ -23,6 +23,7 @@ import {
   BarcodeIcon,
   TagIcon,
   ReceiptIcon,
+  GearSixIcon,
 } from "@phosphor-icons/react/ssr"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
@@ -132,6 +133,17 @@ export function AppSidebar() {
                       <Link href={href!}>
                         <ReceiptIcon />
                         {t("receipt")}
+                      </Link>
+                    </SidebarMenuButton>
+                  )}
+                </DynamicSidebarLink>
+
+                <DynamicSidebarLink href="/options">
+                  {({ href, ...props }) => (
+                    <SidebarMenuButton asChild {...props}>
+                      <Link href={href!}>
+                        <GearSixIcon />
+                        {t("options")}
                       </Link>
                     </SidebarMenuButton>
                   )}

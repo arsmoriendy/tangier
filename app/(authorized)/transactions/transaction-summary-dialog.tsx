@@ -12,6 +12,7 @@ import {
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { useSession } from "@/contexts/session-ctx"
+import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
 import { useTranslations } from "next-intl"
@@ -24,6 +25,7 @@ export const TransactionSummaryDialog = withForm({
     const t = useTranslations("transactions.form.summary")
     const tc = useTranslations("common")
     const { user } = useSession()
+    const { getLocalStorage } = useLocalStorage()
     return (
       <AlertDialog {...props}>
         <AlertDialogContent>
@@ -48,28 +50,29 @@ export const TransactionSummaryDialog = withForm({
                       <TableCell>{t("totalPrice")}</TableCell>
                       <TableCell>{formatCurrency(v.totalPrice)}</TableCell>
                     </TableRow>
-                    {user.role === "admin" && (
-                      <>
-                        <TableRow>
-                          <TableCell>{t("expenses")}</TableCell>
-                          <TableCell className="text-destructive">
-                            {formatCurrency(expenses)}
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell>{tc("profitLoss")}</TableCell>
-                          <TableCell
-                            className={cn(
-                              profitLoss < 0
-                                ? "text-destructive"
-                                : "text-success"
-                            )}
-                          >
-                            {formatCurrency(profitLoss)}
-                          </TableCell>
-                        </TableRow>
-                      </>
-                    )}
+                    {user.role === "admin" &&
+                      !getLocalStorage.hideTrxMarginAndDiscounts && (
+                        <>
+                          <TableRow>
+                            <TableCell>{t("expenses")}</TableCell>
+                            <TableCell className="text-destructive">
+                              {formatCurrency(expenses)}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell>{tc("profitLoss")}</TableCell>
+                            <TableCell
+                              className={cn(
+                                profitLoss < 0
+                                  ? "text-destructive"
+                                  : "text-success"
+                              )}
+                            >
+                              {formatCurrency(profitLoss)}
+                            </TableCell>
+                          </TableRow>
+                        </>
+                      )}
                   </TableBody>
                 </Table>
               )

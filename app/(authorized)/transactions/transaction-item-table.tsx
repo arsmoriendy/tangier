@@ -61,39 +61,27 @@ export const TransactionItemTable = withForm({
       >
         {({ state }) => (
           <Table className="w-full table-fixed border-separate border-spacing-0">
-            {session.user.role === "admin" ? (
-              <colgroup>
-                <col className="w-1/36" />
-                <col className="w-1/36" />
-                <col className="w-9/36" />
-                <col className="w-3/36" />
-                <col className="w-6/36" />
-                <col className="w-6/36" />
-                <col className="w-3/36" />
-                <col className="w-1/36" />
-                <col className="w-6/36" />
-              </colgroup>
-            ) : (
-              <colgroup>
-                <col className="w-1/36" />
-                <col className="w-1/36" />
-                <col className="w-9/36" />
-                <col className="w-3/36" />
-                <col className="w-6/36" />
-                <col className="w-3/36" />
-                <col className="w-1/36" />
-                <col className="w-6/36" />
-              </colgroup>
-            )}
+            <colgroup>
+              <col className="w-1/36" />
+              <col className="w-1/36" />
+              <col className="w-9/36" />
+              <col className="w-3/36" />
+              <col className="w-6/36" />
+              {session.user.role === "admin" &&
+                !getLocalStorage.hideTrxBuyPrice && <col className="w-6/36" />}
+              <col className="w-3/36" />
+              <col className="w-1/36" />
+              <col className="w-6/36" />
+            </colgroup>
             <TableHeader className="[&_th]:border-b">
               <TableRow>
-                <TableHead></TableHead>
-                <TableHead></TableHead>
+                <TableHead colSpan={2}></TableHead>
                 <TableHead>{tc("name")}</TableHead>
                 <TableHead>{tc("unit")}</TableHead>
-                {session.user.role === "admin" && (
-                  <TableHead>{tc("buyPrice")}</TableHead>
-                )}
+                {session.user.role === "admin" &&
+                  !getLocalStorage.hideTrxBuyPrice && (
+                    <TableHead>{tc("buyPrice")}</TableHead>
+                  )}
                 <TableHead>{tc("sellPrice")}</TableHead>
                 <TableHead>Qty</TableHead>
                 <TableHead />
@@ -105,7 +93,12 @@ export const TransactionItemTable = withForm({
                 <TableRow>
                   <TableCell
                     className="text-center text-muted-foreground"
-                    colSpan={9}
+                    colSpan={
+                      session.user.role === "admin" &&
+                      !getLocalStorage.hideTrxBuyPrice
+                        ? 9
+                        : 8
+                    }
                   >
                     {t("items.noItems")}
                   </TableCell>
@@ -181,13 +174,14 @@ export const TransactionItemTable = withForm({
                       {(field) => <field.TextField />}
                     </form.AppField>
                   </TableCell>
-                  {session.user.role === "admin" && (
-                    <TableCell className="align-top">
-                      <form.AppField name={`transactionItems[${i}].buyPrice`}>
-                        {(field) => <field.IdrField min={0} />}
-                      </form.AppField>
-                    </TableCell>
-                  )}
+                  {session.user.role === "admin" &&
+                    !getLocalStorage.hideTrxBuyPrice && (
+                      <TableCell className="align-top">
+                        <form.AppField name={`transactionItems[${i}].buyPrice`}>
+                          {(field) => <field.IdrField min={0} />}
+                        </form.AppField>
+                      </TableCell>
+                    )}
                   <TableCell className="align-top">
                     <form.AppField
                       name={`transactionItems[${i}].sellPrice`}
@@ -203,42 +197,43 @@ export const TransactionItemTable = withForm({
                     >
                       {(field) => <field.IdrField min={0} />}
                     </form.AppField>
-                    {session.user.role === "admin" && (
-                      <form.Subscribe
-                        selector={(f) => [
-                          f.values.transactionItems[i].buyPrice,
-                          f.values.transactionItems[i].sellPrice,
-                        ]}
-                      >
-                        {([bp, sp]) => {
-                          const margin = sp - bp
-                          const discount = ((bp - sp) / bp) * 100
-                          return (
-                            margin !== 0 && (
-                              <small
-                                className={cn(
-                                  margin < 0
-                                    ? "text-destructive"
-                                    : "text-green-500"
-                                )}
-                              >
-                                {tc("margin")}: {margin > 0 && "+"}
-                                {formatCurrency(margin)}{" "}
-                                {margin < 0 && (
-                                  <>
-                                    (
-                                    {tc("discountPerc", {
-                                      perc: discount.toFixed(2),
-                                    })}
-                                    )
-                                  </>
-                                )}
-                              </small>
+                    {session.user.role === "admin" &&
+                      !getLocalStorage.hideTrxMarginAndDiscounts && (
+                        <form.Subscribe
+                          selector={(f) => [
+                            f.values.transactionItems[i].buyPrice,
+                            f.values.transactionItems[i].sellPrice,
+                          ]}
+                        >
+                          {([bp, sp]) => {
+                            const margin = sp - bp
+                            const discount = ((bp - sp) / bp) * 100
+                            return (
+                              margin !== 0 && (
+                                <small
+                                  className={cn(
+                                    margin < 0
+                                      ? "text-destructive"
+                                      : "text-green-500"
+                                  )}
+                                >
+                                  {tc("margin")}: {margin > 0 && "+"}
+                                  {formatCurrency(margin)}{" "}
+                                  {margin < 0 && (
+                                    <>
+                                      (
+                                      {tc("discountPerc", {
+                                        perc: discount.toFixed(2),
+                                      })}
+                                      )
+                                    </>
+                                  )}
+                                </small>
+                              )
                             )
-                          )
-                        }}
-                      </form.Subscribe>
-                    )}
+                          }}
+                        </form.Subscribe>
+                      )}
                   </TableCell>
                   <TableCell className="align-top">
                     <form.AppField
@@ -296,12 +291,9 @@ export const TransactionItemTable = withForm({
             </TableBody>
             <TableFooter>
               <TableRow>
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                <TableCell />
-                {session.user.role === "admin" && <TableCell />}
+                <TableCell colSpan={5} />
+                {session.user.role === "admin" &&
+                  !getLocalStorage.hideTrxBuyPrice && <TableCell />}
                 <TableCell />
                 <TableCell className="flex justify-center gap-2 px-0">
                   <Checkbox

@@ -25,6 +25,7 @@ import { useTranslations } from "next-intl"
 import { useItems } from "@/contexts/items-ctx"
 import { useItemFilters } from "@/app/(authorized)/(admin)/items/item-filters-ctx"
 import { useItemCount } from "@/app/(authorized)/(admin)/items/item-count-ctx"
+import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import {
   Table,
   TableBody,
@@ -47,6 +48,7 @@ export default function ItemForm(props: {
   const { itemsProxy } = useItems()
   const { itemFiltersProxy } = useItemFilters()
   const { setItemCount } = useItemCount()
+  const { getLocalStorage } = useLocalStorage()
   const createItemFormSchema = z.object({
     name: z.string().min(1),
     unit: z.uuid(),
@@ -183,51 +185,55 @@ export default function ItemForm(props: {
                         <TrashIcon />
                       </Button>
                     </div>
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead></TableHead>
-                          <TableHead>Margin</TableHead>
-                          <TableHead>Discount</TableHead>
-                        </TableRow>
-                      </TableHeader>
+                    {!getLocalStorage.hideItemMarginAndDiscounts && (
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead></TableHead>
+                            <TableHead>Margin</TableHead>
+                            <TableHead>Discount</TableHead>
+                          </TableRow>
+                        </TableHeader>
 
-                      <TableBody>
-                        <form.Subscribe selector={(f) => f.values.sellPrices}>
-                          {(sps) =>
-                            sps.map(({ price: sp, priceGroup }) => {
-                              const margin = sp - bp
-                              const discount =
-                                bp === 0 ? 0 : ((bp - sp) / bp) * 100
-                              const pg = priceGroups.find(
-                                (pg) => pg.id === priceGroup
-                              )!
-                              return (
-                                <TableRow>
-                                  <TableHead
-                                    style={{
-                                      color: `#${pg.hexColor}`,
-                                    }}
-                                  >
-                                    {pg.name}
-                                  </TableHead>
-                                  <TableCell
-                                    className={cn(
-                                      margin > 0 && "text-success",
-                                      margin < 0 && "text-destructive"
-                                    )}
-                                  >
-                                    {margin > 0 && "+"}
-                                    {formatCurrency(margin)}
-                                  </TableCell>
-                                  <TableCell>{discount.toFixed(2)}%</TableCell>
-                                </TableRow>
-                              )
-                            })
-                          }
-                        </form.Subscribe>
-                      </TableBody>
-                    </Table>
+                        <TableBody>
+                          <form.Subscribe selector={(f) => f.values.sellPrices}>
+                            {(sps) =>
+                              sps.map(({ price: sp, priceGroup }) => {
+                                const margin = sp - bp
+                                const discount =
+                                  bp === 0 ? 0 : ((bp - sp) / bp) * 100
+                                const pg = priceGroups.find(
+                                  (pg) => pg.id === priceGroup
+                                )!
+                                return (
+                                  <TableRow>
+                                    <TableHead
+                                      style={{
+                                        color: `#${pg.hexColor}`,
+                                      }}
+                                    >
+                                      {pg.name}
+                                    </TableHead>
+                                    <TableCell
+                                      className={cn(
+                                        margin > 0 && "text-success",
+                                        margin < 0 && "text-destructive"
+                                      )}
+                                    >
+                                      {margin > 0 && "+"}
+                                      {formatCurrency(margin)}
+                                    </TableCell>
+                                    <TableCell>
+                                      {discount.toFixed(2)}%
+                                    </TableCell>
+                                  </TableRow>
+                                )
+                              })
+                            }
+                          </form.Subscribe>
+                        </TableBody>
+                      </Table>
+                    )}
                   </div>
                 ))}
                 <Button
