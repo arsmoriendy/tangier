@@ -70,12 +70,15 @@ export async function printTransaction(trx: TransactionWithRelations) {
     }
     printer.drawLine()
 
-    printer.text(
-      twoCols([
-        `${trx.transactionItems.length} items`,
-        `Total : ${formatNumber(trx.totalPrice)}`,
-      ])
-    )
+    printer.text(`${trx.transactionItems.length} items`)
+
+    printer.align("rt")
+    // Double height emphazised mode
+    // https://download4.epson.biz/sec_pubs/pos/reference_en/escpos/esc_exclamation.html
+    printer.buffer.write(Buffer.from([0x1b, 0x21, 0b0001_1000]))
+    printer.text(`Total : ${formatNumber(trx.totalPrice)}`)
+    printer.buffer.write(Buffer.from([0x1b, 0x21, 0b0000_0000])) // Reset mode
+    printer.align("lt")
 
     if (settings.receiptFooter) {
       printer.feed(1)
