@@ -15,6 +15,7 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 1. Fix trx item select using arrow keys on client
 2. Sync time format in history page
 3. Shutdown confirm dialog
+4. Replace client's redirect countdown with its own option
 
 ###### Backlog
 
