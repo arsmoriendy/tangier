@@ -1,6 +1,6 @@
 import { ChangePasswordForm } from "@/components/app-sidebar/change-password-form"
 import { ChangeUsernameForm } from "@/components/app-sidebar/change-username-form"
-import { PowerDropdown } from "@/components/app-sidebar/power-dropdown"
+import { ClientDropdown } from "@/components/app-sidebar/client-dropdown"
 import {
   DialogTrigger,
   Dialog,
@@ -24,7 +24,7 @@ import {
 import { useSession } from "@/contexts/session-ctx"
 import { authClient } from "@/lib/auth-client"
 import {
-  PowerIcon,
+  AppWindowIcon,
   SignOutIcon,
   TrashIcon,
   UserCircleIcon,
@@ -119,15 +119,15 @@ export function UserSidebarItem() {
       </DropdownMenu>
 
       {isTauri() && (
-        <PowerDropdown
+        <ClientDropdown
           side="right"
           align="end"
           className="relative left-2 min-w-3xs"
         >
           <SidebarMenuAction className="size-8">
-            <PowerIcon />
+            <AppWindowIcon />
           </SidebarMenuAction>
-        </PowerDropdown>
+        </ClientDropdown>
       )}
     </SidebarMenuItem>
   )

@@ -13,7 +13,7 @@ import { PowerIcon, SignOutIcon } from "@phosphor-icons/react"
 import { invoke } from "@tauri-apps/api/core"
 import { exit } from "@tauri-apps/plugin-process"
 
-export function PowerDropdown({
+export function ClientDropdown({
   children,
   ...props
 }: Dropdown.DropdownMenuContentProps) {
@@ -22,7 +22,7 @@ export function PowerDropdown({
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
       <DropdownMenuContent {...props}>
         <DropdownMenuGroup>
-          <DropdownMenuLabel>Power menu</DropdownMenuLabel>
+          <DropdownMenuLabel>Client menu</DropdownMenuLabel>
           <DropdownMenuItem variant="destructive" onClick={() => exit()}>
             <SignOutIcon /> Exit tangier
           </DropdownMenuItem>

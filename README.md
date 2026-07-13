@@ -16,6 +16,7 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 2. Shutdown confirm dialog
 3. Replace client's redirect countdown with its own option
 4. Widen history filter if no report
+5. i18n client menu
 
 ###### Backlog
 
