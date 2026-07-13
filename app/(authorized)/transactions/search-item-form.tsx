@@ -1,5 +1,6 @@
 import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
 import { defaultAddItemValues } from "@/app/(authorized)/transactions/add-item-schema"
+import { SelectItemRows } from "@/app/(authorized)/transactions/select-item-rows"
 import { Form, useAppForm, withForm } from "@/components/form"
 import {
   Combobox,
@@ -20,7 +21,6 @@ import { Kbd } from "@/components/ui/kbd"
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
@@ -176,32 +176,7 @@ export const SearchItemForm = withForm({
               </TableHeader>
 
               <TableBody>
-                {foundItems.map((item, i) => (
-                  <TableRow
-                    key={i}
-                    tabIndex={i + 1}
-                    ref={(el) => {
-                      el && (itemsRef.current[i] = el)
-                    }}
-                    role="button"
-                    className="group cursor-pointer focus:outline-none [&_td]:group-focus-visible:bg-primary [&_td]:group-focus-visible:text-primary-foreground"
-                    onClick={() => selectItem(item)}
-                    onKeyDown={(e) => {
-                      if (e.key === "ArrowUp")
-                        i !== 0 && itemsRef.current?.at(i - 1)?.focus()
-                      else if (e.key === "ArrowDown")
-                        itemsRef.current?.at(i + 1)?.focus()
-                      else if (e.key === "Enter" || e.key === " ")
-                        selectItem(item)
-                      else return
-
-                      e.preventDefault()
-                    }}
-                  >
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.unit.name}</TableCell>
-                  </TableRow>
-                ))}
+                <SelectItemRows items={foundItems} onSelect={selectItem} />
               </TableBody>
             </Table>
           </DialogContent>
