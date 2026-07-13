@@ -1,5 +1,6 @@
 import { ChangePasswordForm } from "@/components/app-sidebar/change-password-form"
 import { ChangeUsernameForm } from "@/components/app-sidebar/change-username-form"
+import { PowerDropdown } from "@/components/app-sidebar/power-dropdown"
 import {
   DialogTrigger,
   Dialog,
@@ -15,13 +16,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import {
+  SidebarMenuAction,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar"
 import { useSession } from "@/contexts/session-ctx"
 import { authClient } from "@/lib/auth-client"
-import { SignOutIcon, TrashIcon, UserCircleIcon } from "@phosphor-icons/react"
+import {
+  PowerIcon,
+  SignOutIcon,
+  TrashIcon,
+  UserCircleIcon,
+} from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
+import { isTauri } from "@tauri-apps/api/core"
 
 export function UserSidebarItem() {
   const session = useSession()
@@ -106,6 +117,18 @@ export function UserSidebarItem() {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+
+      {isTauri() && (
+        <PowerDropdown
+          side="right"
+          align="end"
+          className="relative left-2 min-w-3xs"
+        >
+          <SidebarMenuAction className="size-8">
+            <PowerIcon />
+          </SidebarMenuAction>
+        </PowerDropdown>
+      )}
     </SidebarMenuItem>
   )
 }
