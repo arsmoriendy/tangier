@@ -13,10 +13,9 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 ##### TODO
 
 1. Fix trx item select using arrow keys on client
-2. Shutdown confirm dialog
-3. Replace client's redirect countdown with its own option
-4. Widen history filter if no report
-5. i18n client menu
+2. Replace client's redirect countdown with its own option
+3. Widen history filter if no report
+4. i18n client menu
 
 ###### Backlog
 
