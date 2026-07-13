@@ -4,19 +4,14 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useEffect, useState } from "react"
-import { useTranslations } from "next-intl"
+import { useFormatter } from "next-intl"
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button"
-import {
-  CaretDownIcon,
-  CaretUpIcon,
-  EyeIcon,
-  EyeSlashIcon,
-} from "@phosphor-icons/react"
+import { CaretDownIcon, CaretUpIcon } from "@phosphor-icons/react"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { subscribeKey } from "valtio/utils"
 import { EditTrxDialog } from "@/app/(authorized)/transactions/history/edit-trx-dialog"
@@ -30,6 +25,7 @@ export function TrxRow({
   const createdDate = new Date(trx.createdAt)
   const { setLocalStorage } = useLocalStorage()
   const [showItems, setShowItems] = useState(false)
+  const format = useFormatter()
 
   useEffect(() => {
     setShowItems(setLocalStorage.showHisotryItems)
@@ -79,12 +75,12 @@ export function TrxRow({
       </TableCell>
       <TableCell className="align-top">
         <span className="flex h-8 items-center">
-          {createdDate.toLocaleDateString()}
+          {format.dateTime(createdDate)}
         </span>
       </TableCell>
       <TableCell className="align-top">
         <span className="flex h-8 items-center">
-          {createdDate.toLocaleTimeString()}
+          {format.dateTime(createdDate, { hour: "2-digit", minute: "2-digit" })}
         </span>
       </TableCell>
       <TableCell className="space-x-2 align-top">

@@ -18,6 +18,7 @@ import {
 } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { TrashIcon } from "@phosphor-icons/react"
+import { useFormatter } from "next-intl"
 
 export const RecallDialog = withForm({
   defaultValues: defaultTransactionValues,
@@ -36,6 +37,7 @@ export const RecallDialog = withForm({
   }) {
     const { setHeld, getHeld } = useHeld()
     const { priceGroups } = usePriceGroups()
+    const format = useFormatter()
 
     return (
       <Dialog open={open} onOpenChange={setOpen}>
@@ -88,8 +90,13 @@ export const RecallDialog = withForm({
                       setOpen(false)
                     }}
                   >
-                    <TableCell>{date.toLocaleDateString()}</TableCell>
-                    <TableCell>{date.toLocaleTimeString()}</TableCell>
+                    <TableCell>{format.dateTime(date)}</TableCell>
+                    <TableCell>
+                      {format.dateTime(date, {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </TableCell>
                     <TableCell>{trx.customerPriceGroup}</TableCell>
                     <TableCell>{trx.transactionItems.length}</TableCell>
                     <TableCell>{formatCurrency(trx.totalPrice)}</TableCell>

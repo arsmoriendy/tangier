@@ -33,13 +33,14 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { getRandomColor, getRandomColors } from "@/lib/catpuccun-colors"
-import { useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 import { useFilters } from "@/app/(authorized)/transactions/history/filters-ctx"
 
 export function Report() {
   const { setTrx } = useTrx()
   const { setFilters } = useFilters()
   const t = useTranslations("transactions.history.report")
+  const format = useFormatter()
 
   const trxSchema = z.object({
     revenue: z.number().default(0),
@@ -101,7 +102,9 @@ export function Report() {
     Array.from({ length: n }, (_, i) => {
       const ms = minDate.getTime() + i * tick
       const date = new Date(ms)
-      timeline[date.toLocaleString()] = 0
+      timeline[
+        format.dateTime(date, { dateStyle: "short", timeStyle: "short" })
+      ] = 0
     })
 
     // fill timeline
@@ -109,7 +112,10 @@ export function Report() {
       const createdAt = new Date(t.createdAt)
       if (tick > msInHour) createdAt.setHours(0, 0, 0, 0)
       else createdAt.setMinutes(0, 0, 0)
-      const timestamp = createdAt.toLocaleString()
+      const timestamp = format.dateTime(createdAt, {
+        dateStyle: "short",
+        timeStyle: "short",
+      })
       timeline[timestamp]++
     })
 
