@@ -61,6 +61,17 @@
       },
       "signOut": "Sign out",
       "deleteAccount": "Delete account"
+    },
+    "client": {
+      "title": "Client menu",
+      "exit": "Exit tangier",
+      "shutdown": {
+        "label": "Shutdown",
+        "confirmTitle": "Confirm shutdown",
+        "confirmDescription": "Are you sure you want to shutdown this computer?",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+      }
     }
   },
   "transactions": {

@@ -12,6 +12,7 @@ import {
 import { PowerIcon, SignOutIcon } from "@phosphor-icons/react"
 import { invoke } from "@tauri-apps/api/core"
 import { exit } from "@tauri-apps/plugin-process"
+import { useTranslations } from "next-intl"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -28,19 +29,20 @@ export function ClientDropdown({
   children,
   ...props
 }: Dropdown.DropdownMenuContentProps) {
+  const t = useTranslations("sidebar.client")
   return (
     <AlertDialog>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent {...props}>
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Client menu</DropdownMenuLabel>
+            <DropdownMenuLabel>{t("title")}</DropdownMenuLabel>
             <DropdownMenuItem variant="destructive" onClick={() => exit()}>
-              <SignOutIcon /> Exit tangier
+              <SignOutIcon /> {t("exit")}
             </DropdownMenuItem>
             <AlertDialogTrigger asChild>
               <DropdownMenuItem variant="destructive">
-                <PowerIcon /> Shutdown
+                <PowerIcon /> {t("shutdown.label")}
               </DropdownMenuItem>
             </AlertDialogTrigger>
           </DropdownMenuGroup>
@@ -49,15 +51,15 @@ export function ClientDropdown({
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Confirm shutdown</AlertDialogTitle>
+          <AlertDialogTitle>{t("shutdown.confirmTitle")}</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to shutdown this computer?
+            {t("shutdown.confirmDescription")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t("shutdown.cancel")}</AlertDialogCancel>
           <AlertDialogAction onClick={() => invoke("shutdown")}>
-            Confirm
+            {t("shutdown.confirm")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

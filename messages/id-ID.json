@@ -61,6 +61,17 @@
       },
       "signOut": "Keluar",
       "deleteAccount": "Hapus akun"
+    },
+    "client": {
+      "title": "Menu klien",
+      "exit": "Keluar dari tangier",
+      "shutdown": {
+        "label": "Matikan",
+        "confirmTitle": "Konfirmasi matikan",
+        "confirmDescription": "Apakah anda yakin ingin mematikan komputer ini?",
+        "cancel": "Batal",
+        "confirm": "Konfirmasi"
+      }
     }
   },
   "transactions": {
