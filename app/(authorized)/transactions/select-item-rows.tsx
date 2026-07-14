@@ -45,7 +45,7 @@ export function SelectItemRows({
           key={i}
           role="button"
           className={cn(
-            "cursor-pointer",
+            "cursor-pointer transition-none",
             i === selectedIdx && "text-background [&_td]:bg-primary"
           )}
           onMouseOver={() => setSelectedIdx(i)}
