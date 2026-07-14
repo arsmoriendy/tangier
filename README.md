@@ -12,8 +12,6 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 
 ##### TODO
 
-1. Replace client's redirect countdown with its own option
-
 ###### Backlog
 
 1. Server function authorization
