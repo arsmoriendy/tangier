@@ -22,12 +22,15 @@ export function SelectItemRows({
   function handleKeys(e: KeyboardEvent) {
     switch (e.key) {
       case "ArrowUp":
+        e.preventDefault()
         setSelectedIdx((i) => Math.max(0, i - 1))
         break
       case "ArrowDown":
+        e.preventDefault()
         setSelectedIdx((i) => Math.min(items.length - 1, i + 1))
         break
       case "Enter":
+        e.preventDefault()
         onSelect(items[idxRef.current])
         break
     }
@@ -42,13 +45,15 @@ export function SelectItemRows({
     <>
       {items.map((item, i) => (
         <TableRow
+          tabIndex={i + 1}
           key={i}
           role="button"
           className={cn(
-            "cursor-pointer transition-none",
+            "cursor-pointer transition-none outline-none",
             i === selectedIdx && "text-background [&_td]:bg-primary"
           )}
           onMouseOver={() => setSelectedIdx(i)}
+          onFocus={() => setSelectedIdx(i)}
           onClick={() => onSelect(items[idxRef.current])}
         >
           <TableCell>{item.name}</TableCell>

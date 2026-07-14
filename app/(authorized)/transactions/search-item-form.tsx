@@ -31,7 +31,7 @@ import { listItems } from "@/lib/crud/items"
 import { ItemWithRelations } from "@/lib/crud/items"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
-import { RefObject, useRef, useState } from "react"
+import { RefObject, useState } from "react"
 
 const defaultProps: {
   afterSelect?: () => any
@@ -66,8 +66,6 @@ export const SearchItemForm = withForm({
 
     const t = useTranslations("transactions.form.addItem.searchItem")
     const tc = useTranslations("common")
-
-    const itemsRef = useRef<HTMLTableRowElement[]>([])
 
     function selectItem(item: ItemWithRelations) {
       const buyPrice = item.buyPrices.at(item.buyPrices.length - 1)
