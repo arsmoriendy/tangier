@@ -23,7 +23,7 @@ import {
   BarcodeIcon,
   TagIcon,
   ReceiptIcon,
-  GearSixIcon,
+  GearFineIcon,
 } from "@phosphor-icons/react/ssr"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
@@ -142,7 +142,7 @@ export function AppSidebar() {
                   {({ href, ...props }) => (
                     <SidebarMenuButton asChild {...props}>
                       <Link href={href!}>
-                        <GearSixIcon />
+                        <GearFineIcon />
                         {t("options")}
                       </Link>
                     </SidebarMenuButton>
