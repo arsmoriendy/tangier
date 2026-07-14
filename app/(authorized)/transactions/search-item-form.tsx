@@ -42,6 +42,7 @@ export const SearchItemForm = withForm({
   defaultValues: defaultAddItemValues,
   props: defaultProps,
   render: function Render({ form, afterSelect, nameRef }) {
+    const limit = 50
     const { addItemProxy } = useAddItem()
     const { units } = useUnits()
     const searchItemForm = useAppForm({
@@ -55,6 +56,7 @@ export const SearchItemForm = withForm({
         const items = await listItems({
           name: form.state.values.name,
           unitId: form.state.values.unitId,
+          limit,
         })
         setFoundItems(items)
         setDialogOpened(true)
@@ -158,14 +160,22 @@ export const SearchItemForm = withForm({
         </Form>
 
         <Dialog open={dialogIsOpen} onOpenChange={setDialogOpened}>
-          <DialogContent className="overflow-auto pt-0">
-            <DialogTitle className="mt-4">{t("title")}</DialogTitle>
+          <DialogContent className="pt-0">
+            <DialogTitle className="mt-4">
+              {t("title")}{" "}
+              <small className="text-muted-foreground">(max {limit})</small>
+            </DialogTitle>
 
             <DialogDescription>
               {t.rich("description", { Kbd: (chunks) => <Kbd>{chunks}</Kbd> })}
             </DialogDescription>
 
-            <Table className="border-separate border-spacing-0 [&_td]:border-b [&_th]:border-b [&_tr]:bg-popover [&_tr]:hover:bg-muted">
+            <Table className="block max-h-[64vh] border-separate border-spacing-0 overflow-y-auto [&_td]:border-b [&_th]:border-b [&_tr]:bg-popover [&_tr]:hover:bg-muted">
+              <colgroup>
+                <col className="w-full" />
+                <col className="w-full" />
+              </colgroup>
+
               <TableHeader className="sticky top-0">
                 <TableRow>
                   <TableHead>{tc("name")}</TableHead>

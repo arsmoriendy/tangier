@@ -201,7 +201,7 @@ export async function listItems({
 }: {
   name?: string
   unitId?: string
-  limit?: number
+  limit?: number | null
   offset?: number
 } = {}) {
   return await db.query.items.findMany({
@@ -210,7 +210,7 @@ export async function listItems({
       unitId.length > 0 ? eq(items.unit, unitId) : undefined,
       undefined
     ),
-    limit,
+    limit: limit ?? undefined,
     offset,
     columns: { unit: false },
     with: {
