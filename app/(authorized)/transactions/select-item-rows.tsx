@@ -52,9 +52,8 @@ export function SelectItemRows({
             "cursor-pointer transition-none outline-none",
             i === selectedIdx && "text-background [&_td]:bg-primary"
           )}
-          onMouseOver={() => setSelectedIdx(i)}
           onFocus={() => setSelectedIdx(i)}
-          onClick={() => onSelect(items[idxRef.current])}
+          onClick={() => onSelect(items[i])}
         >
           <TableCell>{item.name}</TableCell>
           <TableCell>{item.unit.name}</TableCell>
