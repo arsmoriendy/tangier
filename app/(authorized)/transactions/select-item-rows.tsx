@@ -14,8 +14,13 @@ export function SelectItemRows({
 }) {
   const [selectedIdx, setSelectedIdx] = useState(DEFAULT_SELECTED_IDX)
   const idxRef = useRef(DEFAULT_SELECTED_IDX)
+  const trs = useRef<HTMLTableRowElement[]>([])
 
   useEffect(() => {
+    const selectedTr = trs.current.at(selectedIdx)
+    if (document.activeElement !== selectedTr) selectedTr?.focus()
+    selectedTr?.scrollTo()
+
     idxRef.current = selectedIdx
   }, [selectedIdx])
 
@@ -45,6 +50,10 @@ export function SelectItemRows({
     <>
       {items.map((item, i) => (
         <TableRow
+          ref={(tr) => {
+            if (tr) trs.current[i] = tr
+            else delete trs.current[i]
+          }}
           tabIndex={i + 1}
           key={i}
           role="button"
