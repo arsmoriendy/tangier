@@ -87,7 +87,7 @@
         "searchItem": {
           "nameOrBarcode": "Nama atau barcode",
           "title": "Pilih barang",
-          "description": "Gunakan <Kbd>↑</Kbd> atau <Kbd>⇧ Shift</Kbd> + <Kbd>⇥ Tab</Kbd> untuk fokus ke barang sebelumnya, dan <Kbd>↓</Kbd> atau <Kbd>⇥ Tab</Kbd> untuk fokus ke barang selanjutnya.",
+          "description": "Gunakan <Kbd>↑</Kbd>/<Kbd>k</Kbd>/<Kbd>⇧ Shift</Kbd>+<Kbd>⇥ Tab</Kbd> untuk fokus ke barang sebelumnya, dan <Kbd>↓</Kbd>/<Kbd>j</Kbd>/<Kbd>⇥ Tab</Kbd> untuk fokus ke barang selanjutnya.",
           "errors": { "unitNotFound": "Satuan tidak ditemukan" }
         },
         "noPrice": "Tidak ada harga yang tercatat"

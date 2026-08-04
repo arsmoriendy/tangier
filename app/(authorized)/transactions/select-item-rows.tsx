@@ -27,10 +27,12 @@ export function SelectItemRows({
   function handleKeys(e: KeyboardEvent) {
     switch (e.key) {
       case "ArrowUp":
+      case "k":
         e.preventDefault()
         setSelectedIdx((i) => Math.max(0, i - 1))
         break
       case "ArrowDown":
+      case "j":
         e.preventDefault()
         setSelectedIdx((i) => Math.min(items.length - 1, i + 1))
         break

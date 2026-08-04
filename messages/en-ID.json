@@ -85,7 +85,7 @@
         "searchItem": {
           "nameOrBarcode": "Name or barcode",
           "title": "Select item",
-          "description": "Use <Kbd>↑</Kbd> or <Kbd>⇧ Shift</Kbd> + <Kbd>⇥ Tab</Kbd> to focus to the previous item, and <Kbd>↓</Kbd> or <Kbd>⇥ Tab</Kbd> to focus to the next item.",
+          "description": "Use <Kbd>↑</Kbd>/<Kbd>k</Kbd>/<Kbd>⇧ Shift</Kbd>+<Kbd>⇥ Tab</Kbd> to focus the previous item, and <Kbd>↓</Kbd>/<Kbd>j</Kbd>/<Kbd>⇥ Tab</Kbd> to focus the next item.",
           "errors": { "unitNotFound": "Unit not found" }
         },
         "noPrice": "No recorded price"
