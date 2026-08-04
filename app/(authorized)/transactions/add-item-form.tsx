@@ -245,7 +245,7 @@ export const AddItemForm = withForm({
 
             <div className="flex-1" />
 
-            <Field orientation="horizontal" className="w-auto">
+            <Field orientation="horizontal" className="w-auto gap-2">
               <Checkbox
                 checked={getLocalStorage.showTrxSummary}
                 onCheckedChange={(c: boolean) =>

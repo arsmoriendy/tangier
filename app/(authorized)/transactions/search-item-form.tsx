@@ -87,7 +87,10 @@ export const SearchItemForm = withForm({
 
     return (
       <>
-        <Form handleSubmit={searchItemForm.handleSubmit} className="flex gap-2">
+        <Form
+          handleSubmit={searchItemForm.handleSubmit}
+          className="flex gap-2 space-y-0"
+        >
           <form.AppField name="name">
             {(field) => (
               <field.TextField
@@ -104,8 +107,10 @@ export const SearchItemForm = withForm({
             {(field) => {
               const isInvalid = !field.state.meta.isValid
               return (
-                <div className="space-y-2">
-                  <FieldLabel aria-invalid={isInvalid}>{tc("unit")}</FieldLabel>
+                <div>
+                  <FieldLabel className="mb-2" aria-invalid={isInvalid}>
+                    {tc("unit")}
+                  </FieldLabel>
                   <Combobox
                     items={units.map((unit) => ({
                       value: unit.id,
