@@ -235,6 +235,7 @@ export const AddItemForm = withForm({
 
             <ResetButton
               size="xs"
+              hotkeys={["F2"]}
               onClick={() => {
                 addItemProxy.sellPrices = []
                 addItemProxy.buyPrices = []
