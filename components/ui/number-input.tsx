@@ -15,7 +15,7 @@ export type NumberInputProps = Omit<
   ref?: RefObject<HTMLInputElement | null>
   value: number
   onValueChange: (value: number) => any
-  scrollable: boolean
+  scrollable?: boolean
 }
 
 export function NumberInput({
