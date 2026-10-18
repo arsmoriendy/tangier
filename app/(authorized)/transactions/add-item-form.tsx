@@ -172,18 +172,35 @@ export const AddItemForm = withForm({
             <FieldSet className="flex-1">
               <FieldLegend>{tc("sellPrice")}</FieldLegend>
               <div className="flex gap-2">
-                <form.AppField
-                  name="sellPrice"
-                  listeners={{
-                    onChange: (v) =>
-                      form.setFieldValue(
-                        "quantifiedPrice",
-                        v.value * form.state.values.quantity
-                      ),
-                  }}
+                <form.Subscribe
+                  selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
                 >
-                  {(field) => <field.IdrField min={0} />}
-                </form.AppField>
+                  {([bp, sp]) => (
+                    <form.AppField
+                      name="sellPrice"
+                      listeners={{
+                        onChange: (v) =>
+                          form.setFieldValue(
+                            "quantifiedPrice",
+                            v.value * form.state.values.quantity
+                          ),
+                      }}
+                    >
+                      {(field) => (
+                        <field.IdrField
+                          className={cn(
+                            getLocalStorage.coloredSellPrice
+                              ? bp > sp
+                                ? "bg-destructive/33"
+                                : "bg-success/33"
+                              : ""
+                          )}
+                          min={0}
+                        />
+                      )}
+                    </form.AppField>
+                  )}
+                </form.Subscribe>
 
                 <span className="grid h-8 place-items-center">x</span>
 
