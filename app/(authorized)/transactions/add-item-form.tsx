@@ -171,87 +171,93 @@ export const AddItemForm = withForm({
 
             <FieldSet className="flex-1">
               <FieldLegend>{tc("sellPrice")}</FieldLegend>
-              <div className="flex gap-2">
-                <form.Subscribe
-                  selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
-                >
-                  {([bp, sp]) => (
-                    <form.AppField
-                      name="sellPrice"
-                      listeners={{
-                        onChange: (v) =>
-                          form.setFieldValue(
-                            "quantifiedPrice",
-                            v.value * form.state.values.quantity
-                          ),
-                      }}
-                    >
-                      {(field) => (
-                        <field.IdrField
-                          inputClass={cn(
-                            getLocalStorage.coloredSellPrice
-                              ? bp > sp
-                                ? "bg-destructive/33"
-                                : "bg-success/33"
-                              : ""
-                          )}
-                          min={0}
-                        />
-                      )}
-                    </form.AppField>
-                  )}
-                </form.Subscribe>
 
-                <span className="grid h-8 place-items-center">x</span>
-
-                <form.AppField
-                  name="quantity"
-                  listeners={{
-                    onChange: (v) =>
-                      form.setFieldValue(
-                        "quantifiedPrice",
-                        v.value * form.state.values.sellPrice
-                      ),
-                  }}
-                >
-                  {(f) => (
-                    <f.NumberField className="w-24" min={1} ref={qtyRef} />
-                  )}
-                </form.AppField>
-              </div>
-
-              {session.user.role === "admin" &&
-                !getLocalStorage.hideTrxMarginAndDiscounts && (
+              {/* Sell price and optional margin indicator */}
+              <div>
+                <div className="flex gap-2">
                   <form.Subscribe
                     selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
                   >
-                    {([bp, sp]) => {
-                      const margin = sp - bp
-                      const discount = ((bp - sp) / bp) * 100
-                      return (
-                        margin !== 0 && (
-                          <small
-                            className={cn(
-                              margin < 0 ? "text-destructive" : "text-green-500"
+                    {([bp, sp]) => (
+                      <form.AppField
+                        name="sellPrice"
+                        listeners={{
+                          onChange: (v) =>
+                            form.setFieldValue(
+                              "quantifiedPrice",
+                              v.value * form.state.values.quantity
+                            ),
+                        }}
+                      >
+                        {(field) => (
+                          <field.IdrField
+                            inputClass={cn(
+                              getLocalStorage.coloredSellPrice
+                                ? bp > sp
+                                  ? "bg-destructive/33"
+                                  : "bg-success/33"
+                                : ""
                             )}
-                          >
-                            {tc("margin")}: {margin > 0 && "+"}
-                            {formatCurrency(margin)}{" "}
-                            {margin < 0 && (
-                              <>
-                                (
-                                {tc("discountPerc", {
-                                  perc: discount.toFixed(2),
-                                })}
-                                )
-                              </>
-                            )}
-                          </small>
-                        )
-                      )
-                    }}
+                            min={0}
+                          />
+                        )}
+                      </form.AppField>
+                    )}
                   </form.Subscribe>
-                )}
+
+                  <span className="grid h-8 place-items-center">x</span>
+
+                  <form.AppField
+                    name="quantity"
+                    listeners={{
+                      onChange: (v) =>
+                        form.setFieldValue(
+                          "quantifiedPrice",
+                          v.value * form.state.values.sellPrice
+                        ),
+                    }}
+                  >
+                    {(f) => (
+                      <f.NumberField className="w-24" min={1} ref={qtyRef} />
+                    )}
+                  </form.AppField>
+                </div>
+
+                {session.user.role === "admin" &&
+                  !getLocalStorage.hideTrxMarginAndDiscounts && (
+                    <form.Subscribe
+                      selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
+                    >
+                      {([bp, sp]) => {
+                        const margin = sp - bp
+                        const discount = ((bp - sp) / bp) * 100
+                        return (
+                          margin !== 0 && (
+                            <small
+                              className={cn(
+                                margin < 0
+                                  ? "text-destructive"
+                                  : "text-green-500"
+                              )}
+                            >
+                              {tc("margin")}: {margin > 0 && "+"}
+                              {formatCurrency(margin)}{" "}
+                              {margin < 0 && (
+                                <>
+                                  (
+                                  {tc("discountPerc", {
+                                    perc: discount.toFixed(2),
+                                  })}
+                                  )
+                                </>
+                              )}
+                            </small>
+                          )
+                        )
+                      }}
+                    </form.Subscribe>
+                  )}
+              </div>
 
               <form.AppField name="quantifiedPrice">
                 {(field) => (
