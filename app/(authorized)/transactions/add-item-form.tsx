@@ -73,6 +73,7 @@ export const AddItemForm = withForm({
       },
     })
 
+    // update sell price according to selected price group when an item is picked
     subscribeKey(addItemProxy, "sellPrices", (sps) => {
       const sellPrice = sps.find(
         (sp) =>
@@ -89,6 +90,7 @@ export const AddItemForm = withForm({
     const nameRef = useRef<HTMLInputElement>(null)
     const qtyRef = useRef<HTMLInputElement>(null)
 
+    // update sell price when a different price group is selected
     createTransactionForm.store.subscribe(({ values: { priceGroup } }) => {
       const sellPrice =
         addItemProxy.sellPrices.find((sp) => sp.priceGroup.id === priceGroup)
