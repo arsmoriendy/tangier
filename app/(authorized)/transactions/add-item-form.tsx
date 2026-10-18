@@ -188,7 +188,7 @@ export const AddItemForm = withForm({
                     >
                       {(field) => (
                         <field.IdrField
-                          className={cn(
+                          inputClass={cn(
                             getLocalStorage.coloredSellPrice
                               ? bp > sp
                                 ? "bg-destructive/33"
