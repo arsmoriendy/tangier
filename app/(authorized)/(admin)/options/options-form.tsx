@@ -47,6 +47,11 @@ export default function OptionsForm() {
             onCheckedChange={(c) => (setLocalStorage.hideTrxBuyPrice = c)}
             label={t("hideTrxBuyPrice")}
           />
+          <OptionCheckbox
+            checked={getLocalStorage.coloredSellPrice}
+            onCheckedChange={(c) => (setLocalStorage.coloredSellPrice = c)}
+            label={t("coloredSellPrice")}
+          />
         </FieldSet>
 
         <FieldSet>

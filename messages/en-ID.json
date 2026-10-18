@@ -251,7 +251,8 @@
     "hideTrxMarginAndDiscounts": "Hide margin and discounts",
     "hideTrxBuyPrice": "Hide buy price",
     "hideHistoryReports": "Hide reports",
-    "hideItemMarginAndDiscounts": "Hide margin and discounts"
+    "hideItemMarginAndDiscounts": "Hide margin and discounts",
+    "coloredSellPrice": "Colored sell price"
   },
   "auth": {
     "signIn": "Sign in",

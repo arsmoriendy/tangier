@@ -13,6 +13,7 @@ const lsSchema = z.object({
   hideTrxBuyPrice: z.boolean().default(true),
   hideHistoryReports: z.boolean().default(true),
   hideItemMarginAndDiscounts: z.boolean().default(true),
+  coloredSellPrice: z.boolean().default(false),
 })
 
 type LocalStorage = z.infer<typeof lsSchema>
