@@ -15,6 +15,7 @@ export type NumberInputProps = Omit<
   ref?: RefObject<HTMLInputElement | null>
   value: number
   onValueChange: (value: number) => any
+  scrollable: boolean
 }
 
 export function NumberInput({
@@ -30,24 +31,29 @@ export function NumberInput({
   unstyled,
   value: valueProp,
   ref = useRef<HTMLInputElement>(null),
+  scrollable = false,
   ...props
 }: NumberInputProps) {
   const clamp = (v: number): number => Math.min(max, Math.max(min, v))
 
-  useEffect(() => {
-    function handleWheel(e: WheelEvent) {
-      if (document.activeElement === ref.current) {
-        e.preventDefault()
-        onValueChange(clamp(e.deltaY < 0 ? valueProp + step : valueProp - step))
+  if (scrollable) {
+    useEffect(() => {
+      function handleWheel(e: WheelEvent) {
+        if (document.activeElement === ref.current) {
+          e.preventDefault()
+          onValueChange(
+            clamp(e.deltaY < 0 ? valueProp + step : valueProp - step)
+          )
+        }
+        // @ts-ignore
+        onWheel?.(e)
       }
-      // @ts-ignore
-      onWheel?.(e)
-    }
 
-    ref.current?.addEventListener("wheel", handleWheel, { passive: false })
+      ref.current?.addEventListener("wheel", handleWheel, { passive: false })
 
-    return () => ref.current?.removeEventListener("wheel", handleWheel)
-  })
+      return () => ref.current?.removeEventListener("wheel", handleWheel)
+    })
+  }
 
   return (
     <NumericFormat
