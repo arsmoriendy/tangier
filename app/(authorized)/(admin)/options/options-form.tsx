@@ -15,7 +15,7 @@ function OptionCheckbox({
   label: string
 }) {
   return (
-    <Field orientation="horizontal">
+    <Field orientation="horizontal" className="gap-2">
       <Checkbox checked={checked} onCheckedChange={onCheckedChange} />
       <FieldLabel>{label}</FieldLabel>
     </Field>
