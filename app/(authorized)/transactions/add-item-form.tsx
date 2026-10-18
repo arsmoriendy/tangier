@@ -97,6 +97,7 @@ export const AddItemForm = withForm({
       )
 
       // update sell price when a different price group is selected
+      let lastPriceGroup = createTransactionForm.getFieldValue("priceGroup")
       const { unsubscribe: unsubscribePriceGroupsSync } =
         createTransactionForm.store.subscribe(({ values: { priceGroup } }) => {
           const sellPrice =
@@ -104,8 +105,10 @@ export const AddItemForm = withForm({
               (sp) => sp.priceGroup.id === priceGroup
             )?.price ?? 0
 
-          if (form.state.values.sellPrice !== sellPrice)
+          if (lastPriceGroup !== priceGroup)
             form.setFieldValue("sellPrice", sellPrice)
+
+          lastPriceGroup = priceGroup
         })
 
       return () => {
