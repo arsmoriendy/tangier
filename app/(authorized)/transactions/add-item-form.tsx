@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils"
 import { useSession } from "@/contexts/session-ctx"
 import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { useUnits } from "@/contexts/units-ctx"
 import { Checkbox } from "@/components/ui/checkbox"
 import { isEqual } from "es-toolkit"
@@ -73,16 +73,6 @@ export const AddItemForm = withForm({
       },
     })
 
-    // update sell price according to selected price group when an item is picked
-    subscribeKey(addItemProxy, "sellPrices", (sps) => {
-      const sellPrice = sps.find(
-        (sp) =>
-          sp.priceGroup.id === createTransactionForm.state.values.priceGroup
-      )?.price
-
-      if (sellPrice !== undefined) form.setFieldValue("sellPrice", sellPrice)
-    })
-
     const t = useTranslations("transactions.form.addItem")
     const tc = useTranslations("common")
     const tSummary = useTranslations("transactions.form.summary")
@@ -90,15 +80,39 @@ export const AddItemForm = withForm({
     const nameRef = useRef<HTMLInputElement>(null)
     const qtyRef = useRef<HTMLInputElement>(null)
 
-    // update sell price when a different price group is selected
-    createTransactionForm.store.subscribe(({ values: { priceGroup } }) => {
-      const sellPrice =
-        addItemProxy.sellPrices.find((sp) => sp.priceGroup.id === priceGroup)
-          ?.price ?? 0
+    useEffect(() => {
+      // update sell price according to selected price group when an item is picked
+      const unsubscribeSellPricesSync = subscribeKey(
+        addItemProxy,
+        "sellPrices",
+        (sps) => {
+          const sellPrice = sps.find(
+            (sp) =>
+              sp.priceGroup.id === createTransactionForm.state.values.priceGroup
+          )?.price
 
-      if (form.state.values.sellPrice !== sellPrice)
-        form.setFieldValue("sellPrice", sellPrice)
-    })
+          if (sellPrice !== undefined)
+            form.setFieldValue("sellPrice", sellPrice)
+        }
+      )
+
+      // update sell price when a different price group is selected
+      const { unsubscribe: unsubscribePriceGroupsSync } =
+        createTransactionForm.store.subscribe(({ values: { priceGroup } }) => {
+          const sellPrice =
+            addItemProxy.sellPrices.find(
+              (sp) => sp.priceGroup.id === priceGroup
+            )?.price ?? 0
+
+          if (form.state.values.sellPrice !== sellPrice)
+            form.setFieldValue("sellPrice", sellPrice)
+        })
+
+      return () => {
+        unsubscribeSellPricesSync()
+        unsubscribePriceGroupsSync()
+      }
+    }, [])
 
     return (
       <>
