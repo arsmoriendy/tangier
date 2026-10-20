@@ -1,5 +1,5 @@
 import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
-import { QuickDialog } from "@/components/quick-dialog"
+import { Alert } from "@/components/alert"
 import { Button } from "@/components/ui/button"
 import {
   deleteTransaction,
@@ -18,7 +18,7 @@ export function DeleteTrxDialog({
   const { setTrx } = useTrx()
 
   return (
-    <QuickDialog
+    <Alert
       title={<>{t("table.delete")}?</>}
       description={t("table.deleteDescription")}
       action={async () => {

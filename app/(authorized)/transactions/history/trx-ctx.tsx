@@ -26,6 +26,7 @@ export function TrxProvider({
   )
 }
 
+// TODO: rename to useTrxs
 export function useTrx() {
   const { proxy, snap } = useContext(trxCtx)!
   return { setTrx: proxy, getTrx: snap }

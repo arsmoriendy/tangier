@@ -12,7 +12,7 @@ import {
 import { type ButtonVariant } from "@/components/ui/button"
 import { ReactNode } from "react"
 
-export function QuickDialog({
+export function Alert({
   title,
   description,
   action,
