@@ -60,7 +60,8 @@
         "errors": { "passwordMatch": "Passwords don't match" }
       },
       "signOut": "Sign out",
-      "deleteAccount": "Delete account"
+      "deleteAccount": "Delete account",
+      "deleteAccountDescription": "Are you sure you want to delete your account?"
     },
     "client": {
       "title": "Client menu",
@@ -111,6 +112,9 @@
         "expenses": "Expenses",
         "close": "Close"
       }
+    },
+    "recall": {
+      "deleteDescription": "Are you sure you want to delete this held transaction?"
     },
     "history": {
       "filters": {
@@ -171,7 +175,8 @@
     "form": {
       "create": "Create unit",
       "update": "Update unit",
-      "delete": "Delete unit"
+      "delete": "Delete unit",
+      "deleteDescription": "Are you sure you want to delete this unit?"
     },
     "table": {
       "unitList": "Unit list"
@@ -190,6 +195,7 @@
       "create": "Create price group",
       "update": "Update price group",
       "delete": "Delete price group",
+      "deleteDescription": "Are you sure you want to delete this price group?",
       "randomColor": "Random color"
     },
     "table": {
@@ -209,7 +215,8 @@
     "form": {
       "create": "Create barcode group",
       "update": "Update barcode group",
-      "delete": "Delete barcode group"
+      "delete": "Delete barcode group",
+      "deleteDescription": "Are you sure you want to delete this barcode group?"
     },
     "table": {
       "barcodeGroupList": "Barcode group list"
@@ -226,6 +233,7 @@
       "adminRole": "Admin role",
       "activeState": "Active state",
       "delete": "Delete",
+      "deleteDescription": "Are you sure you want to delete this user?",
       "admin": "Admin",
       "active": "Active"
     },

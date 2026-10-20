@@ -1,3 +1,4 @@
+import { DeleteAlert } from "@/components/delete-alert"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
 import { useBarcodeGroups } from "@/contexts/barcode-groups-ctx"
@@ -53,20 +54,23 @@ export default function UpdateBarcodeGroupForm(props: {
       <form.AppForm>
         <div className="flex gap-2">
           <form.SubmitButton>{t("form.update")}</form.SubmitButton>
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={async () => {
+          <DeleteAlert
+            action={async () => {
               await deleteBarcodeGroup(props.barcodeGroup.id)
               setBarcodeGroups((bgs) =>
                 bgs.filter((bg) => bg.id !== props.barcodeGroup.id)
               )
               props.onDelete?.()
             }}
-          >
-            <TrashIcon />
-            {t("form.delete")}
-          </Button>
+            trigger={
+              <Button type="button" variant="destructive">
+                <TrashIcon />
+                {t("form.delete")}
+              </Button>
+            }
+            description={t("form.deleteDescription")}
+            title={<>{t("form.delete")}?</>}
+          />
         </div>
       </form.AppForm>
     </Form>

@@ -23,8 +23,7 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 5. group transaction items based on new category column
 6. backup and restore
 7. export and import
-8. Delete dialogs
-9. Tooltips
-10. DB indices
-11. Change year on date inputs
-12. Increase print speed?
+8. Tooltips
+9. DB indices
+10. Change year on date inputs
+11. Increase print speed?

@@ -1,3 +1,4 @@
+import { DeleteAlert } from "@/components/delete-alert"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
 import { FieldLabel } from "@/components/ui/field"
@@ -95,20 +96,23 @@ export default function UpdatePriceGroupForm(props: {
       <form.AppForm>
         <div className="flex gap-2">
           <form.SubmitButton>{t("form.update")}</form.SubmitButton>
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={async () => {
+          <DeleteAlert
+            action={async () => {
               await deletePriceGroup(props.priceGroup.id)
               setPriceGroups((pgs) =>
                 pgs.filter((pg) => pg.id !== props.priceGroup.id)
               )
               props.onDelete?.()
             }}
-          >
-            <TrashIcon />
-            {t("form.delete")}
-          </Button>
+            trigger={
+              <Button type="button" variant="destructive">
+                <TrashIcon />
+                {t("form.delete")}
+              </Button>
+            }
+            description={t("form.deleteDescription")}
+            title={<>{t("form.delete")}?</>}
+          />
         </div>
       </form.AppForm>
     </Form>

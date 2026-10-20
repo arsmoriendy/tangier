@@ -60,7 +60,8 @@
         "errors": { "passwordMatch": "Kata sandi tidak cocok" }
       },
       "signOut": "Keluar",
-      "deleteAccount": "Hapus akun"
+      "deleteAccount": "Hapus akun",
+      "deleteAccountDescription": "Apakah anda yakin ingin menghapus akun anda?"
     },
     "client": {
       "title": "Menu klien",
@@ -113,6 +114,9 @@
         "expenses": "Pengeluaran",
         "close": "Tutup"
       }
+    },
+    "recall": {
+      "deleteDescription": "Apakah anda yakin ingin menghapus transaksi tertahan ini?"
     },
     "history": {
       "filters": {
@@ -173,7 +177,8 @@
     "form": {
       "create": "Buat satuan",
       "update": "Perbarui satuan",
-      "delete": "Hapus satuan"
+      "delete": "Hapus satuan",
+      "deleteDescription": "Apakah anda yakin ingin menghapus satuan ini?"
     },
     "table": {
       "unitList": "Daftar satuan"
@@ -192,6 +197,7 @@
       "create": "Buat kelompok harga",
       "update": "Perbarui kelompok harga",
       "delete": "Hapus kelompok harga",
+      "deleteDescription": "Apakah anda yakin ingin menghapus kelompok harga ini?",
       "randomColor": "Warna acak"
     },
     "table": {
@@ -211,7 +217,8 @@
     "form": {
       "create": "Buat kelompok barcode",
       "update": "Perbarui kelompok barcode",
-      "delete": "Hapus kelompok barcode"
+      "delete": "Hapus kelompok barcode",
+      "deleteDescription": "Apakah anda yakin ingin menghapus kelompok barcode ini?"
     },
     "table": {
       "barcodeGroupList": "Daftar kelompok barcode"
@@ -228,6 +235,7 @@
       "adminRole": "Peran admin",
       "activeState": "Status aktif",
       "delete": "Hapus",
+      "deleteDescription": "Apakah anda yakin ingin menghapus pengguna ini?",
       "admin": "Admin",
       "active": "Aktif"
     },

@@ -2,6 +2,10 @@
 
 Point-of-sale (POS) application for a retail business, built with Next.js 16 (App Router), React 19, Drizzle ORM (PostgreSQL), and `better-auth`. Targets a USB ESC/POS thermal receipt printer (default Epson VID `0x04b8` / PID `0x0202`). Currency is hardcoded to IDR (`id-ID`) throughout. UI is bilingual (`en-ID`, `id-ID`) via `next-intl`, locale stored in a `locale` cookie.
 
+## Maintaining this file
+
+Anything learned while working on this codebase — new conventions, gotchas, commands, architecture, or corrections to what's written here — **must** be added to this file so future agents benefit. Keep entries concise, accurate, and grouped under the existing sections; update or remove entries that become stale.
+
 ## Commands
 
 Package manager is **bun** (lockfile is `bun.lock`). On Arch/NixOS the `usb` native dependency needs the dev shell from `flake.nix` (`nix develop`) plus `node-gyp build` inside `node_modules/usb`; on other systems apply the udev rule from `README.md`.
@@ -94,6 +98,7 @@ Zod schemas typically live next to the form (e.g. `transaction-schema.ts`, `add-
 - **shadcn** config (`components.json`): style `radix-lyra`, icon library **phosphor** (`@phosphor-icons/react`, with `/ssr` subpath for server components — see `app-sidebar/index.tsx`). UI primitives live in `components/ui/`. Tailwind v4, CSS variables for theme, base color `neutral`. `cn` and `cva` are registered with `prettier-plugin-tailwindcss`.
 - **Formatting**: prettier (no semicolons, double quotes, 2-space indent, trailing comma `es5`, print width 80, LF). Biome is also configured (`biome.json`) with matching style and recommended lint rules; eslint uses `eslint-config-next` (core-web-vitals + TS). Run `bun run format` after structural changes.
 - **"use server"** directive is at the top of every `lib/crud/*.ts`, `lib/auth-guard.ts`, `lib/get-session.ts`, `lib/set-locale.ts`, `lib/print-transaction.ts`. Keep new server-action files consistent.
+- **Delete confirmations**: wrap every destructive delete in `<DeleteAlert>` (`components/delete-alert.tsx`) — it presets the destructive action variant, `TrashIcon`, and the `common.delete` label on top of the generic `<Alert>` (`components/alert.tsx`). Pass `trigger` (usually a destructive `Button`), `action`, `title` (typically `<>{t("...delete")}?</>`), and `description`; add the `deleteDescription` key to **both** locales. Only in-form row removals (e.g. `removeFieldValue`) skip the confirmation.
 - **Translations**: message JSON files in `messages/{en-ID,id-ID}.json`. Server components use `getTranslations(...)` from `next-intl/server`; client components use `useTranslations(...)` / `useLocale()`. Run `bun run intl-check` to catch unused keys. When adding a key, add it to **both** locale files.
 - **Currency/number formatting**: `lib/i18n/currency.ts` exports `formatCurrency` (IDR, 2 decimals); `lib/print-transaction.ts` uses a separate `Intl.NumberFormat("id-ID", {})` (no decimals) for receipts — match the context when formatting numbers.
 - **Type helpers**: `lib/partial-keys.d.ts` (`PartialKey<T,K>`), `lib/deep-read-only.d.ts` (`DeepReadonly`), `lib/mutable.d.ts` (`Mutable`, `DeepMutable`), `contexts/state-context.d.ts` (`StateContext<T>`). Use these instead of redefining.

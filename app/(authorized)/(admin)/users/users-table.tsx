@@ -1,5 +1,6 @@
 "use client"
 
+import { DeleteAlert } from "@/components/delete-alert"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -76,19 +77,22 @@ export function UsersTable() {
                 </div>
               </TableCell>
               <TableCell>
-                <Button
-                  variant="destructive"
-                  disabled={disabled}
-                  onClick={async () => {
+                <DeleteAlert
+                  title={<>{t("delete")}?</>}
+                  description={t("deleteDescription")}
+                  action={async () => {
                     await authClient.admin.removeUser({
                       userId: user.id,
                     })
                     usersProxy.splice(i, 1)
                     toast.error(tt("deleted"))
                   }}
-                >
-                  {t("delete")}
-                </Button>
+                  trigger={
+                    <Button variant="destructive" disabled={disabled}>
+                      {t("delete")}
+                    </Button>
+                  }
+                />
               </TableCell>
             </TableRow>
           )

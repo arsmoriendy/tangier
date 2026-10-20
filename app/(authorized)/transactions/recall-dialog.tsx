@@ -1,5 +1,6 @@
 import { useHeld } from "@/app/(authorized)/transactions/held-ctx"
 import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
+import { DeleteAlert } from "@/components/delete-alert"
 import { withForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
@@ -18,7 +19,7 @@ import {
 } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { TrashIcon } from "@phosphor-icons/react"
-import { useFormatter } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 
 export const RecallDialog = withForm({
   defaultValues: defaultTransactionValues,
@@ -38,6 +39,8 @@ export const RecallDialog = withForm({
     const { setHeld, getHeld } = useHeld()
     const { priceGroups } = usePriceGroups()
     const format = useFormatter()
+    const t = useTranslations("transactions.recall")
+    const tc = useTranslations("common")
 
     return (
       <Dialog open={open} onOpenChange={setOpen}>
@@ -101,12 +104,10 @@ export const RecallDialog = withForm({
                     <TableCell>{trx.transactionItems.length}</TableCell>
                     <TableCell>{formatCurrency(trx.totalPrice)}</TableCell>
                     <TableCell>
-                      <Button
-                        className="cursor-pointer"
-                        variant="destructive"
-                        size="icon"
-                        onClick={async (e) => {
-                          e.stopPropagation()
+                      <DeleteAlert
+                        title={<>{tc("delete")}?</>}
+                        description={t("deleteDescription")}
+                        action={async () => {
                           if (trx.id === recalledTrx?.id) {
                             setRecalledTrx(undefined)
                             form.reset()
@@ -114,9 +115,16 @@ export const RecallDialog = withForm({
                           await deleteTransaction(trx.id)
                           setHeld.splice(i, 1)
                         }}
-                      >
-                        <TrashIcon />
-                      </Button>
+                        trigger={
+                          <Button
+                            className="cursor-pointer"
+                            variant="destructive"
+                            size="icon"
+                          >
+                            <TrashIcon />
+                          </Button>
+                        }
+                      />
                     </TableCell>
                   </TableRow>
                 )

@@ -1,6 +1,7 @@
 import { ChangePasswordForm } from "@/components/app-sidebar/change-password-form"
 import { ChangeUsernameForm } from "@/components/app-sidebar/change-username-form"
 import { ClientDropdown } from "@/components/app-sidebar/client-dropdown"
+import { DeleteAlert } from "@/components/delete-alert"
 import {
   DialogTrigger,
   Dialog,
@@ -100,9 +101,10 @@ export function UserSidebarItem() {
               {t("signOut")}
             </DropdownMenuItem>
 
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={async () => {
+            <DeleteAlert
+              title={<>{t("deleteAccount")}?</>}
+              description={t("deleteAccountDescription")}
+              action={async () => {
                 const { error } = await authClient.deleteUser()
                 if (error) {
                   toast.error(error.message ?? error.statusText)
@@ -110,10 +112,16 @@ export function UserSidebarItem() {
                 }
                 redirect("/")
               }}
-            >
-              <TrashIcon />
-              {t("deleteAccount")}
-            </DropdownMenuItem>
+              trigger={
+                <DropdownMenuItem
+                  variant="destructive"
+                  onSelect={(e) => e.preventDefault()}
+                >
+                  <TrashIcon />
+                  {t("deleteAccount")}
+                </DropdownMenuItem>
+              }
+            />
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
