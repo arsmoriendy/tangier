@@ -34,6 +34,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { DeleteAlert } from "@/components/delete-alert"
 
 export default function ItemForm(props: {
   item?: DeepReadonly<ItemWithRelations>
@@ -310,18 +311,21 @@ export default function ItemForm(props: {
         </form.AppForm>
 
         {props.item && (
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={async () => {
+          <DeleteAlert
+            action={async () => {
               await deleteItem({ itemId: props.item!.id })
               toast.error(t("toast.deleted"))
               props.afterDelete?.()
             }}
-          >
-            <TrashIcon />
-            {t("form.delete")}
-          </Button>
+            trigger={
+              <Button type="button" variant="destructive">
+                <TrashIcon />
+                {t("form.delete")}
+              </Button>
+            }
+            description={t("form.deleteDescription")}
+            title={<>{t("form.delete")}?</>}
+          />
         )}
       </div>
     </Form>

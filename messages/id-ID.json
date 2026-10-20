@@ -151,7 +151,8 @@
       "pruneEmptyStockPrices": "Hapus harga stok kosong",
       "create": "Buat barang",
       "update": "Perbarui barang",
-      "delete": "Hapus barang"
+      "delete": "Hapus barang",
+      "deleteDescription": "Apakah anda yakin ingin menghapus barang ini?"
     },
     "table": {
       "buyPrices": "Harga beli",
