@@ -1,5 +1,5 @@
 import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
-import { Alert } from "@/components/alert"
+import { DeleteAlert } from "@/components/delete-alert"
 import { Button } from "@/components/ui/button"
 import {
   deleteTransaction,
@@ -14,11 +14,10 @@ export function DeleteTrxDialog({
   trx: DeepReadonly<TransactionWithRelations>
 }) {
   const t = useTranslations("transactions.history")
-  const tc = useTranslations("common")
   const { setTrx } = useTrx()
 
   return (
-    <Alert
+    <DeleteAlert
       title={<>{t("table.delete")}?</>}
       description={t("table.deleteDescription")}
       action={async () => {
@@ -26,9 +25,6 @@ export function DeleteTrxDialog({
         setTrx.splice(i, 1)
         await deleteTransaction(trx.id)
       }}
-      actionVariant="destructive"
-      actionIcon={<TrashIcon />}
-      actionLabel={tc("delete")}
       trigger={
         <Button variant="destructive" size="icon">
           <TrashIcon />
