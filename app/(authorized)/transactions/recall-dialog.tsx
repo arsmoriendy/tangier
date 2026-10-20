@@ -18,7 +18,7 @@ import {
   type TransactionWithRelations,
 } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
-import { TrashIcon } from "@phosphor-icons/react"
+import { TrashIcon, ClockCountdownIcon } from "@phosphor-icons/react"
 import { useFormatter, useTranslations } from "next-intl"
 
 export const RecallDialog = withForm({
@@ -42,6 +42,29 @@ export const RecallDialog = withForm({
     const t = useTranslations("transactions.recall")
     const tc = useTranslations("common")
 
+    async function recallTrx(trx: DeepReadonly<TransactionWithRelations>) {
+      setRecalledTrx(trx as DeepMutable<typeof trx>)
+
+      form.setFieldValue(
+        "priceGroup",
+        priceGroups.find((pg) => pg.name === trx.customerPriceGroup)?.id
+      )
+      form.setFieldValue("totalPrice", trx.totalPrice)
+      form.setFieldValue(
+        "transactionItems",
+        (trx.transactionItems as DeepMutable<typeof trx.transactionItems>).map(
+          (item) => ({
+            ...item,
+            extraFields: {
+              quantifiedPrice: item.quantity * item.sellPrice,
+            },
+          })
+        )
+      )
+
+      setOpen(false)
+    }
+
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-2xl">
@@ -55,7 +78,7 @@ export const RecallDialog = withForm({
                 <TableHead>Customer</TableHead>
                 <TableHead>Item count</TableHead>
                 <TableHead>Total price</TableHead>
-                <TableHead>Delete</TableHead>
+                <TableHead>Actions</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -63,36 +86,7 @@ export const RecallDialog = withForm({
               {getHeld.map((trx, i) => {
                 const date = new Date(trx.createdAt)
                 return (
-                  <TableRow
-                    key={trx.id}
-                    className="cursor-pointer"
-                    onClick={async () => {
-                      setRecalledTrx(trx as DeepMutable<typeof trx>)
-
-                      form.setFieldValue(
-                        "priceGroup",
-                        priceGroups.find(
-                          (pg) => pg.name === trx.customerPriceGroup
-                        )?.id
-                      )
-                      form.setFieldValue("totalPrice", trx.totalPrice)
-                      form.setFieldValue(
-                        "transactionItems",
-                        (
-                          trx.transactionItems as DeepMutable<
-                            typeof trx.transactionItems
-                          >
-                        ).map((item) => ({
-                          ...item,
-                          extraFields: {
-                            quantifiedPrice: item.quantity * item.sellPrice,
-                          },
-                        }))
-                      )
-
-                      setOpen(false)
-                    }}
-                  >
+                  <TableRow key={trx.id}>
                     <TableCell>{format.dateTime(date)}</TableCell>
                     <TableCell>
                       {format.dateTime(date, {
@@ -103,7 +97,10 @@ export const RecallDialog = withForm({
                     <TableCell>{trx.customerPriceGroup}</TableCell>
                     <TableCell>{trx.transactionItems.length}</TableCell>
                     <TableCell>{formatCurrency(trx.totalPrice)}</TableCell>
-                    <TableCell>
+                    <TableCell className="flex gap-2">
+                      <Button onClick={() => recallTrx(trx)}>
+                        <ClockCountdownIcon /> Recall
+                      </Button>
                       <DeleteAlert
                         title={<>{tc("delete")}?</>}
                         description={t("deleteDescription")}
@@ -116,11 +113,7 @@ export const RecallDialog = withForm({
                           setHeld.splice(i, 1)
                         }}
                         trigger={
-                          <Button
-                            className="cursor-pointer"
-                            variant="destructive"
-                            size="icon"
-                          >
+                          <Button variant="destructive" size="icon">
                             <TrashIcon />
                           </Button>
                         }
