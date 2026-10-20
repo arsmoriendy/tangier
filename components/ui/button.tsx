@@ -39,8 +39,12 @@ const buttonVariants = cva(
   }
 )
 
+export type ButtonCvaProps = VariantProps<typeof buttonVariants>
+
+export type ButtonVariant = ButtonCvaProps["variant"]
+
 export type ButtonProps = React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
+  ButtonCvaProps & {
     asChild?: boolean
     ref?: React.RefObject<HTMLButtonElement | null>
   }

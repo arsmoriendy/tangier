@@ -1,15 +1,5 @@
 import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+import { QuickDialog } from "@/components/quick-dialog"
 import { Button } from "@/components/ui/button"
 import {
   deleteTransaction,
@@ -28,34 +18,22 @@ export function DeleteTrxDialog({
   const { setTrx } = useTrx()
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
+    <QuickDialog
+      title={<>{t("table.delete")}?</>}
+      description={t("table.deleteDescription")}
+      action={async () => {
+        const i = setTrx.findIndex((t) => t.id === trx.id)
+        setTrx.splice(i, 1)
+        await deleteTransaction(trx.id)
+      }}
+      actionVariant="destructive"
+      actionIcon={<TrashIcon />}
+      actionLabel={tc("delete")}
+      trigger={
         <Button variant="destructive" size="icon">
           <TrashIcon />
         </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent size="sm">
-        <AlertDialogHeader>
-          <AlertDialogTitle>{t("table.delete")}?</AlertDialogTitle>
-          <AlertDialogDescription>
-            {t("table.deleteDescription")}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            variant="destructive"
-            onClick={async () => {
-              const i = setTrx.findIndex((t) => t.id === trx.id)
-              setTrx.splice(i, 1)
-              await deleteTransaction(trx.id)
-            }}
-          >
-            <TrashIcon />
-            {tc("delete")}
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+      }
+    />
   )
 }
