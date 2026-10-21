@@ -74,6 +74,15 @@ export default function OptionsForm() {
           />
         </FieldSet>
       </FieldSet>
+
+      <FieldSet>
+        <FieldLegend variant="label">{t("miscellaneous")}</FieldLegend>
+        <OptionCheckbox
+          checked={getLocalStorage.uppercaseInput}
+          onCheckedChange={(c) => (setLocalStorage.uppercaseInput = c)}
+          label={t("uppercaseInput")}
+        />
+      </FieldSet>
     </FieldSet>
   )
 }

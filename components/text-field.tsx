@@ -7,10 +7,16 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field"
-import { ComponentProps, RefObject, useRef } from "react"
+import { ComponentProps, RefObject, useEffect, useRef, useState } from "react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group"
 import { Kbd } from "./ui/kbd"
 import { useHotkeys } from "react-hotkeys-hook"
+import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import {
+  Input,
+  InputTransformer,
+  upperCaseTransformer,
+} from "@/components/ui/input"
 
 export default function TextField({
   label,
@@ -19,17 +25,21 @@ export default function TextField({
   onChange,
   hotkeys,
   ref = useRef<HTMLInputElement>(null),
+  transformers = [],
+  disableUppercaseOption,
   ...inputProps
-}: Omit<ComponentProps<"input">, "ref"> & {
+}: Omit<ComponentProps<typeof Input>, "ref"> & {
   label?: string
   description?: string
   className?: string
   hotkeys?: string[]
+  disableUppercaseOption?: true
   ref?: RefObject<HTMLInputElement | null>
 }) {
   const field = useFieldContext<string>()
   const id = `${field.form.formId}-${field.name}`
   const isInvalid = !field.state.meta.isValid
+  const { getLocalStorage } = useLocalStorage()
 
   if (hotkeys !== undefined) {
     useHotkeys(hotkeys, () => ref.current?.focus(), {
@@ -37,6 +47,15 @@ export default function TextField({
       enableOnFormTags: true,
     })
   }
+
+  const [getTransformers, setTransformers] =
+    useState<InputTransformer[]>(transformers)
+
+  useEffect(() => {
+    if (getLocalStorage.uppercaseInput && !disableUppercaseOption) {
+      setTransformers((tfs) => [upperCaseTransformer, ...tfs])
+    }
+  }, [])
 
   return (
     <Field className={className}>
@@ -57,6 +76,7 @@ export default function TextField({
           onBlur={field.handleBlur}
           autoComplete="off"
           aria-invalid={isInvalid}
+          transformers={getTransformers}
           {...inputProps}
         />
         {hotkeys?.map((hk, i) => (

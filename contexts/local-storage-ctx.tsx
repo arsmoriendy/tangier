@@ -14,6 +14,7 @@ const lsSchema = z.object({
   hideHistoryReports: z.boolean().default(true),
   hideItemMarginAndDiscounts: z.boolean().default(true),
   coloredSellPrice: z.boolean().default(false),
+  uppercaseInput: z.boolean().default(true),
 })
 
 type LocalStorage = z.infer<typeof lsSchema>

@@ -261,7 +261,9 @@
     "hideTrxBuyPrice": "Hide buy price",
     "hideHistoryReports": "Hide reports",
     "hideItemMarginAndDiscounts": "Hide margin and discounts",
-    "coloredSellPrice": "Colored sell price"
+    "coloredSellPrice": "Colored sell price",
+    "uppercaseInput": "Uppercase input",
+    "miscellaneous": "Miscellaneous"
   },
   "auth": {
     "signIn": "Sign in",

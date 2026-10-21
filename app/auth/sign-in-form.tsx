@@ -3,6 +3,7 @@
 import { nameToEmail } from "@/app/auth/name-to-email"
 import { Form, useAppForm } from "@/components/form"
 import { FieldError } from "@/components/ui/field"
+import { kebabCaseTransformer } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
 import { kebabCase } from "es-toolkit"
 import { useTranslations } from "next-intl"
@@ -53,13 +54,20 @@ export function SignInForm() {
           {(f) => (
             <f.TextField
               label={tc("username")}
-              onChange={(e) => (e.target.value = kebabCase(e.target.value))}
+              transformers={[kebabCaseTransformer]}
+              disableUppercaseOption
             />
           )}
         </form.AppField>
 
         <form.AppField name="password">
-          {(f) => <f.TextField type="password" label={tc("password")} />}
+          {(f) => (
+            <f.TextField
+              type="password"
+              label={tc("password")}
+              disableUppercaseOption
+            />
+          )}
         </form.AppField>
 
         <form.SubmitButton>{t("signIn")}</form.SubmitButton>

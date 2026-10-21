@@ -263,7 +263,9 @@
     "hideTrxBuyPrice": "Sembunyikan harga beli",
     "hideHistoryReports": "Sembunyikan laporan",
     "hideItemMarginAndDiscounts": "Sembunyikan margin dan diskon",
-    "coloredSellPrice": "Harga jual berwarna"
+    "coloredSellPrice": "Harga jual berwarna",
+    "uppercaseInput": "Input huruf besar",
+    "miscellaneous": "Lain-lain"
   },
   "auth": {
     "signIn": "Masuk",
