@@ -5,6 +5,15 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useLocalStorage } from "@/contexts/local-storage-ctx"
 import { useTranslations } from "next-intl"
 import { useSession } from "@/contexts/session-ctx"
+import { Form, useAppForm } from "@/components/form"
+import { Settings, updateSettings } from "@/lib/crud/settings"
+import { toast } from "sonner"
+import z from "zod"
+
+const receiptFormSchema = z.object({
+  receiptHeader: z.string().optional(),
+  receiptFooter: z.string().optional(),
+})
 
 function OptionCheckbox({
   checked,
@@ -23,60 +32,99 @@ function OptionCheckbox({
   )
 }
 
-export default function OptionsForm() {
+export default function OptionsForm({
+  initialData,
+}: {
+  initialData: Settings
+}) {
   const t = useTranslations("options")
+  const tr = useTranslations("receipt")
   const { user } = useSession()
   const { setLocalStorage, getLocalStorage } = useLocalStorage()
+
+  const defaultValues: z.infer<typeof receiptFormSchema> = {
+    receiptHeader: initialData.receiptHeader ?? "",
+    receiptFooter: initialData.receiptFooter ?? "",
+  }
+
+  const form = useAppForm({
+    defaultValues,
+    onSubmit: async ({ value }) => {
+      await updateSettings(value)
+      toast.success(tr("toast.updated"))
+    },
+  })
 
   return (
     <FieldSet>
       <FieldLegend>{t("title")}</FieldLegend>
 
       {user.role === "admin" && (
-        <FieldSet>
-          <FieldLegend variant="legend">{t("financialInfo")}</FieldLegend>
-
+        <>
           <FieldSet>
-            <FieldLegend variant="label">{t("transactionForm")}</FieldLegend>
-            <OptionCheckbox
-              checked={getLocalStorage.hideTrxMarginAndDiscounts}
-              onCheckedChange={(c) =>
-                (setLocalStorage.hideTrxMarginAndDiscounts = c)
-              }
-              label={t("hideTrxMarginAndDiscounts")}
-            />
-            <OptionCheckbox
-              checked={getLocalStorage.hideTrxBuyPrice}
-              onCheckedChange={(c) => (setLocalStorage.hideTrxBuyPrice = c)}
-              label={t("hideTrxBuyPrice")}
-            />
-            <OptionCheckbox
-              checked={getLocalStorage.coloredSellPrice}
-              onCheckedChange={(c) => (setLocalStorage.coloredSellPrice = c)}
-              label={t("coloredSellPrice")}
-            />
-          </FieldSet>
+            <FieldLegend variant="legend">{t("financialInfo")}</FieldLegend>
 
-          <FieldSet>
-            <FieldLegend variant="label">{t("historyPage")}</FieldLegend>
-            <OptionCheckbox
-              checked={getLocalStorage.hideHistoryReports}
-              onCheckedChange={(c) => (setLocalStorage.hideHistoryReports = c)}
-              label={t("hideHistoryReports")}
-            />
-          </FieldSet>
+            <FieldSet>
+              <FieldLegend variant="label">{t("transactionForm")}</FieldLegend>
+              <OptionCheckbox
+                checked={getLocalStorage.hideTrxMarginAndDiscounts}
+                onCheckedChange={(c) =>
+                  (setLocalStorage.hideTrxMarginAndDiscounts = c)
+                }
+                label={t("hideTrxMarginAndDiscounts")}
+              />
+              <OptionCheckbox
+                checked={getLocalStorage.hideTrxBuyPrice}
+                onCheckedChange={(c) => (setLocalStorage.hideTrxBuyPrice = c)}
+                label={t("hideTrxBuyPrice")}
+              />
+              <OptionCheckbox
+                checked={getLocalStorage.coloredSellPrice}
+                onCheckedChange={(c) => (setLocalStorage.coloredSellPrice = c)}
+                label={t("coloredSellPrice")}
+              />
+            </FieldSet>
 
-          <FieldSet>
-            <FieldLegend variant="label">{t("itemPage")}</FieldLegend>
-            <OptionCheckbox
-              checked={getLocalStorage.hideItemMarginAndDiscounts}
-              onCheckedChange={(c) =>
-                (setLocalStorage.hideItemMarginAndDiscounts = c)
-              }
-              label={t("hideItemMarginAndDiscounts")}
-            />
+            <FieldSet>
+              <FieldLegend variant="label">{t("historyPage")}</FieldLegend>
+              <OptionCheckbox
+                checked={getLocalStorage.hideHistoryReports}
+                onCheckedChange={(c) =>
+                  (setLocalStorage.hideHistoryReports = c)
+                }
+                label={t("hideHistoryReports")}
+              />
+            </FieldSet>
+
+            <FieldSet>
+              <FieldLegend variant="label">{t("itemPage")}</FieldLegend>
+              <OptionCheckbox
+                checked={getLocalStorage.hideItemMarginAndDiscounts}
+                onCheckedChange={(c) =>
+                  (setLocalStorage.hideItemMarginAndDiscounts = c)
+                }
+                label={t("hideItemMarginAndDiscounts")}
+              />
+            </FieldSet>
           </FieldSet>
-        </FieldSet>
+          <FieldSet>
+            <FieldLegend variant="label">{tr("title")}</FieldLegend>
+
+            <Form handleSubmit={form.handleSubmit}>
+              <form.AppField name="receiptHeader">
+                {(f) => <f.TextareaField label={tr("receiptHeader")} />}
+              </form.AppField>
+
+              <form.AppField name="receiptFooter">
+                {(f) => <f.TextareaField label={tr("receiptFooter")} />}
+              </form.AppField>
+
+              <form.AppForm>
+                <form.SubmitButton>{tr("save")}</form.SubmitButton>
+              </form.AppForm>
+            </Form>
+          </FieldSet>
+        </>
       )}
 
       <FieldSet>

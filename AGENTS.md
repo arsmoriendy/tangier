@@ -36,7 +36,7 @@ Drizzle migrations are managed with `drizzle-kit` (config in `drizzle.config.ts`
 
 - `app/auth/` — unauthenticated sign-in/sign-up; also `auth/inactive/` for users with `active=false` (the `authGuard` redirects inactive users here).
 - `app/(authorized)/` — everything behind `authGuard` (requires session + `user.active`). Wrapped by `SessionProvider` + `SidebarProvider` + `AppSidebar` in its layout.
-- `app/(authorized)/(admin)/` — admin-only subtree; its layout re-checks `session.user.role === "admin"` and redirects to `/auth` otherwise. Contains `items`, `units`, `price-groups`, `barcode-groups`, `users`, `receipt`. The sidebar only renders these links for admins.
+- `app/(authorized)/(admin)/` — admin-only subtree; its layout re-checks `session.user.role === "admin"` and redirects to `/auth` otherwise. Contains `items`, `units`, `price-groups`, `barcode-groups`, `users`. The sidebar only renders these links for admins.
 - `app/(authorized)/transactions/` — the core POS UI (`new/` for the live transaction form, `history/` for past transactions + reports). Available to all authorized users.
 - `app/page.tsx` redirects to `/transactions/new`.
 - `app/api/auth/[...all]/route.ts` — better-auth HTTP handler (`toNextJsHandler`).
@@ -77,7 +77,7 @@ Zod schemas typically live next to the form (e.g. `transaction-schema.ts`, `add-
 
 ### Receipt printing
 
-`lib/print-transaction.ts` is a `"use server"` module that opens the USB device via `@node-escpos/usb-adapter` using `env.PRINTER_VID/PID` and prints with `@node-escpos/core`. Receipt width comes from `env.PRINTER_WIDTH` (default 33 columns). Header/footer text comes from the singleton `settings` row (id=1) in the DB. Column layout uses `lib/format-cols.ts` (tested by `format-cols.test.ts`). Printing is best-effort — the transaction form wraps `printTransaction` in try/catch and shows a sonner toast on failure.
+`lib/print-transaction.ts` is a `"use server"` module that opens the USB device via `@node-escpos/usb-adapter` using `env.PRINTER_VID/PID` and prints with `@node-escpos/core`. Receipt width comes from `env.PRINTER_WIDTH` (default 33 columns). Header/footer text comes from the singleton `settings` row (id=1) in the DB, edited via the admin-only receipt section on the `/options` page (`app/(authorized)/options/`); the former standalone `/receipt` admin route was removed. Column layout uses `lib/format-cols.ts` (tested by `format-cols.test.ts`). Printing is best-effort — the transaction form wraps `printTransaction` in try/catch and shows a sonner toast on failure.
 
 ### Stock handling
 
