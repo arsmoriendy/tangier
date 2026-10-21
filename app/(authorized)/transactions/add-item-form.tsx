@@ -192,11 +192,11 @@ export const AddItemForm = withForm({
                         {(field) => (
                           <field.IdrField
                             inputClass={cn(
-                              getLocalStorage.coloredSellPrice
-                                ? bp > sp
+                              session.user.role === "admin" &&
+                                getLocalStorage.coloredSellPrice &&
+                                (bp > sp
                                   ? "bg-destructive/33"
-                                  : "bg-success/33"
-                                : ""
+                                  : "bg-success/33")
                             )}
                             min={0}
                           />
