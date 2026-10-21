@@ -183,32 +183,45 @@ export const TransactionItemTable = withForm({
                       </TableCell>
                     )}
                   <TableCell className="align-top">
-                    <form.AppField
-                      name={`transactionItems[${i}].sellPrice`}
-                      listeners={{
-                        onChange: ({ value }) => {
-                          setIdempotentFieldValue(
-                            `transactionItems[${i}].extraFields.quantifiedPrice`,
-                            form.state.values.transactionItems[i].quantity *
-                              value
-                          )
-                        },
-                      }}
+                    <form.Subscribe
+                      selector={(f) => [
+                        f.values.transactionItems[i].buyPrice,
+                        f.values.transactionItems[i].sellPrice,
+                      ]}
                     >
-                      {(field) => <field.IdrField min={0} />}
-                    </form.AppField>
-                    {session.user.role === "admin" &&
-                      !getLocalStorage.hideTrxMarginAndDiscounts && (
-                        <form.Subscribe
-                          selector={(f) => [
-                            f.values.transactionItems[i].buyPrice,
-                            f.values.transactionItems[i].sellPrice,
-                          ]}
-                        >
-                          {([bp, sp]) => {
-                            const margin = sp - bp
-                            const discount = ((bp - sp) / bp) * 100
-                            return (
+                      {([bp, sp]) => {
+                        const margin = sp - bp
+                        const discount = ((bp - sp) / bp) * 100
+
+                        return (
+                          <>
+                            <form.AppField
+                              name={`transactionItems[${i}].sellPrice`}
+                              listeners={{
+                                onChange: ({ value }) => {
+                                  setIdempotentFieldValue(
+                                    `transactionItems[${i}].extraFields.quantifiedPrice`,
+                                    form.state.values.transactionItems[i]
+                                      .quantity * value
+                                  )
+                                },
+                              }}
+                            >
+                              {(field) => (
+                                <field.IdrField
+                                  inputClass={cn(
+                                    session.user.role === "admin" &&
+                                      getLocalStorage.coloredSellPrice &&
+                                      (bp > sp
+                                        ? "bg-destructive/33"
+                                        : "bg-success/33")
+                                  )}
+                                  min={0}
+                                />
+                              )}
+                            </form.AppField>
+                            {session.user.role === "admin" &&
+                              !getLocalStorage.hideTrxMarginAndDiscounts &&
                               margin !== 0 && (
                                 <small
                                   className={cn(
@@ -229,11 +242,11 @@ export const TransactionItemTable = withForm({
                                     </>
                                   )}
                                 </small>
-                              )
-                            )
-                          }}
-                        </form.Subscribe>
-                      )}
+                              )}
+                          </>
+                        )
+                      }}
+                    </form.Subscribe>
                   </TableCell>
                   <TableCell className="align-top">
                     <form.AppField
