@@ -137,19 +137,19 @@ export function AppSidebar() {
                     </SidebarMenuButton>
                   )}
                 </DynamicSidebarLink>
-
-                <DynamicSidebarLink href="/options">
-                  {({ href, ...props }) => (
-                    <SidebarMenuButton asChild {...props}>
-                      <Link href={href!}>
-                        <GearFineIcon />
-                        {t("options")}
-                      </Link>
-                    </SidebarMenuButton>
-                  )}
-                </DynamicSidebarLink>
               </>
             )}
+
+            <DynamicSidebarLink href="/options">
+              {({ href, ...props }) => (
+                <SidebarMenuButton asChild {...props}>
+                  <Link href={href!}>
+                    <GearFineIcon />
+                    {t("options")}
+                  </Link>
+                </SidebarMenuButton>
+              )}
+            </DynamicSidebarLink>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
