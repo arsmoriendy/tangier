@@ -296,7 +296,12 @@ export default function ItemForm(props: {
                 {() => <input type="hidden" value={id} />}
               </form.Field>
               <form.AppField name={`barcodes[${i}].barcode`}>
-                {(f) => <f.TextField label={`${name} barcode`} />}
+                {(f) => (
+                  <f.TextField
+                    label={`${name} barcode`}
+                    disableUppercaseOption
+                  />
+                )}
               </form.AppField>
             </div>
           ))}
