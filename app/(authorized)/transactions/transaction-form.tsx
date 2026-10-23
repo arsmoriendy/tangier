@@ -13,7 +13,7 @@ import {
   TransactionWithRelations,
   updateTransaction,
 } from "@/lib/crud/transactions"
-import { printTransaction } from "@/lib/print-transaction"
+import { printTrxReceipt } from "@/lib/print-trx-receipt"
 import { AddItemForm } from "@/app/(authorized)/transactions/add-item-form"
 import { AddItemProvider } from "@/app/(authorized)/transactions/add-item-ctx"
 import {
@@ -141,7 +141,7 @@ export default function TransactionForm(props: {
       }
 
       try {
-        await printTransaction({
+        await printTrxReceipt({
           id,
           createdAt,
           cashier: session.user.name,
@@ -150,7 +150,7 @@ export default function TransactionForm(props: {
           customerPriceGroup,
         })
       } catch (e) {
-        toast.error("Unable to print transaction", { description: `${e}` })
+        toast.error("Unable to print transaction")
       }
 
       setRecalledTrx(undefined)
