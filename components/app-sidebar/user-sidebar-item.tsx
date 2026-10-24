@@ -1,6 +1,6 @@
 import { ChangePasswordForm } from "@/components/app-sidebar/change-password-form"
 import { ChangeUsernameForm } from "@/components/app-sidebar/change-username-form"
-import { ClientDropdown } from "@/components/app-sidebar/client-dropdown"
+import { ClientDropdown } from "@/components/client-dropdown"
 import { DeleteAlert } from "@/components/delete-alert"
 import {
   DialogTrigger,

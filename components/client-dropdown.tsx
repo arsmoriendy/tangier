@@ -29,7 +29,7 @@ export function ClientDropdown({
   children,
   ...props
 }: Dropdown.DropdownMenuContentProps) {
-  const t = useTranslations("sidebar.client")
+  const t = useTranslations("common.client")
   return (
     <AlertDialog>
       <DropdownMenu>
