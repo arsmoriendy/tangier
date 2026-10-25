@@ -11,3 +11,9 @@ export async function authGuard() {
 
   return session
 }
+
+export async function withAuth({ admin }: { admin?: true }) {
+  const session = await getSession()
+  if (!session || (admin && session.user.role !== "admin"))
+    return Response.json({ error: "Unauthorized" }, { status: 401 })
+}

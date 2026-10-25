@@ -1,0 +1,25 @@
+"use server"
+
+import { env } from "@/lib/env"
+import { execFile } from "node:child_process"
+import { promisify } from "node:util"
+import pkg from "package.json"
+
+export async function dumpDatabase() {
+  const timestamp = new Date().toISOString()
+  const filename = `/tmp/tangier-v${pkg.version}-backup-${timestamp}.bak`
+
+  await promisify(execFile)("pg_dump", [
+    `--dbname`,
+    env.DATABASE_URL,
+    "--no-privileges",
+    `--file`,
+    filename,
+  ])
+
+  return filename
+}
+
+export async function restoreDatabase(filename: string) {
+  await promisify(execFile)("psql", [env.DATABASE_URL, "--file", filename])
+}
