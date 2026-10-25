@@ -7,7 +7,7 @@ import pkg from "package.json"
 
 export async function dumpDatabase() {
   const timestamp = new Date().toISOString()
-  const filename = `/tmp/tangier-v${pkg.version}-backup-${timestamp}.bak`
+  const filename = `/tmp/tangier-v${pkg.version}-backup-${timestamp}.sql`
 
   await promisify(execFile)("pg_dump", [
     `--dbname`,
