@@ -8,7 +8,7 @@ RUN bun -b run build
 
 FROM oven/bun:alpine
 RUN apk update
-RUN apk add --no-cache libudev-zero
+RUN apk add --no-cache libudev-zero postgresql18-client
 WORKDIR /opt/var/tangier
 COPY --from=build-stage /opt/var/tangier/.next/standalone .
 CMD ["./server.js"]
