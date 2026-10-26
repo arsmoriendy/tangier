@@ -22,5 +22,11 @@ export async function dumpDatabase() {
 }
 
 export async function restoreDatabase(filename: string) {
-  await promisify(execFile)("psql", [env.DATABASE_URL, "--file", filename])
+  await promisify(execFile)("psql", [
+    env.DATABASE_URL,
+    "--single-transaction",
+    "--set=ON_ERROR_STOP=on",
+    "--file",
+    filename,
+  ])
 }
