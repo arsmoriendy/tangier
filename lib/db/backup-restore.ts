@@ -14,6 +14,7 @@ export async function dumpDatabase() {
     env.DATABASE_URL,
     "--no-privileges",
     "--no-owner",
+    "--clean",
     `--file`,
     filename,
   ])
