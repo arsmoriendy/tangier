@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { ClockCounterClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
 import { SyntheticEvent } from "react"
 
 async function handleRestore(e: SyntheticEvent<HTMLFormElement>) {
@@ -18,9 +19,12 @@ async function handleRestore(e: SyntheticEvent<HTMLFormElement>) {
 
 export function RestoreForm() {
   return (
-    <form onSubmit={handleRestore} method="POST">
+    <form onSubmit={handleRestore} method="POST" className="space-y-2">
       <Input type="file" name="dump" />
-      <Button>Restore</Button>
+      <Button>
+        <ClockCounterClockwiseIcon />
+        Restore from file
+      </Button>
     </form>
   )
 }
