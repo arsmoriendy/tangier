@@ -282,7 +282,8 @@
   },
   "backupRestore": {
     "backup": {
-      "buttonLabel": "Download database dump"
+      "buttonLabel": "Download database dump",
+      "success": "Downloaded database dump"
     },
     "restore": {
       "success": "Database restoration successful",

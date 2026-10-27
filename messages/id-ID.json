@@ -284,7 +284,8 @@
   },
   "backupRestore": {
     "backup": {
-      "buttonLabel": "Unduh backup database"
+      "buttonLabel": "Unduh backup database",
+      "success": "Backup database terunduh"
     },
     "restore": {
       "success": "Restorasi database berhasil",

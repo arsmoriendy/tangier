@@ -1,7 +1,7 @@
 import { APIError, betterAuth } from "better-auth"
 import { drizzleAdapter } from "better-auth/adapters/drizzle"
 import { db } from "@/lib/db"
-import { admin } from "better-auth/plugins"
+import { admin, jwt } from "better-auth/plugins"
 import { countUser, readUser } from "@/lib/crud/users"
 import { count, eq } from "drizzle-orm"
 import { user } from "@/lib/db/auth-schema"
@@ -58,5 +58,8 @@ export const auth = betterAuth({
       },
     },
   },
-  plugins: [admin()],
+  plugins: [
+    admin(),
+    jwt({ jwt: { definePayload: (sess) => ({ auth: sess }) } }),
+  ],
 })
