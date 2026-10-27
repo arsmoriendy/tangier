@@ -1,9 +1,9 @@
+import { ClientButton } from "@/app/auth/client-button"
 import { SignInForm } from "@/app/auth/sign-in-form"
 import { SignUpForm } from "@/app/auth/sign-up-form"
 import { ClientDropdown } from "@/components/client-dropdown"
 import Logo from "@/components/logo"
 import { Button } from "@/components/ui/button"
-import { ButtonGroup } from "@/components/ui/button-group"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { XIcon } from "@phosphor-icons/react/dist/ssr"
 import { isTauri } from "@tauri-apps/api/core"
@@ -47,17 +47,7 @@ export default async function Page() {
         </span>
       </div>
 
-      {isTauri() && (
-        <ClientDropdown side="right" align="start">
-          <Button
-            variant="destructive"
-            size="icon"
-            className="fixed top-3 right-2"
-          >
-            <XIcon />
-          </Button>
-        </ClientDropdown>
-      )}
+      <ClientButton />
     </>
   )
 }
