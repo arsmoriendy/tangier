@@ -283,10 +283,14 @@
     }
   },
   "backupRestore": {
+    "backup": {
+      "buttonLabel": "Unduh backup database"
+    },
     "restore": {
       "success": "Restorasi database berhasil",
       "error": "Restorasi database gagal",
-      "buttonLabel": "Restore dari file"
+      "fileInputLabel": "File backup",
+      "buttonLabel": "Restorasi database"
     }
   }
 }

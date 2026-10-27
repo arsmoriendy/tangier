@@ -281,10 +281,14 @@
     }
   },
   "backupRestore": {
+    "backup": {
+      "buttonLabel": "Download database dump"
+    },
     "restore": {
       "success": "Database restoration successful",
       "error": "Database restoration failed",
-      "buttonLabel": "Restore from file"
+      "fileInputLabel": "Dump file",
+      "buttonLabel": "Restore from database dump"
     }
   }
 }
