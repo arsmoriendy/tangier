@@ -38,7 +38,7 @@ export function RestoreForm() {
   return (
     <form onSubmit={handleRestore} method="POST" className="space-y-2">
       <Label htmlFor="dump">{t("fileInputLabel")}:</Label>
-      <Input type="file" name="dump" id="dump" required />
+      <Input type="file" name="dump" id="dump" accept=".sql" required />
       <Button type="submit" disabled={loading}>
         {loading ? <Spinner /> : <ClockCounterClockwiseIcon />}
         {t("buttonLabel")}
