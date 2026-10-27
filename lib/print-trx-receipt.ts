@@ -100,6 +100,11 @@ export async function printTrxReceipt(trx: TransactionWithRelations) {
   const settings = await listSettings()
 
   const device = new USB(vid, pid)
+
+  await new Promise<void>((resolve, reject) =>
+    device.open((err) => (err ? reject(err) : resolve()))
+  )
+
   const printer = new Printer(device, { encoding: "ascii", width })
 
   const trxReceiptPrinter = new TrxReceiptPrinter(printer, width)
