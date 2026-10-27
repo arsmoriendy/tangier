@@ -281,5 +281,12 @@
       "message": "Mohon tunggu administrator untuk mengaktifkan akun Anda",
       "refresh": "Coba lagi"
     }
+  },
+  "backupRestore": {
+    "restore": {
+      "success": "Restorasi database berhasil",
+      "error": "Restorasi database gagal",
+      "buttonLabel": "Restore dari file"
+    }
   }
 }

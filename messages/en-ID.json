@@ -279,5 +279,12 @@
       "message": "Please wait for an administrator to activate your account",
       "refresh": "Refresh"
     }
+  },
+  "backupRestore": {
+    "restore": {
+      "success": "Database restoration successful",
+      "error": "Database restoration failed",
+      "buttonLabel": "Restore from file"
+    }
   }
 }
