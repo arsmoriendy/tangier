@@ -30,16 +30,14 @@ function WebForm() {
 }
 
 enum DownloadStatus {
-  NotStarted,
+  Initial, // not started / finished
   Started,
-  InProgress,
-  Finished,
 }
 
 function TauriForm() {
   const t = useTranslations("backupRestore.backup")
   const [progress, setProgress] = useState(0)
-  const [status, setStatus] = useState(DownloadStatus.NotStarted)
+  const [status, setStatus] = useState(DownloadStatus.Initial)
 
   async function handleBackup() {
     const savePath = await save({
@@ -64,9 +62,7 @@ function TauriForm() {
       savePath,
       ({ progressTotal, total }) => {
         const perc = (progressTotal / total) * 100
-        setStatus(
-          perc < 100 ? DownloadStatus.InProgress : DownloadStatus.Finished
-        )
+        if (perc >= 100) setStatus(DownloadStatus.Initial)
         setProgress(perc)
       },
       new Map([["Authorization", `Bearer ${tokenRes.data.token}`]])
@@ -76,10 +72,14 @@ function TauriForm() {
   }
 
   return (
-    <Button className="relative" onClick={handleBackup}>
+    <Button
+      className="relative"
+      onClick={handleBackup}
+      disabled={status === DownloadStatus.Started}
+    >
       {status === DownloadStatus.Started ? <Spinner /> : <DownloadIcon />}
       {t("buttonLabel")}
-      {status === DownloadStatus.InProgress && (
+      {status === DownloadStatus.Started && (
         <Progress
           className="absolute bottom-0"
           indicatorClass="bg-success"
