@@ -10,7 +10,6 @@ import { generateBackupFilepath } from "@/lib/generate-backup-filepath"
 import { useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { toast } from "sonner"
-import { env } from "@/lib/env"
 import { Progress } from "@/components/ui/progress"
 import { Spinner } from "@/components/spinner"
 
@@ -30,9 +29,17 @@ function WebForm() {
   )
 }
 
+enum DownloadStatus {
+  NotStarted,
+  Started,
+  InProgress,
+  Finished,
+}
+
 function TauriForm() {
   const t = useTranslations("backupRestore.backup")
   const [progress, setProgress] = useState(0)
+  const [status, setStatus] = useState(DownloadStatus.NotStarted)
 
   async function handleBackup() {
     const savePath = await save({
@@ -50,13 +57,17 @@ function TauriForm() {
     }
 
     setProgress(0)
-    let downloaded = 0
+    setStatus(DownloadStatus.Started)
+
     await download(
       `${window.location.origin}/api/backup`,
       savePath,
-      ({ progress, total }) => {
-        downloaded += progress
-        setProgress(downloaded / total)
+      ({ progressTotal, total }) => {
+        const perc = (progressTotal / total) * 100
+        setStatus(
+          perc < 100 ? DownloadStatus.InProgress : DownloadStatus.Finished
+        )
+        setProgress(perc)
       },
       new Map([["Authorization", `Bearer ${tokenRes.data.token}`]])
     )
@@ -65,12 +76,16 @@ function TauriForm() {
   }
 
   return (
-    <>
-      <Button onClick={handleBackup}>
-        {progress !== 0 && progress !== 1 ? <Spinner /> : <DownloadIcon />}
-        {t("buttonLabel")}
-      </Button>
-      <Progress value={progress * 100} />
-    </>
+    <Button className="relative" onClick={handleBackup}>
+      {status === DownloadStatus.Started ? <Spinner /> : <DownloadIcon />}
+      {t("buttonLabel")}
+      {status === DownloadStatus.InProgress && (
+        <Progress
+          className="absolute bottom-0"
+          indicatorClass="bg-success"
+          value={progress}
+        />
+      )}
+    </Button>
   )
 }
