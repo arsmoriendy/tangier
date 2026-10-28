@@ -8,7 +8,3 @@ import { migrate } from "drizzle-orm/node-postgres/migrator"
 export const db = drizzle(env.DATABASE_URL, {
   schema: { ...schema, ...relations, ...authSchema },
 })
-
-await migrate(db, {
-  migrationsFolder: "lib/db/drizzle",
-})
