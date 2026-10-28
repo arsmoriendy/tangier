@@ -1,15 +1,18 @@
 "use server"
 
 import { headers } from "next/headers"
-import { createRemoteJWKSet, jwtVerify } from "jose"
+import { createRemoteJWKSet, jwtVerify, RemoteJWKSet } from "jose"
 import { auth } from "@/lib/auth"
 import { env } from "@/lib/env"
 
 type SessionResult = typeof auth.$Infer.Session // { session, user }
 
-const JWKS = createRemoteJWKSet(new URL(`${env.BETTER_AUTH_URL}/api/auth/jwks`))
+let JWKS: RemoteJWKSet | undefined
 
 async function resultFromJwt(token: string): Promise<SessionResult | null> {
+  if (JWKS === undefined)
+    JWKS = createRemoteJWKSet(new URL(`${env.BETTER_AUTH_URL}/api/auth/jwks`))
+
   try {
     const { payload } = await jwtVerify(token, JWKS, {
       issuer: env.BETTER_AUTH_URL,
