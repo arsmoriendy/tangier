@@ -6,7 +6,7 @@ import { DownloadIcon } from "@phosphor-icons/react/dist/ssr"
 import { isTauri } from "@tauri-apps/api/core"
 import { useTranslations } from "next-intl"
 import { save } from "@tauri-apps/plugin-dialog"
-import { generateBackupFilepath } from "@/lib/generate-backup-filepath"
+import { generateBackupFilename } from "@/lib/generate-backup-filename"
 import { useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { toast } from "sonner"
@@ -42,7 +42,7 @@ function TauriForm() {
   async function handleBackup() {
     const savePath = await save({
       title: t("buttonLabel"),
-      defaultPath: generateBackupFilepath(),
+      defaultPath: generateBackupFilename(),
     })
 
     if (savePath === null) return

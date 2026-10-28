@@ -1,12 +1,12 @@
 "use server"
 
 import { env } from "@/lib/env"
-import { generateBackupFilepath } from "@/lib/generate-backup-filepath"
+import { generateBackupFilename } from "@/lib/generate-backup-filename"
 import { execFile } from "node:child_process"
 import { promisify } from "node:util"
 
 export async function dumpDatabase() {
-  const filename = generateBackupFilepath()
+  const filename = generateBackupFilename()
 
   await promisify(execFile)("pg_dump", [
     `--dbname`,
