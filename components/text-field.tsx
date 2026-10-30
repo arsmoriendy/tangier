@@ -11,7 +11,7 @@ import { ComponentProps, RefObject, useEffect, useRef, useState } from "react"
 import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group"
 import { Kbd } from "./ui/kbd"
 import { useHotkeys } from "react-hotkeys-hook"
-import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { useUserSettings } from "@/contexts/user-settings"
 import {
   Input,
   InputTransformer,
@@ -39,7 +39,7 @@ export default function TextField({
   const field = useFieldContext<string>()
   const id = `${field.form.formId}-${field.name}`
   const isInvalid = !field.state.meta.isValid
-  const { getLocalStorage } = useLocalStorage()
+  const { getUserSettings } = useUserSettings()
 
   if (hotkeys !== undefined) {
     useHotkeys(hotkeys, () => ref.current?.focus(), {
@@ -52,7 +52,7 @@ export default function TextField({
     useState<InputTransformer[]>(transformers)
 
   useEffect(() => {
-    if (getLocalStorage.uppercaseInput && !disableUppercaseOption) {
+    if (getUserSettings.uppercaseInput && !disableUppercaseOption) {
       setTransformers((tfs) => [upperCaseTransformer, ...tfs])
     }
   }, [])

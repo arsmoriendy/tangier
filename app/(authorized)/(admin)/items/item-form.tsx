@@ -25,7 +25,7 @@ import { useTranslations } from "next-intl"
 import { useItems } from "@/contexts/items-ctx"
 import { useItemFilters } from "@/app/(authorized)/(admin)/items/item-filters-ctx"
 import { useItemCount } from "@/app/(authorized)/(admin)/items/item-count-ctx"
-import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { useUserSettings } from "@/contexts/user-settings"
 import {
   Table,
   TableBody,
@@ -49,7 +49,7 @@ export default function ItemForm(props: {
   const { itemsProxy } = useItems()
   const { itemFiltersProxy } = useItemFilters()
   const { setItemCount } = useItemCount()
-  const { getLocalStorage } = useLocalStorage()
+  const { getUserSettings } = useUserSettings()
   const createItemFormSchema = z.object({
     name: z.string().min(1),
     unit: z.uuid(),
@@ -186,7 +186,7 @@ export default function ItemForm(props: {
                         <TrashIcon />
                       </Button>
                     </div>
-                    {!getLocalStorage.hideItemMarginAndDiscounts && (
+                    {!getUserSettings.hideItemMarginAndDiscounts && (
                       <Table>
                         <TableHeader>
                           <TableRow>

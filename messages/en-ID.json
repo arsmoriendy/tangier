@@ -256,13 +256,20 @@
     "transactionForm": "Transaction form",
     "historyPage": "History page",
     "itemPage": "Item page",
+    "miscellaneous": "Miscellaneous"
+  },
+  "userSettings": {
+    "updated": "Updated user setting",
+
+    "decrementStock": "Update stocks",
+    "showHisotryItems": "Show history items",
+    "showTrxSummary": "Show transaction summary",
     "hideTrxMarginAndDiscounts": "Hide margin and discounts",
     "hideTrxBuyPrice": "Hide buy price",
     "hideHistoryReports": "Hide reports",
     "hideItemMarginAndDiscounts": "Hide margin and discounts",
     "coloredSellPrice": "Colored sell price",
-    "uppercaseInput": "Uppercase input",
-    "miscellaneous": "Miscellaneous"
+    "uppercaseInput": "Uppercase input"
   },
   "auth": {
     "signIn": "Sign in",

@@ -9,9 +9,11 @@ import {
   uniqueIndex,
   integer,
   boolean,
+  text,
 } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
 import { v7 } from "uuid"
+import { user } from "@/lib/db/auth-schema"
 
 export const items = pgTable(
   "items",
@@ -199,3 +201,27 @@ export const settings = pgTable("settings", {
   receiptHeader: varchar("receipt_header"),
   receiptFooter: varchar("receipt_footer"),
 })
+
+export const userSettings = pgTable(
+  "user_settings",
+  {
+    userId: text("id").primaryKey(),
+    decrementStock: boolean().default(true).notNull(),
+    showHisotryItems: boolean().default(false).notNull(),
+    showTrxSummary: boolean().default(false).notNull(),
+    hideTrxMarginAndDiscounts: boolean().default(true).notNull(),
+    hideTrxBuyPrice: boolean().default(true).notNull(),
+    hideHistoryReports: boolean().default(true).notNull(),
+    hideItemMarginAndDiscounts: boolean().default(true).notNull(),
+    coloredSellPrice: boolean().default(false).notNull(),
+    uppercaseInput: boolean().default(true).notNull(),
+  },
+  (table) => [
+    foreignKey({
+      columns: [table.userId],
+      foreignColumns: [user.id],
+    })
+      .onUpdate("cascade")
+      .onDelete("cascade"),
+  ]
+)

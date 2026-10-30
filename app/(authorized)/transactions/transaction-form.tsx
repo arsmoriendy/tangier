@@ -36,7 +36,7 @@ import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { RecallDialog } from "@/app/(authorized)/transactions/recall-dialog"
 import { TransactionItemTable } from "@/app/(authorized)/transactions/transaction-item-table"
 import { Badge } from "@/components/ui/badge"
-import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { useUserSettings } from "@/contexts/user-settings"
 import { TransactionSummaryDialog } from "@/app/(authorized)/transactions/transaction-summary-dialog"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
@@ -53,7 +53,7 @@ export default function TransactionForm(props: {
     TransactionWithRelations | undefined
   >(undefined)
   const [getOpenSummary, setOpenSummary] = useState<boolean>(false)
-  const { setLocalStorage, getLocalStorage } = useLocalStorage()
+  const { getUserSettings } = useUserSettings()
   const [selected, setSelected] = useState<Set<number>>(new Set())
   const t = useTranslations("transactions.form")
   const tc = useTranslations("common")
@@ -154,7 +154,7 @@ export default function TransactionForm(props: {
       }
 
       setRecalledTrx(undefined)
-      if (setLocalStorage.showTrxSummary) setOpenSummary(true)
+      if (getUserSettings.showTrxSummary) setOpenSummary(true)
       else form.reset()
     },
   })
@@ -231,7 +231,7 @@ export default function TransactionForm(props: {
           <div className="absolute -top-4 left-2 flex gap-2">
             <Badge>{tc("totalPrice")}</Badge>
             {session.user.role === "admin" &&
-              !getLocalStorage.hideTrxMarginAndDiscounts && (
+              !getUserSettings.hideTrxMarginAndDiscounts && (
                 <form.Subscribe selector={(f) => f.values}>
                   {(v) => {
                     const expenses = v.transactionItems.reduce(

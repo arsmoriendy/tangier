@@ -2,7 +2,7 @@
 
 import { Field, FieldLabel, FieldSet, FieldLegend } from "@/components/ui/field"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { useUserSettings } from "@/contexts/user-settings"
 import { useTranslations } from "next-intl"
 import { useSession } from "@/contexts/session-ctx"
 import { Form, useAppForm } from "@/components/form"
@@ -38,9 +38,10 @@ export default function OptionsForm({
   initialData: Settings
 }) {
   const t = useTranslations("options")
+  const ts = useTranslations("userSettings")
   const tr = useTranslations("receipt")
   const { user } = useSession()
-  const { setLocalStorage, getLocalStorage } = useLocalStorage()
+  const { setUserSettings, getUserSettings } = useUserSettings()
 
   const defaultValues: z.infer<typeof receiptFormSchema> = {
     receiptHeader: initialData.receiptHeader ?? "",
@@ -67,43 +68,43 @@ export default function OptionsForm({
             <FieldSet>
               <FieldLegend variant="label">{t("transactionForm")}</FieldLegend>
               <OptionCheckbox
-                checked={getLocalStorage.hideTrxMarginAndDiscounts}
+                checked={getUserSettings.hideTrxMarginAndDiscounts}
                 onCheckedChange={(c) =>
-                  (setLocalStorage.hideTrxMarginAndDiscounts = c)
+                  (setUserSettings.hideTrxMarginAndDiscounts = c)
                 }
-                label={t("hideTrxMarginAndDiscounts")}
+                label={ts("hideTrxMarginAndDiscounts")}
               />
               <OptionCheckbox
-                checked={getLocalStorage.hideTrxBuyPrice}
-                onCheckedChange={(c) => (setLocalStorage.hideTrxBuyPrice = c)}
-                label={t("hideTrxBuyPrice")}
+                checked={getUserSettings.hideTrxBuyPrice}
+                onCheckedChange={(c) => (setUserSettings.hideTrxBuyPrice = c)}
+                label={ts("hideTrxBuyPrice")}
               />
               <OptionCheckbox
-                checked={getLocalStorage.coloredSellPrice}
-                onCheckedChange={(c) => (setLocalStorage.coloredSellPrice = c)}
-                label={t("coloredSellPrice")}
+                checked={getUserSettings.coloredSellPrice}
+                onCheckedChange={(c) => (setUserSettings.coloredSellPrice = c)}
+                label={ts("coloredSellPrice")}
               />
             </FieldSet>
 
             <FieldSet>
               <FieldLegend variant="label">{t("historyPage")}</FieldLegend>
               <OptionCheckbox
-                checked={getLocalStorage.hideHistoryReports}
+                checked={getUserSettings.hideHistoryReports}
                 onCheckedChange={(c) =>
-                  (setLocalStorage.hideHistoryReports = c)
+                  (setUserSettings.hideHistoryReports = c)
                 }
-                label={t("hideHistoryReports")}
+                label={ts("hideHistoryReports")}
               />
             </FieldSet>
 
             <FieldSet>
               <FieldLegend variant="label">{t("itemPage")}</FieldLegend>
               <OptionCheckbox
-                checked={getLocalStorage.hideItemMarginAndDiscounts}
+                checked={getUserSettings.hideItemMarginAndDiscounts}
                 onCheckedChange={(c) =>
-                  (setLocalStorage.hideItemMarginAndDiscounts = c)
+                  (setUserSettings.hideItemMarginAndDiscounts = c)
                 }
-                label={t("hideItemMarginAndDiscounts")}
+                label={ts("hideItemMarginAndDiscounts")}
               />
             </FieldSet>
           </FieldSet>
@@ -130,9 +131,9 @@ export default function OptionsForm({
       <FieldSet>
         <FieldLegend variant="label">{t("miscellaneous")}</FieldLegend>
         <OptionCheckbox
-          checked={getLocalStorage.uppercaseInput}
-          onCheckedChange={(c) => (setLocalStorage.uppercaseInput = c)}
-          label={t("uppercaseInput")}
+          checked={getUserSettings.uppercaseInput}
+          onCheckedChange={(c) => (setUserSettings.uppercaseInput = c)}
+          label={ts("uppercaseInput")}
         />
       </FieldSet>
     </FieldSet>

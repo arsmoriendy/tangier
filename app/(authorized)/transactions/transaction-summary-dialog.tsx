@@ -12,7 +12,7 @@ import {
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { useSession } from "@/contexts/session-ctx"
-import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { useUserSettings } from "@/contexts/user-settings"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
 import { useTranslations } from "next-intl"
@@ -25,7 +25,7 @@ export const TransactionSummaryDialog = withForm({
     const t = useTranslations("transactions.form.summary")
     const tc = useTranslations("common")
     const { user } = useSession()
-    const { getLocalStorage } = useLocalStorage()
+    const { getUserSettings } = useUserSettings()
     return (
       <AlertDialog {...props}>
         <AlertDialogContent>
@@ -51,7 +51,7 @@ export const TransactionSummaryDialog = withForm({
                       <TableCell>{formatCurrency(v.totalPrice)}</TableCell>
                     </TableRow>
                     {user.role === "admin" &&
-                      !getLocalStorage.hideTrxMarginAndDiscounts && (
+                      !getUserSettings.hideTrxMarginAndDiscounts && (
                         <>
                           <TableRow>
                             <TableCell>{t("expenses")}</TableCell>

@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { useUserSettings } from "@/contexts/user-settings"
 import { useSession } from "@/contexts/session-ctx"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
@@ -25,7 +25,7 @@ export const TransactionItemTable = withForm({
     setSelected: (_selected: Set<number>) => {},
   },
   render: function Render({ form, selected, setSelected }) {
-    const { getLocalStorage, setLocalStorage } = useLocalStorage()
+    const { getUserSettings, setUserSettings } = useUserSettings()
     const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
     const session = useSession()
@@ -68,7 +68,7 @@ export const TransactionItemTable = withForm({
               <col className="w-3/36" />
               <col className="w-6/36" />
               {session.user.role === "admin" &&
-                !getLocalStorage.hideTrxBuyPrice && <col className="w-6/36" />}
+                !getUserSettings.hideTrxBuyPrice && <col className="w-6/36" />}
               <col className="w-3/36" />
               <col className="w-1/36" />
               <col className="w-6/36" />
@@ -79,7 +79,7 @@ export const TransactionItemTable = withForm({
                 <TableHead>{tc("name")}</TableHead>
                 <TableHead>{tc("unit")}</TableHead>
                 {session.user.role === "admin" &&
-                  !getLocalStorage.hideTrxBuyPrice && (
+                  !getUserSettings.hideTrxBuyPrice && (
                     <TableHead>{tc("buyPrice")}</TableHead>
                   )}
                 <TableHead>{tc("sellPrice")}</TableHead>
@@ -95,7 +95,7 @@ export const TransactionItemTable = withForm({
                     className="text-center text-muted-foreground"
                     colSpan={
                       session.user.role === "admin" &&
-                      !getLocalStorage.hideTrxBuyPrice
+                      !getUserSettings.hideTrxBuyPrice
                         ? 9
                         : 8
                     }
@@ -175,7 +175,7 @@ export const TransactionItemTable = withForm({
                     </form.AppField>
                   </TableCell>
                   {session.user.role === "admin" &&
-                    !getLocalStorage.hideTrxBuyPrice && (
+                    !getUserSettings.hideTrxBuyPrice && (
                       <TableCell className="align-top">
                         <form.AppField name={`transactionItems[${i}].buyPrice`}>
                           {(field) => <field.IdrField min={0} />}
@@ -211,7 +211,7 @@ export const TransactionItemTable = withForm({
                                 <field.IdrField
                                   inputClass={cn(
                                     session.user.role === "admin" &&
-                                      getLocalStorage.coloredSellPrice &&
+                                      getUserSettings.coloredSellPrice &&
                                       (bp > sp
                                         ? "bg-destructive/33"
                                         : "bg-success/33")
@@ -221,7 +221,7 @@ export const TransactionItemTable = withForm({
                               )}
                             </form.AppField>
                             {session.user.role === "admin" &&
-                              !getLocalStorage.hideTrxMarginAndDiscounts &&
+                              !getUserSettings.hideTrxMarginAndDiscounts &&
                               margin !== 0 && (
                                 <small
                                   className={cn(
@@ -306,13 +306,13 @@ export const TransactionItemTable = withForm({
               <TableRow>
                 <TableCell colSpan={5} />
                 {session.user.role === "admin" &&
-                  !getLocalStorage.hideTrxBuyPrice && <TableCell />}
+                  !getUserSettings.hideTrxBuyPrice && <TableCell />}
                 <TableCell />
                 <TableCell className="flex justify-center gap-2 px-0">
                   <Checkbox
-                    checked={getLocalStorage.decrementStock}
+                    checked={getUserSettings.decrementStock}
                     onCheckedChange={(c) => {
-                      setLocalStorage.decrementStock = c as boolean
+                      setUserSettings.decrementStock = c as boolean
                       for (const [i, item] of state.value.entries()) {
                         if (item.buyPriceId !== null) {
                           form.setFieldValue(
