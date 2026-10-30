@@ -1,14 +1,14 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { SessionProvider } from "@/contexts/session-ctx"
-import { authGuard } from "@/lib/auth-guard"
+import { getSessionOrRedirect } from "@/lib/auth-guard"
 
 export default async function AuthorizedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await authGuard()
+  const session = await getSessionOrRedirect()
 
   return (
     <SessionProvider session={session}>

@@ -1,13 +1,11 @@
-import { getSession } from "@/lib/get-session"
-import { redirect } from "next/navigation"
+import { getSessionOrRedirect } from "@/lib/auth-guard"
 
 export default async function AuthorizedLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await getSession()
-  if (session?.user.role !== "admin") redirect("/auth")
+  await getSessionOrRedirect({ admin: true })
 
   return children
 }

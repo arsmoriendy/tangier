@@ -4,10 +4,10 @@ import { stat, unlink } from "node:fs/promises"
 import { createReadStream } from "node:fs"
 import { after, NextResponse } from "next/server"
 import { Readable } from "stream"
-import { withAuth } from "@/lib/auth-guard"
+import { isUnauthorized } from "@/lib/auth-guard"
 
 export async function GET() {
-  const unauthorized = await withAuth({ admin: true })
+  const unauthorized = await isUnauthorized({ admin: true })
   if (unauthorized) return unauthorized
 
   const dumpfile = await dumpDatabase()
