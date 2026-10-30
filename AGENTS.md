@@ -22,6 +22,8 @@ bun run format              # prettier --write on ts/tsx/css
 bun run intl-check          # find unused i18n keys (source locale en-ID)
 ```
 
+**Agents: do not run `bun run lint` or start the app/dev server (`bun run dev`, `bun run start`, `bun run build`). The user handles linting and running the program; skip these unless explicitly asked.**
+
 `build` copies `public/` and `.next/static` into `.next/standalone/` — the Docker image (`oven/bun:alpine`) runs `./server.js` from the standalone output. Do not change this assembly step unless you also update the Dockerfile.
 
 Drizzle migrations are managed with `drizzle-kit` (config in `drizzle.config.ts`, dialect `postgresql`, output dir `./lib/db`). Schemas live in `lib/db/schema.ts` (app tables) and `lib/db/auth-schema.ts` (better-auth tables). Env validation is via `@t3-oss/env-nextjs` (`lib/env.ts`) — `SKIP_ENV_VALIDATION=1` bypasses it (used by `build`).
@@ -35,7 +37,7 @@ Drizzle migrations are managed with `drizzle-kit` (config in `drizzle.config.ts`
 ### Route groups (App Router)
 
 - `app/auth/` — unauthenticated sign-in/sign-up; also `auth/inactive/` for users with `active=false` (the `authGuard` redirects inactive users here).
-- `app/(authorized)/` — everything behind `authGuard` (requires session + `user.active`). Wrapped by `SessionProvider` + `SidebarProvider` + `AppSidebar` in its layout.
+- `app/(authorized)/` — everything behind `authGuard` (requires session + `user.active`). Wrapped by `SessionProvider` + `UserSettingsProvider` + `SidebarProvider` + `AppSidebar` in its layout. The layout fetches the current user's settings via `getUserSettings({ userId: session.user.id })` and seeds the provider with them.
 - `app/(authorized)/(admin)/` — admin-only subtree; its layout re-checks `session.user.role === "admin"` and redirects to `/auth` otherwise. Contains `items`, `units`, `price-groups`, `barcode-groups`, `users`. The sidebar only renders these links for admins.
 - `app/(authorized)/transactions/` — the core POS UI (`new/` for the live transaction form, `history/` for past transactions + reports). Available to all authorized users.
 - `app/page.tsx` redirects to `/transactions/new`.
@@ -56,6 +58,8 @@ State is split between React Context and **valtio** proxies. There are two provi
 2. **Per-page providers** (server components, e.g. `transactions/new/page.tsx`) fetch initial data via server actions, then wrap client children in `PriceGroupsProvider`, `UnitsProvider`, `ItemsProvider`, `HeldProvider`, `TrxProvider`, `FiltersProvider`, etc. Each page composes only the providers it needs.
 
 The shared pattern is `ValtioContext<T> = { proxy: T; snap: Snapshot<T> }` (see `contexts/valtio-context.d.ts`). Context hooks return `{ setX: proxy, getX: snap }`-style accessors — mutate the proxy to update, read the snapshot for render. `LocalStorageProvider` persists a valtio proxy to `localStorage["tangierStore"]` via `subscribe`; its schema (`decrementStock`, `showHisotryItems` [sic — typo is in the code], `showTrxSummary`) is the source of truth for those UI preferences.
+
+`UserSettingsProvider` (`contexts/user-settings.tsx`) is a valtio-backed `ValtioContext<UserSettings>` used via `useUserSettings()` → `{ getUserSettings: snap, setUserSettings: proxy }`. It is seeded from the `user_settings` DB row in the `(authorized)` layout; changes are currently **in-memory only** (not persisted back to the DB yet). Call sites mutate it imperatively (`setUserSettings.x = c`).
 
 `SessionProvider` is React-only (no valtio) and just holds the server-resolved session for `useSession()`.
 
