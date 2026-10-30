@@ -7,10 +7,12 @@ import { upsertUserSettings, type UserSettings } from "@/lib/crud/user-settings"
 import { useSession } from "@/contexts/session-ctx"
 import { toast } from "sonner"
 import { useTranslations } from "next-intl"
+import { defaultUserSetings } from "@/lib/default-user-settings"
 
-const userSettingsCtx = createContext<ValtioContext<UserSettings> | undefined>(
-  undefined
-)
+const userSettingsCtx = createContext<ValtioContext<UserSettings>>({
+  proxy: defaultUserSetings,
+  snap: defaultUserSetings,
+})
 
 export function UserSettingsProvider(props: {
   children: ReactNode
@@ -57,7 +59,7 @@ export function UserSettingsProvider(props: {
 }
 
 export function useUserSettings() {
-  const { proxy, snap } = useContext(userSettingsCtx)!
+  const { proxy, snap } = useContext(userSettingsCtx)
   return {
     setUserSettings: proxy,
     getUserSettings: snap,

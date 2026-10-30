@@ -2,7 +2,7 @@
 
 import { db } from "@/lib/db"
 import { userSettings } from "@/lib/db/schema"
-import { getTableConfig } from "drizzle-orm/pg-core"
+import { defaultUserSetings } from "@/lib/default-user-settings"
 
 export type UserSettings = Omit<typeof userSettings.$inferSelect, "userId">
 
@@ -16,14 +16,7 @@ export async function getUserSettings({
     where: (settings, { eq }) => eq(settings.userId, userId),
   })
 
-  if (settings) return settings
-
-  const { columns } = getTableConfig(userSettings)
-  const defaultSetings = Object.fromEntries(
-    columns.filter((c) => c.hasDefault).map((c) => [c.name, c.default])
-  ) as UserSettings
-
-  return defaultSetings
+  return settings ?? defaultUserSetings
 }
 
 export async function upsertUserSettings(
