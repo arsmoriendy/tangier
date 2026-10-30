@@ -25,3 +25,14 @@ export async function getUserSettings({
 
   return defaultSetings
 }
+
+export async function upsertUserSettings(
+  args: typeof userSettings.$inferInsert
+) {
+  const { userId: _, ...updatedSettings } = args
+
+  await db.insert(userSettings).values(args).onConflictDoUpdate({
+    target: userSettings.userId,
+    set: updatedSettings,
+  })
+}

@@ -38,6 +38,7 @@ export default function OptionsForm({
   initialData: Settings
 }) {
   const t = useTranslations("options")
+  const ts = useTranslations("userSettings")
   const tr = useTranslations("receipt")
   const { user } = useSession()
   const { setUserSettings, getUserSettings } = useUserSettings()
@@ -71,17 +72,17 @@ export default function OptionsForm({
                 onCheckedChange={(c) =>
                   (setUserSettings.hideTrxMarginAndDiscounts = c)
                 }
-                label={t("hideTrxMarginAndDiscounts")}
+                label={ts("hideTrxMarginAndDiscounts")}
               />
               <OptionCheckbox
                 checked={getUserSettings.hideTrxBuyPrice}
                 onCheckedChange={(c) => (setUserSettings.hideTrxBuyPrice = c)}
-                label={t("hideTrxBuyPrice")}
+                label={ts("hideTrxBuyPrice")}
               />
               <OptionCheckbox
                 checked={getUserSettings.coloredSellPrice}
                 onCheckedChange={(c) => (setUserSettings.coloredSellPrice = c)}
-                label={t("coloredSellPrice")}
+                label={ts("coloredSellPrice")}
               />
             </FieldSet>
 
@@ -92,7 +93,7 @@ export default function OptionsForm({
                 onCheckedChange={(c) =>
                   (setUserSettings.hideHistoryReports = c)
                 }
-                label={t("hideHistoryReports")}
+                label={ts("hideHistoryReports")}
               />
             </FieldSet>
 
@@ -103,7 +104,7 @@ export default function OptionsForm({
                 onCheckedChange={(c) =>
                   (setUserSettings.hideItemMarginAndDiscounts = c)
                 }
-                label={t("hideItemMarginAndDiscounts")}
+                label={ts("hideItemMarginAndDiscounts")}
               />
             </FieldSet>
           </FieldSet>
@@ -132,7 +133,7 @@ export default function OptionsForm({
         <OptionCheckbox
           checked={getUserSettings.uppercaseInput}
           onCheckedChange={(c) => (setUserSettings.uppercaseInput = c)}
-          label={t("uppercaseInput")}
+          label={ts("uppercaseInput")}
         />
       </FieldSet>
     </FieldSet>

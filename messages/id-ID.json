@@ -258,13 +258,20 @@
     "transactionForm": "Form transaksi",
     "historyPage": "Halaman riwayat",
     "itemPage": "Halaman barang",
+    "miscellaneous": "Lain-lain"
+  },
+  "userSettings": {
+    "updated": "Setelan pengguna berhasil diperbarui",
+
+    "decrementStock": "Perbarui stok",
+    "showHisotryItems": "Tampilkan barang-barang di riwayat",
+    "showTrxSummary": "Tampilkan ringkasan transaksi",
     "hideTrxMarginAndDiscounts": "Sembunyikan margin dan diskon",
     "hideTrxBuyPrice": "Sembunyikan harga beli",
     "hideHistoryReports": "Sembunyikan laporan",
     "hideItemMarginAndDiscounts": "Sembunyikan margin dan diskon",
     "coloredSellPrice": "Harga jual berwarna",
-    "uppercaseInput": "Input huruf besar",
-    "miscellaneous": "Lain-lain"
+    "uppercaseInput": "Input huruf besar"
   },
   "auth": {
     "signIn": "Masuk",
