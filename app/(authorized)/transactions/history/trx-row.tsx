@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/collapsible"
 import { Button } from "@/components/ui/button"
 import { CaretDownIcon, CaretUpIcon } from "@phosphor-icons/react"
-import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { useUserSettings } from "@/contexts/user-settings"
 import { subscribeKey } from "valtio/utils"
 import { EditTrxDialog } from "@/app/(authorized)/transactions/history/edit-trx-dialog"
 import { DeleteTrxDialog } from "@/app/(authorized)/transactions/history/delete-trx-dialog"
@@ -23,14 +23,14 @@ export function TrxRow({
   trx: DeepReadonly<TransactionWithRelations>
 }) {
   const createdDate = new Date(trx.createdAt)
-  const { setLocalStorage } = useLocalStorage()
+  const { setUserSettings } = useUserSettings()
   const [showItems, setShowItems] = useState(false)
   const format = useFormatter()
 
   useEffect(() => {
-    setShowItems(setLocalStorage.showHisotryItems)
+    setShowItems(setUserSettings.showHisotryItems)
     const unsub = subscribeKey(
-      setLocalStorage,
+      setUserSettings,
       "showHisotryItems",
       setShowItems
     )

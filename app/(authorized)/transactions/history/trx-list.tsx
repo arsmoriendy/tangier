@@ -12,13 +12,13 @@ import { TrxRow } from "./trx-row"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
 import { EyeIcon, EyeSlashIcon } from "@phosphor-icons/react"
-import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { useUserSettings } from "@/contexts/user-settings"
 
 export function TrxList() {
   const t = useTranslations("transactions.history")
   const tc = useTranslations("common")
   const { getTrx } = useTrx()
-  const { getLocalStorage, setLocalStorage } = useLocalStorage()
+  const { getUserSettings, setUserSettings } = useUserSettings()
   return (
     <Table>
       <colgroup>
@@ -38,11 +38,11 @@ export function TrxList() {
               size="icon-xs"
               variant="outline"
               onClick={() =>
-                (setLocalStorage.showHisotryItems =
-                  !setLocalStorage.showHisotryItems)
+                (setUserSettings.showHisotryItems =
+                  !setUserSettings.showHisotryItems)
               }
             >
-              {getLocalStorage.showHisotryItems ? (
+              {getUserSettings.showHisotryItems ? (
                 <EyeIcon />
               ) : (
                 <EyeSlashIcon />

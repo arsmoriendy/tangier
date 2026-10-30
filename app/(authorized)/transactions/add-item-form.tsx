@@ -14,7 +14,7 @@ import {
 import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
 import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
 import { Item } from "@/components/ui/item"
-import { useLocalStorage } from "@/contexts/local-storage-ctx"
+import { useUserSettings } from "@/contexts/user-settings"
 import { cn } from "@/lib/utils"
 import { useSession } from "@/contexts/session-ctx"
 import { ResetButton } from "@/components/reset-button"
@@ -30,7 +30,7 @@ export const AddItemForm = withForm({
   render: function Render({ form: createTransactionForm }) {
     const session = useSession()
     const { addItemProxy, addItemSnap } = useAddItem()
-    const { getLocalStorage, setLocalStorage } = useLocalStorage()
+    const { getUserSettings, setUserSettings } = useUserSettings()
     const { units } = useUnits()
 
     const form = useAppForm({
@@ -42,7 +42,7 @@ export const AddItemForm = withForm({
           ...rest,
           unit,
           buyPriceId: addItemProxy.buyPrice?.id ?? null,
-          updateStock: getLocalStorage.decrementStock,
+          updateStock: getUserSettings.decrementStock,
         }
 
         const idx = createTransactionForm
@@ -128,7 +128,7 @@ export const AddItemForm = withForm({
         <Form handleSubmit={form.handleSubmit}>
           <div className="flex gap-2">
             {session.user.role === "admin" &&
-              !getLocalStorage.hideTrxBuyPrice && (
+              !getUserSettings.hideTrxBuyPrice && (
                 <FieldSet className="flex-1">
                   <FieldLegend>{tc("buyPrice")}</FieldLegend>
 
@@ -193,7 +193,7 @@ export const AddItemForm = withForm({
                           <field.IdrField
                             inputClass={cn(
                               session.user.role === "admin" &&
-                                getLocalStorage.coloredSellPrice &&
+                                getUserSettings.coloredSellPrice &&
                                 (bp > sp
                                   ? "bg-destructive/33"
                                   : "bg-success/33")
@@ -224,7 +224,7 @@ export const AddItemForm = withForm({
                 </div>
 
                 {session.user.role === "admin" &&
-                  !getLocalStorage.hideTrxMarginAndDiscounts && (
+                  !getUserSettings.hideTrxMarginAndDiscounts && (
                     <form.Subscribe
                       selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
                     >
@@ -290,9 +290,9 @@ export const AddItemForm = withForm({
 
             <Field orientation="horizontal" className="w-auto gap-2">
               <Checkbox
-                checked={getLocalStorage.showTrxSummary}
+                checked={getUserSettings.showTrxSummary}
                 onCheckedChange={(c: boolean) =>
-                  (setLocalStorage.showTrxSummary = c)
+                  (setUserSettings.showTrxSummary = c)
                 }
               />
               <FieldLabel>{tSummary("show")}</FieldLabel>
