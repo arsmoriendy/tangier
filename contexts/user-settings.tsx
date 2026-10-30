@@ -1,27 +1,34 @@
 "use client"
 
-import { StateContext } from "@/contexts/state-context"
+import { createContext, ReactNode, useContext } from "react"
+import { proxy, useSnapshot } from "valtio"
+import { ValtioContext } from "./valtio-context"
 import type { UserSettings } from "@/lib/crud/user-settings"
-import { createContext, ReactNode, useContext, useState } from "react"
 
-const userSettingsCtx = createContext<StateContext<UserSettings>>({
-  state: {} as UserSettings,
-  setState: () => {},
-})
+const userSettingsCtx = createContext<ValtioContext<UserSettings> | undefined>(
+  undefined
+)
 
 export function UserSettingsProvider(props: {
   children: ReactNode
   userSettings: UserSettings
 }) {
-  const [state, setState] = useState(props.userSettings)
+  const userSettingsProxy = proxy(props.userSettings)
+  const userSettingsSnap = useSnapshot(userSettingsProxy)
+
   return (
-    <userSettingsCtx.Provider value={{ state, setState }}>
+    <userSettingsCtx.Provider
+      value={{ proxy: userSettingsProxy, snap: userSettingsSnap }}
+    >
       {props.children}
     </userSettingsCtx.Provider>
   )
 }
 
-export const useUserSettings = () => {
-  const { state, setState } = useContext(userSettingsCtx)
-  return { getUserSettings: state, setUserSettings: setState }
+export function useUserSettings() {
+  const { proxy, snap } = useContext(userSettingsCtx)!
+  return {
+    setUserSettings: proxy,
+    getUserSettings: snap,
+  }
 }
