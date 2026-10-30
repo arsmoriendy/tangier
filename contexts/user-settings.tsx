@@ -38,11 +38,7 @@ export function UserSettingsProvider(props: {
       if (Object.keys(updatedUserSettings).length > 0) {
         await upsertUserSettings({ userId: user.id, ...updatedUserSettings })
 
-        for (const s in updatedUserSettings) {
-          toast.success(t("updated"), {
-            description: `${t(s as Parameters<typeof t>[0])} = ${JSON.stringify(updatedUserSettings[s])}`,
-          })
-        }
+        toast.success(t("updated"))
       }
 
       previousUserSettings = newUserSettings
