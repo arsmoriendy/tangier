@@ -11,7 +11,7 @@ export function ReportFieldSet() {
   const t = useTranslations("transactions.history")
   const sess = useSession()
 
-  if (sess.user.role !== "admin" && getLocalStorage.hideHistoryReports)
+  if (sess.user.role !== "admin" || getLocalStorage.hideHistoryReports)
     return null
 
   return (

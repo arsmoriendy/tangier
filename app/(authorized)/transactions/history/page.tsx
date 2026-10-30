@@ -10,7 +10,6 @@ import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
 import { UnitsProvider } from "@/contexts/units-ctx"
 import { HeldProvider } from "../held-ctx"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
-import { getSession } from "@/lib/get-session"
 
 export default async function Page() {
   const from = new Date()
@@ -21,8 +20,6 @@ export default async function Page() {
   const trxList = await listTransactions({ from, to })
   const priceGroups = await listPriceGroups()
   const units = await listUnits()
-
-  const { user } = (await getSession())!
 
   return (
     <FiltersProvider
@@ -41,8 +38,7 @@ export default async function Page() {
                     <FieldLegend>Filters</FieldLegend>
                     <Filters />
                   </FieldSet>
-
-                  {user.role === "admin" && <ReportFieldSet />}
+                  <ReportFieldSet />
                 </div>
                 <TrxList />
               </div>
