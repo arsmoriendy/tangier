@@ -21,6 +21,7 @@ import { formatCurrency } from "@/lib/i18n/currency"
 import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
 import { TrashIcon, ClockCountdownIcon } from "@phosphor-icons/react"
 import { useFormatter, useTranslations } from "next-intl"
+import { useEffect } from "react"
 
 export const RecallDialog = withForm({
   defaultValues: defaultTransactionValues,
@@ -63,6 +64,13 @@ export const RecallDialog = withForm({
 
       setOpen(false)
     }
+
+    // automatically recall if only 1 transaction is held
+    useEffect(() => {
+      if (open && setHeld.length === 1) {
+        recallTrx(setHeld[0])
+      }
+    }, [open])
 
     return (
       <Dialog open={open} onOpenChange={setOpen}>
