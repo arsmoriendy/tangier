@@ -4,6 +4,7 @@ import {
   RadioGroupChoiceItem,
 } from "@/components/ui/choice-card"
 import { Field, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
+import { MarginIndicator } from "@/components/margin-indicator"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
 import { subscribeKey } from "valtio/utils"
@@ -241,27 +242,10 @@ export const AddItemForm = withForm({
                         const margin = sp - bp
                         const discount = ((bp - sp) / bp) * 100
                         return (
-                          margin !== 0 && (
-                            <small
-                              className={cn(
-                                margin < 0
-                                  ? "text-destructive"
-                                  : "text-green-500"
-                              )}
-                            >
-                              {tc("margin")}: {margin > 0 && "+"}
-                              {formatCurrency(margin)}{" "}
-                              {margin < 0 && (
-                                <>
-                                  (
-                                  {tc("discountPerc", {
-                                    perc: discount.toFixed(2),
-                                  })}
-                                  )
-                                </>
-                              )}
-                            </small>
-                          )
+                          <MarginIndicator
+                            margin={margin}
+                            discount={discount}
+                          />
                         )
                       }}
                     </form.Subscribe>

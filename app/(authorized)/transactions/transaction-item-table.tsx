@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table"
 import { useUserSettings } from "@/contexts/user-settings"
 import { useSession } from "@/contexts/session-ctx"
-import { formatCurrency } from "@/lib/i18n/currency"
+import { MarginIndicator } from "@/components/margin-indicator"
 import { cn } from "@/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
@@ -221,27 +221,11 @@ export const TransactionItemTable = withForm({
                               )}
                             </form.AppField>
                             {session.user.role === "admin" &&
-                              !getUserSettings.hideMarginAndDiscounts &&
-                              margin !== 0 && (
-                                <small
-                                  className={cn(
-                                    margin < 0
-                                      ? "text-destructive"
-                                      : "text-green-500"
-                                  )}
-                                >
-                                  {tc("margin")}: {margin > 0 && "+"}
-                                  {formatCurrency(margin)}{" "}
-                                  {margin < 0 && (
-                                    <>
-                                      (
-                                      {tc("discountPerc", {
-                                        perc: discount.toFixed(2),
-                                      })}
-                                      )
-                                    </>
-                                  )}
-                                </small>
+                              !getUserSettings.hideMarginAndDiscounts && (
+                                <MarginIndicator
+                                  margin={margin}
+                                  discount={discount}
+                                />
                               )}
                           </>
                         )
@@ -288,16 +272,42 @@ export const TransactionItemTable = withForm({
                     )}
                   </TableCell>
                   <TableCell className="align-top">
-                    <form.AppField
-                      name={`transactionItems[${i}].quantifiedSellPrice`}
-                      listeners={{
-                        onChange: () => {
-                          recalculateTotalPrice()
-                        },
-                      }}
+                    <form.Subscribe
+                      selector={(f) => [
+                        f.values.transactionItems[i].quantifiedSellPrice,
+                        f.values.transactionItems[i].buyPrice,
+                        f.values.transactionItems[i].quantity,
+                      ]}
                     >
-                      {(field) => <field.IdrField min={0} />}
-                    </form.AppField>
+                      {([qsp, bp, qty]) => {
+                        const cost = bp * qty
+                        const margin = qsp - cost
+                        const discount =
+                          cost === 0 ? 0 : ((cost - qsp) / cost) * 100
+
+                        return (
+                          <>
+                            <form.AppField
+                              name={`transactionItems[${i}].quantifiedSellPrice`}
+                              listeners={{
+                                onChange: () => {
+                                  recalculateTotalPrice()
+                                },
+                              }}
+                            >
+                              {(field) => <field.IdrField min={0} />}
+                            </form.AppField>
+                            {session.user.role === "admin" &&
+                              !getUserSettings.hideMarginAndDiscounts && (
+                                <MarginIndicator
+                                  margin={margin}
+                                  discount={discount}
+                                />
+                              )}
+                          </>
+                        )
+                      }}
+                    </form.Subscribe>
                   </TableCell>
                 </TableRow>
               ))}

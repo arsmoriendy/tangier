@@ -6,6 +6,10 @@ Point-of-sale (POS) application for a retail business, built with Next.js 16 (Ap
 
 Anything learned while working on this codebase — new conventions, gotchas, commands, architecture, or corrections to what's written here — **must** be added to this file so future agents benefit. Keep entries concise, accurate, and grouped under the existing sections; update or remove entries that become stale.
 
+## Asking the user for decisions
+
+When a task requires choosing between known alternatives, prompt the user with **structured options** (concrete labels, a one-line description each, and the recommended option first) rather than an open-ended question. Reserve open-ended prompts for clarifying *what* to build, not *which* of several known options to take.
+
 ## Commands
 
 Package manager is **bun** (lockfile is `bun.lock`). On Arch/NixOS the `usb` native dependency needs the dev shell from `flake.nix` (`nix develop`) plus `node-gyp build` inside `node_modules/usb`; on other systems apply the udev rule from `README.md`.
@@ -104,6 +108,7 @@ Zod schemas typically live next to the form (e.g. `transaction-schema.ts`, `add-
 - **Formatting**: prettier (no semicolons, double quotes, 2-space indent, trailing comma `es5`, print width 80, LF). Biome is also configured (`biome.json`) with matching style and recommended lint rules; eslint uses `eslint-config-next` (core-web-vitals + TS). Run `bun run format` after structural changes.
 - **"use server"** directive is at the top of every `lib/crud/*.ts`, `lib/auth-guard.ts`, `lib/get-session.ts`, `lib/set-locale.ts`, `lib/print-trx-receipt.ts`. Keep new server-action files consistent.
 - **Atomic changes**: prefer small, additive, focused diffs over drive-by refactors. Leave adjacent legacy scaffolding in place and propose its cleanup as a separate change rather than folding it into an unrelated one.
+- **Margin indicators**: the inline `Margin: +X (Y% discount)` display is `components/margin-indicator.tsx` (`<MarginIndicator margin discount />`; returns `null` at zero). Gate it at the call site with `admin && !hideMarginAndDiscounts`. The transaction-form total margin badge is a separate presentation and does not use it.
 - **Delete confirmations**: wrap every destructive delete in `<DeleteAlert>` (`components/delete-alert.tsx`) — it presets the destructive action variant, `TrashIcon`, and the `common.delete` label on top of the generic `<Alert>` (`components/alert.tsx`). Pass `trigger` (usually a destructive `Button`), `action`, `title` (typically `<>{t("...delete")}?</>`), and `description`; add the `deleteDescription` key to **both** locales. Only in-form row removals (e.g. `removeFieldValue`) skip the confirmation.
 - **Translations**: message JSON files in `messages/{en-ID,id-ID}.json`. Server components use `getTranslations(...)` from `next-intl/server`; client components use `useTranslations(...)` / `useLocale()`. Run `bun run intl-check` to catch unused keys. When adding a key, add it to **both** locale files.
 - **Currency/number formatting**: `lib/i18n/currency.ts` exports `formatCurrency` (IDR, 2 decimals); `lib/print-trx-receipt.ts` uses a separate `Intl.NumberFormat("id-ID", {})` (no decimals) for receipts — match the context when formatting numbers.
