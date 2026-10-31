@@ -24,7 +24,7 @@ import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
 import { useSession } from "@/contexts/session-ctx"
 import { toast } from "sonner"
 import { useHeld } from "./held-ctx"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
@@ -41,6 +41,14 @@ import { TransactionSummaryDialog } from "@/app/(authorized)/transactions/transa
 import { formatCurrency } from "@/lib/i18n/currency"
 import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
 import { cn } from "@/lib/utils"
+import { XIcon } from "@phosphor-icons/react/dist/ssr"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { Kbd } from "@/components/ui/kbd"
+import { useHotkeys } from "react-hotkeys-hook"
 
 export default function TransactionForm({
   className,
@@ -192,6 +200,19 @@ export default function TransactionForm({
     form.reset()
   }
 
+  async function cancelRecall() {
+    if (recalledTrx === undefined) return
+    setRecalledTrx(undefined)
+    form.reset()
+    toast.info(t("toasts.recallCancelled"))
+  }
+
+  // register cancel recall hotkey
+  useHotkeys("Ctrl + F6", cancelRecall, {
+    preventDefault: true,
+    enableOnFormTags: true,
+  })
+
   return (
     <div className={cn("flex h-full flex-col gap-2", className)}>
       <form.Subscribe selector={(f) => f.values.priceGroup}>
@@ -259,13 +280,31 @@ export default function TransactionForm({
           </div>
 
           {recalledTrx !== undefined && (
-            <Badge className="absolute -top-4 right-2 gap-2">
-              <span className="relative size-2">
-                <span className="absolute size-full animate-ping rounded-full bg-warning opacity-75"></span>
-                <span className="flex size-full rounded rounded-full bg-warning"></span>
-              </span>
-              Recalled
-            </Badge>
+            <div className="absolute -top-4 right-2 flex gap-2">
+              <Badge className="gap-2">
+                <span className="relative size-2">
+                  <span className="absolute size-full animate-ping rounded-full bg-warning opacity-75" />
+                  <span className="flex size-full rounded rounded-full bg-warning" />
+                </span>
+
+                <span>Recalled</span>
+
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={() => {
+                        cancelRecall()
+                      }}
+                    >
+                      <XIcon />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    Cancel recall <Kbd>Ctrl + F6</Kbd>
+                  </TooltipContent>
+                </Tooltip>
+              </Badge>
+            </div>
           )}
 
           <form.AppField name="totalPrice">

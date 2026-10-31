@@ -115,7 +115,8 @@
         "updated": "Transaction updated",
         "created": "Transaction created",
         "printError": "Failed printing transaction receipt",
-        "held": "Transaction held"
+        "held": "Transaction held",
+        "recallCancelled": "Recall cancelled"
       }
     },
     "recall": {

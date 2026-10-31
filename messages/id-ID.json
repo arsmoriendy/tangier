@@ -117,7 +117,8 @@
         "updated": "Transaksi berhasil diperbarui",
         "created": "Transaksi tersimpan",
         "printError": "Gagal mencetak struk transaksi",
-        "held": "Transaction held"
+        "held": "Transaction held",
+        "recallCancelled": "Recall dibatalkan"
       }
     },
     "recall": {
