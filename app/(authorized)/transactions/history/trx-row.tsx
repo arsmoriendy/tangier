@@ -16,6 +16,7 @@ import { useUserSettings } from "@/contexts/user-settings"
 import { subscribeKey } from "valtio/utils"
 import { EditTrxDialog } from "@/app/(authorized)/transactions/history/edit-trx-dialog"
 import { DeleteTrxDialog } from "@/app/(authorized)/transactions/history/delete-trx-dialog"
+import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
 
 export function TrxRow({
   trx,
@@ -58,8 +59,11 @@ export function TrxRow({
                 {trx.transactionItems.map((item, i) => (
                   <TableRow key={i}>
                     <TableCell className="truncate">{item.name}</TableCell>
-                    <TableCell className="truncate text-right">
-                      {formatCurrency(item.sellPrice)}
+                    <TableCell className="w-13 truncate text-right">
+                      x{item.quantity}
+                    </TableCell>
+                    <TableCell className="w-32 truncate text-right">
+                      {formatCurrency(quantifiedSellPrice(item))}
                     </TableCell>
                   </TableRow>
                 ))}
