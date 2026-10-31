@@ -29,6 +29,7 @@ import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { LanguageSidebarItem } from "./language-sidebar-item"
 import { Header } from "@/components/app-sidebar/header"
+import CollapsedClientSidebarItem from "@/components/app-sidebar/collapsed-client-sidebar-item"
 
 export function AppSidebar() {
   const session = useSession()
@@ -160,6 +161,7 @@ export function AppSidebar() {
           <ThemeSidebarItem />
           <hr />
           <UserSidebarItem />
+          <CollapsedClientSidebarItem />
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>

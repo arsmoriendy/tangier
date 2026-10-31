@@ -24,16 +24,12 @@ import {
 } from "@/components/ui/sidebar"
 import { useSession } from "@/contexts/session-ctx"
 import { authClient } from "@/lib/auth-client"
-import {
-  AppWindowIcon,
-  SignOutIcon,
-  TrashIcon,
-  UserCircleIcon,
-} from "@phosphor-icons/react"
+import { SignOutIcon, TrashIcon, UserCircleIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
 import { isTauri } from "@tauri-apps/api/core"
+import { XIcon } from "@phosphor-icons/react/dist/ssr"
 
 export function UserSidebarItem() {
   const session = useSession()
@@ -132,8 +128,8 @@ export function UserSidebarItem() {
           align="end"
           className="relative left-2 min-w-3xs"
         >
-          <SidebarMenuAction className="size-8">
-            <AppWindowIcon />
+          <SidebarMenuAction className="size-8 bg-destructive/10 text-destructive">
+            <XIcon />
           </SidebarMenuAction>
         </ClientDropdown>
       )}
