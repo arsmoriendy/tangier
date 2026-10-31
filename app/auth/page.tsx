@@ -1,12 +1,8 @@
 import { ClientButton } from "@/app/auth/client-button"
 import { SignInForm } from "@/app/auth/sign-in-form"
 import { SignUpForm } from "@/app/auth/sign-up-form"
-import { ClientDropdown } from "@/components/client-dropdown"
 import Logo from "@/components/logo"
-import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { XIcon } from "@phosphor-icons/react/dist/ssr"
-import { isTauri } from "@tauri-apps/api/core"
 import { getTranslations } from "next-intl/server"
 import pkg from "package.json"
 
