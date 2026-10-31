@@ -12,8 +12,6 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 
 ##### TODO
 
-1. Always show client settings on client (auth page, compact sidebar)
-
 ###### Backlog
 
 1. Server function authorization
