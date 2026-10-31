@@ -8,6 +8,13 @@
       "when": 1793177610913,
       "tag": "0000_steady_warhawk",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793430070011,
+      "tag": "0001_first_moondragon",
+      "breakpoints": true
     }
   ]
 }
