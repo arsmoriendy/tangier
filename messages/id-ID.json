@@ -24,7 +24,7 @@
     "profitLoss": "Laba / rugi",
     "client": {
       "title": "Menu klien",
-      "exit": "Keluar dari tangier",
+      "exit": "Tutup tangier",
       "shutdown": {
         "label": "Matikan",
         "confirmTitle": "Konfirmasi matikan",
