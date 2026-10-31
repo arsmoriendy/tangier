@@ -173,6 +173,7 @@ export const transactionItems = pgTable(
     sellPrice: numeric("sell_price", { mode: "number" }).notNull(),
     quantity: numeric({ mode: "number" }).notNull(),
     buyPrice: numeric("buy_price", { mode: "number" }).notNull(),
+    quantifiedSellPrice: numeric({ mode: "number" }),
 
     // for updates and recalls
     buyPriceId: uuid("buy_price_id"),

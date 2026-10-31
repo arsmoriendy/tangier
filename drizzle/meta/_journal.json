@@ -15,6 +15,13 @@
       "when": 1793430070011,
       "tag": "0001_first_moondragon",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793449791663,
+      "tag": "0002_naive_rhodey",
+      "breakpoints": true
     }
   ]
 }

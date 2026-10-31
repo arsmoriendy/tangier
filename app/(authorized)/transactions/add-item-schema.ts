@@ -6,7 +6,7 @@ export const addItemSchema = z.object({
   buyPrice: z.number().min(0),
   sellPrice: z.number().min(0),
   quantity: z.number(),
-  quantifiedPrice: z.number().min(0),
+  quantifiedSellPrice: z.number().min(0),
 })
 
 export const defaultAddItemValues: z.infer<typeof addItemSchema> = {
@@ -15,5 +15,5 @@ export const defaultAddItemValues: z.infer<typeof addItemSchema> = {
   buyPrice: 0,
   sellPrice: 0,
   quantity: 1,
-  quantifiedPrice: 0,
+  quantifiedSellPrice: 0,
 }

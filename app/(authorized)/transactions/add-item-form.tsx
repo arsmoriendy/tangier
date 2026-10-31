@@ -36,7 +36,9 @@ export const AddItemForm = withForm({
     const form = useAppForm({
       defaultValues: defaultAddItemValues,
       validators: { onMount: addItemSchema, onChange: addItemSchema },
-      onSubmit: ({ value: { quantifiedPrice, unitId, quantity, ...rest } }) => {
+      onSubmit: ({
+        value: { unitId, quantity, quantifiedSellPrice, ...rest },
+      }) => {
         const unit = units.find((u) => u.id === unitId)!.name
         const partialItem = {
           ...rest,
@@ -47,20 +49,27 @@ export const AddItemForm = withForm({
 
         const idx = createTransactionForm
           .getFieldValue("transactionItems")
-          .findIndex(({ quantity, extraFields, ...i }) =>
+          .findIndex(({ quantity, quantifiedSellPrice, ...i }) =>
             isEqual(i, partialItem)
           )
 
-        if (idx !== -1)
+        if (idx !== -1) {
+          const prevQty = createTransactionForm.getFieldValue(
+            `transactionItems[${idx}].quantity`
+          )
           createTransactionForm.setFieldValue(
             `transactionItems[${idx}].quantity`,
             (q) => q + quantity
           )
-        else
+          createTransactionForm.setFieldValue(
+            `transactionItems[${idx}].quantifiedSellPrice`,
+            partialItem.sellPrice * (prevQty + quantity)
+          )
+        } else
           createTransactionForm.pushFieldValue("transactionItems", {
             ...partialItem,
             quantity,
-            extraFields: { quantifiedPrice },
+            quantifiedSellPrice,
           })
 
         addItemProxy.sellPrices = []
@@ -184,7 +193,7 @@ export const AddItemForm = withForm({
                         listeners={{
                           onChange: (v) =>
                             form.setFieldValue(
-                              "quantifiedPrice",
+                              "quantifiedSellPrice",
                               v.value * form.state.values.quantity
                             ),
                         }}
@@ -212,7 +221,7 @@ export const AddItemForm = withForm({
                     listeners={{
                       onChange: (v) =>
                         form.setFieldValue(
-                          "quantifiedPrice",
+                          "quantifiedSellPrice",
                           v.value * form.state.values.sellPrice
                         ),
                     }}
@@ -259,7 +268,7 @@ export const AddItemForm = withForm({
                   )}
               </div>
 
-              <form.AppField name="quantifiedPrice">
+              <form.AppField name="quantifiedSellPrice">
                 {(field) => (
                   <field.IdrField label={tc("quantifiedPrice")} min={0} />
                 )}

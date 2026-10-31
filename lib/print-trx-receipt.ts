@@ -7,6 +7,7 @@ import { listSettings } from "@/lib/crud/settings"
 import { env } from "@/lib/env"
 import { format } from "date-fns"
 import { formatCols } from "./format-cols"
+import { quantifiedSellPrice } from "./quantified-sell-price"
 
 const numberFormatter = new Intl.NumberFormat("id-ID", {})
 const formatNumber = numberFormatter.format
@@ -66,7 +67,7 @@ class TrxReceiptPrinter {
         .text(
           this.twoCols([
             `${item.quantity} ${item.unit} X ${formatNumber(item.sellPrice)}`,
-            formatNumber(item.sellPrice * item.quantity),
+            formatNumber(quantifiedSellPrice(item)),
           ])
         )
     }

@@ -39,6 +39,7 @@ import { Badge } from "@/components/ui/badge"
 import { useUserSettings } from "@/contexts/user-settings"
 import { TransactionSummaryDialog } from "@/app/(authorized)/transactions/transaction-summary-dialog"
 import { formatCurrency } from "@/lib/i18n/currency"
+import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
 import { cn } from "@/lib/utils"
 
 export default function TransactionForm({
@@ -70,7 +71,7 @@ export default function TransactionForm({
           )?.id,
           transactionItems: props.transaction.transactionItems.map((trx) => ({
             ...trx,
-            extraFields: { quantifiedPrice: trx.sellPrice * trx.quantity },
+            quantifiedSellPrice: quantifiedSellPrice(trx),
           })),
         }
       : {
@@ -82,9 +83,7 @@ export default function TransactionForm({
       onChange: transactionSchema,
     },
     onSubmit: async ({ value: { transactionItems, priceGroup, ...value } }) => {
-      const items = transactionItems.map(
-        ({ extraFields, ...otherFields }) => otherFields
-      )
+      const items = transactionItems
       const customerPriceGroup =
         priceGroups.find((pg) => pg.id === priceGroup)?.name ?? ""
       const trx = {
@@ -167,9 +166,7 @@ export default function TransactionForm({
     if (form.state.values.transactionItems.length < 1) return
 
     const { transactionItems, priceGroup, ...value } = form.state.values
-    const items = transactionItems.map(
-      ({ extraFields, ...otherFields }) => otherFields
-    )
+    const items = transactionItems
     const customerPriceGroup =
       priceGroups.find((pg) => pg.id === priceGroup)?.name ?? ""
 

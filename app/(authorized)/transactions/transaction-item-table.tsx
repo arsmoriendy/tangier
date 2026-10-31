@@ -34,7 +34,7 @@ export const TransactionItemTable = withForm({
       setIdempotentFieldValue(
         "totalPrice",
         form.state.values.transactionItems
-          .map((i) => i.extraFields.quantifiedPrice)
+          .map((i) => i.quantifiedSellPrice)
           .reduce((a, i) => a + i, 0)
       )
     }
@@ -200,7 +200,7 @@ export const TransactionItemTable = withForm({
                               listeners={{
                                 onChange: ({ value }) => {
                                   setIdempotentFieldValue(
-                                    `transactionItems[${i}].extraFields.quantifiedPrice`,
+                                    `transactionItems[${i}].quantifiedSellPrice`,
                                     form.state.values.transactionItems[i]
                                       .quantity * value
                                   )
@@ -254,7 +254,7 @@ export const TransactionItemTable = withForm({
                       listeners={{
                         onChange: ({ value }) => {
                           setIdempotentFieldValue(
-                            `transactionItems[${i}].extraFields.quantifiedPrice`,
+                            `transactionItems[${i}].quantifiedSellPrice`,
                             form.state.values.transactionItems[i].sellPrice *
                               value
                           )
@@ -289,14 +289,14 @@ export const TransactionItemTable = withForm({
                   </TableCell>
                   <TableCell className="align-top">
                     <form.AppField
-                      name={`transactionItems[${i}].extraFields.quantifiedPrice`}
+                      name={`transactionItems[${i}].quantifiedSellPrice`}
                       listeners={{
                         onChange: () => {
                           recalculateTotalPrice()
                         },
                       }}
                     >
-                      {(field) => <field.IdrField min={0} disabled />}
+                      {(field) => <field.IdrField min={0} />}
                     </form.AppField>
                   </TableCell>
                 </TableRow>

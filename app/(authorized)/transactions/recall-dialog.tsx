@@ -18,6 +18,7 @@ import {
   type TransactionWithRelations,
 } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
+import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
 import { TrashIcon, ClockCountdownIcon } from "@phosphor-icons/react"
 import { useFormatter, useTranslations } from "next-intl"
 
@@ -55,9 +56,7 @@ export const RecallDialog = withForm({
         (trx.transactionItems as DeepMutable<typeof trx.transactionItems>).map(
           (item) => ({
             ...item,
-            extraFields: {
-              quantifiedPrice: item.quantity * item.sellPrice,
-            },
+            quantifiedSellPrice: quantifiedSellPrice(item),
           })
         )
       )
