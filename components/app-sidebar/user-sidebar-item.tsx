@@ -1,6 +1,5 @@
 import { ChangePasswordForm } from "@/components/app-sidebar/change-password-form"
 import { ChangeUsernameForm } from "@/components/app-sidebar/change-username-form"
-import { ClientDropdown } from "@/components/client-dropdown"
 import { DeleteAlert } from "@/components/delete-alert"
 import {
   DialogTrigger,
@@ -17,19 +16,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
+import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { useSession } from "@/contexts/session-ctx"
 import { authClient } from "@/lib/auth-client"
 import { SignOutIcon, TrashIcon, UserCircleIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
 import { redirect } from "next/navigation"
 import { toast } from "sonner"
-import { isTauri } from "@tauri-apps/api/core"
-import { XIcon } from "@phosphor-icons/react/dist/ssr"
 
 export function UserSidebarItem() {
   const session = useSession()
@@ -121,18 +114,6 @@ export function UserSidebarItem() {
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-
-      {isTauri() && (
-        <ClientDropdown
-          side="right"
-          align="end"
-          className="relative left-2 min-w-3xs"
-        >
-          <SidebarMenuAction className="size-8 bg-destructive/10 text-destructive">
-            <XIcon />
-          </SidebarMenuAction>
-        </ClientDropdown>
-      )}
     </SidebarMenuItem>
   )
 }
