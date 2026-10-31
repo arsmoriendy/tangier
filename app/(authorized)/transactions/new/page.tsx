@@ -19,7 +19,7 @@ export default async function Page() {
     <HeldProvider initialValue={held}>
       <PriceGroupsProvider priceGroups={priceGroups}>
         <UnitsProvider units={units}>
-          <TransactionForm />
+          <TransactionForm className="px-2 pt-2" />
         </UnitsProvider>
       </PriceGroupsProvider>
     </HeldProvider>

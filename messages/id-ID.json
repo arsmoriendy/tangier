@@ -254,8 +254,9 @@
   },
   "options": {
     "title": "Setelan",
+    "userSettings": "Setelan pengguna",
     "financialInfo": "Informasi keuangan",
-    "transactionForm": "Form transaksi",
+    "transactionForm": "Formulir transaksi",
     "historyPage": "Halaman riwayat",
     "itemPage": "Halaman barang",
     "miscellaneous": "Lain-lain"

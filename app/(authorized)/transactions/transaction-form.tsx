@@ -41,9 +41,13 @@ import { TransactionSummaryDialog } from "@/app/(authorized)/transactions/transa
 import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
 
-export default function TransactionForm(props: {
+export default function TransactionForm({
+  className,
+  ...props
+}: {
   transaction?: DeepReadonly<TransactionWithRelations>
   onUpdate?: (trx: TransactionWithRelations) => any
+  className?: string
 }) {
   const session = useSession()
   const { priceGroups } = usePriceGroups()
@@ -192,7 +196,7 @@ export default function TransactionForm(props: {
   }
 
   return (
-    <div className="flex h-full flex-col gap-2">
+    <div className={cn("flex h-full flex-col gap-2", className)}>
       <form.Subscribe selector={(f) => f.values.priceGroup}>
         {(priceGroup) => (
           <RadioGroupChoiceCard

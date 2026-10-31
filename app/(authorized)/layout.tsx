@@ -18,7 +18,7 @@ export default async function AuthorizedLayout({
       <UserSettingsProvider userSettings={userSettings}>
         <SidebarProvider>
           <AppSidebar />
-          <main className="w-full p-2">{children}</main>
+          <main className="w-full">{children}</main>
         </SidebarProvider>
       </UserSettingsProvider>
     </SessionProvider>

@@ -252,6 +252,7 @@
   },
   "options": {
     "title": "Options",
+    "userSettings": "User settings",
     "financialInfo": "Financial information",
     "transactionForm": "Transaction form",
     "historyPage": "History page",

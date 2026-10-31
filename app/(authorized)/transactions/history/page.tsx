@@ -33,13 +33,14 @@ export default async function Page() {
           <PriceGroupsProvider priceGroups={priceGroups}>
             <UnitsProvider units={units}>
               <div className="space-y-2">
-                <div className="flex justify-stretch gap-2">
+                <div className="flex justify-stretch gap-2 px-2 pt-2">
                   <FieldSet className="xl:flex-1">
                     <FieldLegend>Filters</FieldLegend>
                     <Filters />
                   </FieldSet>
                   <ReportFieldSet />
                 </div>
+
                 <TrxList />
               </div>
             </UnitsProvider>

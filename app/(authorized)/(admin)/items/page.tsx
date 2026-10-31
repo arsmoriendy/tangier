@@ -27,11 +27,14 @@ export default async function Page() {
           <ItemsProvider items={items}>
             <ItemFiltersProvider initialValue={{}}>
               <ItemCountProvider>
-                <FieldSet>
-                  <FieldLegend>{t("createNew")}</FieldLegend>
-                  <ItemForm />
-                </FieldSet>
-                <ItemList />
+                <div className="px-2 pt-2">
+                  <FieldSet>
+                    <FieldLegend>{t("createNew")}</FieldLegend>
+                    <ItemForm />
+                  </FieldSet>
+
+                  <ItemList />
+                </div>
               </ItemCountProvider>
             </ItemFiltersProvider>
           </ItemsProvider>
