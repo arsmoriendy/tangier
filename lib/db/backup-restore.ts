@@ -13,6 +13,7 @@ export async function dumpDatabase() {
     `--dbname`,
     env.DATABASE_URL,
     "--no-privileges",
+    "--if-exists",
     "--no-owner",
     "--clean",
     `--file`,
