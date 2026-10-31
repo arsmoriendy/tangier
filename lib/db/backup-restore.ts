@@ -1,5 +1,6 @@
 "use server"
 
+import { migrateDb } from "@/lib/db/migrate-db"
 import { env } from "@/lib/env"
 import { generateBackupFilename } from "@/lib/generate-backup-filename"
 import { execFile } from "node:child_process"
@@ -29,4 +30,5 @@ export async function restoreDatabase(filename: string) {
     "--file",
     filename,
   ])
+  await migrateDb()
 }
