@@ -21,9 +21,8 @@ Use the flake, run `node-gyp build` within the `node_modules/usb` directory
 3. Auto set price based on quantity threshold
 4. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
 5. group transaction items based on new category column
-6. backup and restore
-7. export and import
-8. Tooltips
-9. DB indices
-10. Change year on date inputs
-11. Increase print speed?
+6. export and import
+7. Tooltips
+8. DB indices
+9. Change year on date inputs
+10. Increase print speed?
