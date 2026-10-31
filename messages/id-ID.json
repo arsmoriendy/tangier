@@ -296,7 +296,7 @@
       "success": "Backup database terunduh"
     },
     "restore": {
-      "success": "Restorasi database berhasil",
+      "success": "Restorasi database berhasil, silahkan masuk kembali",
       "error": "Restorasi database gagal",
       "fileInputLabel": "File backup",
       "buttonLabel": "Restorasi database"

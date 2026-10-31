@@ -4,14 +4,17 @@ import { Spinner } from "@/components/spinner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { authClient } from "@/lib/auth-client"
 import { ClockCounterClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
 import { SyntheticEvent, useState } from "react"
 import { toast } from "sonner"
 
 export function RestoreForm() {
   const [loading, setLoading] = useState(false)
   const t = useTranslations("backupRestore.restore")
+  const router = useRouter()
 
   async function handleRestore(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -32,6 +35,8 @@ export function RestoreForm() {
       toast.error(t("error"))
     } else {
       toast.success(t("success"))
+      await authClient.signOut()
+      router.push("/auth")
     }
   }
 

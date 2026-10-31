@@ -294,7 +294,7 @@
       "success": "Downloaded database dump"
     },
     "restore": {
-      "success": "Database restoration successful",
+      "success": "Database restoration successful, please sign back in",
       "error": "Database restoration failed",
       "fileInputLabel": "Dump file",
       "buttonLabel": "Restore from database dump"
