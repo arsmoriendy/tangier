@@ -112,6 +112,12 @@
         "totalPrice": "Total harga",
         "expenses": "Pengeluaran",
         "close": "Tutup"
+      },
+      "toasts": {
+        "updated": "Transaksi berhasil diperbarui",
+        "created": "Transaksi tersimpan",
+        "printError": "Gagal mencetak struk transaksi",
+        "held": "Transaction held"
       }
     },
     "recall": {

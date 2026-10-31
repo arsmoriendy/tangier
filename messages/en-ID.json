@@ -110,6 +110,12 @@
         "totalPrice": "Total price",
         "expenses": "Expenses",
         "close": "Close"
+      },
+      "toasts": {
+        "updated": "Transaction updated",
+        "created": "Transaction created",
+        "printError": "Failed printing transaction receipt",
+        "held": "Transaction held"
       }
     },
     "recall": {

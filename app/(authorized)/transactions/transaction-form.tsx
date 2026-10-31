@@ -131,7 +131,7 @@ export default function TransactionForm({
           ...trx,
         })
 
-        toast.success("Transaction updated")
+        toast.success(t("toasts.updated"))
         props.onUpdate?.({
           id,
           createdAt,
@@ -140,7 +140,7 @@ export default function TransactionForm({
       } else {
         var { id, createdAt } = await createTransaction(trx)
 
-        toast.success("Transaction created")
+        toast.success(t("toasts.created"))
       }
 
       try {
@@ -153,7 +153,7 @@ export default function TransactionForm({
           customerPriceGroup,
         })
       } catch (e) {
-        toast.error("Unable to print transaction")
+        toast.error(t("toasts.printError"))
       }
 
       setRecalledTrx(undefined)
@@ -187,7 +187,7 @@ export default function TransactionForm({
       await createTransaction(trx)
     }
 
-    toast.success("Transaction held", { icon: <HandIcon /> })
+    toast.success(t("toasts.held"), { icon: <HandIcon /> })
     setRecalledTrx(undefined)
     form.reset()
   }
