@@ -7,7 +7,7 @@ import { isTauri } from "@tauri-apps/api/core"
 import { useTranslations } from "next-intl"
 
 export default function CollapsedClientSidebarItem() {
-  if (!isTauri) return null
+  if (!isTauri()) return null
 
   const t = useTranslations("common.client")
 
