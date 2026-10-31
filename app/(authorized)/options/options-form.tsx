@@ -7,7 +7,6 @@ import { Form, useAppForm } from "@/components/form"
 import { Settings, updateSettings } from "@/lib/crud/settings"
 import { toast } from "sonner"
 import z from "zod"
-import PageTitle from "@/components/page-title"
 import OptionCheckbox from "@/app/(authorized)/options/option-checkbox"
 import AdminOptionForms from "@/app/(authorized)/options/admin-option-forms"
 
