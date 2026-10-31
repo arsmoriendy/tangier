@@ -221,7 +221,7 @@ export const TransactionItemTable = withForm({
                               )}
                             </form.AppField>
                             {session.user.role === "admin" &&
-                              !getUserSettings.hideTrxMarginAndDiscounts &&
+                              !getUserSettings.hideMarginAndDiscounts &&
                               margin !== 0 && (
                                 <small
                                   className={cn(

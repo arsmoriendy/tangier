@@ -1,6 +1,6 @@
 {
-  "id": "7f1904fa-bded-402b-8f00-3a75664e4af3",
-  "prevId": "e75568cc-55c0-4ede-b500-f0834d32581d",
+  "id": "046c78db-5c31-4fca-a56c-763f33d9678e",
+  "prevId": "d894c725-02f4-4475-a2eb-8ba519b1d252",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -537,63 +537,56 @@
           "name": "decrementStock",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": true
         },
         "showHisotryItems": {
           "name": "showHisotryItems",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": false
         },
         "showTrxSummary": {
           "name": "showTrxSummary",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": false
-        },
-        "hideTrxMarginAndDiscounts": {
-          "name": "hideTrxMarginAndDiscounts",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false,
-          "default": true
         },
         "hideTrxBuyPrice": {
           "name": "hideTrxBuyPrice",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": true
         },
         "hideHistoryReports": {
           "name": "hideHistoryReports",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": true
         },
-        "hideItemMarginAndDiscounts": {
-          "name": "hideItemMarginAndDiscounts",
+        "hideMarginAndDiscounts": {
+          "name": "hideMarginAndDiscounts",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": true
         },
         "coloredSellPrice": {
           "name": "coloredSellPrice",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": false
         },
         "uppercaseInput": {
           "name": "uppercaseInput",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
           "default": true
         }
       },

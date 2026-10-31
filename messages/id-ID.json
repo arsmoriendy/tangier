@@ -264,8 +264,8 @@
   "userSettings": {
     "updated": "Setelan pengguna berhasil diperbarui",
 
-    "decrementStock": "Perbarui stok",
-    "showHisotryItems": "Tampilkan barang-barang di riwayat",
+    "decrementStock": "Perbarui stok secara otomatis",
+    "showHisotryItems": "Tampilkan barang-barang riwayat",
     "showTrxSummary": "Tampilkan ringkasan transaksi",
     "hideTrxMarginAndDiscounts": "Sembunyikan margin dan diskon",
     "hideTrxBuyPrice": "Sembunyikan harga beli",

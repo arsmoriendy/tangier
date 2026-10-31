@@ -8,7 +8,7 @@ import { Settings, updateSettings } from "@/lib/crud/settings"
 import { toast } from "sonner"
 import z from "zod"
 import OptionCheckbox from "@/app/(authorized)/options/option-checkbox"
-import AdminOptionForms from "@/app/(authorized)/options/admin-option-forms"
+import AdminOnly from "@/components/admin-only"
 
 const receiptFormSchema = z.object({
   receiptHeader: z.string().optional(),
@@ -43,10 +43,65 @@ export default function OptionsForm({
       <FieldSet>
         <FieldLegend>{t("userSettings")}</FieldLegend>
 
-        <AdminOptionForms />
+        <FieldSet>
+          <FieldLegend variant="label">{t("transactionForm")}</FieldLegend>
+
+          <AdminOnly>
+            <OptionCheckbox
+              checked={getUserSettings.hideTrxBuyPrice}
+              onCheckedChange={(c) => (setUserSettings.hideTrxBuyPrice = c)}
+              label={ts("hideTrxBuyPrice")}
+            />
+            <OptionCheckbox
+              checked={getUserSettings.coloredSellPrice}
+              onCheckedChange={(c) => (setUserSettings.coloredSellPrice = c)}
+              label={ts("coloredSellPrice")}
+            />
+          </AdminOnly>
+
+          <OptionCheckbox
+            checked={getUserSettings.showTrxSummary}
+            onCheckedChange={(c) => (setUserSettings.showTrxSummary = c)}
+            label={ts("showTrxSummary")}
+          />
+          <OptionCheckbox
+            checked={getUserSettings.decrementStock}
+            onCheckedChange={(c) => (setUserSettings.decrementStock = c)}
+            label={ts("decrementStock")}
+          />
+        </FieldSet>
+
+        <FieldSet>
+          <FieldLegend variant="label">{t("historyPage")}</FieldLegend>
+
+          <AdminOnly>
+            <OptionCheckbox
+              checked={getUserSettings.hideHistoryReports}
+              onCheckedChange={(c) => (setUserSettings.hideHistoryReports = c)}
+              label={ts("hideHistoryReports")}
+            />
+          </AdminOnly>
+
+          <OptionCheckbox
+            checked={getUserSettings.showHisotryItems}
+            onCheckedChange={(c) => (setUserSettings.showHisotryItems = c)}
+            label={ts("showHisotryItems")}
+          />
+        </FieldSet>
 
         <FieldSet>
           <FieldLegend variant="label">{t("miscellaneous")}</FieldLegend>
+
+          <AdminOnly>
+            <OptionCheckbox
+              checked={getUserSettings.hideMarginAndDiscounts}
+              onCheckedChange={(c) =>
+                (setUserSettings.hideMarginAndDiscounts = c)
+              }
+              label={ts("hideTrxMarginAndDiscounts")}
+            />
+          </AdminOnly>
+
           <OptionCheckbox
             checked={getUserSettings.uppercaseInput}
             onCheckedChange={(c) => (setUserSettings.uppercaseInput = c)}

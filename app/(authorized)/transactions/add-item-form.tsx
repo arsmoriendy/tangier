@@ -224,7 +224,7 @@ export const AddItemForm = withForm({
                 </div>
 
                 {session.user.role === "admin" &&
-                  !getUserSettings.hideTrxMarginAndDiscounts && (
+                  !getUserSettings.hideMarginAndDiscounts && (
                     <form.Subscribe
                       selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
                     >

@@ -235,7 +235,7 @@ export default function TransactionForm({
           <div className="absolute -top-4 left-2 flex gap-2">
             <Badge>{tc("totalPrice")}</Badge>
             {session.user.role === "admin" &&
-              !getUserSettings.hideTrxMarginAndDiscounts && (
+              !getUserSettings.hideMarginAndDiscounts && (
                 <form.Subscribe selector={(f) => f.values}>
                   {(v) => {
                     const expenses = v.transactionItems.reduce(

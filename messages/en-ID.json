@@ -262,7 +262,7 @@
   "userSettings": {
     "updated": "Updated user setting",
 
-    "decrementStock": "Update stocks",
+    "decrementStock": "Update stocks automatically",
     "showHisotryItems": "Show history items",
     "showTrxSummary": "Show transaction summary",
     "hideTrxMarginAndDiscounts": "Hide margin and discounts",

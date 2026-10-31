@@ -186,7 +186,7 @@ export default function ItemForm(props: {
                         <TrashIcon />
                       </Button>
                     </div>
-                    {!getUserSettings.hideItemMarginAndDiscounts && (
+                    {!getUserSettings.hideMarginAndDiscounts && (
                       <Table>
                         <TableHeader>
                           <TableRow>
