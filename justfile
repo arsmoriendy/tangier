@@ -6,5 +6,5 @@ build-img-as-latest: build-img
 build-img:
     docker build . -t tangier:{{ version }}
 
-save:
-    docker save tangier:{{ version }} | xz > tangier-{{ version }}.img.tar.xz
+save parent-path=".":
+    docker save tangier:{{ version }} | xz > {{ parent-path }}/tangier-{{ version }}.img.tar.xz
