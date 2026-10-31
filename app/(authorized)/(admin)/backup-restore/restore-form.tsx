@@ -32,7 +32,7 @@ export function RestoreForm() {
     setLoading(false)
 
     if (status !== 200) {
-      toast.error(t("error"))
+      toast.error(t("error"), { duration: Infinity })
     } else {
       toast.success(t("success"))
       await authClient.signOut()
