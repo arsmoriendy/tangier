@@ -300,7 +300,7 @@ export default function TransactionForm({
                     </button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    Cancel recall <Kbd>Ctrl + F6</Kbd>
+                    {t("cancelRecall")} <Kbd>Ctrl + F6</Kbd>
                   </TooltipContent>
                 </Tooltip>
               </Badge>

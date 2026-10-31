@@ -119,7 +119,8 @@
         "printError": "Gagal mencetak struk transaksi",
         "held": "Transaction held",
         "recallCancelled": "Recall dibatalkan"
-      }
+      },
+      "cancelRecall": "Batalkan recall"
     },
     "recall": {
       "deleteDescription": "Apakah anda yakin ingin menghapus transaksi tertahan ini?"
