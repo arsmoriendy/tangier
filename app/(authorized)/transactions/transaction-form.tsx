@@ -24,7 +24,7 @@ import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
 import { useSession } from "@/contexts/session-ctx"
 import { toast } from "sonner"
 import { useHeld } from "./held-ctx"
-import { useState } from "react"
+import { ComponentProps, useState } from "react"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
@@ -312,80 +312,96 @@ export default function TransactionForm({
       )
     }
 
-    return (
-      <div className="sticky bottom-0 flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground">
-        <div className="absolute -top-4 left-2 flex gap-2">
-          <Badge>{tc("totalPrice")}</Badge>
-
-          <form.Subscribe selector={(f) => f.values.priceGroup}>
-            {(priceGroup) => (
-              <PriceGroupBadge
-                value={priceGroup}
-                onChange={(id) => form.setFieldValue("priceGroup", id)}
-              />
-            )}
-          </form.Subscribe>
-
-          <AdminOnly>
-            {getUserSettings.showMarginAndDiscounts && (
-              <form.Subscribe selector={(f) => f.values}>
-                {(v) => <MarginBadge values={v} />}
-              </form.Subscribe>
-            )}
-          </AdminOnly>
-        </div>
-
-        {recalledTrx !== undefined && <RecallBadge />}
-
-        <form.AppField name="totalPrice">
-          {(field) => <field.IdrField min={0} className="max-w-xs" />}
-        </form.AppField>
-
-        <div className="flex gap-2">
-          <ButtonWithHotkeys
-            hotkeys={["Ctrl+d"]}
-            variant="destructive"
-            disabled={selected.size < 1}
-            onClick={() => removeSelectedItems()}
-          >
-            <TrashIcon />
-            {t("removeItems", { count: selected.size })}
-          </ButtonWithHotkeys>
-
-          <ResetButton hotkeys={["F4"]} onClick={() => form.reset()} />
-
-          {!props.transaction && (
-            <>
-              <HoldButton />
-              <RecallButton />
-              <RecallDialog
-                form={form}
-                open={openRecallDialog}
-                setOpen={setOpenRecallDialog}
-                recalledTrx={recalledTrx}
-                setRecalledTrx={setRecalledTrx}
-              />
-            </>
+    function Bar({ className, ...props }: ComponentProps<"div">) {
+      return (
+        <div
+          className={cn(
+            "relative flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground",
+            className
           )}
+          {...props}
+        />
+      )
+    }
 
-          <Form handleSubmit={form.handleSubmit}>
-            <form.AppForm>
-              <form.SubmitButton hotkeys={["F7"]}>
-                <PrinterIcon /> {t("saveAndPrint")}
-              </form.SubmitButton>
-            </form.AppForm>
-          </Form>
-        </div>
+    return (
+      <div className="sticky bottom-0 space-y-2">
+        <Bar>
+          <AddItemProvider>
+            <AddItemForm form={form} />
+          </AddItemProvider>
+        </Bar>
+
+        <Bar>
+          <div className="absolute -top-4 left-2 flex gap-2">
+            <Badge>{tc("totalPrice")}</Badge>
+
+            <form.Subscribe selector={(f) => f.values.priceGroup}>
+              {(priceGroup) => (
+                <PriceGroupBadge
+                  value={priceGroup}
+                  onChange={(id) => form.setFieldValue("priceGroup", id)}
+                />
+              )}
+            </form.Subscribe>
+
+            <AdminOnly>
+              {getUserSettings.showMarginAndDiscounts && (
+                <form.Subscribe selector={(f) => f.values}>
+                  {(v) => <MarginBadge values={v} />}
+                </form.Subscribe>
+              )}
+            </AdminOnly>
+          </div>
+
+          {recalledTrx !== undefined && <RecallBadge />}
+
+          <form.AppField name="totalPrice">
+            {(field) => <field.IdrField min={0} className="max-w-xs" />}
+          </form.AppField>
+
+          <div className="flex gap-2">
+            <ButtonWithHotkeys
+              hotkeys={["Ctrl+d"]}
+              variant="destructive"
+              disabled={selected.size < 1}
+              onClick={() => removeSelectedItems()}
+            >
+              <TrashIcon />
+              {t("removeItems", { count: selected.size })}
+            </ButtonWithHotkeys>
+
+            <ResetButton hotkeys={["F4"]} onClick={() => form.reset()} />
+
+            {!props.transaction && (
+              <>
+                <HoldButton />
+                <RecallButton />
+                <RecallDialog
+                  form={form}
+                  open={openRecallDialog}
+                  setOpen={setOpenRecallDialog}
+                  recalledTrx={recalledTrx}
+                  setRecalledTrx={setRecalledTrx}
+                />
+              </>
+            )}
+
+            <Form handleSubmit={form.handleSubmit}>
+              <form.AppForm>
+                <form.SubmitButton hotkeys={["F7"]}>
+                  <PrinterIcon /> {t("saveAndPrint")}
+                </form.SubmitButton>
+              </form.AppForm>
+            </Form>
+          </div>
+        </Bar>
       </div>
     )
   }
 
   return (
     <div className={cn("flex h-full flex-col gap-2", className)}>
-      <AddItemProvider>
-        <AddItemForm form={form} />
-      </AddItemProvider>
-
       <div className="relative flex flex-1 flex-col gap-2">
         <div className="h-full border">
           <TransactionItemTable

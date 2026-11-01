@@ -1,9 +1,12 @@
 import { Form, useAppForm, withForm } from "@/components/form"
 import {
-  RadioGroupChoiceCard,
-  RadioGroupChoiceItem,
-} from "@/components/ui/choice-card"
-import { Field, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox"
 import { MarginIndicator } from "@/components/margin-indicator"
 import { MismatchIndicator } from "@/components/mismatch-indicator"
 import { formatCurrency } from "@/lib/i18n/currency"
@@ -15,7 +18,6 @@ import {
 } from "@/app/(authorized)/transactions/add-item-schema"
 import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
 import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
-import { Item } from "@/components/ui/item"
 import AdminOnly, { useIsAdmin } from "@/components/admin-only"
 import { useUserSettings } from "@/contexts/user-settings"
 import { cn } from "@/lib/utils"
@@ -23,16 +25,22 @@ import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
 import { useEffect, useRef } from "react"
 import { useUnits } from "@/contexts/units-ctx"
-import { Checkbox } from "@/components/ui/checkbox"
 import { isEqual } from "es-toolkit"
 import { ListPlusIcon } from "@phosphor-icons/react"
+
+type BuyPriceOption = {
+  value: string
+  label: string
+  price: number
+  stock: number
+}
 
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
   render: function Render({ form: createTransactionForm }) {
     const isAdmin = useIsAdmin()
     const { addItemProxy, addItemSnap } = useAddItem()
-    const { getUserSettings, setUserSettings } = useUserSettings()
+    const { getUserSettings } = useUserSettings()
     const { units } = useUnits()
 
     const form = useAppForm({
@@ -86,10 +94,26 @@ export const AddItemForm = withForm({
 
     const t = useTranslations("transactions.form.addItem")
     const tc = useTranslations("common")
-    const tSummary = useTranslations("transactions.form.summary")
 
     const nameRef = useRef<HTMLInputElement>(null)
     const qtyRef = useRef<HTMLInputElement>(null)
+
+    const buyPriceOptions: BuyPriceOption[] = addItemSnap.buyPrices
+      .toReversed()
+      .map((bp) => ({
+        value: bp.id,
+        label: formatCurrency(bp.price),
+        price: bp.price,
+        stock: bp.stock,
+      }))
+
+    function selectBuyPrice(bp: BuyPriceOption | null) {
+      if (bp === null) return
+      addItemProxy.buyPrice = addItemProxy.buyPrices.find(
+        (b) => b.id === bp.value
+      )!
+      form.setFieldValue("buyPrice", bp.price)
+    }
 
     useEffect(() => {
       // update sell price according to selected price group when an item is picked
@@ -136,171 +160,139 @@ export const AddItemForm = withForm({
           nameRef={nameRef}
         />
 
-        <Form handleSubmit={form.handleSubmit}>
-          <div className="flex gap-2">
-            <AdminOnly>
-              {getUserSettings.showTrxBuyPrice && (
-                <FieldSet className="flex-1">
-                  <FieldLegend>{tc("buyPrice")}</FieldLegend>
-
-                  <form.AppField name="buyPrice">
-                    {(f) => <f.IdrField />}
-                  </form.AppField>
-
-                  <RadioGroupChoiceCard
-                    value={addItemSnap.buyPrice?.id}
-                    onValueChange={(v) => {
-                      const price = parseFloat(v)
-                      addItemProxy.buyPrice = addItemProxy.buyPrices.find(
-                        (bp) => bp.id === v
-                      )!
-                      form.setFieldValue("buyPrice", price)
-                    }}
-                  >
-                    {addItemSnap.buyPrices.length > 0 ? (
-                      addItemSnap.buyPrices
-                        .toReversed()
-                        .map((bp, i) => (
-                          <RadioGroupChoiceItem
-                            key={i}
-                            value={bp.id}
-                            title={formatCurrency(bp.price)}
-                            description={tc("stockLeft", { count: bp.stock })}
-                          />
-                        ))
-                    ) : (
-                      <Item
-                        className="grid min-h-17 place-items-center border-dashed text-muted-foreground"
-                        variant="outline"
-                      >
-                        {t("noPrice")}
-                      </Item>
-                    )}
-                  </RadioGroupChoiceCard>
-                </FieldSet>
-              )}
-            </AdminOnly>
-
-            <FieldSet className="flex-1 gap-2">
-              <FieldLegend>{tc("sellPrice")}</FieldLegend>
-
-              {/* Sell price and optional margin indicator */}
+        <Form className="contents" handleSubmit={form.handleSubmit}>
+          <AdminOnly>
+            {getUserSettings.showTrxBuyPrice && (
               <div>
-                <div className="flex gap-2">
-                  <form.Subscribe
-                    selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
-                  >
-                    {([bp, sp]) => (
-                      <form.AppField
-                        name="sellPrice"
-                        listeners={{
-                          onChange: (v) =>
-                            form.setFieldValue(
-                              "quantifiedSellPrice",
-                              v.value * form.state.values.quantity
-                            ),
-                        }}
-                      >
-                        {(field) => (
-                          <field.IdrField
-                            inputClass={cn(
-                              isAdmin &&
-                                getUserSettings.coloredSellPrice &&
-                                (bp > sp
-                                  ? "bg-destructive/33"
-                                  : "bg-success/33")
-                            )}
-                            min={0}
-                          />
-                        )}
-                      </form.AppField>
-                    )}
-                  </form.Subscribe>
+                <Combobox
+                  items={buyPriceOptions}
+                  value={
+                    buyPriceOptions.find(
+                      (bp) => bp.value === addItemSnap.buyPrice?.id
+                    ) ?? null
+                  }
+                  itemToStringValue={(bp) => bp!.label ?? ""}
+                  onValueChange={(bp: BuyPriceOption | null) =>
+                    selectBuyPrice(bp)
+                  }
+                >
+                  <ComboboxInput />
+                  <ComboboxContent>
+                    <ComboboxEmpty>{t("noPrice")}</ComboboxEmpty>
+                    <ComboboxList>
+                      {(bp) => (
+                        <ComboboxItem key={bp.value} value={bp}>
+                          <span className="grow">{bp.label}</span>
+                          <span className="text-muted-foreground">
+                            {tc("stockLeft", { count: bp.stock })}
+                          </span>
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
+              </div>
+            )}
+          </AdminOnly>
 
-                  <span className="grid h-8 place-items-center">x</span>
-
-                  <form.AppField
-                    name="quantity"
-                    listeners={{
-                      onChange: (v) =>
-                        form.setFieldValue(
-                          "quantifiedSellPrice",
-                          v.value * form.state.values.sellPrice
-                        ),
-                    }}
-                  >
-                    {(f) => (
-                      <f.NumberField className="w-24" min={1} ref={qtyRef} />
-                    )}
-                  </form.AppField>
-                </div>
+          <form.Subscribe
+            selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
+          >
+            {([bp, sp]) => (
+              <div>
+                <form.AppField
+                  name="sellPrice"
+                  listeners={{
+                    onChange: (v) =>
+                      form.setFieldValue(
+                        "quantifiedSellPrice",
+                        v.value * form.state.values.quantity
+                      ),
+                  }}
+                >
+                  {(field) => (
+                    <field.IdrField
+                      inputClass={cn(
+                        isAdmin &&
+                          getUserSettings.coloredSellPrice &&
+                          (bp > sp ? "bg-destructive/33" : "bg-success/33")
+                      )}
+                      min={0}
+                    />
+                  )}
+                </form.AppField>
 
                 <AdminOnly>
                   {getUserSettings.showMarginAndDiscounts && (
-                    <form.Subscribe
-                      selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
-                    >
-                      {([bp, sp]) => (
-                        <MarginIndicator
-                          sell={sp}
-                          buy={bp}
-                          tooltip={tc("marginTooltip")}
-                        />
-                      )}
-                    </form.Subscribe>
+                    <MarginIndicator
+                      sell={sp}
+                      buy={bp}
+                      tooltip={tc("marginTooltip")}
+                    />
                   )}
                 </AdminOnly>
               </div>
+            )}
+          </form.Subscribe>
 
-              <form.Subscribe
-                selector={(f) => [
-                  f.values.quantifiedSellPrice,
-                  f.values.buyPrice,
-                  f.values.quantity,
-                  f.values.sellPrice,
-                ]}
-              >
-                {([qsp, bp, qty, sp]) => {
-                  return (
-                    <div>
-                      <form.AppField name="quantifiedSellPrice">
-                        {(field) => (
-                          <field.IdrField
-                            label={tc("quantifiedPrice")}
-                            inputClass={cn(
-                              isAdmin &&
-                                getUserSettings.coloredSellPrice &&
-                                (qsp < bp * qty
-                                  ? "bg-destructive/33"
-                                  : "bg-success/33")
-                            )}
-                            min={0}
-                          />
-                        )}
-                      </form.AppField>
-                      <AdminOnly>
-                        {getUserSettings.showMarginAndDiscounts && (
-                          <MarginIndicator
-                            sell={qsp}
-                            buy={bp * qty}
-                            tooltip={tc("marginTooltip")}
-                          />
-                        )}
-                      </AdminOnly>
-                      <MismatchIndicator
-                        sellPrice={sp}
-                        quantity={qty}
-                        quantifiedSellPrice={qsp}
-                        tooltip={tc("mismatchTooltip")}
-                      />
-                    </div>
-                  )
-                }}
-              </form.Subscribe>
-            </FieldSet>
-          </div>
+          <form.AppField
+            name="quantity"
+            listeners={{
+              onChange: (v) =>
+                form.setFieldValue(
+                  "quantifiedSellPrice",
+                  v.value * form.state.values.sellPrice
+                ),
+            }}
+          >
+            {(f) => <f.NumberField min={1} ref={qtyRef} className="w-32" />}
+          </form.AppField>
 
-          <div className="flex items-center gap-2">
+          <form.Subscribe
+            selector={(f) => [
+              f.values.quantifiedSellPrice,
+              f.values.buyPrice,
+              f.values.quantity,
+              f.values.sellPrice,
+            ]}
+          >
+            {([qsp, bp, qty, sp]) => (
+              <div>
+                <form.AppField name="quantifiedSellPrice">
+                  {(field) => (
+                    <field.IdrField
+                      inputClass={cn(
+                        isAdmin &&
+                          getUserSettings.coloredSellPrice &&
+                          (qsp < bp * qty
+                            ? "bg-destructive/33"
+                            : "bg-success/33")
+                      )}
+                      min={0}
+                    />
+                  )}
+                </form.AppField>
+
+                <AdminOnly>
+                  {getUserSettings.showMarginAndDiscounts && (
+                    <MarginIndicator
+                      sell={qsp}
+                      buy={bp * qty}
+                      tooltip={tc("marginTooltip")}
+                    />
+                  )}
+                </AdminOnly>
+                <MismatchIndicator
+                  sellPrice={sp}
+                  quantity={qty}
+                  quantifiedSellPrice={qsp}
+                  tooltip={tc("mismatchTooltip")}
+                />
+              </div>
+            )}
+          </form.Subscribe>
+
+          <div className="absolute -top-4 flex items-center gap-2">
             <form.AppForm>
               <form.SubmitButton size="xs" hotkeys={["Ctrl + Enter"]}>
                 <ListPlusIcon />
@@ -318,18 +310,6 @@ export const AddItemForm = withForm({
                 form.reset()
               }}
             />
-
-            <div className="flex-1" />
-
-            <Field orientation="horizontal" className="w-auto gap-2">
-              <Checkbox
-                checked={getUserSettings.showTrxSummary}
-                onCheckedChange={(c: boolean) =>
-                  (setUserSettings.showTrxSummary = c)
-                }
-              />
-              <FieldLabel>{tSummary("show")}</FieldLabel>
-            </Field>
           </div>
         </Form>
       </>
