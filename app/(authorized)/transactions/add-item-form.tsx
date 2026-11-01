@@ -163,35 +163,33 @@ export const AddItemForm = withForm({
         <Form className="contents" handleSubmit={form.handleSubmit}>
           <AdminOnly>
             {getUserSettings.showTrxBuyPrice && (
-              <div>
-                <Combobox
-                  items={buyPriceOptions}
-                  value={
-                    buyPriceOptions.find(
-                      (bp) => bp.value === addItemSnap.buyPrice?.id
-                    ) ?? null
-                  }
-                  itemToStringValue={(bp) => bp!.label ?? ""}
-                  onValueChange={(bp: BuyPriceOption | null) =>
-                    selectBuyPrice(bp)
-                  }
-                >
-                  <ComboboxInput />
-                  <ComboboxContent>
-                    <ComboboxEmpty>{t("noPrice")}</ComboboxEmpty>
-                    <ComboboxList>
-                      {(bp) => (
-                        <ComboboxItem key={bp.value} value={bp}>
-                          <span className="grow">{bp.label}</span>
-                          <span className="text-muted-foreground">
-                            {tc("stockLeft", { count: bp.stock })}
-                          </span>
-                        </ComboboxItem>
-                      )}
-                    </ComboboxList>
-                  </ComboboxContent>
-                </Combobox>
-              </div>
+              <Combobox
+                items={buyPriceOptions}
+                value={
+                  buyPriceOptions.find(
+                    (bp) => bp.value === addItemSnap.buyPrice?.id
+                  ) ?? null
+                }
+                itemToStringValue={(bp) => bp!.label ?? ""}
+                onValueChange={(bp: BuyPriceOption | null) =>
+                  selectBuyPrice(bp)
+                }
+              >
+                <ComboboxInput />
+                <ComboboxContent>
+                  <ComboboxEmpty>{t("noPrice")}</ComboboxEmpty>
+                  <ComboboxList>
+                    {(bp) => (
+                      <ComboboxItem key={bp.value} value={bp}>
+                        <span className="grow">{bp.label}</span>
+                        <span className="text-muted-foreground">
+                          {tc("stockLeft", { count: bp.stock })}
+                        </span>
+                      </ComboboxItem>
+                    )}
+                  </ComboboxList>
+                </ComboboxContent>
+              </Combobox>
             )}
           </AdminOnly>
 
@@ -245,7 +243,7 @@ export const AddItemForm = withForm({
                 ),
             }}
           >
-            {(f) => <f.NumberField min={1} ref={qtyRef} className="w-32" />}
+            {(f) => <f.NumberField min={1} ref={qtyRef} />}
           </form.AppField>
 
           <form.Subscribe
