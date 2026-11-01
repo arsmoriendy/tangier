@@ -28,11 +28,8 @@ import { useState } from "react"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
-import {
-  RadioGroupChoiceCard,
-  RadioGroupChoiceItem,
-} from "@/components/ui/choice-card"
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
+import { PriceGroupBadge } from "@/app/(authorized)/transactions/price-group-badge"
 import { RecallDialog } from "@/app/(authorized)/transactions/recall-dialog"
 import { TransactionItemTable } from "@/app/(authorized)/transactions/transaction-item-table"
 import { Badge } from "@/components/ui/badge"
@@ -319,6 +316,16 @@ export default function TransactionForm({
       <div className="sticky bottom-0 flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground">
         <div className="absolute -top-4 left-2 flex gap-2">
           <Badge>{tc("totalPrice")}</Badge>
+
+          <form.Subscribe selector={(f) => f.values.priceGroup}>
+            {(priceGroup) => (
+              <PriceGroupBadge
+                value={priceGroup}
+                onChange={(id) => form.setFieldValue("priceGroup", id)}
+              />
+            )}
+          </form.Subscribe>
+
           <AdminOnly>
             {getUserSettings.showMarginAndDiscounts && (
               <form.Subscribe selector={(f) => f.values}>
@@ -375,27 +382,6 @@ export default function TransactionForm({
 
   return (
     <div className={cn("flex h-full flex-col gap-2", className)}>
-      <form.Subscribe selector={(f) => f.values.priceGroup}>
-        {(priceGroup) => (
-          <RadioGroupChoiceCard
-            className="sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:min-h-14"
-            value={priceGroup}
-            onValueChange={(id) => form.setFieldValue("priceGroup", id)}
-          >
-            {priceGroups.map((pg, i) => (
-              <RadioGroupChoiceItem
-                key={i}
-                style={{ backgroundColor: `#${pg.hexColor}` }}
-                value={pg.id}
-                title={pg.name}
-                description={pg.description || t("customerGroup.noDescription")}
-                descriptionClass="hidden xl:flex"
-              />
-            ))}
-          </RadioGroupChoiceCard>
-        )}
-      </form.Subscribe>
-
       <AddItemProvider>
         <AddItemForm form={form} />
       </AddItemProvider>

@@ -100,8 +100,7 @@
         "noItems": "Belum ada barang"
       },
       "customerGroup": {
-        "title": "Kelompok pelanggan",
-        "noDescription": "Tidak ada deskripsi"
+        "title": "Kelompok pelanggan"
       },
       "saveAndPrint": "Simpan|cetak",
       "itemCount": "{count} barang",
