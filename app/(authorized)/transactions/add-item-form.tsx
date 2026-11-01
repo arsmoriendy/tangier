@@ -182,7 +182,7 @@ export const AddItemForm = withForm({
               )}
             </AdminOnly>
 
-            <FieldSet className="flex-1">
+            <FieldSet className="flex-1 gap-2">
               <FieldLegend>{tc("sellPrice")}</FieldLegend>
 
               {/* Sell price and optional margin indicator */}
@@ -268,7 +268,7 @@ export const AddItemForm = withForm({
                   const mismatch = qsp - sp * qty
 
                   return (
-                    <>
+                    <div>
                       <form.AppField name="quantifiedSellPrice">
                         {(field) => (
                           <field.IdrField
@@ -293,7 +293,7 @@ export const AddItemForm = withForm({
                         )}
                       </AdminOnly>
                       <MismatchIndicator mismatch={mismatch} />
-                    </>
+                    </div>
                   )
                 }}
               </form.Subscribe>
