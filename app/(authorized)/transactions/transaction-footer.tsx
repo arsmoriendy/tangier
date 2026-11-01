@@ -147,7 +147,7 @@ export const TransactionFooter = withForm({
     }
 
     return (
-      <div className="sticky bottom-0 space-y-2">
+      <div className="sticky bottom-0 space-y-2 bg-background">
         <FooterBar>
           <AddItemProvider>
             <AddItemForm form={form} />
