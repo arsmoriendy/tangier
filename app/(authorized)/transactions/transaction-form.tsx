@@ -49,6 +49,18 @@ import {
 import { Kbd } from "@/components/ui/kbd"
 import { useHotkeys } from "react-hotkeys-hook"
 
+function FooterBar({ className, ...props }: ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "relative flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground",
+        className
+      )}
+      {...props}
+    />
+  )
+}
+
 export default function TransactionForm({
   className,
   ...props
@@ -312,27 +324,15 @@ export default function TransactionForm({
       )
     }
 
-    function Bar({ className, ...props }: ComponentProps<"div">) {
-      return (
-        <div
-          className={cn(
-            "relative flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground",
-            className
-          )}
-          {...props}
-        />
-      )
-    }
-
     return (
       <div className="sticky bottom-0 space-y-2">
-        <Bar>
+        <FooterBar>
           <AddItemProvider>
             <AddItemForm form={form} />
           </AddItemProvider>
-        </Bar>
+        </FooterBar>
 
-        <Bar>
+        <FooterBar>
           <div className="absolute -top-4 left-2 flex gap-2">
             <Badge>{tc("totalPrice")}</Badge>
 
@@ -395,7 +395,7 @@ export default function TransactionForm({
               </form.AppForm>
             </Form>
           </div>
-        </Bar>
+        </FooterBar>
       </div>
     )
   }
