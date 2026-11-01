@@ -14,6 +14,7 @@ import {
 import { useUserSettings } from "@/contexts/user-settings"
 import AdminOnly, { useIsAdmin } from "@/components/admin-only"
 import { MarginIndicator } from "@/components/margin-indicator"
+import { MismatchIndicator } from "@/components/mismatch-indicator"
 import { marginAndDiscount } from "@/lib/margin"
 import { cn } from "@/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
@@ -278,13 +279,15 @@ export const TransactionItemTable = withForm({
                         f.values.transactionItems[i].quantifiedSellPrice,
                         f.values.transactionItems[i].buyPrice,
                         f.values.transactionItems[i].quantity,
+                        f.values.transactionItems[i].sellPrice,
                       ]}
                     >
-                      {([qsp, bp, qty]) => {
+                      {([qsp, bp, qty, sp]) => {
                         const { margin, discount } = marginAndDiscount(
                           qsp,
                           bp * qty
                         )
+                        const mismatch = qsp - sp * qty
 
                         return (
                           <>
@@ -317,6 +320,7 @@ export const TransactionItemTable = withForm({
                                 />
                               )}
                             </AdminOnly>
+                            <MismatchIndicator mismatch={mismatch} />
                           </>
                         )
                       }}

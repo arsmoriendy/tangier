@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/choice-card"
 import { Field, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { MarginIndicator } from "@/components/margin-indicator"
+import { MismatchIndicator } from "@/components/mismatch-indicator"
 import { marginAndDiscount } from "@/lib/margin"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
@@ -259,10 +260,12 @@ export const AddItemForm = withForm({
                   f.values.quantifiedSellPrice,
                   f.values.buyPrice,
                   f.values.quantity,
+                  f.values.sellPrice,
                 ]}
               >
-                {([qsp, bp, qty]) => {
+                {([qsp, bp, qty, sp]) => {
                   const { margin, discount } = marginAndDiscount(qsp, bp * qty)
+                  const mismatch = qsp - sp * qty
 
                   return (
                     <>
@@ -289,6 +292,7 @@ export const AddItemForm = withForm({
                           />
                         )}
                       </AdminOnly>
+                      <MismatchIndicator mismatch={mismatch} />
                     </>
                   )
                 }}
