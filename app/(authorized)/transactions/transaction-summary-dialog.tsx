@@ -54,7 +54,7 @@ export const TransactionSummaryDialog = withForm({
                       <TableCell>{formatCurrency(v.totalPrice)}</TableCell>
                     </TableRow>
                     <AdminOnly>
-                      {!getUserSettings.hideMarginAndDiscounts && (
+                      {getUserSettings.showMarginAndDiscounts && (
                         <>
                           <TableRow>
                             <TableCell>{t("expenses")}</TableCell>

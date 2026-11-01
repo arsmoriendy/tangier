@@ -139,7 +139,7 @@ export const AddItemForm = withForm({
         <Form handleSubmit={form.handleSubmit}>
           <div className="flex gap-2">
             <AdminOnly>
-              {!getUserSettings.hideTrxBuyPrice && (
+              {getUserSettings.showTrxBuyPrice && (
                 <FieldSet className="flex-1">
                   <FieldLegend>{tc("buyPrice")}</FieldLegend>
 
@@ -236,7 +236,7 @@ export const AddItemForm = withForm({
                 </div>
 
                 <AdminOnly>
-                  {!getUserSettings.hideMarginAndDiscounts && (
+                  {getUserSettings.showMarginAndDiscounts && (
                     <form.Subscribe
                       selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
                     >
@@ -279,7 +279,7 @@ export const AddItemForm = withForm({
                         )}
                       </form.AppField>
                       <AdminOnly>
-                        {!getUserSettings.hideMarginAndDiscounts && (
+                        {getUserSettings.showMarginAndDiscounts && (
                           <MarginIndicator
                             sell={qsp}
                             buy={bp * qty}

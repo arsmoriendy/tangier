@@ -12,7 +12,7 @@ export function ReportFieldSet() {
 
   return (
     <AdminOnly>
-      {!getUserSettings.hideHistoryReports && (
+      {getUserSettings.showHistoryReports && (
         <FieldSet className="flex-1">
           <FieldLegend>{t("report.legend")}</FieldLegend>
           <Report />

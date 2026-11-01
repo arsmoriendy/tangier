@@ -48,9 +48,9 @@ export default function OptionsForm({
 
           <AdminOnly>
             <OptionCheckbox
-              checked={getUserSettings.hideTrxBuyPrice}
-              onCheckedChange={(c) => (setUserSettings.hideTrxBuyPrice = c)}
-              label={ts("hideTrxBuyPrice")}
+              checked={getUserSettings.showTrxBuyPrice}
+              onCheckedChange={(c) => (setUserSettings.showTrxBuyPrice = c)}
+              label={ts("showTrxBuyPrice")}
             />
             <OptionCheckbox
               checked={getUserSettings.coloredSellPrice}
@@ -76,9 +76,9 @@ export default function OptionsForm({
 
           <AdminOnly>
             <OptionCheckbox
-              checked={getUserSettings.hideHistoryReports}
-              onCheckedChange={(c) => (setUserSettings.hideHistoryReports = c)}
-              label={ts("hideHistoryReports")}
+              checked={getUserSettings.showHistoryReports}
+              onCheckedChange={(c) => (setUserSettings.showHistoryReports = c)}
+              label={ts("showHistoryReports")}
             />
           </AdminOnly>
 
@@ -94,11 +94,11 @@ export default function OptionsForm({
 
           <AdminOnly>
             <OptionCheckbox
-              checked={getUserSettings.hideMarginAndDiscounts}
+              checked={getUserSettings.showMarginAndDiscounts}
               onCheckedChange={(c) =>
-                (setUserSettings.hideMarginAndDiscounts = c)
+                (setUserSettings.showMarginAndDiscounts = c)
               }
-              label={ts("hideTrxMarginAndDiscounts")}
+              label={ts("showTrxMarginAndDiscounts")}
             />
           </AdminOnly>
 

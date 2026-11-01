@@ -69,7 +69,7 @@ export const TransactionItemTable = withForm({
               <col className="w-3/36" />
               <col className="w-6/36" />
               <AdminOnly>
-                {!getUserSettings.hideTrxBuyPrice && <col className="w-6/36" />}
+                {getUserSettings.showTrxBuyPrice && <col className="w-6/36" />}
               </AdminOnly>
               <col className="w-3/36" />
               <col className="w-1/36" />
@@ -81,7 +81,7 @@ export const TransactionItemTable = withForm({
                 <TableHead>{tc("name")}</TableHead>
                 <TableHead>{tc("unit")}</TableHead>
                 <AdminOnly>
-                  {!getUserSettings.hideTrxBuyPrice && (
+                  {getUserSettings.showTrxBuyPrice && (
                     <TableHead>{tc("buyPrice")}</TableHead>
                   )}
                 </AdminOnly>
@@ -97,7 +97,7 @@ export const TransactionItemTable = withForm({
                   <TableCell
                     className="text-center text-muted-foreground"
                     colSpan={
-                      isAdmin && !getUserSettings.hideTrxBuyPrice ? 9 : 8
+                      isAdmin && getUserSettings.showTrxBuyPrice ? 9 : 8
                     }
                   >
                     {t("items.noItems")}
@@ -175,7 +175,7 @@ export const TransactionItemTable = withForm({
                     </form.AppField>
                   </TableCell>
                   <AdminOnly>
-                    {!getUserSettings.hideTrxBuyPrice && (
+                    {getUserSettings.showTrxBuyPrice && (
                       <TableCell className="align-top">
                         <form.AppField name={`transactionItems[${i}].buyPrice`}>
                           {(field) => <field.IdrField min={0} />}
@@ -219,7 +219,7 @@ export const TransactionItemTable = withForm({
                               )}
                             </form.AppField>
                             <AdminOnly>
-                              {!getUserSettings.hideMarginAndDiscounts && (
+                              {getUserSettings.showMarginAndDiscounts && (
                                 <MarginIndicator
                                   sell={sp}
                                   buy={bp}
@@ -305,7 +305,7 @@ export const TransactionItemTable = withForm({
                               )}
                             </form.AppField>
                             <AdminOnly>
-                              {!getUserSettings.hideMarginAndDiscounts && (
+                              {getUserSettings.showMarginAndDiscounts && (
                                 <MarginIndicator
                                   sell={qsp}
                                   buy={bp * qty}
@@ -331,7 +331,7 @@ export const TransactionItemTable = withForm({
               <TableRow>
                 <TableCell colSpan={5} />
                 <AdminOnly>
-                  {!getUserSettings.hideTrxBuyPrice && <TableCell />}
+                  {getUserSettings.showTrxBuyPrice && <TableCell />}
                 </AdminOnly>
                 <TableCell />
                 <TableCell className="flex justify-center gap-2 px-0">

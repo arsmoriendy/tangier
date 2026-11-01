@@ -22,6 +22,13 @@
       "when": 1793449791663,
       "tag": "0002_naive_rhodey",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793505368303,
+      "tag": "0003_acoustic_colonel_america",
+      "breakpoints": true
     }
   ]
 }
