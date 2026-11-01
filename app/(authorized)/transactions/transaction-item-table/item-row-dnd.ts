@@ -31,17 +31,16 @@ export function itemRowDndHandlers(form: DndForm, i: number) {
 
   function onDrop(e: DragEvent<HTMLTableRowElement>) {
     const sourceIndex = parseInt(e.dataTransfer.getData("text/plain"))
+    e.currentTarget.removeAttribute("data-drop")
+
+    if (i === sourceIndex) return
+
     const rect = e.currentTarget.getBoundingClientRect()
     const y = e.clientY - rect.top
     const yPct = y / rect.height
+    const swapIndex = yPct > 0.5 ? i : i - 1
 
-    e.currentTarget.removeAttribute("data-drop")
-
-    form.moveFieldValues(
-      "transactionItems",
-      sourceIndex,
-      yPct > 0.5 ? i + 1 : i
-    )
+    form.moveFieldValues("transactionItems", sourceIndex, swapIndex)
   }
 
   return { onDragStart, onDragEnd, onDragOver, onDragLeave, onDrop }
