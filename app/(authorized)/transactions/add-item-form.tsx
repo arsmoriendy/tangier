@@ -252,11 +252,39 @@ export const AddItemForm = withForm({
                   )}
               </div>
 
-              <form.AppField name="quantifiedSellPrice">
-                {(field) => (
-                  <field.IdrField label={tc("quantifiedPrice")} min={0} />
-                )}
-              </form.AppField>
+              <form.Subscribe
+                selector={(f) => [
+                  f.values.quantifiedSellPrice,
+                  f.values.buyPrice,
+                  f.values.quantity,
+                ]}
+              >
+                {([qsp, bp, qty]) => {
+                  const cost = bp * qty
+                  const margin = qsp - cost
+                  const discount = cost === 0 ? 0 : ((cost - qsp) / cost) * 100
+
+                  return (
+                    <>
+                      <form.AppField name="quantifiedSellPrice">
+                        {(field) => (
+                          <field.IdrField
+                            label={tc("quantifiedPrice")}
+                            min={0}
+                          />
+                        )}
+                      </form.AppField>
+                      {session.user.role === "admin" &&
+                        !getUserSettings.hideMarginAndDiscounts && (
+                          <MarginIndicator
+                            margin={margin}
+                            discount={discount}
+                          />
+                        )}
+                    </>
+                  )
+                }}
+              </form.Subscribe>
             </FieldSet>
           </div>
 
