@@ -215,6 +215,164 @@ export default function TransactionForm({
     enableOnFormTags: true,
   })
 
+  function Footer() {
+    function RecallBadge() {
+      return (
+        <Badge className="absolute -top-4 right-2 gap-2">
+          <span className="relative size-2">
+            <span className="absolute size-full animate-ping rounded-full bg-warning opacity-75" />
+            <span className="flex size-full rounded rounded-full bg-warning" />
+          </span>
+
+          <span>Recalled</span>
+
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={() => {
+                  cancelRecall()
+                }}
+              >
+                <XIcon />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              {t("cancelRecall")} <Kbd>Ctrl + F6</Kbd>
+            </TooltipContent>
+          </Tooltip>
+        </Badge>
+      )
+    }
+
+    function MarginBadge({ values: v }: { values: typeof form.state.values }) {
+      const expenses = v.transactionItems.reduce(
+        (acc, item) => (acc += item.buyPrice * item.quantity),
+        0
+      )
+      const { margin: profitLoss } = marginAndDiscount(v.totalPrice, expenses)
+
+      return (
+        <Badge variant="secondary">
+          <span>Margin:</span>
+          <span
+            className={cn(profitLoss < 0 ? "text-destructive" : "text-success")}
+          >
+            {profitLoss > 0 && "+"}
+            {formatCurrency(profitLoss)}
+          </span>
+        </Badge>
+      )
+    }
+
+    function removeSelectedItems() {
+      for (const s of selected) {
+        form.removeFieldValue("transactionItems", s)
+      }
+      setSelected(new Set())
+    }
+
+    async function refreshHeldTrxs() {
+      setHeld.splice(
+        0,
+        setHeld.length,
+        ...(await listTransactions({
+          held: true,
+          from: new Date(0),
+          to: new Date(),
+        }))
+      )
+    }
+
+    function RecallButton() {
+      return (
+        <ButtonWithHotkeys
+          type="button"
+          hotkeys={["F6"]}
+          onClick={async () => {
+            await refreshHeldTrxs()
+            setOpenRecallDialog(true)
+          }}
+        >
+          <ClockCountdownIcon /> <span>Recall</span>
+        </ButtonWithHotkeys>
+      )
+    }
+
+    function HoldButton() {
+      return (
+        <form.Subscribe selector={(form) => form.canSubmit}>
+          {(canSubmit) => (
+            <ButtonWithHotkeys
+              type="button"
+              onClick={hold}
+              hotkeys={["F5"]}
+              disabled={!canSubmit}
+            >
+              <HandIcon /> <span>Hold</span>
+            </ButtonWithHotkeys>
+          )}
+        </form.Subscribe>
+      )
+    }
+
+    return (
+      <div className="sticky bottom-0 flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground">
+        <div className="absolute -top-4 left-2 flex gap-2">
+          <Badge>{tc("totalPrice")}</Badge>
+          <AdminOnly>
+            {getUserSettings.showMarginAndDiscounts && (
+              <form.Subscribe selector={(f) => f.values}>
+                {(v) => <MarginBadge values={v} />}
+              </form.Subscribe>
+            )}
+          </AdminOnly>
+        </div>
+
+        {recalledTrx !== undefined && <RecallBadge />}
+
+        <form.AppField name="totalPrice">
+          {(field) => <field.IdrField min={0} className="max-w-xs" />}
+        </form.AppField>
+
+        <div className="flex gap-2">
+          <ButtonWithHotkeys
+            hotkeys={["Ctrl+d"]}
+            variant="destructive"
+            disabled={selected.size < 1}
+            onClick={() => removeSelectedItems()}
+          >
+            <TrashIcon />
+            {t("removeItems", { count: selected.size })}
+          </ButtonWithHotkeys>
+
+          <ResetButton hotkeys={["F4"]} onClick={() => form.reset()} />
+
+          {!props.transaction && (
+            <>
+              <HoldButton />
+              <RecallButton />
+              <RecallDialog
+                form={form}
+                open={openRecallDialog}
+                setOpen={setOpenRecallDialog}
+                recalledTrx={recalledTrx}
+                setRecalledTrx={setRecalledTrx}
+              />
+            </>
+          )}
+
+          <Form handleSubmit={form.handleSubmit}>
+            <form.AppForm>
+              <form.SubmitButton hotkeys={["F7"]}>
+                <PrinterIcon /> {t("saveAndPrint")}
+              </form.SubmitButton>
+            </form.AppForm>
+          </Form>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className={cn("flex h-full flex-col gap-2", className)}>
       <form.Subscribe selector={(f) => f.values.priceGroup}>
@@ -251,148 +409,7 @@ export default function TransactionForm({
           />
         </div>
 
-        <div className="sticky bottom-0 flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground">
-          <div className="absolute -top-4 left-2 flex gap-2">
-            <Badge>{tc("totalPrice")}</Badge>
-            <AdminOnly>
-              {getUserSettings.showMarginAndDiscounts && (
-                <form.Subscribe selector={(f) => f.values}>
-                  {(v) => {
-                    const expenses = v.transactionItems.reduce(
-                      (acc, item) => (acc += item.buyPrice * item.quantity),
-                      0
-                    )
-                    const { margin: profitLoss } = marginAndDiscount(
-                      v.totalPrice,
-                      expenses
-                    )
-                    return (
-                      <Badge variant="secondary">
-                        <span>Margin:</span>
-                        <span
-                          className={cn(
-                            profitLoss < 0 ? "text-destructive" : "text-success"
-                          )}
-                        >
-                          {profitLoss > 0 && "+"}
-                          {formatCurrency(profitLoss)}
-                        </span>
-                      </Badge>
-                    )
-                  }}
-                </form.Subscribe>
-              )}
-            </AdminOnly>
-          </div>
-
-          {recalledTrx !== undefined && (
-            <div className="absolute -top-4 right-2 flex gap-2">
-              <Badge className="gap-2">
-                <span className="relative size-2">
-                  <span className="absolute size-full animate-ping rounded-full bg-warning opacity-75" />
-                  <span className="flex size-full rounded rounded-full bg-warning" />
-                </span>
-
-                <span>Recalled</span>
-
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      onClick={() => {
-                        cancelRecall()
-                      }}
-                    >
-                      <XIcon />
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    {t("cancelRecall")} <Kbd>Ctrl + F6</Kbd>
-                  </TooltipContent>
-                </Tooltip>
-              </Badge>
-            </div>
-          )}
-
-          <form.AppField name="totalPrice">
-            {(field) => <field.IdrField min={0} className="max-w-xs" />}
-          </form.AppField>
-
-          <div className="flex gap-2">
-            <ButtonWithHotkeys
-              hotkeys={["Ctrl+d"]}
-              variant="destructive"
-              disabled={selected.size < 1}
-              onClick={() => {
-                for (const s of selected) {
-                  form.removeFieldValue("transactionItems", s)
-                }
-                setSelected(new Set())
-              }}
-            >
-              <TrashIcon />
-              {t("removeItems", { count: selected.size })}
-            </ButtonWithHotkeys>
-
-            <ResetButton
-              hotkeys={["F4"]}
-              onClick={() => {
-                form.reset()
-              }}
-            />
-
-            {!props.transaction && (
-              <>
-                <form.Subscribe selector={(form) => form.canSubmit}>
-                  {(canSubmit) => (
-                    <ButtonWithHotkeys
-                      type="button"
-                      onClick={hold}
-                      hotkeys={["F5"]}
-                      disabled={!canSubmit}
-                    >
-                      <HandIcon /> <span>Hold</span>
-                    </ButtonWithHotkeys>
-                  )}
-                </form.Subscribe>
-
-                <ButtonWithHotkeys
-                  type="button"
-                  hotkeys={["F6"]}
-                  onClick={async () => {
-                    setHeld.splice(
-                      0,
-                      setHeld.length,
-                      ...(await listTransactions({
-                        held: true,
-                        from: new Date(0),
-                        to: new Date(),
-                      }))
-                    )
-                    setOpenRecallDialog(true)
-                  }}
-                >
-                  <ClockCountdownIcon /> <span>Recall</span>
-                </ButtonWithHotkeys>
-
-                <RecallDialog
-                  form={form}
-                  open={openRecallDialog}
-                  setOpen={setOpenRecallDialog}
-                  recalledTrx={recalledTrx}
-                  setRecalledTrx={setRecalledTrx}
-                />
-              </>
-            )}
-
-            <Form handleSubmit={form.handleSubmit}>
-              <form.AppForm>
-                <form.SubmitButton hotkeys={["F7"]}>
-                  <PrinterIcon /> {t("saveAndPrint")}
-                </form.SubmitButton>
-              </form.AppForm>
-            </Form>
-          </div>
-        </div>
+        <Footer />
       </div>
 
       <TransactionSummaryDialog
