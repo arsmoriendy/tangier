@@ -1,0 +1,125 @@
+import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
+import { withForm } from "@/components/form"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { useUserSettings } from "@/contexts/user-settings"
+import { useIsAdmin } from "@/components/admin-only"
+import { useTranslations } from "next-intl"
+import { NoItemsRow } from "@/app/(authorized)/transactions/transaction-item-table/no-items-row"
+import { ItemRow } from "@/app/(authorized)/transactions/transaction-item-table/item-row"
+import { recalculateTotalPrice } from "@/app/(authorized)/transactions/transaction-item-table/form-helpers"
+
+export const TransactionItemTable = withForm({
+  defaultValues: defaultTransactionValues,
+  props: {
+    selected: new Set([0]),
+    setSelected: (_selected: Set<number>) => {},
+  },
+  render: function Render({ form, selected, setSelected }) {
+    const { getUserSettings, setUserSettings } = useUserSettings()
+    const t = useTranslations("transactions.form")
+    const tc = useTranslations("common")
+    const isAdmin = useIsAdmin()
+
+    const showBuyPrice = isAdmin && getUserSettings.showTrxBuyPrice
+
+    function handleItemsChange() {
+      recalculateTotalPrice(form)
+    }
+
+    function handleDecrementStockChange(
+      checked: boolean,
+      items: typeof form.state.values.transactionItems
+    ) {
+      setUserSettings.decrementStock = checked
+      for (const [i, item] of items.entries())
+        if (item.buyPriceId !== null)
+          form.setFieldValue(`transactionItems[${i}].updateStock`, checked)
+    }
+
+    return (
+      <form.AppField
+        name="transactionItems"
+        mode="array"
+        listeners={{
+          onChange: handleItemsChange,
+        }}
+      >
+        {({ state }) => (
+          <Table className="w-full table-fixed border-separate border-spacing-0">
+            <colgroup>
+              <col className="w-1/36" />
+              <col className="w-1/36" />
+              <col className="w-9/36" />
+              <col className="w-3/36" />
+              <col className="w-6/36" />
+              {showBuyPrice && <col className="w-6/36" />}
+              <col className="w-3/36" />
+              <col className="w-1/36" />
+              <col className="w-6/36" />
+            </colgroup>
+
+            <TableHeader className="[&_th]:border-b">
+              <TableRow>
+                <TableHead colSpan={2}></TableHead>
+                <TableHead>{tc("name")}</TableHead>
+                <TableHead>{tc("unit")}</TableHead>
+                {showBuyPrice && <TableHead>{tc("buyPrice")}</TableHead>}
+                <TableHead>{tc("sellPrice")}</TableHead>
+                <TableHead>Qty</TableHead>
+                <TableHead />
+                <TableHead>{tc("quantifiedPrice")}</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+              {state.value.length < 1 && (
+                <NoItemsRow colSpan={showBuyPrice ? 9 : 8} />
+              )}
+
+              {state.value.map((item, i) => (
+                <ItemRow
+                  key={i}
+                  form={form}
+                  i={i}
+                  buyPriceId={item.buyPriceId}
+                  selected={selected}
+                  setSelected={setSelected}
+                  showBuyPrice={showBuyPrice}
+                />
+              ))}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell colSpan={5} />
+                {showBuyPrice && <TableCell />}
+                <TableCell />
+                <TableCell className="flex justify-center gap-2 px-0">
+                  <Checkbox
+                    checked={getUserSettings.decrementStock}
+                    onCheckedChange={(c) =>
+                      handleDecrementStockChange(c as boolean, state.value)
+                    }
+                  />
+                </TableCell>
+                <TableCell>
+                  <span className="text-muted-foreground">
+                    {t("items.updateStock")}
+                  </span>
+                </TableCell>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        )}
+      </form.AppField>
+    )
+  },
+})
