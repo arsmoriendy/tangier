@@ -270,6 +270,13 @@ export const AddItemForm = withForm({
                         {(field) => (
                           <field.IdrField
                             label={tc("quantifiedPrice")}
+                            inputClass={cn(
+                              isAdmin &&
+                                getUserSettings.coloredSellPrice &&
+                                (margin < 0
+                                  ? "bg-destructive/33"
+                                  : "bg-success/33")
+                            )}
                             min={0}
                           />
                         )}

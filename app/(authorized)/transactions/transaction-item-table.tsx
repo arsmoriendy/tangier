@@ -296,7 +296,18 @@ export const TransactionItemTable = withForm({
                                 },
                               }}
                             >
-                              {(field) => <field.IdrField min={0} />}
+                              {(field) => (
+                                <field.IdrField
+                                  inputClass={cn(
+                                    isAdmin &&
+                                      getUserSettings.coloredSellPrice &&
+                                      (margin < 0
+                                        ? "bg-destructive/33"
+                                        : "bg-success/33")
+                                  )}
+                                  min={0}
+                                />
+                              )}
                             </form.AppField>
                             <AdminOnly>
                               {!getUserSettings.hideMarginAndDiscounts && (
