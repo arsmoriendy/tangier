@@ -14,6 +14,7 @@ import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { useSession } from "@/contexts/session-ctx"
 import { useUserSettings } from "@/contexts/user-settings"
 import { formatCurrency } from "@/lib/i18n/currency"
+import { marginAndDiscount } from "@/lib/margin"
 import { cn } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 import { ComponentProps } from "react"
@@ -38,7 +39,10 @@ export const TransactionSummaryDialog = withForm({
                 (acc, item) => (acc += item.buyPrice * item.quantity),
                 0
               )
-              const profitLoss = v.totalPrice - expenses
+              const { margin: profitLoss } = marginAndDiscount(
+                v.totalPrice,
+                expenses
+              )
               return (
                 <Table>
                   <TableBody>

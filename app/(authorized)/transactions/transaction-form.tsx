@@ -40,6 +40,7 @@ import { useUserSettings } from "@/contexts/user-settings"
 import { TransactionSummaryDialog } from "@/app/(authorized)/transactions/transaction-summary-dialog"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
+import { marginAndDiscount } from "@/lib/margin"
 import { cn } from "@/lib/utils"
 import { XIcon } from "@phosphor-icons/react/dist/ssr"
 import {
@@ -260,7 +261,10 @@ export default function TransactionForm({
                       (acc, item) => (acc += item.buyPrice * item.quantity),
                       0
                     )
-                    const profitLoss = v.totalPrice - expenses
+                    const { margin: profitLoss } = marginAndDiscount(
+                      v.totalPrice,
+                      expenses
+                    )
                     return (
                       <Badge variant="secondary">
                         <span>Margin:</span>

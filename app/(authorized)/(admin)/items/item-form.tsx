@@ -20,6 +20,7 @@ import { useUnits } from "@/contexts/units-ctx"
 import { Button } from "@/components/ui/button"
 import { TrashIcon } from "@phosphor-icons/react"
 import { cn } from "@/lib/utils"
+import { marginAndDiscount } from "@/lib/margin"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { useTranslations } from "next-intl"
 import { useItems } from "@/contexts/items-ctx"
@@ -200,9 +201,10 @@ export default function ItemForm(props: {
                           <form.Subscribe selector={(f) => f.values.sellPrices}>
                             {(sps) =>
                               sps.map(({ price: sp, priceGroup }) => {
-                                const margin = sp - bp
-                                const discount =
-                                  bp === 0 ? 0 : ((bp - sp) / bp) * 100
+                                const { margin, discount } = marginAndDiscount(
+                                  sp,
+                                  bp
+                                )
                                 const pg = priceGroups.find(
                                   (pg) => pg.id === priceGroup
                                 )!

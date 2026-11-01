@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/choice-card"
 import { Field, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { MarginIndicator } from "@/components/margin-indicator"
+import { marginAndDiscount } from "@/lib/margin"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
 import { subscribeKey } from "valtio/utils"
@@ -239,8 +240,7 @@ export const AddItemForm = withForm({
                       selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
                     >
                       {([bp, sp]) => {
-                        const margin = sp - bp
-                        const discount = ((bp - sp) / bp) * 100
+                        const { margin, discount } = marginAndDiscount(sp, bp)
                         return (
                           <MarginIndicator
                             margin={margin}
@@ -260,9 +260,7 @@ export const AddItemForm = withForm({
                 ]}
               >
                 {([qsp, bp, qty]) => {
-                  const cost = bp * qty
-                  const margin = qsp - cost
-                  const discount = cost === 0 ? 0 : ((cost - qsp) / cost) * 100
+                  const { margin, discount } = marginAndDiscount(qsp, bp * qty)
 
                   return (
                     <>

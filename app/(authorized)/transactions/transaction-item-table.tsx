@@ -14,6 +14,7 @@ import {
 import { useUserSettings } from "@/contexts/user-settings"
 import { useSession } from "@/contexts/session-ctx"
 import { MarginIndicator } from "@/components/margin-indicator"
+import { marginAndDiscount } from "@/lib/margin"
 import { cn } from "@/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
@@ -190,8 +191,7 @@ export const TransactionItemTable = withForm({
                       ]}
                     >
                       {([bp, sp]) => {
-                        const margin = sp - bp
-                        const discount = ((bp - sp) / bp) * 100
+                        const { margin, discount } = marginAndDiscount(sp, bp)
 
                         return (
                           <>
@@ -280,10 +280,10 @@ export const TransactionItemTable = withForm({
                       ]}
                     >
                       {([qsp, bp, qty]) => {
-                        const cost = bp * qty
-                        const margin = qsp - cost
-                        const discount =
-                          cost === 0 ? 0 : ((cost - qsp) / cost) * 100
+                        const { margin, discount } = marginAndDiscount(
+                          qsp,
+                          bp * qty
+                        )
 
                         return (
                           <>
