@@ -96,9 +96,7 @@ export const TransactionItemTable = withForm({
                 <TableRow>
                   <TableCell
                     className="text-center text-muted-foreground"
-                    colSpan={
-                      isAdmin && getUserSettings.showTrxBuyPrice ? 9 : 8
-                    }
+                    colSpan={isAdmin && getUserSettings.showTrxBuyPrice ? 9 : 8}
                   >
                     {t("items.noItems")}
                   </TableCell>
