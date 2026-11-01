@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
-import { useSession } from "@/contexts/session-ctx"
+import AdminOnly from "@/components/admin-only"
 import { useUserSettings } from "@/contexts/user-settings"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { marginAndDiscount } from "@/lib/margin"
@@ -25,7 +25,6 @@ export const TransactionSummaryDialog = withForm({
   render: function Render({ form, ...props }) {
     const t = useTranslations("transactions.form.summary")
     const tc = useTranslations("common")
-    const { user } = useSession()
     const { getUserSettings } = useUserSettings()
     return (
       <AlertDialog {...props}>
@@ -54,8 +53,8 @@ export const TransactionSummaryDialog = withForm({
                       <TableCell>{t("totalPrice")}</TableCell>
                       <TableCell>{formatCurrency(v.totalPrice)}</TableCell>
                     </TableRow>
-                    {user.role === "admin" &&
-                      !getUserSettings.hideMarginAndDiscounts && (
+                    <AdminOnly>
+                      {!getUserSettings.hideMarginAndDiscounts && (
                         <>
                           <TableRow>
                             <TableCell>{t("expenses")}</TableCell>
@@ -77,6 +76,7 @@ export const TransactionSummaryDialog = withForm({
                           </TableRow>
                         </>
                       )}
+                    </AdminOnly>
                   </TableBody>
                 </Table>
               )

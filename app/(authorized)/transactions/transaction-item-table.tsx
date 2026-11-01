@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { useUserSettings } from "@/contexts/user-settings"
-import { useSession } from "@/contexts/session-ctx"
+import AdminOnly, { useIsAdmin } from "@/components/admin-only"
 import { MarginIndicator } from "@/components/margin-indicator"
 import { marginAndDiscount } from "@/lib/margin"
 import { cn } from "@/lib/utils"
@@ -29,7 +29,7 @@ export const TransactionItemTable = withForm({
     const { getUserSettings, setUserSettings } = useUserSettings()
     const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
-    const session = useSession()
+    const isAdmin = useIsAdmin()
 
     function recalculateTotalPrice() {
       setIdempotentFieldValue(
@@ -68,8 +68,9 @@ export const TransactionItemTable = withForm({
               <col className="w-9/36" />
               <col className="w-3/36" />
               <col className="w-6/36" />
-              {session.user.role === "admin" &&
-                !getUserSettings.hideTrxBuyPrice && <col className="w-6/36" />}
+              <AdminOnly>
+                {!getUserSettings.hideTrxBuyPrice && <col className="w-6/36" />}
+              </AdminOnly>
               <col className="w-3/36" />
               <col className="w-1/36" />
               <col className="w-6/36" />
@@ -79,10 +80,11 @@ export const TransactionItemTable = withForm({
                 <TableHead colSpan={2}></TableHead>
                 <TableHead>{tc("name")}</TableHead>
                 <TableHead>{tc("unit")}</TableHead>
-                {session.user.role === "admin" &&
-                  !getUserSettings.hideTrxBuyPrice && (
+                <AdminOnly>
+                  {!getUserSettings.hideTrxBuyPrice && (
                     <TableHead>{tc("buyPrice")}</TableHead>
                   )}
+                </AdminOnly>
                 <TableHead>{tc("sellPrice")}</TableHead>
                 <TableHead>Qty</TableHead>
                 <TableHead />
@@ -95,10 +97,7 @@ export const TransactionItemTable = withForm({
                   <TableCell
                     className="text-center text-muted-foreground"
                     colSpan={
-                      session.user.role === "admin" &&
-                      !getUserSettings.hideTrxBuyPrice
-                        ? 9
-                        : 8
+                      isAdmin && !getUserSettings.hideTrxBuyPrice ? 9 : 8
                     }
                   >
                     {t("items.noItems")}
@@ -175,14 +174,15 @@ export const TransactionItemTable = withForm({
                       {(field) => <field.TextField />}
                     </form.AppField>
                   </TableCell>
-                  {session.user.role === "admin" &&
-                    !getUserSettings.hideTrxBuyPrice && (
+                  <AdminOnly>
+                    {!getUserSettings.hideTrxBuyPrice && (
                       <TableCell className="align-top">
                         <form.AppField name={`transactionItems[${i}].buyPrice`}>
                           {(field) => <field.IdrField min={0} />}
                         </form.AppField>
                       </TableCell>
                     )}
+                  </AdminOnly>
                   <TableCell className="align-top">
                     <form.Subscribe
                       selector={(f) => [
@@ -210,7 +210,7 @@ export const TransactionItemTable = withForm({
                               {(field) => (
                                 <field.IdrField
                                   inputClass={cn(
-                                    session.user.role === "admin" &&
+                                    isAdmin &&
                                       getUserSettings.coloredSellPrice &&
                                       (bp > sp
                                         ? "bg-destructive/33"
@@ -220,13 +220,14 @@ export const TransactionItemTable = withForm({
                                 />
                               )}
                             </form.AppField>
-                            {session.user.role === "admin" &&
-                              !getUserSettings.hideMarginAndDiscounts && (
+                            <AdminOnly>
+                              {!getUserSettings.hideMarginAndDiscounts && (
                                 <MarginIndicator
                                   margin={margin}
                                   discount={discount}
                                 />
                               )}
+                            </AdminOnly>
                           </>
                         )
                       }}
@@ -297,13 +298,14 @@ export const TransactionItemTable = withForm({
                             >
                               {(field) => <field.IdrField min={0} />}
                             </form.AppField>
-                            {session.user.role === "admin" &&
-                              !getUserSettings.hideMarginAndDiscounts && (
+                            <AdminOnly>
+                              {!getUserSettings.hideMarginAndDiscounts && (
                                 <MarginIndicator
                                   margin={margin}
                                   discount={discount}
                                 />
                               )}
+                            </AdminOnly>
                           </>
                         )
                       }}
@@ -315,8 +317,9 @@ export const TransactionItemTable = withForm({
             <TableFooter>
               <TableRow>
                 <TableCell colSpan={5} />
-                {session.user.role === "admin" &&
-                  !getUserSettings.hideTrxBuyPrice && <TableCell />}
+                <AdminOnly>
+                  {!getUserSettings.hideTrxBuyPrice && <TableCell />}
+                </AdminOnly>
                 <TableCell />
                 <TableCell className="flex justify-center gap-2 px-0">
                   <Checkbox

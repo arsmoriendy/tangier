@@ -41,6 +41,7 @@ import { TransactionSummaryDialog } from "@/app/(authorized)/transactions/transa
 import { formatCurrency } from "@/lib/i18n/currency"
 import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
 import { marginAndDiscount } from "@/lib/margin"
+import AdminOnly from "@/components/admin-only"
 import { cn } from "@/lib/utils"
 import { XIcon } from "@phosphor-icons/react/dist/ssr"
 import {
@@ -253,8 +254,8 @@ export default function TransactionForm({
         <div className="sticky bottom-0 flex justify-between gap-2 border bg-sidebar p-2 text-sidebar-foreground">
           <div className="absolute -top-4 left-2 flex gap-2">
             <Badge>{tc("totalPrice")}</Badge>
-            {session.user.role === "admin" &&
-              !getUserSettings.hideMarginAndDiscounts && (
+            <AdminOnly>
+              {!getUserSettings.hideMarginAndDiscounts && (
                 <form.Subscribe selector={(f) => f.values}>
                   {(v) => {
                     const expenses = v.transactionItems.reduce(
@@ -281,6 +282,7 @@ export default function TransactionForm({
                   }}
                 </form.Subscribe>
               )}
+            </AdminOnly>
           </div>
 
           {recalledTrx !== undefined && (

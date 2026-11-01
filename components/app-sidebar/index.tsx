@@ -14,7 +14,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
 } from "@/components/ui/sidebar"
-import { useSession } from "@/contexts/session-ctx"
+import AdminOnly from "@/components/admin-only"
 import {
   MoneyIcon,
   PackageIcon,
@@ -32,7 +32,6 @@ import { Header } from "@/components/app-sidebar/header"
 import CollapsedClientSidebarItem from "@/components/app-sidebar/collapsed-client-sidebar-item"
 
 export function AppSidebar() {
-  const session = useSession()
   const t = useTranslations("sidebar")
   const tc = useTranslations("common")
   return (
@@ -72,7 +71,7 @@ export function AppSidebar() {
               )}
             </DynamicSidebarLink>
 
-            {session.user.role === "admin" && (
+            <AdminOnly>
               <>
                 <DynamicSidebarLink href="/items">
                   {({ href, ...props }) => (
@@ -140,7 +139,7 @@ export function AppSidebar() {
                   )}
                 </DynamicSidebarLink>
               </>
-            )}
+            </AdminOnly>
 
             <DynamicSidebarLink href="/options">
               {({ href, ...props }) => (

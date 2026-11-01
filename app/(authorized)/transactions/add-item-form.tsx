@@ -16,9 +16,9 @@ import {
 import { useAddItem } from "@/app/(authorized)/transactions/add-item-ctx"
 import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
 import { Item } from "@/components/ui/item"
+import AdminOnly, { useIsAdmin } from "@/components/admin-only"
 import { useUserSettings } from "@/contexts/user-settings"
 import { cn } from "@/lib/utils"
-import { useSession } from "@/contexts/session-ctx"
 import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
 import { useEffect, useRef } from "react"
@@ -30,7 +30,7 @@ import { ListPlusIcon } from "@phosphor-icons/react"
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
   render: function Render({ form: createTransactionForm }) {
-    const session = useSession()
+    const isAdmin = useIsAdmin()
     const { addItemProxy, addItemSnap } = useAddItem()
     const { getUserSettings, setUserSettings } = useUserSettings()
     const { units } = useUnits()
@@ -138,8 +138,8 @@ export const AddItemForm = withForm({
 
         <Form handleSubmit={form.handleSubmit}>
           <div className="flex gap-2">
-            {session.user.role === "admin" &&
-              !getUserSettings.hideTrxBuyPrice && (
+            <AdminOnly>
+              {!getUserSettings.hideTrxBuyPrice && (
                 <FieldSet className="flex-1">
                   <FieldLegend>{tc("buyPrice")}</FieldLegend>
 
@@ -179,6 +179,7 @@ export const AddItemForm = withForm({
                   </RadioGroupChoiceCard>
                 </FieldSet>
               )}
+            </AdminOnly>
 
             <FieldSet className="flex-1">
               <FieldLegend>{tc("sellPrice")}</FieldLegend>
@@ -203,7 +204,7 @@ export const AddItemForm = withForm({
                         {(field) => (
                           <field.IdrField
                             inputClass={cn(
-                              session.user.role === "admin" &&
+                              isAdmin &&
                                 getUserSettings.coloredSellPrice &&
                                 (bp > sp
                                   ? "bg-destructive/33"
@@ -234,8 +235,8 @@ export const AddItemForm = withForm({
                   </form.AppField>
                 </div>
 
-                {session.user.role === "admin" &&
-                  !getUserSettings.hideMarginAndDiscounts && (
+                <AdminOnly>
+                  {!getUserSettings.hideMarginAndDiscounts && (
                     <form.Subscribe
                       selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
                     >
@@ -250,6 +251,7 @@ export const AddItemForm = withForm({
                       }}
                     </form.Subscribe>
                   )}
+                </AdminOnly>
               </div>
 
               <form.Subscribe
@@ -272,13 +274,14 @@ export const AddItemForm = withForm({
                           />
                         )}
                       </form.AppField>
-                      {session.user.role === "admin" &&
-                        !getUserSettings.hideMarginAndDiscounts && (
+                      <AdminOnly>
+                        {!getUserSettings.hideMarginAndDiscounts && (
                           <MarginIndicator
                             margin={margin}
                             discount={discount}
                           />
                         )}
+                      </AdminOnly>
                     </>
                   )
                 }}

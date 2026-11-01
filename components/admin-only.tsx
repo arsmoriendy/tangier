@@ -3,8 +3,13 @@
 import { useSession } from "@/contexts/session-ctx"
 import { ReactNode } from "react"
 
-export default function AdminOnly(props: { children: ReactNode }) {
+export function useIsAdmin() {
   const { user } = useSession()
-  if (user.role !== "admin") return null
+  return user.role === "admin"
+}
+
+export default function AdminOnly(props: { children: ReactNode }) {
+  const isAdmin = useIsAdmin()
+  if (!isAdmin) return null
   return props.children
 }
