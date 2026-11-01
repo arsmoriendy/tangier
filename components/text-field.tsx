@@ -28,6 +28,7 @@ export default function TextField({
   transformers = [],
   disableUppercaseOption,
   hideHotkeys,
+  hideErrors,
   ...inputProps
 }: Omit<ComponentProps<typeof Input>, "ref"> & {
   label?: string
@@ -36,6 +37,7 @@ export default function TextField({
   hotkeys?: string[]
   disableUppercaseOption?: true
   hideHotkeys?: true
+  hideErrors?: true
   ref?: RefObject<HTMLInputElement | null>
 }) {
   const field = useFieldContext<string>()
@@ -89,7 +91,7 @@ export default function TextField({
           ))}
       </InputGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
-      {field.state.meta.errors[0] && (
+      {!hideErrors && field.state.meta.errors[0] && (
         <FieldError>{field.state.meta.errors[0].message}</FieldError>
       )}
     </Field>

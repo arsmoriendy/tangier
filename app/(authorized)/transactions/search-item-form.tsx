@@ -91,6 +91,7 @@ export const SearchItemForm = withForm({
             {(field) => (
               <field.TextField
                 hideHotkeys
+                hideErrors
                 className="min-w-50"
                 ref={nameRef}
                 hotkeys={["Ctrl+k", "F3"]}
