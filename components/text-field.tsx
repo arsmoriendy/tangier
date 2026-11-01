@@ -27,6 +27,7 @@ export default function TextField({
   ref = useRef<HTMLInputElement>(null),
   transformers = [],
   disableUppercaseOption,
+  hideHotkeys,
   ...inputProps
 }: Omit<ComponentProps<typeof Input>, "ref"> & {
   label?: string
@@ -34,6 +35,7 @@ export default function TextField({
   className?: string
   hotkeys?: string[]
   disableUppercaseOption?: true
+  hideHotkeys?: true
   ref?: RefObject<HTMLInputElement | null>
 }) {
   const field = useFieldContext<string>()
@@ -79,11 +81,12 @@ export default function TextField({
           transformers={getTransformers}
           {...inputProps}
         />
-        {hotkeys?.map((hk, i) => (
-          <InputGroupAddon key={i} align="inline-end">
-            <Kbd>{hk}</Kbd>
-          </InputGroupAddon>
-        ))}
+        {!hideHotkeys &&
+          hotkeys?.map((hk, i) => (
+            <InputGroupAddon key={i} align="inline-end">
+              <Kbd>{hk}</Kbd>
+            </InputGroupAddon>
+          ))}
       </InputGroup>
       {description && <FieldDescription>{description}</FieldDescription>}
       {field.state.meta.errors[0] && (

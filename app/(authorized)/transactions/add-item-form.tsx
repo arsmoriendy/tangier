@@ -175,7 +175,7 @@ export const AddItemForm = withForm({
                   selectBuyPrice(bp)
                 }
               >
-                <ComboboxInput />
+                <ComboboxInput className="min-w-31" />
                 <ComboboxContent>
                   <ComboboxEmpty>{t("noPrice")}</ComboboxEmpty>
                   <ComboboxList>
@@ -210,6 +210,7 @@ export const AddItemForm = withForm({
                 >
                   {(field) => (
                     <field.IdrField
+                      className="min-w-29"
                       inputClass={cn(
                         isAdmin &&
                           getUserSettings.coloredSellPrice &&
@@ -243,7 +244,9 @@ export const AddItemForm = withForm({
                 ),
             }}
           >
-            {(f) => <f.NumberField min={1} ref={qtyRef} />}
+            {(f) => (
+              <f.NumberField className="w-14 shrink-0" min={1} ref={qtyRef} />
+            )}
           </form.AppField>
 
           <form.Subscribe
@@ -259,6 +262,7 @@ export const AddItemForm = withForm({
                 <form.AppField name="quantifiedSellPrice">
                   {(field) => (
                     <field.IdrField
+                      className="min-w-31"
                       inputClass={cn(
                         isAdmin &&
                           getUserSettings.coloredSellPrice &&

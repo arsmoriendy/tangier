@@ -29,7 +29,7 @@ export function IdrInput({
     >
       <span
         className={cn(
-          "grid w-8 place-items-center bg-muted text-center text-muted-foreground select-none",
+          "hidden w-8 place-items-center bg-muted text-center text-muted-foreground select-none xl:grid",
           ariaInvalid ? "bg-destructive text-background" : ""
         )}
       >

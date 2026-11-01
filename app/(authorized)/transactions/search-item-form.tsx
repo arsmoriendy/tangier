@@ -90,6 +90,8 @@ export const SearchItemForm = withForm({
           <form.AppField name="name">
             {(field) => (
               <field.TextField
+                hideHotkeys
+                className="min-w-50"
                 ref={nameRef}
                 hotkeys={["Ctrl+k", "F3"]}
                 placeholder={t("nameOrBarcode")}
@@ -123,6 +125,7 @@ export const SearchItemForm = withForm({
                 >
                   <ComboboxInput
                     aria-invalid={isInvalid}
+                    className="min-w-22"
                     placeholder={tc("unit")}
                   />
                   <ComboboxContent>
