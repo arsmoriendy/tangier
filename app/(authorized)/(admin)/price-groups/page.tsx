@@ -17,10 +17,9 @@ export default async function Page() {
         <PageTitle>{t("priceGroups")}</PageTitle>
       </PageHeader>
 
-      <div className="px- pt-2">
-        <CreatePriceGroupForm />
-        <PriceGroupTable />
-      </div>
+      <CreatePriceGroupForm className="my-2 px-2" />
+
+      <PriceGroupTable />
     </PriceGroupsProvider>
   )
 }

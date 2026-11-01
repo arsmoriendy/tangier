@@ -5,7 +5,7 @@ import { FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { createPriceGroup, listPriceGroups } from "@/lib/crud/price-groups"
 import { ArrowsClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
-import { useEffect } from "react"
+import { ComponentProps, useEffect } from "react"
 import { useTranslations } from "next-intl"
 import z from "zod"
 import { getRandomColor } from "../../../../lib/catpuccun-colors"
@@ -17,7 +17,9 @@ const createPriceGroupFormSchema = z.object({
   hexColor: z.string().min(3).max(6),
 })
 
-export default function CreatePriceGroupForm() {
+export default function CreatePriceGroupForm({
+  ...props
+}: ComponentProps<typeof FieldSet>) {
   const { setPriceGroups } = usePriceGroups()
   const t = useTranslations("priceGroups")
   const ct = useTranslations("common")
@@ -47,7 +49,7 @@ export default function CreatePriceGroupForm() {
   }, [])
 
   return (
-    <FieldSet>
+    <FieldSet {...props}>
       <FieldLegend>{t("createNew")}</FieldLegend>
 
       <Form handleSubmit={form.handleSubmit}>
