@@ -15,7 +15,6 @@ import { useUserSettings } from "@/contexts/user-settings"
 import AdminOnly, { useIsAdmin } from "@/components/admin-only"
 import { MarginIndicator } from "@/components/margin-indicator"
 import { MismatchIndicator } from "@/components/mismatch-indicator"
-import { marginAndDiscount } from "@/lib/margin"
 import { cn } from "@/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
@@ -192,8 +191,6 @@ export const TransactionItemTable = withForm({
                       ]}
                     >
                       {([bp, sp]) => {
-                        const { margin, discount } = marginAndDiscount(sp, bp)
-
                         return (
                           <>
                             <form.AppField
@@ -224,8 +221,9 @@ export const TransactionItemTable = withForm({
                             <AdminOnly>
                               {!getUserSettings.hideMarginAndDiscounts && (
                                 <MarginIndicator
-                                  margin={margin}
-                                  discount={discount}
+                                  sell={sp}
+                                  buy={bp}
+                                  tooltip={tc("marginTooltip")}
                                 />
                               )}
                             </AdminOnly>
@@ -283,12 +281,6 @@ export const TransactionItemTable = withForm({
                       ]}
                     >
                       {([qsp, bp, qty, sp]) => {
-                        const { margin, discount } = marginAndDiscount(
-                          qsp,
-                          bp * qty
-                        )
-                        const mismatch = qsp - sp * qty
-
                         return (
                           <>
                             <form.AppField
@@ -304,7 +296,7 @@ export const TransactionItemTable = withForm({
                                   inputClass={cn(
                                     isAdmin &&
                                       getUserSettings.coloredSellPrice &&
-                                      (margin < 0
+                                      (qsp < bp * qty
                                         ? "bg-destructive/33"
                                         : "bg-success/33")
                                   )}
@@ -315,12 +307,18 @@ export const TransactionItemTable = withForm({
                             <AdminOnly>
                               {!getUserSettings.hideMarginAndDiscounts && (
                                 <MarginIndicator
-                                  margin={margin}
-                                  discount={discount}
+                                  sell={qsp}
+                                  buy={bp * qty}
+                                  tooltip={tc("marginTooltip")}
                                 />
                               )}
                             </AdminOnly>
-                            <MismatchIndicator mismatch={mismatch} />
+                            <MismatchIndicator
+                              sellPrice={sp}
+                              quantity={qty}
+                              quantifiedSellPrice={qsp}
+                              tooltip={tc("mismatchTooltip")}
+                            />
                           </>
                         )
                       }}

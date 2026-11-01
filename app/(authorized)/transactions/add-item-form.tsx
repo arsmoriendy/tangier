@@ -6,7 +6,6 @@ import {
 import { Field, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
 import { MarginIndicator } from "@/components/margin-indicator"
 import { MismatchIndicator } from "@/components/mismatch-indicator"
-import { marginAndDiscount } from "@/lib/margin"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
 import { subscribeKey } from "valtio/utils"
@@ -241,15 +240,13 @@ export const AddItemForm = withForm({
                     <form.Subscribe
                       selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
                     >
-                      {([bp, sp]) => {
-                        const { margin, discount } = marginAndDiscount(sp, bp)
-                        return (
-                          <MarginIndicator
-                            margin={margin}
-                            discount={discount}
-                          />
-                        )
-                      }}
+                      {([bp, sp]) => (
+                        <MarginIndicator
+                          sell={sp}
+                          buy={bp}
+                          tooltip={tc("marginTooltip")}
+                        />
+                      )}
                     </form.Subscribe>
                   )}
                 </AdminOnly>
@@ -264,9 +261,6 @@ export const AddItemForm = withForm({
                 ]}
               >
                 {([qsp, bp, qty, sp]) => {
-                  const { margin, discount } = marginAndDiscount(qsp, bp * qty)
-                  const mismatch = qsp - sp * qty
-
                   return (
                     <div>
                       <form.AppField name="quantifiedSellPrice">
@@ -276,7 +270,7 @@ export const AddItemForm = withForm({
                             inputClass={cn(
                               isAdmin &&
                                 getUserSettings.coloredSellPrice &&
-                                (margin < 0
+                                (qsp < bp * qty
                                   ? "bg-destructive/33"
                                   : "bg-success/33")
                             )}
@@ -287,12 +281,18 @@ export const AddItemForm = withForm({
                       <AdminOnly>
                         {!getUserSettings.hideMarginAndDiscounts && (
                           <MarginIndicator
-                            margin={margin}
-                            discount={discount}
+                            sell={qsp}
+                            buy={bp * qty}
+                            tooltip={tc("marginTooltip")}
                           />
                         )}
                       </AdminOnly>
-                      <MismatchIndicator mismatch={mismatch} />
+                      <MismatchIndicator
+                        sellPrice={sp}
+                        quantity={qty}
+                        quantifiedSellPrice={qsp}
+                        tooltip={tc("mismatchTooltip")}
+                      />
                     </div>
                   )
                 }}
