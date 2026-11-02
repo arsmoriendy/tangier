@@ -302,6 +302,7 @@ export const AddItemForm = withForm({
             <form.AppForm>
               <form.SubmitButton
                 size="badge"
+                className="disabled:opacity-100 disabled:brightness-50"
                 hotkeys={["Ctrl + Enter"]}
                 hideHotkeys
                 tooltip=<Kbd>Ctrl + Enter</Kbd>
