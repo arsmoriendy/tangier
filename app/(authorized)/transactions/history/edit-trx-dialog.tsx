@@ -29,7 +29,7 @@ export function EditTrxDialog({
       </DialogTrigger>
 
       <DialogContent
-        className="max-h-[92vh] w-[92vw] p-0 sm:max-w-[92vw]"
+        className="w-[92vw] p-0 ring-0 sm:max-w-[92vw]"
         showCloseButton={false}
       >
         <DialogTitle className="hidden" />
@@ -44,7 +44,7 @@ export function EditTrxDialog({
           </DialogClose>
         </Button>
 
-        <div className="h-[92vh] overflow-auto p-4">
+        <div className="h-[92vh] overflow-auto">
           <TransactionForm
             transaction={trx}
             onUpdate={(trx) => {
