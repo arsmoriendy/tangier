@@ -80,6 +80,11 @@ export type WrappedComboboxProps<O> = {
    * positioning keep working.
    */
   renderInput?: (props: WrappedComboboxInputProps) => React.ReactElement
+  /**
+   * Open the list when the input receives focus. Base UI only opens on
+   * mousedown, so this covers Tab and programmatic focus.
+   */
+  openOnFocus?: boolean
   disabled?: boolean
   invalid?: boolean
 } & Omit<React.ComponentProps<"div">, "children">
@@ -125,6 +130,7 @@ export function WrappedCombobox<O>({
   emptyMessage,
   renderOption,
   renderInput,
+  openOnFocus = true,
   disabled,
   invalid,
   className,
@@ -195,6 +201,21 @@ export function WrappedCombobox<O>({
     if (next.trim() !== "") setOpen(true)
   }
 
+  function getInputProps(
+    inputProps: React.ComponentPropsWithRef<"input">
+  ): WrappedComboboxInputProps["domProps"] {
+    const domProps = inputDomProps(inputProps)
+    if (!openOnFocus) return domProps
+
+    return {
+      ...domProps,
+      onFocus(event: React.FocusEvent<HTMLInputElement>) {
+        domProps.onFocus?.(event)
+        setOpen(true)
+      },
+    }
+  }
+
   return (
     <div className={cn("relative", className)} {...divProps}>
       <Combobox
@@ -218,7 +239,7 @@ export function WrappedCombobox<O>({
                 invalid,
                 disabled,
                 placeholder,
-                domProps: inputDomProps(
+                domProps: getInputProps(
                   renderProps as React.ComponentPropsWithRef<"input">
                 ),
               })
@@ -230,6 +251,7 @@ export function WrappedCombobox<O>({
             placeholder={placeholder}
             disabled={disabled}
             aria-invalid={invalid || undefined}
+            onFocus={openOnFocus ? () => setOpen(true) : undefined}
           />
         )}
         <ComboboxContent>
