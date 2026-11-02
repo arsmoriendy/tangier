@@ -3,7 +3,6 @@ import {
   Combobox,
   ComboboxContent,
   ComboboxEmpty,
-  ComboboxInput,
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox"
@@ -32,6 +31,8 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Badge } from "@/components/ui/badge"
+import { IdrInput, IdrInputProps } from "@/components/ui/idr-input"
+import { Combobox as ComboboxPrimitive } from "@base-ui/react"
 
 type BuyPriceOption = {
   value: string
@@ -168,37 +169,59 @@ export const AddItemForm = withForm({
         <Form className="contents" handleSubmit={form.handleSubmit}>
           <AdminOnly>
             {getUserSettings.showTrxBuyPrice && (
-              <Combobox
-                items={buyPriceOptions}
-                value={
-                  buyPriceOptions.find(
-                    (bp) => bp.value === addItemSnap.buyPrice?.id
-                  ) ?? null
-                }
-                itemToStringValue={(bp) => bp!.label ?? ""}
-                onValueChange={(bp: BuyPriceOption | null) =>
-                  selectBuyPrice(bp)
-                }
-              >
-                <ComboboxInput className="relative min-w-31">
-                  <Badge className="absolute -top-6 left-0">
-                    {tc("buyPrice")}
-                  </Badge>
-                </ComboboxInput>
-                <ComboboxContent>
-                  <ComboboxEmpty>{t("noPrice")}</ComboboxEmpty>
-                  <ComboboxList>
-                    {(bp) => (
-                      <ComboboxItem key={bp.value} value={bp}>
-                        <span className="grow">{bp.label}</span>
-                        <span className="text-muted-foreground">
-                          {tc("stockLeft", { count: bp.stock })}
-                        </span>
-                      </ComboboxItem>
+              <div className="relative">
+                <Badge className="absolute -top-6 left-0">
+                  {tc("buyPrice")}
+                </Badge>
+
+                <Combobox
+                  items={buyPriceOptions}
+                  value={
+                    buyPriceOptions.find(
+                      (bp) => bp.value === addItemSnap.buyPrice?.id
+                    ) ?? null
+                  }
+                  itemToStringValue={(bp) => bp!.label ?? ""}
+                  onValueChange={(bp: BuyPriceOption | null) =>
+                    selectBuyPrice(bp)
+                  }
+                >
+                  <ComboboxPrimitive.Input
+                    className="relative min-w-31"
+                    render={({ ...props }, _state) => (
+                      <form.Subscribe selector={(s) => s.values.buyPrice}>
+                        {(bp) => (
+                          <IdrInput
+                            {...(props as IdrInputProps)}
+                            arrowControls={false}
+                            value={bp}
+                            onValueChange={(value) =>
+                              form.setFieldValue("buyPrice", value)
+                            }
+                          />
+                        )}
+                      </form.Subscribe>
                     )}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
+                  />
+                  <ComboboxContent>
+                    <ComboboxEmpty>{t("noPrice")}</ComboboxEmpty>
+                    <ComboboxList>
+                      {(bp) => (
+                        <ComboboxItem
+                          key={bp.value}
+                          value={bp}
+                          className="flex-col items-start"
+                        >
+                          <span className="grow">{bp.label}</span>
+                          <span className="text-muted-foreground">
+                            {tc("stockLeft", { count: bp.stock })}
+                          </span>
+                        </ComboboxItem>
+                      )}
+                    </ComboboxList>
+                  </ComboboxContent>
+                </Combobox>
+              </div>
             )}
           </AdminOnly>
 

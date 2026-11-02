@@ -53,7 +53,7 @@ function ComboboxInput({
   className,
   children,
   disabled = false,
-  showTrigger = true,
+  showTrigger = false,
   showClear = false,
   ...props
 }: ComboboxPrimitive.Input.Props & {

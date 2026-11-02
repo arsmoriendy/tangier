@@ -1,5 +1,6 @@
 import { NumberInputProps, NumberInput } from "@/components/ui/number-input"
 import { cn } from "@/lib/utils"
+import { RefObject, useRef } from "react"
 
 export type IdrInputProps = Omit<
   NumberInputProps,
@@ -7,7 +8,10 @@ export type IdrInputProps = Omit<
   | "fixedDecimalScale"
   | "decimalSeparator"
   | "thousandSeparator"
-> & { inputClass?: string }
+> & {
+  inputClass?: string
+  idrRef?: RefObject<HTMLDivElement | null>
+}
 
 export function IdrInput({
   step = 500,
@@ -16,15 +20,18 @@ export function IdrInput({
   "aria-disabled": ariaDisabled,
   "aria-invalid": ariaInvalid,
   inputClass,
+  ref: inputRef,
+  idrRef: ref = useRef<HTMLDivElement>(null),
   ...props
 }: IdrInputProps) {
   return (
     <div
+      ref={ref}
       aria-disabled={disabled ?? ariaDisabled}
       aria-invalid={ariaInvalid}
       className={cn(
-        className,
-        "flex h-8 w-full min-w-0 rounded-none border border-input bg-transparent transition-colors outline-none focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:bg-input/50 aria-disabled:opacity-50 aria-invalid:border-destructive-foreground aria-invalid:ring-1 aria-invalid:ring-destructive-foreground/20 md:text-xs dark:bg-input/30 dark:aria-disabled:bg-input/80 dark:aria-invalid:border-destructive-foreground/50 dark:aria-invalid:ring-destructive-foreground/40"
+        "flex h-8 w-full min-w-0 rounded-none border border-input bg-transparent transition-colors outline-none focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:bg-input/50 aria-disabled:opacity-50 aria-invalid:border-destructive-foreground aria-invalid:ring-1 aria-invalid:ring-destructive-foreground/20 md:text-xs dark:aria-disabled:bg-input/80 dark:aria-invalid:border-destructive-foreground/50 dark:aria-invalid:ring-destructive-foreground/40",
+        className
       )}
     >
       <span
@@ -36,6 +43,7 @@ export function IdrInput({
         Rp
       </span>
       <NumberInput
+        ref={inputRef}
         decimalScale={2}
         step={step}
         fixedDecimalScale
