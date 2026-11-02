@@ -79,6 +79,7 @@
     "form": {
       "addItem": {
         "title": "Add item",
+        "reset": "Reset item",
         "scanBarcode": {
           "title": "Scan barcode",
           "errors": { "notFound": "No items with specified barcode" }

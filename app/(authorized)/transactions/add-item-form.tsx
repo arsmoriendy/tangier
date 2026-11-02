@@ -21,13 +21,16 @@ import { defaultTransactionValues } from "@/app/(authorized)/transactions/transa
 import AdminOnly, { useIsAdmin } from "@/components/admin-only"
 import { useUserSettings } from "@/contexts/user-settings"
 import { cn } from "@/lib/utils"
-import { ResetButton } from "@/components/reset-button"
 import { useTranslations } from "next-intl"
 import { useEffect, useRef } from "react"
 import { useUnits } from "@/contexts/units-ctx"
 import { isEqual } from "es-toolkit"
-import { ListPlusIcon } from "@phosphor-icons/react"
 import { Kbd } from "@/components/ui/kbd"
+import {
+  ArrowCounterClockwiseIcon,
+  CaretUpIcon,
+} from "@phosphor-icons/react/dist/ssr"
+import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 
 type BuyPriceOption = {
   value: string
@@ -303,13 +306,15 @@ export const AddItemForm = withForm({
                 hideHotkeys
                 tooltip=<Kbd>Ctrl + Enter</Kbd>
               >
-                <ListPlusIcon />
+                <CaretUpIcon />
                 {t("title")}
               </form.SubmitButton>
             </form.AppForm>
 
-            <ResetButton
+            <ButtonWithHotkeys
               size="badge"
+              type="reset"
+              variant="destructive"
               hotkeys={["F2"]}
               hideHotkeys
               tooltip=<Kbd>F2</Kbd>
@@ -319,7 +324,10 @@ export const AddItemForm = withForm({
                 addItemProxy.buyPrice = undefined
                 form.reset()
               }}
-            />
+            >
+              <ArrowCounterClockwiseIcon />
+              {t("reset")}
+            </ButtonWithHotkeys>
           </div>
         </Form>
       </>

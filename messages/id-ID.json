@@ -79,6 +79,7 @@
     "form": {
       "addItem": {
         "title": "Tambah barang",
+        "reset": "Reset barang",
         "scanBarcode": {
           "title": "Pindai barcode",
           "errors": {
