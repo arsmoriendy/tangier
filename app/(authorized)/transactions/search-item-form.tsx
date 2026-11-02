@@ -90,7 +90,6 @@ export const SearchItemForm = withForm({
           <form.AppField name="name">
             {(field) => (
               <field.TextField
-                hideHotkeys
                 hideErrors
                 className="min-w-50"
                 ref={nameRef}
