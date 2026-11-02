@@ -11,8 +11,10 @@ export default function NumberField({
   label,
   description,
   className,
+  hideErrors,
   ...inputProps
 }: {
+  hideErrors?: true
   label?: string
   description?: string
 } & Omit<
@@ -41,7 +43,7 @@ export default function NumberField({
         {...inputProps}
       />
       {description && <FieldDescription>{description}</FieldDescription>}
-      {field.state.meta.errors[0] && (
+      {!hideErrors && field.state.meta.errors[0] && (
         <FieldError>{field.state.meta.errors[0].message}</FieldError>
       )}
     </Field>
