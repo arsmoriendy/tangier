@@ -6,10 +6,10 @@ import {
   Combobox,
   ComboboxContent,
   ComboboxEmpty,
-  ComboboxInput,
   ComboboxItem,
   ComboboxList,
 } from "@/components/ui/combobox"
+import { Combobox as ComboboxPrimitive } from "@base-ui/react"
 import {
   Dialog,
   DialogContent,
@@ -30,7 +30,8 @@ import { listItems } from "@/lib/crud/items"
 import { ItemWithRelations } from "@/lib/crud/items"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
-import { RefObject, useState } from "react"
+import { ComponentProps, RefObject, useState } from "react"
+import TextField from "@/components/text-field"
 
 const defaultProps: {
   afterSelect?: () => any
@@ -123,10 +124,16 @@ export const SearchItemForm = withForm({
                     form.setFieldValue("unitId", unit?.value ?? "")
                   }}
                 >
-                  <ComboboxInput
-                    aria-invalid={isInvalid}
-                    className="min-w-22"
-                    placeholder={tc("unit")}
+                  <ComboboxPrimitive.Input
+                    render={(props) => (
+                      <TextField
+                        {...(props as ComponentProps<typeof TextField>)}
+                        hideErrors
+                        aria-invalid={isInvalid}
+                        className="w-15 shrink-0"
+                        placeholder={tc("unit")}
+                      />
+                    )}
                   />
                   <ComboboxContent>
                     <ComboboxEmpty>{t("errors.unitNotFound")}</ComboboxEmpty>
