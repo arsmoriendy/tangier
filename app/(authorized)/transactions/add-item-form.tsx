@@ -31,6 +31,7 @@ import {
   CaretUpIcon,
 } from "@phosphor-icons/react/dist/ssr"
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
+import { Badge } from "@/components/ui/badge"
 
 type BuyPriceOption = {
   value: string
@@ -179,7 +180,11 @@ export const AddItemForm = withForm({
                   selectBuyPrice(bp)
                 }
               >
-                <ComboboxInput className="min-w-31" />
+                <ComboboxInput className="relative min-w-31">
+                  <Badge className="absolute -top-6 left-0">
+                    {tc("buyPrice")}
+                  </Badge>
+                </ComboboxInput>
                 <ComboboxContent>
                   <ComboboxEmpty>{t("noPrice")}</ComboboxEmpty>
                   <ComboboxList>
@@ -201,7 +206,11 @@ export const AddItemForm = withForm({
             selector={(f) => [f.values.buyPrice, f.values.sellPrice]}
           >
             {([bp, sp]) => (
-              <div>
+              <div className="relative">
+                <Badge className="absolute -top-6 left-0">
+                  {tc("sellPrice")}
+                </Badge>
+
                 <form.AppField
                   name="sellPrice"
                   listeners={{
@@ -238,20 +247,23 @@ export const AddItemForm = withForm({
             )}
           </form.Subscribe>
 
-          <form.AppField
-            name="quantity"
-            listeners={{
-              onChange: (v) =>
-                form.setFieldValue(
-                  "quantifiedSellPrice",
-                  v.value * form.state.values.sellPrice
-                ),
-            }}
-          >
-            {(f) => (
-              <f.NumberField className="w-14 shrink-0" min={1} ref={qtyRef} />
-            )}
-          </form.AppField>
+          <div className="relative">
+            <Badge className="absolute -top-6 left-0">Qty</Badge>
+            <form.AppField
+              name="quantity"
+              listeners={{
+                onChange: (v) =>
+                  form.setFieldValue(
+                    "quantifiedSellPrice",
+                    v.value * form.state.values.sellPrice
+                  ),
+              }}
+            >
+              {(f) => (
+                <f.NumberField className="w-14 shrink-0" min={1} ref={qtyRef} />
+              )}
+            </form.AppField>
+          </div>
 
           <form.Subscribe
             selector={(f) => [
@@ -262,7 +274,11 @@ export const AddItemForm = withForm({
             ]}
           >
             {([qsp, bp, qty, sp]) => (
-              <div>
+              <div className="relative">
+                <Badge className="absolute -top-6 left-0">
+                  {tc("quantifiedPrice")}
+                </Badge>
+
                 <form.AppField name="quantifiedSellPrice">
                   {(field) => (
                     <field.IdrField
