@@ -7,16 +7,12 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field"
-import { ComponentProps, RefObject, useEffect, useRef, useState } from "react"
-import { InputGroup, InputGroupAddon, InputGroupInput } from "./ui/input-group"
+import { ComponentProps, RefObject, useRef } from "react"
+import { InputGroup, InputGroupAddon } from "./ui/input-group"
 import { Kbd } from "./ui/kbd"
 import { useHotkeys } from "react-hotkeys-hook"
-import { useUserSettings } from "@/contexts/user-settings"
-import {
-  Input,
-  InputTransformer,
-  upperCaseTransformer,
-} from "@/components/ui/input"
+import { Input } from "@/components/ui/input"
+import { UserInput } from "@/components/user-input"
 
 export default function TextField({
   label,
@@ -43,7 +39,6 @@ export default function TextField({
   const field = useFieldContext<string>()
   const id = `${field.form.formId}-${field.name}`
   const isInvalid = !field.state.meta.isValid
-  const { getUserSettings } = useUserSettings()
 
   if (hotkeys !== undefined) {
     useHotkeys(hotkeys, () => ref.current?.focus(), {
@@ -51,15 +46,6 @@ export default function TextField({
       enableOnFormTags: true,
     })
   }
-
-  const [getTransformers, setTransformers] =
-    useState<InputTransformer[]>(transformers)
-
-  useEffect(() => {
-    if (getUserSettings.uppercaseInput && !disableUppercaseOption) {
-      setTransformers((tfs) => [upperCaseTransformer, ...tfs])
-    }
-  }, [])
 
   return (
     <Field className={className}>
@@ -69,7 +55,8 @@ export default function TextField({
         </FieldLabel>
       )}
       <InputGroup>
-        <InputGroupInput
+        <UserInput
+          group
           id={id}
           ref={ref}
           value={field.state.value}
@@ -78,11 +65,12 @@ export default function TextField({
             field.handleChange(e.target.value)
           }}
           onBlur={field.handleBlur}
+          disableUppercaseOption={disableUppercaseOption}
           autoComplete="off"
           aria-invalid={isInvalid}
-          transformers={getTransformers}
           {...inputProps}
         />
+
         {!hideHotkeys &&
           hotkeys?.map((hk, i) => (
             <InputGroupAddon key={i} align="inline-end">
