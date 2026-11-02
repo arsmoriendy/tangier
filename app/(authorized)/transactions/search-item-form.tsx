@@ -41,21 +41,21 @@ const defaultProps: {
 export const SearchItemForm = withForm({
   defaultValues: defaultAddItemValues,
   props: defaultProps,
-  render: function Render({ form, afterSelect, nameRef }) {
+  render: function Render({ form: addItemForm, afterSelect, nameRef }) {
     const limit = 50
     const { addItemProxy } = useAddItem()
     const { units } = useUnits()
     const searchItemForm = useAppForm({
       onSubmit: async () => {
-        const res = await readBarcode(form.state.values.name)
+        const res = await readBarcode(addItemForm.state.values.name)
         if (res !== undefined) {
           selectItem(res.item)
           return
         }
 
         const items = await listItems({
-          name: form.state.values.name,
-          unitId: form.state.values.unitId,
+          name: addItemForm.state.values.name,
+          unitId: addItemForm.state.values.unitId,
           limit,
         })
         setFoundItems(items)
@@ -72,9 +72,9 @@ export const SearchItemForm = withForm({
     function selectItem(item: ItemWithRelations) {
       const buyPrice = item.buyPrices.at(item.buyPrices.length - 1)
 
-      form.setFieldValue("name", item.name)
-      form.setFieldValue("unitId", item.unit.id)
-      form.setFieldValue("buyPrice", buyPrice?.price ?? 0)
+      addItemForm.setFieldValue("name", item.name)
+      addItemForm.setFieldValue("unitId", item.unit.id)
+      addItemForm.setFieldValue("buyPrice", buyPrice?.price ?? 0)
       addItemProxy.sellPrices = item.sellPrices
       addItemProxy.buyPrices = item.buyPrices
       addItemProxy.buyPrice = buyPrice
@@ -88,7 +88,7 @@ export const SearchItemForm = withForm({
     return (
       <>
         <Form handleSubmit={searchItemForm.handleSubmit} className="contents">
-          <form.AppField name="name">
+          <addItemForm.AppField name="name">
             {(field) => (
               <field.TextField
                 hideErrors
@@ -98,9 +98,9 @@ export const SearchItemForm = withForm({
                 placeholder={t("nameOrBarcode")}
               />
             )}
-          </form.AppField>
+          </addItemForm.AppField>
 
-          <form.AppField name="unitId">
+          <addItemForm.AppField name="unitId">
             {(field) => {
               const isInvalid = !field.state.meta.isValid
               return (
@@ -121,7 +121,7 @@ export const SearchItemForm = withForm({
                   onValueChange={(
                     unit: { label: string; value: string } | null
                   ) => {
-                    form.setFieldValue("unitId", unit?.value ?? "")
+                    addItemForm.setFieldValue("unitId", unit?.value ?? "")
                   }}
                 >
                   <ComboboxPrimitive.Input
@@ -148,7 +148,7 @@ export const SearchItemForm = withForm({
                 </Combobox>
               )
             }}
-          </form.AppField>
+          </addItemForm.AppField>
 
           <searchItemForm.AppForm>
             <searchItemForm.SubmitButton size="icon">
