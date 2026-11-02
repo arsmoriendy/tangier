@@ -44,7 +44,7 @@ export function EditTrxDialog({
           </DialogClose>
         </Button>
 
-        <div className="max-h-[92vh] overflow-auto p-4 pb-0">
+        <div className="h-[92vh] overflow-auto p-4">
           <TransactionForm
             transaction={trx}
             onUpdate={(trx) => {
