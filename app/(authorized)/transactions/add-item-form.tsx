@@ -27,6 +27,7 @@ import { useEffect, useRef } from "react"
 import { useUnits } from "@/contexts/units-ctx"
 import { isEqual } from "es-toolkit"
 import { ListPlusIcon } from "@phosphor-icons/react"
+import { Kbd } from "@/components/ui/kbd"
 
 type BuyPriceOption = {
   value: string
@@ -296,7 +297,12 @@ export const AddItemForm = withForm({
 
           <div className="absolute -top-4 flex items-center gap-2">
             <form.AppForm>
-              <form.SubmitButton size="badge" hotkeys={["Ctrl + Enter"]}>
+              <form.SubmitButton
+                size="badge"
+                hotkeys={["Ctrl + Enter"]}
+                hideHotkeys
+                tooltip=<Kbd>Ctrl + Enter</Kbd>
+              >
                 <ListPlusIcon />
                 {t("title")}
               </form.SubmitButton>
@@ -305,6 +311,8 @@ export const AddItemForm = withForm({
             <ResetButton
               size="badge"
               hotkeys={["F2"]}
+              hideHotkeys
+              tooltip=<Kbd>F2</Kbd>
               onClick={() => {
                 addItemProxy.sellPrices = []
                 addItemProxy.buyPrices = []
