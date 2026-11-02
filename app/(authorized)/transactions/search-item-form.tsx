@@ -86,7 +86,7 @@ export const SearchItemForm = withForm({
             {(field) => (
               <field.TextField
                 hideErrors
-                className="min-w-50"
+                className="shrink-0 grow-1 basis-50"
                 ref={nameRef}
                 hotkeys={["Ctrl+k", "F3"]}
                 placeholder={t("nameOrBarcode")}
@@ -135,7 +135,7 @@ export const SearchItemForm = withForm({
                 }
                 placeholder={tc("unit")}
                 emptyMessage={t("errors.unitNotFound")}
-                className="w-30"
+                className="w-17 flex-none"
               />
             )}
           </addItemForm.Subscribe>
