@@ -3,14 +3,6 @@ import { defaultAddItemValues } from "@/app/(authorized)/transactions/add-item-s
 import { SelectItemRows } from "@/app/(authorized)/transactions/select-item-rows"
 import { Form, useAppForm, withForm } from "@/components/form"
 import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox"
-import { Combobox as ComboboxPrimitive } from "@base-ui/react"
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -30,8 +22,10 @@ import { listItems } from "@/lib/crud/items"
 import { ItemWithRelations } from "@/lib/crud/items"
 import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
-import { ComponentProps, RefObject, useState } from "react"
+import { RefObject, useState } from "react"
+import { WrappedCombobox } from "@/components/wrapped-combobox"
 import TextField from "@/components/text-field"
+import { UserInput } from "@/components/user-input"
 
 const defaultProps: {
   afterSelect?: () => any
@@ -73,6 +67,7 @@ export const SearchItemForm = withForm({
       const buyPrice = item.buyPrices.at(item.buyPrices.length - 1)
 
       addItemForm.setFieldValue("name", item.name)
+      addItemForm.setFieldValue("unit", item.unit.name)
       addItemForm.setFieldValue("unitId", item.unit.id)
       addItemForm.setFieldValue("buyPrice", buyPrice?.price ?? 0)
       addItemProxy.sellPrices = item.sellPrices
@@ -100,55 +95,43 @@ export const SearchItemForm = withForm({
             )}
           </addItemForm.AppField>
 
-          <addItemForm.AppField name="unitId">
-            {(field) => {
-              const isInvalid = !field.state.meta.isValid
-              return (
-                <Combobox
-                  items={units.map((unit) => ({
-                    value: unit.id,
-                    label: unit.name,
-                  }))}
-                  value={
-                    units
-                      .map((unit) => ({
-                        value: unit.id,
-                        label: unit.name,
-                      }))
-                      .find((unit) => unit.value === field.state.value) ?? null
-                  }
-                  itemToStringValue={(unit) => unit!.label ?? ""}
-                  onValueChange={(
-                    unit: { label: string; value: string } | null
-                  ) => {
-                    addItemForm.setFieldValue("unitId", unit?.value ?? "")
-                  }}
-                >
-                  <ComboboxPrimitive.Input
-                    render={(props) => (
-                      <TextField
-                        {...(props as ComponentProps<typeof TextField>)}
-                        hideErrors
-                        aria-invalid={isInvalid}
-                        className="w-15 shrink-0"
-                        placeholder={tc("unit")}
-                      />
-                    )}
+          <addItemForm.Subscribe
+            selector={(s) => [s.values.unit, s.values.unitId]}
+          >
+            {([unitName, unitId]) => (
+              <WrappedCombobox
+                options={units}
+                option={units.find((unit) => unit.id === unitId) ?? null}
+                onOptionChange={(unit) => {
+                  addItemForm.setFieldValue("unitId", unit?.id)
+                  addItemForm.setFieldValue("unit", unit?.name ?? "")
+                }}
+                optionToLabel={(unit) => unit.name}
+                optionToValue={(unit) => unit.id}
+                renderInput={({
+                  domProps,
+                  setInputValue,
+                  invalid,
+                  disabled,
+                  ...props
+                }) => (
+                  <UserInput
+                    onInput={(e) => setInputValue(e.currentTarget.value)}
+                    disabled={disabled || invalid}
+                    {...props}
+                    {...domProps}
                   />
-                  <ComboboxContent>
-                    <ComboboxEmpty>{t("errors.unitNotFound")}</ComboboxEmpty>
-                    <ComboboxList>
-                      {(unit) => (
-                        <ComboboxItem key={unit.value} value={unit}>
-                          {unit.label}
-                        </ComboboxItem>
-                      )}
-                    </ComboboxList>
-                  </ComboboxContent>
-                </Combobox>
-              )
-            }}
-          </addItemForm.AppField>
+                )}
+                input={unitName}
+                onInputChange={(unitName) =>
+                  addItemForm.setFieldValue("unit", unitName)
+                }
+                placeholder={tc("unit")}
+                emptyMessage={t("errors.unitNotFound")}
+                className="w-30"
+              />
+            )}
+          </addItemForm.Subscribe>
 
           <searchItemForm.AppForm>
             <searchItemForm.SubmitButton size="icon">
