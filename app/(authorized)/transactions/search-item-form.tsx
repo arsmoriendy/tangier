@@ -95,10 +95,17 @@ export const SearchItemForm = withForm({
           </addItemForm.AppField>
 
           <addItemForm.Subscribe
-            selector={(s) => [s.values.unit, s.values.unitId]}
+            selector={(s) =>
+              [
+                s.values.unit,
+                s.values.unitId,
+                s.fieldMeta.unit?.isValid,
+              ] as const
+            }
           >
-            {([unitName, unitId]) => (
+            {([unitName, unitId, unitIsValid]) => (
               <WrappedCombobox
+                invalid={unitIsValid === false}
                 options={units}
                 option={units.find((unit) => unit.id === unitId) ?? null}
                 onOptionChange={(unit) => {
@@ -116,9 +123,10 @@ export const SearchItemForm = withForm({
                 }) => (
                   <UserInput
                     onInput={(e) => setInputValue(e.currentTarget.value)}
-                    disabled={disabled || invalid}
+                    disabled={disabled}
                     {...props}
                     {...domProps}
+                    aria-invalid={invalid || undefined}
                   />
                 )}
                 input={unitName}

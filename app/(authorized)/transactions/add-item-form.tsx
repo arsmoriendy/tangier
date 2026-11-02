@@ -200,10 +200,18 @@ export const AddItemForm = withForm({
                     </span>
                   )}
                   renderInput={({ domProps }) => (
-                    <form.Subscribe selector={(s) => s.values.buyPrice}>
-                      {(bp) => (
+                    <form.Subscribe
+                      selector={(s) =>
+                        [
+                          s.values.buyPrice,
+                          s.fieldMeta.buyPrice?.isValid,
+                        ] as const
+                      }
+                    >
+                      {([bp, bpIsValid]) => (
                         <IdrInput
                           {...(domProps as IdrInputProps)}
+                          aria-invalid={bpIsValid === false || undefined}
                           arrowControls={false}
                           value={bp}
                           onValueChange={(value) =>
