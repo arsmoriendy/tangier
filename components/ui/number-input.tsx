@@ -16,6 +16,7 @@ export type NumberInputProps = Omit<
   value: number
   onValueChange: (value: number) => any
   scrollable?: boolean
+  arrowControls?: boolean
 }
 
 export function NumberInput({
@@ -32,6 +33,7 @@ export function NumberInput({
   value: valueProp,
   ref = useRef<HTMLInputElement>(null),
   scrollable = false,
+  arrowControls = true,
   ...props
 }: NumberInputProps) {
   const clamp = (v: number): number => Math.min(max, Math.max(min, v))
@@ -67,13 +69,15 @@ export function NumberInput({
         if (floatValue !== undefined) onValueChange(floatValue)
       }}
       onKeyDown={(e) => {
-        if (e.key == "ArrowUp") {
-          e.preventDefault()
-          onValueChange(clamp(valueProp + step))
-        }
-        if (e.key == "ArrowDown") {
-          e.preventDefault()
-          onValueChange(clamp(valueProp - step))
+        if (arrowControls) {
+          if (e.key == "ArrowUp") {
+            e.preventDefault()
+            onValueChange(clamp(valueProp + step))
+          }
+          if (e.key == "ArrowDown") {
+            e.preventDefault()
+            onValueChange(clamp(valueProp - step))
+          }
         }
         onKeyDown?.(e)
       }}
