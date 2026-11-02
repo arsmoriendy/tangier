@@ -220,7 +220,8 @@ export default function ItemForm(props: {
                                     <TableCell
                                       className={cn(
                                         margin > 0 && "text-success",
-                                        margin < 0 && "text-destructive"
+                                        margin < 0 &&
+                                          "text-destructive-foreground"
                                       )}
                                     >
                                       {margin > 0 && "+"}

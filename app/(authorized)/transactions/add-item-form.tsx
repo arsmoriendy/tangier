@@ -218,7 +218,7 @@ export const AddItemForm = withForm({
                       inputClass={cn(
                         isAdmin &&
                           getUserSettings.coloredSellPrice &&
-                          (bp > sp ? "bg-destructive/33" : "bg-success/33")
+                          (bp > sp ? "bg-destructive" : "bg-success/33")
                       )}
                       min={0}
                     />
@@ -271,7 +271,7 @@ export const AddItemForm = withForm({
                         isAdmin &&
                           getUserSettings.coloredSellPrice &&
                           (qsp < bp * qty
-                            ? "bg-destructive/33"
+                            ? "bg-destructive"
                             : "bg-success/33")
                       )}
                       min={0}

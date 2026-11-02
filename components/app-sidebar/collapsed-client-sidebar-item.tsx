@@ -15,7 +15,7 @@ export default function CollapsedClientSidebarItem() {
     <ClientDropdown side="right" align="end">
       <SidebarMenuButton
         size="lg"
-        className="h-8 bg-destructive/10 text-destructive"
+        className="h-8 bg-destructive text-destructive-foreground"
       >
         <div className="grid aspect-square size-8 place-items-center">
           <XIcon />

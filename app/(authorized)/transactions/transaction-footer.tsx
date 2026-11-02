@@ -88,7 +88,9 @@ function MarginBadge({
     <Badge variant="secondary">
       <span>Margin:</span>
       <span
-        className={cn(profitLoss < 0 ? "text-destructive" : "text-success")}
+        className={cn(
+          profitLoss < 0 ? "text-destructive-foreground" : "text-success"
+        )}
       >
         {profitLoss > 0 && "+"}
         {formatCurrency(profitLoss)}

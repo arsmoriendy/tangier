@@ -166,7 +166,7 @@ export function Report() {
         <field.IdrField
           label={t("expenses")}
           disabled
-          inputClass="bg-destructive/25"
+          inputClass="bg-destructive"
         />
       )}
     </form.AppField>

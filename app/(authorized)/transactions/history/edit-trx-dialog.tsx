@@ -36,7 +36,7 @@ export function EditTrxDialog({
 
         <Button
           size="icon-xs"
-          className="absolute -top-3 right-4 z-50 bg-destructive"
+          className="absolute -top-3 right-4 z-50 bg-destructive text-destructive-foreground"
           asChild
         >
           <DialogClose>

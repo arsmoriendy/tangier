@@ -58,7 +58,7 @@ export const TransactionSummaryDialog = withForm({
                         <>
                           <TableRow>
                             <TableCell>{t("expenses")}</TableCell>
-                            <TableCell className="text-destructive">
+                            <TableCell className="text-destructive-foreground">
                               {formatCurrency(expenses)}
                             </TableCell>
                           </TableRow>
@@ -67,7 +67,7 @@ export const TransactionSummaryDialog = withForm({
                             <TableCell
                               className={cn(
                                 profitLoss < 0
-                                  ? "text-destructive"
+                                  ? "text-destructive-foreground"
                                   : "text-success"
                               )}
                             >

@@ -24,13 +24,13 @@ export function IdrInput({
       aria-invalid={ariaInvalid}
       className={cn(
         className,
-        "flex h-8 w-full min-w-0 rounded-none border border-input bg-transparent transition-colors outline-none focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:bg-input/50 aria-disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-1 aria-invalid:ring-destructive/20 md:text-xs dark:bg-input/30 dark:aria-disabled:bg-input/80 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40"
+        "flex h-8 w-full min-w-0 rounded-none border border-input bg-transparent transition-colors outline-none focus-within:border-ring focus-within:ring-1 focus-within:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:cursor-not-allowed aria-disabled:bg-input/50 aria-disabled:opacity-50 aria-invalid:border-destructive-foreground aria-invalid:ring-1 aria-invalid:ring-destructive-foreground/20 md:text-xs dark:bg-input/30 dark:aria-disabled:bg-input/80 dark:aria-invalid:border-destructive-foreground/50 dark:aria-invalid:ring-destructive-foreground/40"
       )}
     >
       <span
         className={cn(
           "hidden w-8 place-items-center bg-muted text-center text-muted-foreground select-none xl:grid",
-          ariaInvalid ? "bg-destructive text-background" : ""
+          ariaInvalid ? "bg-destructive text-destructive-foreground" : ""
         )}
       >
         Rp

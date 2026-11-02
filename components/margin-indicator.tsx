@@ -33,7 +33,7 @@ export function MarginIndicator({
       <TooltipTrigger tabIndex={-1}>
         <small
           className={cn(
-            margin < 0 ? "text-destructive" : "text-success",
+            margin < 0 ? "text-destructive-foreground" : "text-success",
             className
           )}
         >

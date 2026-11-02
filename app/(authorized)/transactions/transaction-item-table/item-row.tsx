@@ -41,7 +41,7 @@ export const ItemRow = withForm({
 
     function sellPriceClass(isLoss: boolean) {
       return cn(
-        coloredSellPrice && (isLoss ? "bg-destructive/33" : "bg-success/33")
+        coloredSellPrice && (isLoss ? "bg-destructive" : "bg-success/33")
       )
     }
 
