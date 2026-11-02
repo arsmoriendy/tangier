@@ -53,9 +53,16 @@ export const AddItemForm = withForm({
       defaultValues: defaultAddItemValues,
       validators: { onMount: addItemSchema, onChange: addItemSchema },
       onSubmit: ({
-        value: { unitId, quantity, quantifiedSellPrice, ...rest },
+        value: {
+          unitId,
+          quantity,
+          quantifiedSellPrice,
+          unit: customUnit,
+          ...rest
+        },
       }) => {
-        const unit = units.find((u) => u.id === unitId)!.name
+        const unit = units.find((u) => u.id === unitId)?.name ?? customUnit
+
         const partialItem = {
           ...rest,
           unit,
