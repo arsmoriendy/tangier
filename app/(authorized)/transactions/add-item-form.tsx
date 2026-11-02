@@ -296,14 +296,14 @@ export const AddItemForm = withForm({
 
           <div className="absolute -top-4 flex items-center gap-2">
             <form.AppForm>
-              <form.SubmitButton size="xs" hotkeys={["Ctrl + Enter"]}>
+              <form.SubmitButton size="badge" hotkeys={["Ctrl + Enter"]}>
                 <ListPlusIcon />
                 {t("title")}
               </form.SubmitButton>
             </form.AppForm>
 
             <ResetButton
-              size="xs"
+              size="badge"
               hotkeys={["F2"]}
               onClick={() => {
                 addItemProxy.sellPrices = []
