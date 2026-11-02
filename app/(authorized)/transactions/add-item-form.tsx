@@ -180,7 +180,7 @@ export const AddItemForm = withForm({
                 </Badge>
 
                 <WrappedCombobox
-                  className="w-31 flex-none"
+                  className="w-31 flex-none xl:w-38"
                   options={buyPriceOptions}
                   option={
                     buyPriceOptions.find(
@@ -247,7 +247,7 @@ export const AddItemForm = withForm({
                 >
                   {(field) => (
                     <field.IdrField
-                      className="w-31 flex-none"
+                      className="w-31 flex-none xl:w-38"
                       inputClass={cn(
                         isAdmin &&
                           getUserSettings.coloredSellPrice &&
@@ -310,7 +310,7 @@ export const AddItemForm = withForm({
                 <form.AppField name="quantifiedSellPrice">
                   {(field) => (
                     <field.IdrField
-                      className="w-31 flex-none"
+                      className="w-31 flex-none xl:w-38"
                       inputClass={cn(
                         isAdmin &&
                           getUserSettings.coloredSellPrice &&
