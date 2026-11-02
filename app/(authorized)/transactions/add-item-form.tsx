@@ -1,11 +1,5 @@
 import { Form, useAppForm, withForm } from "@/components/form"
-import {
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxItem,
-  ComboboxList,
-} from "@/components/ui/combobox"
+import { WrappedCombobox } from "@/components/wrapped-combobox"
 import { MarginIndicator } from "@/components/margin-indicator"
 import { MismatchIndicator } from "@/components/mismatch-indicator"
 import { formatCurrency } from "@/lib/i18n/currency"
@@ -32,7 +26,6 @@ import {
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Badge } from "@/components/ui/badge"
 import { IdrInput, IdrInputProps } from "@/components/ui/idr-input"
-import { Combobox as ComboboxPrimitive } from "@base-ui/react"
 
 type BuyPriceOption = {
   value: string
@@ -121,7 +114,12 @@ export const AddItemForm = withForm({
       }))
 
     function selectBuyPrice(bp: BuyPriceOption | null) {
-      if (bp === null) return
+      if (bp === null) {
+        // Deselected: keep the entered price, but stop tracking stock for it.
+        addItemProxy.buyPrice = undefined
+        return
+      }
+
       addItemProxy.buyPrice = addItemProxy.buyPrices.find(
         (b) => b.id === bp.value
       )!
@@ -181,53 +179,41 @@ export const AddItemForm = withForm({
                   {tc("buyPrice")}
                 </Badge>
 
-                <Combobox
-                  items={buyPriceOptions}
-                  value={
+                <WrappedCombobox
+                  className="w-31"
+                  options={buyPriceOptions}
+                  option={
                     buyPriceOptions.find(
                       (bp) => bp.value === addItemSnap.buyPrice?.id
                     ) ?? null
                   }
-                  itemToStringValue={(bp) => bp!.label ?? ""}
-                  onValueChange={(bp: BuyPriceOption | null) =>
-                    selectBuyPrice(bp)
-                  }
-                >
-                  <ComboboxPrimitive.Input
-                    className="relative min-w-31"
-                    render={({ ...props }, _state) => (
-                      <form.Subscribe selector={(s) => s.values.buyPrice}>
-                        {(bp) => (
-                          <IdrInput
-                            {...(props as IdrInputProps)}
-                            arrowControls={false}
-                            value={bp}
-                            onValueChange={(value) =>
-                              form.setFieldValue("buyPrice", value)
-                            }
-                          />
-                        )}
-                      </form.Subscribe>
-                    )}
-                  />
-                  <ComboboxContent>
-                    <ComboboxEmpty>{t("noPrice")}</ComboboxEmpty>
-                    <ComboboxList>
+                  onOptionChange={selectBuyPrice}
+                  optionToLabel={(bp) => bp.label}
+                  optionToValue={(bp) => bp.value}
+                  emptyMessage={t("noPrice")}
+                  renderOption={(bp) => (
+                    <span className="flex w-full flex-col items-start">
+                      <span>{bp.label}</span>
+                      <span className="text-muted-foreground">
+                        {tc("stockLeft", { count: bp.stock })}
+                      </span>
+                    </span>
+                  )}
+                  renderInput={({ domProps }) => (
+                    <form.Subscribe selector={(s) => s.values.buyPrice}>
                       {(bp) => (
-                        <ComboboxItem
-                          key={bp.value}
+                        <IdrInput
+                          {...(domProps as IdrInputProps)}
+                          arrowControls={false}
                           value={bp}
-                          className="flex-col items-start"
-                        >
-                          <span className="grow">{bp.label}</span>
-                          <span className="text-muted-foreground">
-                            {tc("stockLeft", { count: bp.stock })}
-                          </span>
-                        </ComboboxItem>
+                          onValueChange={(value) =>
+                            form.setFieldValue("buyPrice", value)
+                          }
+                        />
                       )}
-                    </ComboboxList>
-                  </ComboboxContent>
-                </Combobox>
+                    </form.Subscribe>
+                  )}
+                />
               </div>
             )}
           </AdminOnly>

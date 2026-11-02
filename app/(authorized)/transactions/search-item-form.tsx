@@ -24,7 +24,6 @@ import { MagnifyingGlassIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
 import { RefObject, useState } from "react"
 import { WrappedCombobox } from "@/components/wrapped-combobox"
-import TextField from "@/components/text-field"
 import { UserInput } from "@/components/user-input"
 
 const defaultProps: {
