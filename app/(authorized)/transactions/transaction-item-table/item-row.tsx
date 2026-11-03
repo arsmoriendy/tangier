@@ -2,7 +2,6 @@ import { defaultTransactionValues } from "@/app/(authorized)/transactions/transa
 import type { TransactionSchema } from "@/app/(authorized)/transactions/transaction-schema"
 import { withForm } from "@/components/form"
 import { Checkbox } from "@/components/ui/checkbox"
-import { Field } from "@/components/ui/field"
 import { TableCell, TableRow } from "@/components/ui/table"
 import { useUserSettings } from "@/contexts/user-settings"
 import AdminOnly, { useIsAdmin } from "@/components/admin-only"
@@ -19,7 +18,7 @@ import {
   recalculateTotalPrice,
   setIdempotentFieldValue,
 } from "@/app/(authorized)/transactions/transaction-item-table/form-helpers"
-import { LinkBreakIcon, StackMinusIcon } from "@phosphor-icons/react/dist/ssr"
+import { LinkBreakIcon } from "@phosphor-icons/react/dist/ssr"
 import {
   Tooltip,
   TooltipContent,

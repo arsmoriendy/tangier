@@ -4,8 +4,6 @@ import { Checkbox } from "@/components/ui/checkbox"
 import {
   Table,
   TableBody,
-  TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -21,7 +19,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { MinusIcon, StackMinusIcon } from "@phosphor-icons/react/dist/ssr"
 import { useEffect, useRef } from "react"
 
 export const TransactionItemTable = withForm({
