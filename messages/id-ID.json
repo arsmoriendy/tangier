@@ -97,6 +97,7 @@
       },
       "items": {
         "title": "Barang transaksi",
+        "selectAll": "Pilih semua",
         "updateStock": "Kurangi stok",
         "customStock": "Stok kustom",
         "noItems": "Belum ada barang"

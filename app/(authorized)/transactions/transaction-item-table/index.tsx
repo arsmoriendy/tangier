@@ -75,7 +75,36 @@ export const TransactionItemTable = withForm({
 
             <TableHeader className="sticky top-0 z-51 bg-background [&_th]:border-b">
               <TableRow>
-                <TableHead colSpan={2}></TableHead>
+                <TableHead></TableHead>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <TableHead className="pl-0">
+                      <form.Subscribe
+                        selector={(s) => s.values.transactionItems.length}
+                      >
+                        {(n) => (
+                          <Checkbox
+                            className="mx-auto"
+                            checked={selected.size === n}
+                            onCheckedChange={(checked) => {
+                              setSelected(
+                                checked === true
+                                  ? new Set(
+                                      Array.from(
+                                        { length: n },
+                                        (_, index) => index
+                                      )
+                                    )
+                                  : new Set()
+                              )
+                            }}
+                          />
+                        )}
+                      </form.Subscribe>
+                    </TableHead>
+                  </TooltipTrigger>
+                  <TooltipContent>{t("items.selectAll")}</TooltipContent>
+                </Tooltip>
                 <TableHead>{tc("name")}</TableHead>
                 <TableHead>{tc("unit")}</TableHead>
                 {showBuyPrice && <TableHead>{tc("buyPrice")}</TableHead>}

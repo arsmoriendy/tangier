@@ -95,6 +95,7 @@
       },
       "items": {
         "title": "Transaction items",
+        "selectAll": "Select all",
         "updateStock": "Decrement stock",
         "customStock": "Custom stock",
         "noItems": "No items yet"
