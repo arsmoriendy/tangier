@@ -29,9 +29,9 @@ export const TransactionItemTable = withForm({
   props: {
     selected: new Set([0]),
     setSelected: (_selected: Set<number>) => {},
-    blinkSignal: undefined as { index: number; token: number } | undefined,
+    itemSignal: undefined as { index: number; token: number } | undefined,
   },
-  render: function Render({ form, selected, setSelected, blinkSignal }) {
+  render: function Render({ form, selected, setSelected, itemSignal }) {
     const { getUserSettings, setUserSettings } = useUserSettings()
     const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
@@ -152,8 +152,8 @@ export const TransactionItemTable = withForm({
                   setSelected={setSelected}
                   showBuyPrice={showBuyPrice}
                   blinkOnMount={!isFirstRender.current}
-                  blinkToken={
-                    blinkSignal?.index === i ? blinkSignal.token : undefined
+                  itemToken={
+                    itemSignal?.index === i ? itemSignal.token : undefined
                   }
                 />
               ))}

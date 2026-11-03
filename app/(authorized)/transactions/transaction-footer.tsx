@@ -128,7 +128,7 @@ export const TransactionFooter = withForm({
     hideHoldRecall: false,
     onHold: () => {},
     onCancelRecall: () => {},
-    onItemMerged: (_index: number) => {},
+    onItemAdded: (_index: number) => {},
   },
   render: function Render({
     form,
@@ -141,7 +141,7 @@ export const TransactionFooter = withForm({
     hideHoldRecall,
     onHold,
     onCancelRecall,
-    onItemMerged,
+    onItemAdded,
   }) {
     const { getUserSettings } = useUserSettings()
     const { setHeld } = useHeld()
@@ -190,7 +190,7 @@ export const TransactionFooter = withForm({
       <div className="sticky bottom-0 space-y-2 bg-background">
         <FooterBar>
           <AddItemProvider>
-            <AddItemForm form={form} onItemMerged={onItemMerged} />
+            <AddItemForm form={form} onItemAdded={onItemAdded} />
           </AddItemProvider>
         </FooterBar>
 

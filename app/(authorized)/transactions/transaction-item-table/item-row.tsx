@@ -13,7 +13,7 @@ import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
-import { useEffect, useState, type AnimationEvent } from "react"
+import { useEffect, useRef, useState, type AnimationEvent } from "react"
 import { itemRowDndHandlers } from "@/app/(authorized)/transactions/transaction-item-table/item-row-dnd"
 import {
   recalculateTotalPrice,
@@ -29,6 +29,15 @@ import {
 type LinkedBuyPrice =
   TransactionSchema["transactionItems"][number]["linkedBuyPrice"]
 
+function scrollRowIntoView(row: HTMLTableRowElement) {
+  row.scrollIntoView({
+    block: "nearest",
+    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ? "auto"
+      : "smooth",
+  })
+}
+
 export const ItemRow = withForm({
   defaultValues: defaultTransactionValues,
   props: {
@@ -38,7 +47,7 @@ export const ItemRow = withForm({
     setSelected: (_selected: Set<number>) => {},
     showBuyPrice: false,
     blinkOnMount: false,
-    blinkToken: undefined as number | undefined,
+    itemToken: undefined as number | undefined,
   },
   render: function Render({
     form,
@@ -48,19 +57,22 @@ export const ItemRow = withForm({
     setSelected,
     showBuyPrice,
     blinkOnMount,
-    blinkToken,
+    itemToken,
   }) {
     const { getUserSettings } = useUserSettings()
     const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
     const isAdmin = useIsAdmin()
 
-    // Mount flips on for appended rows; merges replay it via blinkToken.
+    // Mount flips on for appended rows; merges replay it via itemToken.
     const [blinking, setBlinking] = useState(blinkOnMount)
+    const rowRef = useRef<HTMLTableRowElement>(null)
 
     useEffect(() => {
-      if (blinkToken !== undefined) setBlinking(true)
-    }, [blinkToken])
+      if (itemToken === undefined) return
+      setBlinking(true)
+      if (rowRef.current) scrollRowIntoView(rowRef.current)
+    }, [itemToken])
 
     function handleBlinkEnd(e: AnimationEvent<HTMLTableRowElement>) {
       if (e.target === e.currentTarget) setBlinking(false)
@@ -105,9 +117,11 @@ export const ItemRow = withForm({
 
     return (
       <TableRow
+        ref={rowRef}
         draggable
         {...dnd}
         className={cn(
+          "scroll-mt-12 scroll-mb-32",
           blinking && "animate-row-blink motion-reduce:animate-none",
           "[&_td]:border-primary data-[drop=bottom]:[&_td]:border-b data-[drop=top]:[&_td]:border-t"
         )}

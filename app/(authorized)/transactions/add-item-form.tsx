@@ -40,9 +40,9 @@ type BuyPriceOption = {
 export const AddItemForm = withForm({
   defaultValues: defaultTransactionValues,
   props: {
-    onItemMerged: (_index: number) => {},
+    onItemAdded: (_index: number) => {},
   },
-  render: function Render({ form: createTransactionForm, onItemMerged }) {
+  render: function Render({ form: createTransactionForm, onItemAdded }) {
     const isAdmin = useIsAdmin()
     const { addItemProxy, addItemSnap } = useAddItem()
     const { getUserSettings } = useUserSettings()
@@ -87,13 +87,17 @@ export const AddItemForm = withForm({
             `transactionItems[${idx}].quantifiedSellPrice`,
             partialItem.sellPrice * (prevQty + quantity)
           )
-          onItemMerged(idx)
-        } else
+          onItemAdded(idx)
+        } else {
           createTransactionForm.pushFieldValue("transactionItems", {
             ...partialItem,
             quantity,
             quantifiedSellPrice,
           })
+          onItemAdded(
+            createTransactionForm.getFieldValue("transactionItems").length - 1
+          )
+        }
 
         addItemProxy.sellPrices = []
         addItemProxy.buyPrices = []

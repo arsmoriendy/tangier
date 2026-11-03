@@ -46,7 +46,7 @@ export default function TransactionForm({
   const [getOpenSummary, setOpenSummary] = useState<boolean>(false)
   const { getUserSettings } = useUserSettings()
   const [selected, setSelected] = useState<Set<number>>(new Set())
-  const [blinkSignal, setBlinkSignal] = useState<{
+  const [itemSignal, setItemSignal] = useState<{
     index: number
     token: number
   }>()
@@ -185,8 +185,8 @@ export default function TransactionForm({
     toast.info(t("toasts.recallCancelled"))
   }
 
-  function blinkRow(index: number) {
-    setBlinkSignal((prev) => ({ index, token: (prev?.token ?? 0) + 1 }))
+  function signalItem(index: number) {
+    setItemSignal((prev) => ({ index, token: (prev?.token ?? 0) + 1 }))
   }
 
   // register cancel recall hotkey
@@ -203,7 +203,7 @@ export default function TransactionForm({
             form={form}
             selected={selected}
             setSelected={setSelected}
-            blinkSignal={blinkSignal}
+            itemSignal={itemSignal}
           />
         </div>
 
@@ -218,7 +218,7 @@ export default function TransactionForm({
           hideHoldRecall={props.transaction !== undefined}
           onHold={hold}
           onCancelRecall={cancelRecall}
-          onItemMerged={blinkRow}
+          onItemAdded={signalItem}
         />
       </div>
 
