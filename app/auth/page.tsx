@@ -1,6 +1,7 @@
 import { ClientButton } from "@/app/auth/client-button"
 import { SignInForm } from "@/app/auth/sign-in-form"
 import { SignUpForm } from "@/app/auth/sign-up-form"
+import { LanguageDropdown } from "@/components/language-dropdown"
 import Logo from "@/components/logo"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { getTranslations } from "next-intl/server"
@@ -41,6 +42,10 @@ export default async function Page() {
         <span className="absolute bottom-2 text-xs text-muted-foreground">
           Version {pkg.version}
         </span>
+
+        <div className="absolute right-2 bottom-2">
+          <LanguageDropdown side="top" align="end" />
+        </div>
       </div>
 
       <ClientButton />
