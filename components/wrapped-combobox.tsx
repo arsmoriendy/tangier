@@ -81,8 +81,16 @@ export type WrappedComboboxProps<O> = {
    */
   renderInput?: (props: WrappedComboboxInputProps) => React.ReactElement
   /**
+   * Props forwarded to `<ComboboxContent>`: `className`, `side`, `align`,
+   * `sideOffset`, `alignOffset`, `anchor`. The default width is the anchor's
+   * (`w-(--anchor-width)` + a `min-w` of anchor+28px), so a wider panel needs
+   * `w-*` and a narrower one needs both `w-*` and `min-w-*`.
+   */
+  contentProps?: Omit<React.ComponentProps<typeof ComboboxContent>, "children">
+  /**
    * Open the list when the input receives focus. Base UI only opens on
    * mousedown, so this covers Tab and programmatic focus.
+   * @default true
    */
   openOnFocus?: boolean
   disabled?: boolean
@@ -130,6 +138,7 @@ export function WrappedCombobox<O>({
   emptyMessage,
   renderOption,
   renderInput,
+  contentProps,
   openOnFocus = true,
   disabled,
   invalid,
@@ -254,7 +263,7 @@ export function WrappedCombobox<O>({
             onFocus={openOnFocus ? () => setOpen(true) : undefined}
           />
         )}
-        <ComboboxContent>
+        <ComboboxContent {...contentProps}>
           <ComboboxEmpty>{emptyMessage}</ComboboxEmpty>
           <ComboboxList>
             {(candidate: O) => (

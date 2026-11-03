@@ -181,6 +181,11 @@ export const AddItemForm = withForm({
 
                 <WrappedCombobox
                   className="w-31 flex-none xl:w-38"
+                  contentProps={{
+                    side: "top",
+                    align: "end",
+                    className: "w-56",
+                  }}
                   options={buyPriceOptions}
                   option={
                     buyPriceOptions.find(
