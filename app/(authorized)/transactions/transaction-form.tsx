@@ -22,7 +22,10 @@ import { TransactionItemTable } from "@/app/(authorized)/transactions/transactio
 import { TransactionFooter } from "@/app/(authorized)/transactions/transaction-footer"
 import { useUserSettings } from "@/contexts/user-settings"
 import { TransactionSummaryDialog } from "@/app/(authorized)/transactions/transaction-summary-dialog"
-import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
+import {
+  toFormItem,
+  withBuyPriceId,
+} from "@/app/(authorized)/transactions/transaction-item-mapper"
 import { cn } from "@/lib/utils"
 import { useHotkeys } from "react-hotkeys-hook"
 
@@ -51,10 +54,7 @@ export default function TransactionForm({
           priceGroup: priceGroups.find(
             (pg) => pg.name === props.transaction!.customerPriceGroup
           )?.id,
-          transactionItems: props.transaction.transactionItems.map((trx) => ({
-            ...trx,
-            quantifiedSellPrice: quantifiedSellPrice(trx),
-          })),
+          transactionItems: props.transaction.transactionItems.map(toFormItem),
         }
       : {
           ...defaultTransactionValues,
@@ -65,7 +65,7 @@ export default function TransactionForm({
       onChange: transactionSchema,
     },
     onSubmit: async ({ value: { transactionItems, priceGroup, ...value } }) => {
-      const items = transactionItems
+      const items = transactionItems.map(withBuyPriceId)
       const customerPriceGroup =
         priceGroups.find((pg) => pg.id === priceGroup)?.name ?? ""
       const trx = {
@@ -78,7 +78,7 @@ export default function TransactionForm({
 
       // unique stock per buyPriceId
       const bpStockMap = new Map<string, number>()
-      for (const item of transactionItems)
+      for (const item of items)
         if (item.updateStock && item.buyPriceId !== null) {
           const qty = bpStockMap.get(item.buyPriceId)
           bpStockMap.set(
@@ -148,7 +148,7 @@ export default function TransactionForm({
     if (form.state.values.transactionItems.length < 1) return
 
     const { transactionItems, priceGroup, ...value } = form.state.values
-    const items = transactionItems
+    const items = transactionItems.map(withBuyPriceId)
     const customerPriceGroup =
       priceGroups.find((pg) => pg.id === priceGroup)?.name ?? ""
 

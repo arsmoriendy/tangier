@@ -41,7 +41,7 @@ export const TransactionItemTable = withForm({
     ) {
       setUserSettings.decrementStock = checked
       for (const [i, item] of items.entries())
-        if (item.buyPriceId !== null)
+        if (item.linkedBuyPrice !== null)
           form.setFieldValue(`transactionItems[${i}].updateStock`, checked)
     }
 
@@ -90,7 +90,7 @@ export const TransactionItemTable = withForm({
                   key={i}
                   form={form}
                   i={i}
-                  buyPriceId={item.buyPriceId}
+                  linkedBuyPrice={item.linkedBuyPrice}
                   selected={selected}
                   setSelected={setSelected}
                   showBuyPrice={showBuyPrice}

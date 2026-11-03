@@ -35,9 +35,12 @@ export async function createTransaction({
         .returning({ id: transactions.id, createdAt: transactions.createdAt })
     )[0]
 
-    await trx
-      .insert(transactionItems)
-      .values(items.map((i) => ({ ...i, transaction: id })))
+    await trx.insert(transactionItems).values(
+      items.map(({ linkedBuyPrice, ...i }) => ({
+        ...i,
+        transaction: id,
+      }))
+    )
     return { id, createdAt }
   })
 }
@@ -58,9 +61,12 @@ export async function updateTransaction({
         .delete(transactionItems)
         .where(eq(transactionItems.transaction, id))
 
-      await trx
-        .insert(transactionItems)
-        .values(items.map((i) => ({ ...i, transaction: id })))
+      await trx.insert(transactionItems).values(
+        items.map(({ linkedBuyPrice, ...i }) => ({
+          ...i,
+          transaction: id,
+        }))
+      )
     }
   })
 }
@@ -68,7 +74,16 @@ export async function updateTransaction({
 export async function readTransaction(id: string) {
   return await db.query.transactions.findFirst({
     where: eq(transactions.id, id),
-    with: { transactionItems: { columns: { transaction: false } } },
+    with: {
+      transactionItems: {
+        columns: { transaction: false },
+        with: {
+          linkedBuyPrice: {
+            columns: { id: true, price: true, stock: true },
+          },
+        },
+      },
+    },
   })
 }
 
@@ -105,7 +120,16 @@ export async function listTransactions({
       lte(transactions.createdAt, to.toUTCString()),
       eq(transactions.held, held)
     ),
-    with: { transactionItems: { columns: { transaction: false } } },
+    with: {
+      transactionItems: {
+        columns: { transaction: false },
+        with: {
+          linkedBuyPrice: {
+            columns: { id: true, price: true, stock: true },
+          },
+        },
+      },
+    },
     orderBy: [desc(transactions.createdAt), asc(transactions.id)],
   })
 }

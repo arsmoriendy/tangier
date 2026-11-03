@@ -2,6 +2,8 @@ import { Form, useAppForm, withForm } from "@/components/form"
 import { WrappedCombobox } from "@/components/wrapped-combobox"
 import { MarginIndicator } from "@/components/margin-indicator"
 import { MismatchIndicator } from "@/components/mismatch-indicator"
+import { BuyPriceMismatchIndicator } from "@/components/buy-price-mismatch-indicator"
+import { toLinkedBuyPrice } from "@/app/(authorized)/transactions/transaction-item-mapper"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { SearchItemForm } from "@/app/(authorized)/transactions/search-item-form"
 import { subscribeKey } from "valtio/utils"
@@ -59,7 +61,7 @@ export const AddItemForm = withForm({
         const partialItem = {
           ...rest,
           unit,
-          buyPriceId: addItemProxy.buyPrice?.id ?? null,
+          linkedBuyPrice: toLinkedBuyPrice(addItemProxy.buyPrice),
           updateStock: getUserSettings.decrementStock,
         }
 
@@ -174,46 +176,39 @@ export const AddItemForm = withForm({
         <Form className="contents" handleSubmit={form.handleSubmit}>
           <AdminOnly>
             {getUserSettings.showTrxBuyPrice && (
-              <div className="relative">
-                <Badge className="absolute -top-6 left-0">
-                  {tc("buyPrice")}
-                </Badge>
-
-                <WrappedCombobox
-                  className="w-31 flex-none xl:w-38"
-                  contentProps={{
-                    side: "top",
-                    align: "end",
-                    className: "w-56",
-                  }}
-                  options={buyPriceOptions}
-                  option={
-                    buyPriceOptions.find(
-                      (bp) => bp.value === addItemSnap.buyPrice?.id
-                    ) ?? null
-                  }
-                  onOptionChange={selectBuyPrice}
-                  optionToLabel={(bp) => bp.label}
-                  optionToValue={(bp) => bp.value}
-                  emptyMessage={t("noPrice")}
-                  renderOption={(bp) => (
-                    <span className="flex w-full flex-col items-start">
-                      <span>{bp.label}</span>
-                      <span className="text-muted-foreground">
-                        {tc("stockLeft", { count: bp.stock })}
-                      </span>
-                    </span>
-                  )}
-                  renderInput={({ domProps }) => (
-                    <form.Subscribe
-                      selector={(s) =>
-                        [
-                          s.values.buyPrice,
-                          s.fieldMeta.buyPrice?.isValid,
-                        ] as const
+              <form.Subscribe
+                selector={(s) =>
+                  [s.values.buyPrice, s.fieldMeta.buyPrice?.isValid] as const
+                }
+              >
+                {([bp, bpIsValid]) => (
+                  <div className="relative">
+                    <WrappedCombobox
+                      className="relative w-31 flex-none xl:w-38"
+                      contentProps={{
+                        side: "top",
+                        align: "end",
+                        className: "w-56",
+                      }}
+                      options={buyPriceOptions}
+                      option={
+                        buyPriceOptions.find(
+                          (bp) => bp.value === addItemSnap.buyPrice?.id
+                        ) ?? null
                       }
-                    >
-                      {([bp, bpIsValid]) => (
+                      onOptionChange={selectBuyPrice}
+                      optionToLabel={(bp) => bp.label}
+                      optionToValue={(bp) => bp.value}
+                      emptyMessage={t("noPrice")}
+                      renderOption={(bp) => (
+                        <span className="flex w-full flex-col items-start">
+                          <span>{bp.label}</span>
+                          <span className="text-muted-foreground">
+                            {tc("stockLeft", { count: bp.stock })}
+                          </span>
+                        </span>
+                      )}
+                      renderInput={({ domProps }) => (
                         <IdrInput
                           {...(domProps as IdrInputProps)}
                           aria-invalid={bpIsValid === false || undefined}
@@ -224,10 +219,23 @@ export const AddItemForm = withForm({
                           }
                         />
                       )}
-                    </form.Subscribe>
-                  )}
-                />
-              </div>
+                    />
+
+                    <Badge className="absolute -top-6 left-0">
+                      {tc("buyPrice")}
+                    </Badge>
+
+                    <BuyPriceMismatchIndicator
+                      buyPrice={bp}
+                      originalBuyPrice={addItemSnap.buyPrice?.price}
+                      tooltip={tc("originalBuyPrice", {
+                        price: formatCurrency(addItemSnap.buyPrice?.price ?? 0),
+                      })}
+                      className="absolute -top-2 -right-2 z-50"
+                    />
+                  </div>
+                )}
+              </form.Subscribe>
             )}
           </AdminOnly>
 

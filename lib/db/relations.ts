@@ -69,6 +69,10 @@ export const transactionItemsRelations = relations(
       fields: [transactionItems.transaction],
       references: [transactions.id],
     }),
+    linkedBuyPrice: one(buyPrices, {
+      fields: [transactionItems.buyPriceId],
+      references: [buyPrices.id],
+    }),
   })
 )
 

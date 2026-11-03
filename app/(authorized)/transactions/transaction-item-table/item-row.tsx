@@ -1,4 +1,5 @@
 import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
+import type { TransactionSchema } from "@/app/(authorized)/transactions/transaction-schema"
 import { withForm } from "@/components/form"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Field } from "@/components/ui/field"
@@ -7,6 +8,8 @@ import { useUserSettings } from "@/contexts/user-settings"
 import AdminOnly, { useIsAdmin } from "@/components/admin-only"
 import { MarginIndicator } from "@/components/margin-indicator"
 import { MismatchIndicator } from "@/components/mismatch-indicator"
+import { BuyPriceMismatchIndicator } from "@/components/buy-price-mismatch-indicator"
+import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
@@ -16,11 +19,14 @@ import {
   setIdempotentFieldValue,
 } from "@/app/(authorized)/transactions/transaction-item-table/form-helpers"
 
+type LinkedBuyPrice =
+  TransactionSchema["transactionItems"][number]["linkedBuyPrice"]
+
 export const ItemRow = withForm({
   defaultValues: defaultTransactionValues,
   props: {
     i: 0,
-    buyPriceId: null as string | null,
+    linkedBuyPrice: null as LinkedBuyPrice,
     selected: new Set<number>(),
     setSelected: (_selected: Set<number>) => {},
     showBuyPrice: false,
@@ -28,7 +34,7 @@ export const ItemRow = withForm({
   render: function Render({
     form,
     i,
-    buyPriceId,
+    linkedBuyPrice,
     selected,
     setSelected,
     showBuyPrice,
@@ -101,10 +107,28 @@ export const ItemRow = withForm({
           </form.AppField>
         </TableCell>
         {showBuyPrice && (
-          <TableCell className="align-top">
-            <form.AppField name={`transactionItems[${i}].buyPrice`}>
-              {(field) => <field.IdrField min={0} />}
-            </form.AppField>
+          <TableCell className="relative align-top">
+            <form.Subscribe
+              selector={(f) => f.values.transactionItems[i].buyPrice}
+            >
+              {(bp) => (
+                <>
+                  <form.AppField name={`transactionItems[${i}].buyPrice`}>
+                    {(field) => <field.IdrField min={0} />}
+                  </form.AppField>
+                  {linkedBuyPrice && (
+                    <BuyPriceMismatchIndicator
+                      buyPrice={bp}
+                      originalBuyPrice={linkedBuyPrice.price}
+                      tooltip={tc("originalBuyPrice", {
+                        price: formatCurrency(linkedBuyPrice.price),
+                      })}
+                      className="absolute top-0 right-0 z-50"
+                    />
+                  )}
+                </>
+              )}
+            </form.Subscribe>
           </TableCell>
         )}
         <TableCell className="align-top">
@@ -153,7 +177,7 @@ export const ItemRow = withForm({
           </form.AppField>
         </TableCell>
         <TableCell className="px-0 align-top">
-          {buyPriceId !== null ? (
+          {linkedBuyPrice !== null ? (
             <Field orientation="horizontal" className="h-8 justify-center">
               <form.AppField name={`transactionItems[${i}].updateStock`}>
                 {(f) => (

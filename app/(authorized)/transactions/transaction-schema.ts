@@ -11,7 +11,13 @@ export const transactionSchema = z.object({
         quantity: z.number(),
         quantifiedSellPrice: z.number().min(0),
 
-        buyPriceId: z.uuid().nullable(),
+        linkedBuyPrice: z
+          .object({
+            id: z.uuid(),
+            price: z.number(),
+            stock: z.number(),
+          })
+          .nullable(),
         updateStock: z.boolean(),
       })
     )

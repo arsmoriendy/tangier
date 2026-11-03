@@ -13,6 +13,7 @@
     "discountPerc": "{perc}% discount",
     "marginTooltip": "Margin (and discount)",
     "mismatchTooltip": "Mismatch",
+    "originalBuyPrice": "Original buy price: {price}",
     "totalPrice": "Total price",
     "id": "Id",
     "username": "Username",

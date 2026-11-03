@@ -35,7 +35,7 @@ import { formatCurrency } from "@/lib/i18n/currency"
 import { marginAndDiscount } from "@/lib/margin"
 import { cn } from "@/lib/utils"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
-import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
+import { toFormItem } from "@/app/(authorized)/transactions/transaction-item-mapper"
 import { toast } from "sonner"
 
 function FooterBar({ className, ...props }: ComponentProps<"div">) {
@@ -163,10 +163,7 @@ export const TransactionFooter = withForm({
       form.setFieldValue(
         "transactionItems",
         (trx.transactionItems as DeepMutable<typeof trx.transactionItems>).map(
-          (item) => ({
-            ...item,
-            quantifiedSellPrice: quantifiedSellPrice(item),
-          })
+          toFormItem
         )
       )
 
