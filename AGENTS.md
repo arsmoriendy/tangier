@@ -15,7 +15,7 @@ When a task requires choosing between known alternatives, prompt the user with *
 Package manager is **bun** (`bun.lock` is authoritative). Stale `package-lock.json` and `pnpm-lock.yaml` also exist at the repo root; ignore/remove them rather than using npm or pnpm. On Arch/NixOS the `usb` native dependency needs the dev shell from `flake.nix` (`nix develop`) plus `node-gyp build` inside `node_modules/usb`; on other systems apply the udev rule from `README.md`.
 
 ```bash
-bun install                 # install deps
+bun install                 # install deps — main checkout only, never in a worktree
 bun -b dev                  # dev server (turbopack) — use bun runtime, see README
 bun run build               # build; sets SKIP_ENV_VALIDATION=1 and assembles standalone output
 bun run start               # start built server
@@ -27,6 +27,8 @@ bun run intl-check          # find unused i18n keys (source locale en-ID)
 ```
 
 **Agents: do not run `bun run lint` or start the app/dev server (`bun run dev`, `bun run start`, `bun run build`). The user handles linting and running the program; skip these unless explicitly asked.**
+
+**Agents: do not run `bun install` in a custom worktree.** Dependencies are installed once in the main checkout; a fresh install inside a worktree duplicates `node_modules` (including the native `usb` build that needs the `nix develop` dev shell) and risks churning the shared `bun.lock`. If a worktree seems to be missing dependencies, stop and ask the user rather than installing.
 
 `build` copies `public/`, `.next/static`, and `drizzle/` into `.next/standalone/` — the Docker image (`oven/bun:alpine`) runs `./server.js` from the standalone output. The Dockerfile also installs `libudev-zero` (USB) and `postgresql18-client` (backup/restore via `pg_dump`/`psql`). Do not change this assembly step unless you also update the Dockerfile.
 
