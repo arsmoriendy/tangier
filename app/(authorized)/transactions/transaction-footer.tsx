@@ -19,7 +19,7 @@ import {
 } from "@/lib/crud/transactions"
 import { useHeld } from "@/app/(authorized)/transactions/held-ctx"
 import { useUserSettings } from "@/contexts/user-settings"
-import { useTranslations } from "next-intl"
+import { useFormatter, useTranslations } from "next-intl"
 import { ComponentProps } from "react"
 import { Badge } from "@/components/ui/badge"
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
@@ -50,8 +50,15 @@ function FooterBar({ className, ...props }: ComponentProps<"div">) {
   )
 }
 
-function RecallBadge({ onCancelRecall }: { onCancelRecall: () => void }) {
+function RecallBadge({
+  createdAt,
+  onCancelRecall,
+}: {
+  createdAt: Date
+  onCancelRecall: () => void
+}) {
   const t = useTranslations("transactions.form")
+  const format = useFormatter()
 
   return (
     <Badge className="absolute -top-4 right-2 gap-2">
@@ -61,6 +68,13 @@ function RecallBadge({ onCancelRecall }: { onCancelRecall: () => void }) {
       </span>
 
       <span>Recalled</span>
+      <ClockCountdownIcon />
+      <span>
+        {format.dateTime(createdAt, {
+          dateStyle: "medium",
+          timeStyle: "short",
+        })}
+      </span>
 
       <Tooltip>
         <TooltipTrigger asChild>
@@ -201,7 +215,10 @@ export const TransactionFooter = withForm({
           </div>
 
           {recalledTrx !== undefined && (
-            <RecallBadge onCancelRecall={onCancelRecall} />
+            <RecallBadge
+              createdAt={new Date(recalledTrx.createdAt)}
+              onCancelRecall={onCancelRecall}
+            />
           )}
 
           <form.AppField name="totalPrice">
