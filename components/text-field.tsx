@@ -21,7 +21,6 @@ export default function TextField({
   onChange,
   hotkeys,
   ref = useRef<HTMLInputElement>(null),
-  transformers = [],
   disableUppercaseOption,
   hideHotkeys,
   hideErrors,
