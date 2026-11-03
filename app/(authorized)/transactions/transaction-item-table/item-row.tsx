@@ -83,10 +83,10 @@ export const ItemRow = withForm({
         <TableCell className="cursor-grab align-top">
           <DotsSixVerticalIcon className="inline h-8" />
         </TableCell>
-        <TableCell className="flex justify-center px-0 align-top">
+        <TableCell className="px-0 align-top">
           <Checkbox
             checked={selected.has(i)}
-            className="my-2"
+            className="mx-auto mt-2"
             onCheckedChange={handleSelect}
           />
         </TableCell>
