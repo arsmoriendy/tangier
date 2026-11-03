@@ -24,6 +24,7 @@ import { Kbd } from "@/components/ui/kbd"
 import {
   ArrowCounterClockwiseIcon,
   CaretUpIcon,
+  LinkIcon,
 } from "@phosphor-icons/react/dist/ssr"
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Badge } from "@/components/ui/badge"
@@ -223,6 +224,9 @@ export const AddItemForm = withForm({
 
                     <Badge className="absolute -top-6 left-0">
                       {tc("buyPrice")}
+                      {addItemSnap.buyPrice && (
+                        <LinkIcon data-icon="inline-end" aria-hidden />
+                      )}
                     </Badge>
 
                     <BuyPriceMismatchIndicator
