@@ -50,6 +50,23 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+@theme {
+  --animate-row-blink: row-blink 900ms ease-in-out;
+
+  @keyframes row-blink {
+    0%,
+    40%,
+    80%,
+    100% {
+      background-color: transparent;
+    }
+    20%,
+    60% {
+      background-color: color-mix(in oklab, var(--primary) 10%, transparent);
+    }
+  }
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

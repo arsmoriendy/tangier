@@ -13,6 +13,7 @@ import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
+import { useEffect, useState, type AnimationEvent } from "react"
 import { itemRowDndHandlers } from "@/app/(authorized)/transactions/transaction-item-table/item-row-dnd"
 import {
   recalculateTotalPrice,
@@ -36,6 +37,8 @@ export const ItemRow = withForm({
     selected: new Set<number>(),
     setSelected: (_selected: Set<number>) => {},
     showBuyPrice: false,
+    blinkOnMount: false,
+    blinkToken: undefined as number | undefined,
   },
   render: function Render({
     form,
@@ -44,11 +47,24 @@ export const ItemRow = withForm({
     selected,
     setSelected,
     showBuyPrice,
+    blinkOnMount,
+    blinkToken,
   }) {
     const { getUserSettings } = useUserSettings()
     const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
     const isAdmin = useIsAdmin()
+
+    // Mount flips on for appended rows; merges replay it via blinkToken.
+    const [blinking, setBlinking] = useState(blinkOnMount)
+
+    useEffect(() => {
+      if (blinkToken !== undefined) setBlinking(true)
+    }, [blinkToken])
+
+    function handleBlinkEnd(e: AnimationEvent<HTMLTableRowElement>) {
+      if (e.target === e.currentTarget) setBlinking(false)
+    }
 
     const coloredSellPrice = isAdmin && getUserSettings.coloredSellPrice
 
@@ -91,7 +107,11 @@ export const ItemRow = withForm({
       <TableRow
         draggable
         {...dnd}
-        className="[&_td]:border-primary data-[drop=bottom]:[&_td]:border-b data-[drop=top]:[&_td]:border-t"
+        className={cn(
+          blinking && "animate-row-blink motion-reduce:animate-none",
+          "[&_td]:border-primary data-[drop=bottom]:[&_td]:border-b data-[drop=top]:[&_td]:border-t"
+        )}
+        onAnimationEnd={handleBlinkEnd}
       >
         <TableCell className="cursor-grab align-top">
           <DotsSixVerticalIcon className="inline h-8" />

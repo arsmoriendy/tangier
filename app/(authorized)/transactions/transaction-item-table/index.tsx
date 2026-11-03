@@ -22,20 +22,29 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { MinusIcon, StackMinusIcon } from "@phosphor-icons/react/dist/ssr"
+import { useEffect, useRef } from "react"
 
 export const TransactionItemTable = withForm({
   defaultValues: defaultTransactionValues,
   props: {
     selected: new Set([0]),
     setSelected: (_selected: Set<number>) => {},
+    blinkSignal: undefined as { index: number; token: number } | undefined,
   },
-  render: function Render({ form, selected, setSelected }) {
+  render: function Render({ form, selected, setSelected, blinkSignal }) {
     const { getUserSettings, setUserSettings } = useUserSettings()
     const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
     const isAdmin = useIsAdmin()
 
     const showBuyPrice = isAdmin && getUserSettings.showTrxBuyPrice
+
+    // Rows mounted with the table (e.g. when editing an existing transaction)
+    // shouldn't blink; only rows appended afterwards should.
+    const isFirstRender = useRef(true)
+    useEffect(() => {
+      isFirstRender.current = false
+    }, [])
 
     function handleItemsChange() {
       recalculateTotalPrice(form)
@@ -142,6 +151,10 @@ export const TransactionItemTable = withForm({
                   selected={selected}
                   setSelected={setSelected}
                   showBuyPrice={showBuyPrice}
+                  blinkOnMount={!isFirstRender.current}
+                  blinkToken={
+                    blinkSignal?.index === i ? blinkSignal.token : undefined
+                  }
                 />
               ))}
             </TableBody>
