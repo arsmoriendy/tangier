@@ -18,7 +18,7 @@ import {
   recalculateTotalPrice,
   setIdempotentFieldValue,
 } from "@/app/(authorized)/transactions/transaction-item-table/form-helpers"
-import { StackMinusIcon } from "@phosphor-icons/react/dist/ssr"
+import { LinkBreakIcon, StackMinusIcon } from "@phosphor-icons/react/dist/ssr"
 import {
   Tooltip,
   TooltipContent,
@@ -183,22 +183,27 @@ export const ItemRow = withForm({
             {(field) => <field.NumberField min={1} />}
           </form.AppField>
         </TableCell>
-        <TableCell className="!pl-0 align-top">
+        <TableCell className="align-top">
           <form.AppField name={`transactionItems[${i}].updateStock`}>
             {(f) => (
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div>
-                    <Checkbox
-                      className="mx-auto mt-2"
-                      checked={!linkedBuyPrice ? false : f.state.value}
-                      onCheckedChange={(c) => f.setValue(c as boolean)}
-                      disabled={linkedBuyPrice === null}
-                    />
+                    {linkedBuyPrice ? (
+                      <Checkbox
+                        className="mx-auto mt-2"
+                        checked={f.state.value}
+                        onCheckedChange={(c) => f.setValue(c as boolean)}
+                      />
+                    ) : (
+                      <LinkBreakIcon className="mx-auto mt-2" />
+                    )}
                   </div>
                 </TooltipTrigger>
                 <TooltipContent side="bottom">
-                  {t("items.updateStock")}
+                  {t(
+                    linkedBuyPrice ? "items.updateStock" : "items.noLinkedStock"
+                  )}
                 </TooltipContent>
               </Tooltip>
             )}

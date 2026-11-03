@@ -97,6 +97,7 @@
         "title": "Transaction items",
         "selectAll": "Select all",
         "updateStock": "Decrement stock",
+        "noLinkedStock": "No linked stock",
         "customStock": "Custom stock",
         "noItems": "No items yet"
       },

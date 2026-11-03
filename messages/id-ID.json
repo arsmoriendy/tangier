@@ -99,6 +99,7 @@
         "title": "Barang transaksi",
         "selectAll": "Pilih semua",
         "updateStock": "Kurangi stok",
+        "noLinkedStock": "Tidak ada stok terkait",
         "customStock": "Stok kustom",
         "noItems": "Belum ada barang"
       },

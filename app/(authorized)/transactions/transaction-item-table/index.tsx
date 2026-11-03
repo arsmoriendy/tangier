@@ -78,7 +78,7 @@ export const TransactionItemTable = withForm({
                 <TableHead></TableHead>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <TableHead className="pl-0">
+                    <TableHead className="px-0">
                       <form.Subscribe
                         selector={(s) => s.values.transactionItems.length}
                       >
@@ -112,7 +112,7 @@ export const TransactionItemTable = withForm({
                 <TableHead>Qty</TableHead>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <TableHead className="pl-0">
+                    <TableHead className="px-0">
                       <Checkbox
                         className="mx-auto"
                         checked={getUserSettings.decrementStock}
