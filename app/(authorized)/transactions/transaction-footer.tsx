@@ -34,6 +34,9 @@ import AdminOnly from "@/components/admin-only"
 import { formatCurrency } from "@/lib/i18n/currency"
 import { marginAndDiscount } from "@/lib/margin"
 import { cn } from "@/lib/utils"
+import { usePriceGroups } from "@/contexts/price-groups-ctx"
+import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
+import { toast } from "sonner"
 
 function FooterBar({ className, ...props }: ComponentProps<"div">) {
   return (
@@ -126,6 +129,7 @@ export const TransactionFooter = withForm({
   }) {
     const { getUserSettings } = useUserSettings()
     const { setHeld } = useHeld()
+    const { priceGroups } = usePriceGroups()
     const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
 
@@ -146,6 +150,27 @@ export const TransactionFooter = withForm({
           to: new Date(),
         }))
       )
+    }
+
+    async function recallTrx(trx: DeepReadonly<TransactionWithRelations>) {
+      setRecalledTrx(trx as DeepMutable<typeof trx>)
+
+      form.setFieldValue(
+        "priceGroup",
+        priceGroups.find((pg) => pg.name === trx.customerPriceGroup)?.id
+      )
+      form.setFieldValue("totalPrice", trx.totalPrice)
+      form.setFieldValue(
+        "transactionItems",
+        (trx.transactionItems as DeepMutable<typeof trx.transactionItems>).map(
+          (item) => ({
+            ...item,
+            quantifiedSellPrice: quantifiedSellPrice(item),
+          })
+        )
+      )
+
+      setOpenRecallDialog(false)
     }
 
     return (
@@ -219,7 +244,18 @@ export const TransactionFooter = withForm({
                   hotkeys={["F6"]}
                   onClick={async () => {
                     await refreshHeldTrxs()
-                    setOpenRecallDialog(true)
+
+                    switch (setHeld.length) {
+                      case 0:
+                        toast.error(t("toasts.emptyHeldList"))
+                        break
+                      case 1:
+                        recallTrx(setHeld[0])
+                        break
+                      default:
+                        setOpenRecallDialog(true)
+                        break
+                    }
                   }}
                 >
                   <ClockCountdownIcon /> <span>Recall</span>
@@ -231,6 +267,7 @@ export const TransactionFooter = withForm({
                   setOpen={setOpenRecallDialog}
                   recalledTrx={recalledTrx}
                   setRecalledTrx={setRecalledTrx}
+                  recallTrx={recallTrx}
                 />
               </>
             )}

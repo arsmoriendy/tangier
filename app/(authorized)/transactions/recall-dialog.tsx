@@ -12,13 +12,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import {
   deleteTransaction,
   type TransactionWithRelations,
 } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
-import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
 import { TrashIcon, ClockCountdownIcon } from "@phosphor-icons/react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useEffect } from "react"
@@ -30,6 +28,7 @@ export const RecallDialog = withForm({
     setOpen: (_open: boolean) => {},
     recalledTrx: undefined as undefined | TransactionWithRelations,
     setRecalledTrx: (_trx: undefined | TransactionWithRelations) => {},
+    recallTrx: (_trx: DeepReadonly<TransactionWithRelations>) => {},
   },
   render: function Render({
     form,
@@ -37,33 +36,12 @@ export const RecallDialog = withForm({
     setOpen,
     recalledTrx,
     setRecalledTrx,
+    recallTrx,
   }) {
     const { setHeld, getHeld } = useHeld()
-    const { priceGroups } = usePriceGroups()
     const format = useFormatter()
     const t = useTranslations("transactions.recall")
     const tc = useTranslations("common")
-
-    async function recallTrx(trx: DeepReadonly<TransactionWithRelations>) {
-      setRecalledTrx(trx as DeepMutable<typeof trx>)
-
-      form.setFieldValue(
-        "priceGroup",
-        priceGroups.find((pg) => pg.name === trx.customerPriceGroup)?.id
-      )
-      form.setFieldValue("totalPrice", trx.totalPrice)
-      form.setFieldValue(
-        "transactionItems",
-        (trx.transactionItems as DeepMutable<typeof trx.transactionItems>).map(
-          (item) => ({
-            ...item,
-            quantifiedSellPrice: quantifiedSellPrice(item),
-          })
-        )
-      )
-
-      setOpen(false)
-    }
 
     // automatically recall if only 1 transaction is held
     useEffect(() => {

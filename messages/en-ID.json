@@ -117,7 +117,8 @@
         "created": "Transaction created",
         "printError": "Failed printing transaction receipt",
         "held": "Transaction held",
-        "recallCancelled": "Recall cancelled"
+        "recallCancelled": "Recall cancelled",
+        "emptyHeldList": "Held list is empty"
       },
       "cancelRecall": "Cancel recall"
     },
