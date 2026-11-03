@@ -18,6 +18,12 @@ import {
   recalculateTotalPrice,
   setIdempotentFieldValue,
 } from "@/app/(authorized)/transactions/transaction-item-table/form-helpers"
+import { StackMinusIcon } from "@phosphor-icons/react/dist/ssr"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 type LinkedBuyPrice =
   TransactionSchema["transactionItems"][number]["linkedBuyPrice"]
@@ -40,6 +46,7 @@ export const ItemRow = withForm({
     showBuyPrice,
   }) {
     const { getUserSettings } = useUserSettings()
+    const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
     const isAdmin = useIsAdmin()
 
@@ -176,23 +183,26 @@ export const ItemRow = withForm({
             {(field) => <field.NumberField min={1} />}
           </form.AppField>
         </TableCell>
-        <TableCell className="px-0 align-top">
-          {linkedBuyPrice !== null ? (
-            <Field orientation="horizontal" className="h-8 justify-center">
-              <form.AppField name={`transactionItems[${i}].updateStock`}>
-                {(f) => (
-                  <Checkbox
-                    checked={f.state.value}
-                    onCheckedChange={(c) => f.setValue(c as boolean)}
-                  />
-                )}
-              </form.AppField>
-            </Field>
-          ) : (
-            <Field orientation="horizontal" className="h-8">
-              <Checkbox disabled />
-            </Field>
-          )}
+        <TableCell className="!pl-0 align-top">
+          <form.AppField name={`transactionItems[${i}].updateStock`}>
+            {(f) => (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div>
+                    <Checkbox
+                      className="mx-auto mt-2"
+                      checked={!linkedBuyPrice ? false : f.state.value}
+                      onCheckedChange={(c) => f.setValue(c as boolean)}
+                      disabled={linkedBuyPrice === null}
+                    />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">
+                  {t("items.updateStock")}
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </form.AppField>
         </TableCell>
         <TableCell className="align-top">
           <form.Subscribe

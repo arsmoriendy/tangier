@@ -95,7 +95,7 @@
       },
       "items": {
         "title": "Transaction items",
-        "updateStock": "Update stock",
+        "updateStock": "Decrement stock",
         "customStock": "Custom stock",
         "noItems": "No items yet"
       },

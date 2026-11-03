@@ -16,6 +16,12 @@ import { useTranslations } from "next-intl"
 import { NoItemsRow } from "@/app/(authorized)/transactions/transaction-item-table/no-items-row"
 import { ItemRow } from "@/app/(authorized)/transactions/transaction-item-table/item-row"
 import { recalculateTotalPrice } from "@/app/(authorized)/transactions/transaction-item-table/form-helpers"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { MinusIcon, StackMinusIcon } from "@phosphor-icons/react/dist/ssr"
 
 export const TransactionItemTable = withForm({
   defaultValues: defaultTransactionValues,
@@ -54,7 +60,7 @@ export const TransactionItemTable = withForm({
         }}
       >
         {({ state }) => (
-          <Table className="w-full table-fixed border-separate border-spacing-0">
+          <Table className="w-full table-fixed border-separate border-spacing-0 pb-2">
             <colgroup>
               <col className="w-1/36" />
               <col className="w-1/36" />
@@ -75,7 +81,20 @@ export const TransactionItemTable = withForm({
                 {showBuyPrice && <TableHead>{tc("buyPrice")}</TableHead>}
                 <TableHead>{tc("sellPrice")}</TableHead>
                 <TableHead>Qty</TableHead>
-                <TableHead />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <TableHead className="pl-0">
+                      <Checkbox
+                        className="mx-auto"
+                        checked={getUserSettings.decrementStock}
+                        onCheckedChange={(c) =>
+                          handleDecrementStockChange(c as boolean, state.value)
+                        }
+                      />
+                    </TableHead>
+                  </TooltipTrigger>
+                  <TooltipContent>{t("items.updateStock")}</TooltipContent>
+                </Tooltip>
                 <TableHead>{tc("quantifiedPrice")}</TableHead>
               </TableRow>
             </TableHeader>
@@ -97,26 +116,6 @@ export const TransactionItemTable = withForm({
                 />
               ))}
             </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={5} />
-                {showBuyPrice && <TableCell />}
-                <TableCell />
-                <TableCell className="flex justify-center gap-2 px-0">
-                  <Checkbox
-                    checked={getUserSettings.decrementStock}
-                    onCheckedChange={(c) =>
-                      handleDecrementStockChange(c as boolean, state.value)
-                    }
-                  />
-                </TableCell>
-                <TableCell>
-                  <span className="text-muted-foreground">
-                    {t("items.updateStock")}
-                  </span>
-                </TableCell>
-              </TableRow>
-            </TableFooter>
           </Table>
         )}
       </form.AppField>

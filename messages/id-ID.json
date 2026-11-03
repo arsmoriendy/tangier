@@ -97,7 +97,7 @@
       },
       "items": {
         "title": "Barang transaksi",
-        "updateStock": "Perbaru stok",
+        "updateStock": "Kurangi stok",
         "customStock": "Stok kustom",
         "noItems": "Belum ada barang"
       },
