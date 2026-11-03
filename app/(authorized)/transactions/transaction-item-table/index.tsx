@@ -67,7 +67,7 @@ export const TransactionItemTable = withForm({
               <col className="w-6/36" />
             </colgroup>
 
-            <TableHeader className="[&_th]:border-b">
+            <TableHeader className="sticky top-0 z-51 bg-background [&_th]:border-b">
               <TableRow>
                 <TableHead colSpan={2}></TableHead>
                 <TableHead>{tc("name")}</TableHead>
