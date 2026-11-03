@@ -213,11 +213,14 @@ export const AddItemForm = withForm({
                           </span>
                         </span>
                       )}
-                      renderInput={({ domProps }) => (
+                      renderInput={({
+                        // ignore key events, allow increment / decrement with arrow keys
+                        // and enter to submit
+                        domProps: { onKeyDown, ...domProps },
+                      }) => (
                         <IdrInput
                           {...(domProps as IdrInputProps)}
                           aria-invalid={bpIsValid === false || undefined}
-                          arrowControls={false}
                           value={bp}
                           onValueChange={(value) =>
                             form.setFieldValue("buyPrice", value)
