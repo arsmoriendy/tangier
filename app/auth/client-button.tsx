@@ -12,7 +12,7 @@ export function ClientButton() {
         <Button
           variant="destructive"
           size="icon"
-          className="fixed top-3 right-2"
+          className="fixed top-2 right-2"
         >
           <XIcon />
         </Button>
