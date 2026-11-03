@@ -75,7 +75,7 @@ export type WrappedComboboxProps<O> = {
   renderOption?: (option: O) => React.ReactNode
   /**
    * Replaces the default input (and its `InputGroup` chrome) with any control,
-   * e.g. `Input`, `IdrInput`, or `NumberInput`. The control must spread
+   * e.g. `Input`, `UserIdrInput`, or `NumberInput`. The control must spread
    * `domProps` onto the underlying `<input>` so keyboard navigation and popup
    * positioning keep working.
    */

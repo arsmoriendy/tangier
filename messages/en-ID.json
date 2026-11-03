@@ -283,7 +283,8 @@
     "showHistoryReports": "Show reports",
     "showItemMarginAndDiscounts": "Show margin and discounts",
     "coloredSellPrice": "Colored sell price",
-    "uppercaseInput": "Uppercase input"
+    "uppercaseInput": "Uppercase input",
+    "showDecimals": "Show decimal points"
   },
   "auth": {
     "signIn": "Sign in",

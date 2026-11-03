@@ -28,7 +28,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr"
 import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Badge } from "@/components/ui/badge"
-import { IdrInput, IdrInputProps } from "@/components/ui/idr-input"
+import { UserIdrInput, UserIdrInputProps } from "@/components/user-idr-input"
 
 type BuyPriceOption = {
   value: string
@@ -222,8 +222,8 @@ export const AddItemForm = withForm({
                         // and enter to submit
                         domProps: { onKeyDown, ...domProps },
                       }) => (
-                        <IdrInput
-                          {...(domProps as IdrInputProps)}
+                        <UserIdrInput
+                          {...(domProps as UserIdrInputProps)}
                           aria-invalid={bpIsValid === false || undefined}
                           value={bp}
                           onValueChange={(value) =>

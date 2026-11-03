@@ -11,10 +11,13 @@ export type IdrInputProps = Omit<
 > & {
   inputClass?: string
   idrRef?: RefObject<HTMLDivElement | null>
+  /** Show the trailing decimal part (e.g. `,00`). */
+  showDecimals?: boolean
 }
 
 export function IdrInput({
   step = 500,
+  showDecimals = true,
   className,
   disabled,
   "aria-disabled": ariaDisabled,
@@ -46,7 +49,7 @@ export function IdrInput({
         ref={inputRef}
         decimalScale={2}
         step={step}
-        fixedDecimalScale
+        fixedDecimalScale={showDecimals}
         decimalSeparator=","
         thousandSeparator="."
         unstyled

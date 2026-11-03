@@ -215,6 +215,7 @@ export const userSettings = pgTable(
     showMarginAndDiscounts: boolean().default(false).notNull(),
     coloredSellPrice: boolean().default(false).notNull(),
     uppercaseInput: boolean().default(true).notNull(),
+    showDecimals: boolean().default(false).notNull(),
   },
   (table) => [
     foreignKey({

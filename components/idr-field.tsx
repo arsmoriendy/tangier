@@ -5,7 +5,7 @@ import {
   FieldError,
   FieldLabel,
 } from "@/components/ui/field"
-import { IdrInput, IdrInputProps } from "@/components/ui/idr-input"
+import { UserIdrInput, UserIdrInputProps } from "@/components/user-idr-input"
 
 export default function IdrField({
   label,
@@ -16,7 +16,7 @@ export default function IdrField({
   label?: string
   description?: string
 } & Omit<
-  IdrInputProps,
+  UserIdrInputProps,
   "id" | "value" | "onValueChange" | "onBlur" | "aria-invalid"
 >) {
   const field = useFieldContext<number>()
@@ -30,7 +30,7 @@ export default function IdrField({
           {label}
         </FieldLabel>
       )}
-      <IdrInput
+      <UserIdrInput
         id={id}
         value={field.state.value}
         onValueChange={(floatValue) =>

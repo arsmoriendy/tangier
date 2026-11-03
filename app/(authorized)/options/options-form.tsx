@@ -107,6 +107,11 @@ export default function OptionsForm({
             onCheckedChange={(c) => (setUserSettings.uppercaseInput = c)}
             label={ts("uppercaseInput")}
           />
+          <OptionCheckbox
+            checked={getUserSettings.showDecimals}
+            onCheckedChange={(c) => (setUserSettings.showDecimals = c)}
+            label={ts("showDecimals")}
+          />
         </FieldSet>
       </FieldSet>
 
