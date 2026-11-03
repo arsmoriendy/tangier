@@ -19,10 +19,10 @@ export function itemRowDndHandlers(form: DndForm, i: number) {
 
     const rect = e.currentTarget.getBoundingClientRect()
     const y = e.clientY - rect.top
-    const yPct = y / rect.height
+    const mouseUnder = y / rect.height > 0.5
 
     e.currentTarget.removeAttribute("data-drop")
-    e.currentTarget.setAttribute("data-drop", yPct > 0.5 ? "bottom" : "top")
+    e.currentTarget.setAttribute("data-drop", mouseUnder ? "bottom" : "top")
   }
 
   function onDragLeave(e: DragEvent<HTMLTableRowElement>) {
@@ -37,8 +37,17 @@ export function itemRowDndHandlers(form: DndForm, i: number) {
 
     const rect = e.currentTarget.getBoundingClientRect()
     const y = e.clientY - rect.top
-    const yPct = y / rect.height
-    const swapIndex = yPct > 0.5 ? i : i - 1
+    const mouseUnder = y / rect.height > 0.5
+    const mouseAbove = !mouseUnder
+
+    const moveUp = sourceIndex > i
+    const moveDown = !moveUp
+
+    let swapIndex = 0
+    if (moveUp && mouseUnder) swapIndex = i + 1
+    else if (moveUp && mouseAbove) swapIndex = i
+    else if (moveDown && mouseUnder) swapIndex = i
+    else if (moveDown && mouseAbove) swapIndex = i - 1
 
     form.moveFieldValues("transactionItems", sourceIndex, swapIndex)
   }
