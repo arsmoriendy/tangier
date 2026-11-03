@@ -44,8 +44,9 @@ export function EditTrxDialog({
           </DialogClose>
         </Button>
 
-        <div className="h-[92vh] overflow-auto">
+        <div className="mb-2 h-[92vh] overflow-auto">
           <TransactionForm
+            className="m-2"
             transaction={trx}
             onUpdate={(trx) => {
               const i = setTrx.findIndex((t) => t.id === trx.id)
