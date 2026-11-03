@@ -51,7 +51,7 @@
 }
 
 @theme {
-  --animate-row-blink: row-blink 900ms ease-in-out;
+  --animate-row-blink: row-blink 1500ms ease-in-out;
 
   @keyframes row-blink {
     0%,
