@@ -7,6 +7,7 @@ import {
   HandIcon,
   PrinterIcon,
   TrashIcon,
+  ArrowCounterClockwiseIcon,
 } from "@phosphor-icons/react/dist/ssr"
 import { AddItemForm } from "@/app/(authorized)/transactions/add-item-form"
 import { AddItemProvider } from "@/app/(authorized)/transactions/add-item-ctx"
@@ -260,7 +261,14 @@ export const TransactionFooter = withForm({
               label={t("removeItems", { count: selected.size })}
             />
 
-            <ResetButton hotkeys={["F4"]} onClick={() => form.reset()} />
+            <FooterButton
+              hotkeys={["F4"]}
+              onClick={() => form.reset()}
+              type="reset"
+              variant="destructive"
+              icon={<ArrowCounterClockwiseIcon />}
+              label={tc("resetAll")}
+            />
 
             {!hideHoldRecall && (
               <>

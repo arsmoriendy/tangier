@@ -1,6 +1,7 @@
 {
   "common": {
     "reset": "Reset",
+    "resetAll": "Reset semua",
     "name": "Nama",
     "unit": "Satuan",
     "buyPrices": "Harga beli",
