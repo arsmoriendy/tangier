@@ -138,7 +138,7 @@ function FooterButton({
           {xlLabel && <span className="inline xl:hidden">{xlLabel}</span>}
         </ButtonWithHotkeys>
       </TooltipTrigger>
-      <TooltipContent className="inline xl:hidden" side="top">
+      <TooltipContent className="inline xl:hidden" side="top" arrow={false}>
         {label}
       </TooltipContent>
     </Tooltip>
