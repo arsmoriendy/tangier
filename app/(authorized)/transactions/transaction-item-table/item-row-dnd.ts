@@ -4,7 +4,28 @@ type DndForm = {
   moveFieldValues: (name: "transactionItems", from: number, to: number) => void
 }
 
-export function itemRowDndHandlers(form: DndForm, i: number) {
+export function remapSelectedAfterMove(
+  selected: Set<number>,
+  from: number,
+  to: number
+) {
+  if (from === to) return selected
+
+  const next = new Set<number>()
+  for (const i of selected) {
+    if (i === from) next.add(to)
+    else if (from < i && i <= to) next.add(i - 1)
+    else if (to <= i && i < from) next.add(i + 1)
+    else next.add(i)
+  }
+  return next
+}
+
+export function itemRowDndHandlers(
+  form: DndForm,
+  i: number,
+  onMove?: (from: number, to: number) => void
+) {
   function onDragStart(e: DragEvent<HTMLTableRowElement>) {
     e.dataTransfer.setData("text/plain", i.toString())
     e.currentTarget.setAttribute("data-state", "selected")
@@ -50,6 +71,7 @@ export function itemRowDndHandlers(form: DndForm, i: number) {
     else if (moveDown && mouseAbove) swapIndex = i - 1
 
     form.moveFieldValues("transactionItems", sourceIndex, swapIndex)
+    onMove?.(sourceIndex, swapIndex)
   }
 
   return { onDragStart, onDragEnd, onDragOver, onDragLeave, onDrop }

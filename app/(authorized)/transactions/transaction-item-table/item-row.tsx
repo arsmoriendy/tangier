@@ -13,7 +13,10 @@ import { cn } from "@/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
 import { useEffect, useRef, useState, type AnimationEvent } from "react"
-import { itemRowDndHandlers } from "@/app/(authorized)/transactions/transaction-item-table/item-row-dnd"
+import {
+  itemRowDndHandlers,
+  remapSelectedAfterMove,
+} from "@/app/(authorized)/transactions/transaction-item-table/item-row-dnd"
 import {
   recalculateTotalPrice,
   setIdempotentFieldValue,
@@ -112,7 +115,9 @@ export const ItemRow = withForm({
       recalculateTotalPrice(form)
     }
 
-    const dnd = itemRowDndHandlers(form, i)
+    const dnd = itemRowDndHandlers(form, i, (from, to) =>
+      setSelected(remapSelectedAfterMove(selected, from, to))
+    )
 
     return (
       <TableRow

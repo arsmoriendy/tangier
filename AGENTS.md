@@ -171,3 +171,4 @@ Base UI single-select `Combobox` over unconstrained option type `O`.
 - **`drizzle.config.ts`** lists both schema files and has no `out` override, so migrations land in `./drizzle` (what `migrateDb()` reads). `lib/db/index.ts` merges `schema + relations + authSchema` so `db.query.*` spans both.
 - **i18n-check source locale is `en-ID`** — add keys there first.
 - **`@types/react` has `DragEvent` but no `DropEvent`** — use `DragEvent<HTMLElement>` for both drag and drop handlers.
+- **Transaction item selection**: `selected` in `TransactionForm` is a `Set` of item indices. Reset it with `resetTransactionForm()` on form resets/recall cancel, clear it when replacing items on recall, and remap it on drag reorder (`remapSelectedAfterMove`); otherwise checkboxes and the remove button target the wrong rows.
