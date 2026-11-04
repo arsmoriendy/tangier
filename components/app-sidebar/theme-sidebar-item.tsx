@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import { useCollapsedTooltip } from "@/components/app-sidebar/use-collapsed-tooltip"
 import { DesktopIcon, MoonIcon, SunIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
 import { useTheme } from "next-themes"
@@ -22,6 +23,7 @@ export function ThemeSidebarItem() {
     dark: <MoonIcon />,
   }
   const t = useTranslations("sidebar.theme")
+  const tooltip = useCollapsedTooltip()
 
   useEffect(() => {
     setMounted(true)
@@ -33,7 +35,7 @@ export function ThemeSidebarItem() {
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton>
+          <SidebarMenuButton tooltip={tooltip(t("title"))}>
             {themeIconMap[theme ?? ""] ?? <DesktopIcon />} {t("title")}
           </SidebarMenuButton>
         </DropdownMenuTrigger>

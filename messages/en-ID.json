@@ -46,6 +46,8 @@
     "barcodeGroups": "Barcode groups",
     "users": "Users",
     "options": "Options",
+    "expandSidebar": "Expand sidebar",
+    "collapseSidebar": "Collapse sidebar",
     "language": {
       "title": "Language",
       "header": "Choose language"

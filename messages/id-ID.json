@@ -46,6 +46,8 @@
     "barcodeGroups": "Kelompok barcode",
     "users": "Pengguna",
     "options": "Setelan",
+    "expandSidebar": "Perluas sidebar",
+    "collapseSidebar": "Tutup sidebar",
     "language": {
       "title": "Bahasa",
       "header": "Pilih bahasa"

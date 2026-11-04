@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
+import { useCollapsedTooltip } from "@/components/app-sidebar/use-collapsed-tooltip"
 import { useSession } from "@/contexts/session-ctx"
 import { authClient } from "@/lib/auth-client"
 import { SignOutIcon, TrashIcon, UserCircleIcon } from "@phosphor-icons/react"
@@ -27,11 +28,12 @@ import { toast } from "sonner"
 export function UserSidebarItem() {
   const session = useSession()
   const t = useTranslations("sidebar.account")
+  const tooltip = useCollapsedTooltip()
   return (
     <SidebarMenuItem>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <SidebarMenuButton size="lg">
+          <SidebarMenuButton size="lg" tooltip={tooltip(session.user.name)}>
             <div className="grid aspect-square size-8 place-items-center">
               <UserCircleIcon />
             </div>

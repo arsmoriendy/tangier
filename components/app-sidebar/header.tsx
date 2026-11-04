@@ -7,10 +7,12 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { SidebarIcon } from "@phosphor-icons/react"
+import { useTranslations } from "next-intl"
 import pkg from "package.json"
 
 export function Header() {
   const { state, toggleSidebar } = useSidebar()
+  const t = useTranslations("sidebar")
   return (
     <SidebarHeader>
       <SidebarMenu>
@@ -22,14 +24,23 @@ export function Header() {
                 <p>tangier</p>
                 <p className="text-xs text-muted-foreground">v{pkg.version}</p>
               </div>
-              <Button size="icon-sm" variant="ghost" onClick={toggleSidebar}>
+              <Button
+                size="icon-sm"
+                variant="ghost"
+                tooltip={t("collapseSidebar")}
+                onClick={toggleSidebar}
+              >
                 <SidebarIcon />
               </Button>
             </>
           )}
         </div>
         {state === "collapsed" && (
-          <SidebarMenuButton className="mt-2" onClick={toggleSidebar}>
+          <SidebarMenuButton
+            className="mt-2"
+            tooltip={t("expandSidebar")}
+            onClick={toggleSidebar}
+          >
             <SidebarIcon />
           </SidebarMenuButton>
         )}

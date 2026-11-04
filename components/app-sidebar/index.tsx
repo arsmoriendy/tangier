@@ -28,10 +28,12 @@ import Link from "next/link"
 import { LanguageSidebarItem } from "./language-sidebar-item"
 import { Header } from "@/components/app-sidebar/header"
 import CollapsedClientSidebarItem from "@/components/app-sidebar/collapsed-client-sidebar-item"
+import { useCollapsedTooltip } from "@/components/app-sidebar/use-collapsed-tooltip"
 
 export function AppSidebar() {
   const t = useTranslations("sidebar")
   const tc = useTranslations("common")
+  const tooltip = useCollapsedTooltip()
   return (
     <Sidebar collapsible="icon">
       <Header />
@@ -41,7 +43,11 @@ export function AppSidebar() {
           <SidebarMenu>
             <DynamicSidebarLink href="/transactions/new">
               {({ href, ...props }) => (
-                <SidebarMenuButton asChild {...props}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={tooltip(t("transactions.newTransaction"))}
+                  {...props}
+                >
                   <Link href={href}>
                     <BasketIcon />
                     {t("transactions.newTransaction")}
@@ -52,7 +58,11 @@ export function AppSidebar() {
 
             <DynamicSidebarLink href="/transactions/history">
               {({ href, ...props }) => (
-                <SidebarMenuButton asChild {...props}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={tooltip(t("transactions.history"))}
+                  {...props}
+                >
                   <Link href={href}>
                     <ReceiptIcon />
                     {t("transactions.history")}
@@ -65,7 +75,11 @@ export function AppSidebar() {
               <>
                 <DynamicSidebarLink href="/items">
                   {({ href, ...props }) => (
-                    <SidebarMenuButton asChild {...props}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={tooltip(tc("items"))}
+                      {...props}
+                    >
                       <Link href={href}>
                         <PackageIcon />
                         {tc("items")}
@@ -76,7 +90,11 @@ export function AppSidebar() {
 
                 <DynamicSidebarLink href="/units">
                   {({ href, ...props }) => (
-                    <SidebarMenuButton asChild {...props}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={tooltip(t("units"))}
+                      {...props}
+                    >
                       <Link href={href!}>
                         <TagIcon />
                         {t("units")}
@@ -87,7 +105,11 @@ export function AppSidebar() {
 
                 <DynamicSidebarLink href="/price-groups">
                   {({ href, ...props }) => (
-                    <SidebarMenuButton asChild {...props}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={tooltip(t("priceGroups"))}
+                      {...props}
+                    >
                       <Link href={href!}>
                         <MoneyIcon />
                         {t("priceGroups")}
@@ -98,7 +120,11 @@ export function AppSidebar() {
 
                 <DynamicSidebarLink href="/barcode-groups">
                   {({ href, ...props }) => (
-                    <SidebarMenuButton asChild {...props}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={tooltip(t("barcodeGroups"))}
+                      {...props}
+                    >
                       <Link href={href!}>
                         <BarcodeIcon />
                         {t("barcodeGroups")}
@@ -109,7 +135,11 @@ export function AppSidebar() {
 
                 <DynamicSidebarLink href="/users">
                   {({ href, ...props }) => (
-                    <SidebarMenuButton asChild {...props}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={tooltip(t("users"))}
+                      {...props}
+                    >
                       <Link href={href!}>
                         <UsersIcon />
                         {t("users")}
@@ -120,7 +150,11 @@ export function AppSidebar() {
 
                 <DynamicSidebarLink href="/backup-restore">
                   {({ href, ...props }) => (
-                    <SidebarMenuButton asChild {...props}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={tooltip("Backup / Restore")}
+                      {...props}
+                    >
                       <Link href={href!}>
                         <ClockCounterClockwiseIcon />
                         Backup / Restore
@@ -133,7 +167,11 @@ export function AppSidebar() {
 
             <DynamicSidebarLink href="/options">
               {({ href, ...props }) => (
-                <SidebarMenuButton asChild {...props}>
+                <SidebarMenuButton
+                  asChild
+                  tooltip={tooltip(t("options"))}
+                  {...props}
+                >
                   <Link href={href!}>
                     <GearFineIcon />
                     {t("options")}
