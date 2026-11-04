@@ -120,13 +120,13 @@ function MarginBadge({
 }
 
 function FooterButton({
-  label,
   xlLabel,
+  label,
   icon,
   ...btnProps
 }: ButtonWithHotkeysProps & {
-  label?: ReactNode
   xlLabel?: ReactNode
+  label?: ReactNode
   icon?: ReactNode
 }) {
   return (
@@ -134,12 +134,12 @@ function FooterButton({
       <TooltipTrigger asChild>
         <ButtonWithHotkeys {...btnProps}>
           {icon}
-          {label && <span className="hidden xl:inline">{label}</span>}
-          {xlLabel && <span className="inline xl:hidden">{xlLabel}</span>}
+          {xlLabel && <span className="hidden xl:inline">{xlLabel}</span>}
+          {label && <span className="inline xl:hidden">{label}</span>}
         </ButtonWithHotkeys>
       </TooltipTrigger>
       <TooltipContent className="inline xl:hidden" side="top" arrow={false}>
-        {label}
+        {xlLabel}
       </TooltipContent>
     </Tooltip>
   )
@@ -263,8 +263,8 @@ export const TransactionFooter = withForm({
               disabled={selected.size < 1}
               onClick={() => removeSelectedItems()}
               icon={<TrashIcon />}
-              label={t("removeItems", { count: selected.size })}
-              xlLabel={selected.size}
+              xlLabel={t("removeItems", { count: selected.size })}
+              label={selected.size}
             />
 
             <FooterButton
@@ -273,7 +273,7 @@ export const TransactionFooter = withForm({
               type="reset"
               variant="destructive"
               icon={<ArrowCounterClockwiseIcon />}
-              label={tc("resetAll")}
+              xlLabel={tc("resetAll")}
             />
 
             {!hideHoldRecall && (
