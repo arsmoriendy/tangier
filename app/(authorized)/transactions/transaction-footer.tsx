@@ -21,7 +21,7 @@ import {
 import { useHeld } from "@/app/(authorized)/transactions/held-ctx"
 import { useUserSettings } from "@/contexts/user-settings"
 import { useFormatter, useTranslations } from "next-intl"
-import { ComponentProps, ReactNode } from "react"
+import { ComponentProps, ReactNode, useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import {
   ButtonWithHotkeys,
@@ -40,6 +40,7 @@ import { cn } from "@/lib/utils"
 import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { toFormItem } from "@/app/(authorized)/transactions/transaction-item-mapper"
 import { toast } from "sonner"
+import { useSidebar } from "@/components/ui/sidebar"
 
 function FooterBar({ className, ...props }: ComponentProps<"div">) {
   return (
@@ -123,25 +124,35 @@ function FooterButton({
   xlLabel,
   label,
   icon,
+  dynamic = true,
   ...btnProps
 }: ButtonWithHotkeysProps & {
+  dynamic?: boolean
   xlLabel?: ReactNode
   label?: ReactNode
   icon?: ReactNode
 }) {
+  if (dynamic)
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <ButtonWithHotkeys {...btnProps}>
+            {icon}
+            {xlLabel && <span className="hidden xl:inline">{xlLabel}</span>}
+            {label && <span className="inline xl:hidden">{label}</span>}
+          </ButtonWithHotkeys>
+        </TooltipTrigger>
+        <TooltipContent className="inline xl:hidden" side="top" arrow={false}>
+          {xlLabel}
+        </TooltipContent>
+      </Tooltip>
+    )
+
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <ButtonWithHotkeys {...btnProps}>
-          {icon}
-          {xlLabel && <span className="hidden xl:inline">{xlLabel}</span>}
-          {label && <span className="inline xl:hidden">{label}</span>}
-        </ButtonWithHotkeys>
-      </TooltipTrigger>
-      <TooltipContent className="inline xl:hidden" side="top" arrow={false}>
-        {xlLabel}
-      </TooltipContent>
-    </Tooltip>
+    <ButtonWithHotkeys {...btnProps}>
+      {icon}
+      {xlLabel}
+    </ButtonWithHotkeys>
   )
 }
 
@@ -175,8 +186,12 @@ export const TransactionFooter = withForm({
     const { getUserSettings } = useUserSettings()
     const { setHeld } = useHeld()
     const { priceGroups } = usePriceGroups()
+    const { state: sidebarState } = useSidebar()
     const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
+    const dynamicBtn = sidebarState === "expanded" && !hideHoldRecall
+
+    useEffect(() => {}, [sidebarState, hideHoldRecall])
 
     function removeSelectedItems() {
       for (const s of selected) {
@@ -265,6 +280,7 @@ export const TransactionFooter = withForm({
               icon={<TrashIcon />}
               xlLabel={t("removeItems", { count: selected.size })}
               label={selected.size}
+              dynamic={dynamicBtn}
             />
 
             <FooterButton
@@ -274,6 +290,7 @@ export const TransactionFooter = withForm({
               variant="destructive"
               icon={<ArrowCounterClockwiseIcon />}
               xlLabel={tc("resetAll")}
+              dynamic={dynamicBtn}
             />
 
             {!hideHoldRecall && (
