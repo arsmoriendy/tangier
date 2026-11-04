@@ -2,12 +2,12 @@
 
 import { Form, withForm } from "@/components/form"
 import {
+  XIcon,
   ClockCountdownIcon,
   HandIcon,
   PrinterIcon,
   TrashIcon,
-} from "@phosphor-icons/react"
-import { XIcon } from "@phosphor-icons/react/dist/ssr"
+} from "@phosphor-icons/react/dist/ssr"
 import { AddItemForm } from "@/app/(authorized)/transactions/add-item-form"
 import { AddItemProvider } from "@/app/(authorized)/transactions/add-item-ctx"
 import { defaultTransactionValues } from "@/app/(authorized)/transactions/transaction-schema"
@@ -20,9 +20,12 @@ import {
 import { useHeld } from "@/app/(authorized)/transactions/held-ctx"
 import { useUserSettings } from "@/contexts/user-settings"
 import { useFormatter, useTranslations } from "next-intl"
-import { ComponentProps } from "react"
+import { ComponentProps, ReactNode } from "react"
 import { Badge } from "@/components/ui/badge"
-import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
+import {
+  ButtonWithHotkeys,
+  ButtonWithHotkeysProps,
+} from "@/components/ui/button-with-hotkeys"
 import { Kbd } from "@/components/ui/kbd"
 import {
   Tooltip,
@@ -113,6 +116,26 @@ function MarginBadge({
         {formatCurrency(profitLoss)}
       </span>
     </Badge>
+  )
+}
+
+function FooterButton({
+  label,
+  icon,
+  ...btnProps
+}: ButtonWithHotkeysProps & { label?: ReactNode; icon?: ReactNode }) {
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <ButtonWithHotkeys {...btnProps}>
+          {icon}
+          <span className="hidden xl:inline">{label}</span>
+        </ButtonWithHotkeys>
+      </TooltipTrigger>
+      <TooltipContent className="inline xl:hidden" side="top">
+        {label}
+      </TooltipContent>
+    </Tooltip>
   )
 }
 
@@ -228,15 +251,14 @@ export const TransactionFooter = withForm({
           </form.AppField>
 
           <div className="flex gap-2">
-            <ButtonWithHotkeys
+            <FooterButton
               hotkeys={["Ctrl+d"]}
               variant="destructive"
               disabled={selected.size < 1}
               onClick={() => removeSelectedItems()}
-            >
-              <TrashIcon />
-              {t("removeItems", { count: selected.size })}
-            </ButtonWithHotkeys>
+              icon={<TrashIcon />}
+              label={t("removeItems", { count: selected.size })}
+            />
 
             <ResetButton hotkeys={["F4"]} onClick={() => form.reset()} />
 

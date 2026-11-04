@@ -107,7 +107,7 @@
       },
       "saveAndPrint": "Save|print",
       "itemCount": "{count, plural, =1 {# item} other {# items}}",
-      "removeItems": "Remove {count}",
+      "removeItems": "Remove {count, plural, =1 {# item} other {# items}}",
       "summary": {
         "title": "Transaction summary",
         "show": "Show summary",

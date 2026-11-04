@@ -109,7 +109,7 @@
       },
       "saveAndPrint": "Simpan|cetak",
       "itemCount": "{count} barang",
-      "removeItems": "Hapus {count}",
+      "removeItems": "Hapus {count} barang",
       "summary": {
         "title": "Ringkasan transaksi",
         "show": "Tampilkan ringkasan",
