@@ -9,18 +9,3 @@ Run with the bun runtime, e.g. `bun -b dev`
 ##### NixOS
 
 Use the flake, run `node-gyp build` within the `node_modules/usb` directory
-
-##### TODO
-
-###### Backlog
-
-1. Server function authorization
-2. Per item quantity threshold
-3. Auto set price based on quantity threshold
-4. Item categories (category columns: `hierarchy_level`, `hierarchy_name` ("category", "sub category"), `name` ("food", "beverages"))
-5. group transaction items based on new category column
-6. export and import
-7. Tooltips
-8. DB indices
-9. Change year on date inputs
-10. Increase print speed?
