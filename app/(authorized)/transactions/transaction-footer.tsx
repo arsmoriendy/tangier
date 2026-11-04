@@ -122,14 +122,14 @@ function MarginBadge({
 
 function FooterButton({
   xlLabel,
-  label,
+  smLabel,
   icon,
   dynamic = true,
   ...btnProps
 }: ButtonWithHotkeysProps & {
   dynamic?: boolean
   xlLabel?: ReactNode
-  label?: ReactNode
+  smLabel?: ReactNode
   icon?: ReactNode
 }) {
   if (dynamic)
@@ -139,7 +139,7 @@ function FooterButton({
           <ButtonWithHotkeys {...btnProps}>
             {icon}
             {xlLabel && <span className="hidden xl:inline">{xlLabel}</span>}
-            {label && <span className="inline xl:hidden">{label}</span>}
+            {smLabel && <span className="inline xl:hidden">{smLabel}</span>}
           </ButtonWithHotkeys>
         </TooltipTrigger>
         <TooltipContent className="inline xl:hidden" side="top" arrow={false}>
@@ -279,7 +279,7 @@ export const TransactionFooter = withForm({
               onClick={() => removeSelectedItems()}
               icon={<TrashIcon />}
               xlLabel={t("removeItems", { count: selected.size })}
-              label={selected.size}
+              smLabel={selected.size}
               dynamic={dynamicBtn}
             />
 
