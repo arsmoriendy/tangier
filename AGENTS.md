@@ -10,6 +10,18 @@ Strongly recommended: when you learn something durable and non-obvious (conventi
 
 When choosing between known alternatives, present **structured options** (concrete labels, one-line descriptions, recommended first) instead of an open-ended question. Keep open-ended prompts for clarifying _what_ to build.
 
+## Commits
+
+Never run `git commit` or any other write git command (`git add`, `git commit`, `git stash`, `git reset`, …) — commits are the user's call. Read-only git (`status`, `diff`, `log`) is fine.
+
+Suggest **atomic conventional commit messages**, whole subject line max 50 chars (e.g. `fix(receipt): clamp columns to width`). Use `doc` (not `docs`) as the type — the shorter type frees up characters.
+
+**At most one suggestion per response** — the only exception is Plan mode, where the planned commits are listed as part of the plan:
+
+- **Plan mode**: lay out the whole change set; if it isn't atomic, list one message per planned commit and say which change comes first.
+- **Build mode**: implement exactly one atomic change, suggest its single message, and stop. Wait for the user to commit or reject it, then continue with the next change only when they say so.
+- Never bundle several messages into one Build-mode reply, even when the remaining changes are already obvious — the next message is suggested after the next change.
+
 ## Commands
 
 **bun** is the package manager (`bun.lock` authoritative; ignore the stale `package-lock.json`/`pnpm-lock.yaml`). On Arch/NixOS the `usb` native dep needs `nix develop` plus `node-gyp build` in `node_modules/usb`; otherwise apply the `README.md` udev rule.
@@ -140,7 +152,7 @@ Base UI single-select `Combobox` over unconstrained option type `O`.
 - **shadcn** (`components.json`): style `radix-lyra`, **phosphor** icons (`@phosphor-icons/react`, `/ssr` in server components — see `app-sidebar/index.tsx`), primitives in `components/ui/`, Tailwind v4, CSS-variable theme, base `neutral`; `cn`/`cva` use `prettier-plugin-tailwindcss`.
 - **Formatting**: prettier (no semicolons, double quotes, 2 spaces, trailing comma `es5`, width 80, LF); Biome mirrors it; eslint is `eslint-config-next`. Run `bun run format` after structural changes.
 - **`"use server"`** tops `lib/crud/*.ts`, `lib/auth-guard.ts`, `lib/get-session.ts`, `lib/set-locale.ts`, `lib/print-trx-receipt.ts`, `lib/db/backup-restore.ts`.
-- **Atomic changes**: small additive diffs; propose legacy cleanup separately.
+- **Atomic changes**: small additive diffs; propose legacy cleanup separately. Each atomic change gets its own suggested commit message — one per response, listed up front only in Plan mode. See [Commits](#commits).
 - **Decluttering**: hoist inline handlers/nested render helpers into named declarations before `return`; prefer a few small files.
 - **Indicators** (each takes a required `tooltip: ReactNode` built at the call site with `next-intl` — `common.marginTooltip`, `common.mismatchTooltip`, `common.originalBuyPrice` ("Original buy price: {price}", via `formatCurrency`) — and spread onto `<TooltipContent>`):
   - `MarginIndicator` (`components/margin-indicator.tsx`): `margin`/`discount` from `marginAndDiscount(sell, buy)` (`lib/margin.ts` → `{ margin, discount }`; `discount` is a % guarded at `buy === 0`); renders `+X` and `(Y%)` for losses, no `Margin:` prefix; gate with `<AdminOnly>` + `showMarginAndDiscounts`. The footer `MarginBadge` is separate and does show `Margin:`.
