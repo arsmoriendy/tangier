@@ -10,9 +10,6 @@ import {
   SidebarGroup,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
 } from "@/components/ui/sidebar"
 import AdminOnly from "@/components/admin-only"
 import {
@@ -24,6 +21,7 @@ import {
   TagIcon,
   GearFineIcon,
   ClockCounterClockwiseIcon,
+  ReceiptIcon,
 } from "@phosphor-icons/react/ssr"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
@@ -41,33 +39,25 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu>
-            <DynamicSidebarLink href="/transactions">
+            <DynamicSidebarLink href="/transactions/new">
               {({ href, ...props }) => (
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild {...props}>
-                    <Link href="/transactions/new">
-                      <BasketIcon />
-                      {t("transactions.title")}
-                    </Link>
-                  </SidebarMenuButton>
+                <SidebarMenuButton asChild {...props}>
+                  <Link href={href}>
+                    <BasketIcon />
+                    {t("transactions.newTransaction")}
+                  </Link>
+                </SidebarMenuButton>
+              )}
+            </DynamicSidebarLink>
 
-                  <SidebarMenuSub>
-                    <DynamicSidebarLink href="/transactions/new">
-                      {({ href, ...props }) => (
-                        <SidebarMenuSubButton asChild {...props}>
-                          <Link href={href}>{t("transactions.new")}</Link>
-                        </SidebarMenuSubButton>
-                      )}
-                    </DynamicSidebarLink>
-                    <DynamicSidebarLink href="/transactions/history">
-                      {({ href, ...props }) => (
-                        <SidebarMenuSubButton asChild {...props}>
-                          <Link href={href}>{t("transactions.history")}</Link>
-                        </SidebarMenuSubButton>
-                      )}
-                    </DynamicSidebarLink>
-                  </SidebarMenuSub>
-                </SidebarMenuItem>
+            <DynamicSidebarLink href="/transactions/history">
+              {({ href, ...props }) => (
+                <SidebarMenuButton asChild {...props}>
+                  <Link href={href}>
+                    <ReceiptIcon />
+                    {t("transactions.history")}
+                  </Link>
+                </SidebarMenuButton>
               )}
             </DynamicSidebarLink>
 

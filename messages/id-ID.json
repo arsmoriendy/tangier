@@ -38,8 +38,7 @@
   },
   "sidebar": {
     "transactions": {
-      "title": "Transaksi",
-      "new": "Baru",
+      "newTransaction": "Transaksi baru",
       "history": "Riwayat"
     },
     "units": "Satuan",

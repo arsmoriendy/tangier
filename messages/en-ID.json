@@ -38,8 +38,7 @@
   },
   "sidebar": {
     "transactions": {
-      "title": "Transactions",
-      "new": "New",
+      "newTransaction": "New transaction",
       "history": "History"
     },
     "units": "Units",
