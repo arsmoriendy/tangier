@@ -1,5 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
-import { SidebarProvider } from "@/components/ui/sidebar"
+import { PersistentSidebarProvider } from "@/components/app-sidebar/persistent-sidebar-provider"
 import { SessionProvider } from "@/contexts/session-ctx"
 import { UserSettingsProvider } from "@/contexts/user-settings"
 import { getSessionOrRedirect } from "@/lib/auth-guard"
@@ -16,10 +16,10 @@ export default async function AuthorizedLayout({
   return (
     <SessionProvider session={session}>
       <UserSettingsProvider userSettings={userSettings}>
-        <SidebarProvider>
+        <PersistentSidebarProvider>
           <AppSidebar />
           <main className="w-full">{children}</main>
-        </SidebarProvider>
+        </PersistentSidebarProvider>
       </UserSettingsProvider>
     </SessionProvider>
   )

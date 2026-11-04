@@ -287,7 +287,8 @@
     "showItemMarginAndDiscounts": "Tampilkan margin dan diskon",
     "coloredSellPrice": "Harga jual berwarna",
     "uppercaseInput": "Input huruf besar",
-    "showDecimals": "Tampilkan titik desimal"
+    "showDecimals": "Tampilkan titik desimal",
+    "collapseSidebar": "Tutup sidebar"
   },
   "auth": {
     "signIn": "Masuk",

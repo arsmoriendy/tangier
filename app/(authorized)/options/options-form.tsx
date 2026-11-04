@@ -112,6 +112,11 @@ export default function OptionsForm({
             onCheckedChange={(c) => (setUserSettings.showDecimals = c)}
             label={ts("showDecimals")}
           />
+          <OptionCheckbox
+            checked={getUserSettings.collapseSidebar}
+            onCheckedChange={(c) => (setUserSettings.collapseSidebar = c)}
+            label={ts("collapseSidebar")}
+          />
         </FieldSet>
       </FieldSet>
 

@@ -216,6 +216,7 @@ export const userSettings = pgTable(
     coloredSellPrice: boolean().default(false).notNull(),
     uppercaseInput: boolean().default(true).notNull(),
     showDecimals: boolean().default(false).notNull(),
+    collapseSidebar: boolean().default(false).notNull(),
   },
   (table) => [
     foreignKey({

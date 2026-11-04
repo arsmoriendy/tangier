@@ -36,6 +36,13 @@
       "when": 1793701654605,
       "tag": "0004_real_rocket_raccoon",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1793756321606,
+      "tag": "0005_narrow_agent_zero",
+      "breakpoints": true
     }
   ]
 }

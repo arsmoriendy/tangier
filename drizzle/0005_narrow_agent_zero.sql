@@ -1,0 +1,1 @@
+ALTER TABLE "user_settings" ADD COLUMN "collapseSidebar" boolean DEFAULT false NOT NULL;

@@ -285,7 +285,8 @@
     "showItemMarginAndDiscounts": "Show margin and discounts",
     "coloredSellPrice": "Colored sell price",
     "uppercaseInput": "Uppercase input",
-    "showDecimals": "Show decimal points"
+    "showDecimals": "Show decimal points",
+    "collapseSidebar": "Collapse sidebar"
   },
   "auth": {
     "signIn": "Sign in",
