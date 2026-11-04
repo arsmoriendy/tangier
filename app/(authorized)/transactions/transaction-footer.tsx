@@ -121,15 +121,21 @@ function MarginBadge({
 
 function FooterButton({
   label,
+  xlLabel,
   icon,
   ...btnProps
-}: ButtonWithHotkeysProps & { label?: ReactNode; icon?: ReactNode }) {
+}: ButtonWithHotkeysProps & {
+  label?: ReactNode
+  xlLabel?: ReactNode
+  icon?: ReactNode
+}) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
         <ButtonWithHotkeys {...btnProps}>
           {icon}
-          <span className="hidden xl:inline">{label}</span>
+          {label && <span className="hidden xl:inline">{label}</span>}
+          {xlLabel && <span className="inline xl:hidden">{xlLabel}</span>}
         </ButtonWithHotkeys>
       </TooltipTrigger>
       <TooltipContent className="inline xl:hidden" side="top">
@@ -258,6 +264,7 @@ export const TransactionFooter = withForm({
               onClick={() => removeSelectedItems()}
               icon={<TrashIcon />}
               label={t("removeItems", { count: selected.size })}
+              xlLabel={selected.size}
             />
 
             <FooterButton
