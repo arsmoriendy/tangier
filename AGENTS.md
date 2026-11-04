@@ -20,6 +20,7 @@ Suggest **atomic conventional commit messages**, whole subject line max 50 chars
 
 - **Plan mode**: lay out the whole change set; if it isn't atomic, list one message per planned commit and say which change comes first.
 - **Build mode**: implement exactly one atomic change, suggest its single message, and stop. Wait for the user to commit or reject it, then continue with the next change only when they say so.
+- **No hidden queue**: never imply a change is still coming. Once the last queued change is done, state it plainly — e.g. `All changes for "<initial prompt>" done.` — filling in the user's original request, and don't say you'll "pick up the next change" unless one is actually queued.
 - Never bundle several messages into one Build-mode reply, even when the remaining changes are already obvious — the next message is suggested after the next change.
 
 ## Commands
