@@ -21,7 +21,7 @@ import {
 import { useHeld } from "@/app/(authorized)/transactions/held-ctx"
 import { useUserSettings } from "@/contexts/user-settings"
 import { useFormatter, useTranslations } from "next-intl"
-import { ComponentProps, ReactNode, useEffect, useState } from "react"
+import { ComponentProps, ReactNode, useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
 import {
   ButtonWithHotkeys,
@@ -168,6 +168,7 @@ export const TransactionFooter = withForm({
     hideHoldRecall: false,
     onHold: () => {},
     onCancelRecall: () => {},
+    onReset: () => {},
     onItemAdded: (_index: number) => {},
   },
   render: function Render({
@@ -181,6 +182,7 @@ export const TransactionFooter = withForm({
     hideHoldRecall,
     onHold,
     onCancelRecall,
+    onReset,
     onItemAdded,
   }) {
     const { getUserSettings } = useUserSettings()
@@ -194,9 +196,12 @@ export const TransactionFooter = withForm({
     useEffect(() => {}, [sidebarState, hideHoldRecall])
 
     function removeSelectedItems() {
-      for (const s of selected) {
-        form.removeFieldValue("transactionItems", s)
-      }
+      form.setFieldValue(
+        "transactionItems",
+        form
+          .getFieldValue("transactionItems")
+          .filter((_, i) => !selected.has(i))
+      )
       setSelected(new Set())
     }
 
@@ -213,6 +218,7 @@ export const TransactionFooter = withForm({
     }
 
     async function recallTrx(trx: DeepReadonly<TransactionWithRelations>) {
+      setSelected(new Set())
       setRecalledTrx(trx as DeepMutable<typeof trx>)
 
       form.setFieldValue(
@@ -285,7 +291,7 @@ export const TransactionFooter = withForm({
 
             <FooterButton
               hotkeys={["F4"]}
-              onClick={() => form.reset()}
+              onClick={onReset}
               type="reset"
               variant="destructive"
               icon={<ArrowCounterClockwiseIcon />}
@@ -335,7 +341,7 @@ export const TransactionFooter = withForm({
                   open={openRecallDialog}
                   setOpen={setOpenRecallDialog}
                   recalledTrx={recalledTrx}
-                  setRecalledTrx={setRecalledTrx}
+                  onReset={onReset}
                   recallTrx={recallTrx}
                 />
               </>

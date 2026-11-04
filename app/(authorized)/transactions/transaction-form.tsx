@@ -142,11 +142,18 @@ export default function TransactionForm({
         toast.error(t("toasts.printError"))
       }
 
-      setRecalledTrx(undefined)
-      if (getUserSettings.showTrxSummary) setOpenSummary(true)
-      else form.reset()
+      if (getUserSettings.showTrxSummary) {
+        setRecalledTrx(undefined)
+        setOpenSummary(true)
+      } else resetTransactionForm()
     },
   })
+
+  function resetTransactionForm() {
+    setSelected(new Set())
+    setRecalledTrx(undefined)
+    form.reset()
+  }
 
   async function hold() {
     if (form.state.values.transactionItems.length < 1) return
@@ -174,14 +181,12 @@ export default function TransactionForm({
     }
 
     toast.success(t("toasts.held"), { icon: <HandIcon /> })
-    setRecalledTrx(undefined)
-    form.reset()
+    resetTransactionForm()
   }
 
   async function cancelRecall() {
     if (recalledTrx === undefined) return
-    setRecalledTrx(undefined)
-    form.reset()
+    resetTransactionForm()
     toast.info(t("toasts.recallCancelled"))
   }
 
@@ -218,6 +223,7 @@ export default function TransactionForm({
           hideHoldRecall={props.transaction !== undefined}
           onHold={hold}
           onCancelRecall={cancelRecall}
+          onReset={resetTransactionForm}
           onItemAdded={signalItem}
         />
       </div>
@@ -226,7 +232,7 @@ export default function TransactionForm({
         form={form}
         open={getOpenSummary}
         onOpenChange={(v) => {
-          if (!v) form.reset()
+          if (!v) resetTransactionForm()
           setOpenSummary(v)
         }}
       />

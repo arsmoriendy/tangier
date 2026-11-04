@@ -27,17 +27,10 @@ export const RecallDialog = withForm({
     open: false,
     setOpen: (_open: boolean) => {},
     recalledTrx: undefined as undefined | TransactionWithRelations,
-    setRecalledTrx: (_trx: undefined | TransactionWithRelations) => {},
+    onReset: () => {},
     recallTrx: (_trx: DeepReadonly<TransactionWithRelations>) => {},
   },
-  render: function Render({
-    form,
-    open,
-    setOpen,
-    recalledTrx,
-    setRecalledTrx,
-    recallTrx,
-  }) {
+  render: function Render({ open, setOpen, recalledTrx, onReset, recallTrx }) {
     const { setHeld, getHeld } = useHeld()
     const format = useFormatter()
     const t = useTranslations("transactions.recall")
@@ -90,10 +83,7 @@ export const RecallDialog = withForm({
                         title={<>{tc("delete")}?</>}
                         description={t("deleteDescription")}
                         action={async () => {
-                          if (trx.id === recalledTrx?.id) {
-                            setRecalledTrx(undefined)
-                            form.reset()
-                          }
+                          if (trx.id === recalledTrx?.id) onReset()
                           await deleteTransaction(trx.id)
                           setHeld.splice(i, 1)
                         }}

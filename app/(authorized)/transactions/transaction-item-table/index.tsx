@@ -91,7 +91,13 @@ export const TransactionItemTable = withForm({
                         {(n) => (
                           <Checkbox
                             className="mx-auto"
-                            checked={selected.size === n}
+                            checked={
+                              n === 0 || selected.size === 0
+                                ? false
+                                : selected.size === n
+                                  ? true
+                                  : "indeterminate"
+                            }
                             onCheckedChange={(checked) => {
                               setSelected(
                                 checked === true
