@@ -1,5 +1,7 @@
 version := `cat package.json | jq -r '.version'`
 
+build-and-save-latest parent-path="~": build-img-as-latest && (save parent-path)
+
 build-img-as-latest: build-img
     docker tag tangier:{{ version }} tangier
 
