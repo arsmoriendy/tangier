@@ -193,7 +193,7 @@ export const ItemRow = withForm({
                 >
                   {(field) => (
                     <field.IdrField
-                      inputClass={sellPriceClass(bp > sp)}
+                      inputClass={cn(sellPriceClass(bp > sp), "text-right")}
                       min={0}
                     />
                   )}

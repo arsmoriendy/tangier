@@ -279,7 +279,8 @@ export const AddItemForm = withForm({
                       inputClass={cn(
                         isAdmin &&
                           getUserSettings.coloredSellPrice &&
-                          (bp > sp ? "bg-destructive" : "bg-success/33")
+                          (bp > sp ? "bg-destructive" : "bg-success/33"),
+                        "text-right"
                       )}
                       min={0}
                     />
