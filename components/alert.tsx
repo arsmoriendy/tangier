@@ -10,7 +10,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { type ButtonVariant } from "@/components/ui/button"
-import { ReactNode } from "react"
+import { ComponentProps, ReactNode } from "react"
 
 export function Alert({
   title,
@@ -19,14 +19,19 @@ export function Alert({
   actionVariant,
   actionIcon,
   actionLabel,
+  actionProps,
   trigger,
 }: {
   title: ReactNode
-  description: ReactNode
-  action: () => any
-  actionVariant: ButtonVariant
-  actionIcon: ReactNode
-  actionLabel: ReactNode
+  description?: ReactNode
+  action?: () => any
+  actionVariant?: ButtonVariant
+  actionIcon?: ReactNode
+  actionLabel?: ReactNode
+  actionProps?: Omit<
+    ComponentProps<typeof AlertDialogAction>,
+    "variant" | "onClick" | "children"
+  >
   trigger: ReactNode
 }) {
   return (
@@ -39,7 +44,11 @@ export function Alert({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction variant={actionVariant} onClick={action}>
+          <AlertDialogAction
+            variant={actionVariant}
+            onClick={action}
+            {...actionProps}
+          >
             {actionIcon}
             {actionLabel}
           </AlertDialogAction>

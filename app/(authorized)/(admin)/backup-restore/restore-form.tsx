@@ -1,53 +1,91 @@
 "use client"
 
+import { Alert } from "@/components/alert"
+import { Form, useAppForm } from "@/components/form"
 import { Spinner } from "@/components/spinner"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { authClient } from "@/lib/auth-client"
 import { ClockCounterClockwiseIcon } from "@phosphor-icons/react/dist/ssr"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
-import { SyntheticEvent, useState } from "react"
+import { useState } from "react"
 import { toast } from "sonner"
+import z from "zod"
 
 export function RestoreForm() {
   const [loading, setLoading] = useState(false)
   const t = useTranslations("backupRestore.restore")
   const router = useRouter()
 
-  async function handleRestore(e: SyntheticEvent<HTMLFormElement>) {
-    e.preventDefault()
+  const restoreFormSchema = z.object({
+    dump: z
+      .file()
+      .nullable()
+      .refine((file): boolean => file !== null, { error: t("fileRequired") }),
+  })
 
-    setLoading(true)
+  const defaultValues: z.infer<typeof restoreFormSchema> = { dump: null }
 
-    const file = new FormData(e.currentTarget).get("dump")
-    if (!(file instanceof File) || file.size === 0) return
+  const form = useAppForm({
+    defaultValues,
+    validators: {
+      onMount: restoreFormSchema,
+      onChange: restoreFormSchema,
+    },
+    onSubmit: async ({ value }) => {
+      if (!value.dump) return
 
-    const { status } = await fetch("/api/restore", {
-      method: "POST",
-      body: file,
-    })
+      setLoading(true)
 
-    setLoading(false)
+      const { status } = await fetch("/api/restore", {
+        method: "POST",
+        body: value.dump,
+      })
 
-    if (status !== 200) {
-      toast.error(t("error"), { duration: Infinity })
-    } else {
-      toast.success(t("success"))
-      await authClient.signOut()
-      router.push("/auth")
-    }
+      setLoading(false)
+
+      if (status !== 200) {
+        toast.error(t("error"), { duration: Infinity })
+      } else {
+        toast.success(t("success"))
+        await authClient.signOut()
+        router.push("/auth")
+      }
+    },
+  })
+
+  async function handleRestore() {
+    await form.handleSubmit()
   }
 
   return (
-    <form onSubmit={handleRestore} method="POST" className="space-y-2">
-      <Label htmlFor="dump">{t("fileInputLabel")}:</Label>
-      <Input type="file" name="dump" id="dump" accept=".sql" required />
-      <Button type="submit" disabled={loading}>
-        {loading ? <Spinner /> : <ClockCounterClockwiseIcon />}
-        {t("buttonLabel")}
-      </Button>
-    </form>
+    <Form handleSubmit={form.handleSubmit}>
+      <form.AppField name="dump">
+        {(f) => <f.FileField label={t("fileInputLabel")} accept=".sql" />}
+      </form.AppField>
+
+      <form.Subscribe selector={(state) => state.canSubmit}>
+        {(canSubmit) => (
+          <Alert
+            title={t("alertTitle")}
+            description={t("alertDescription")}
+            action={handleRestore}
+            actionIcon={loading ? <Spinner /> : <ClockCounterClockwiseIcon />}
+            actionLabel={t("actionLabel")}
+            actionVariant="destructive"
+            actionProps={{
+              type: "button",
+              disabled: !canSubmit || loading,
+            }}
+            trigger={
+              <Button type="button" disabled={!canSubmit || loading}>
+                {loading ? <Spinner /> : <ClockCounterClockwiseIcon />}
+                {t("buttonLabel")}
+              </Button>
+            }
+          />
+        )}
+      </form.Subscribe>
+    </Form>
   )
 }

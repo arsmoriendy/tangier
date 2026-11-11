@@ -314,7 +314,11 @@
       "success": "Database restoration successful, please sign back in",
       "error": "Database restoration failed",
       "fileInputLabel": "Dump file",
-      "buttonLabel": "Restore from database dump"
+      "fileRequired": "Select a database dump to restore",
+      "buttonLabel": "Restore from database dump",
+      "alertTitle": "Confirm restoration?",
+      "alertDescription": "This WIPE and replace current data",
+      "actionLabel": "Restore"
     }
   }
 }

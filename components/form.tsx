@@ -1,3 +1,4 @@
+import FileField from "@/components/file-field"
 import IdrField from "@/components/idr-field"
 import NumberField from "@/components/number-field"
 import SubmitButton from "@/components/submit-button"
@@ -11,7 +12,13 @@ export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts()
 
 export const { useAppForm, withForm } = createFormHook({
-  fieldComponents: { TextField, NumberField, IdrField, TextareaField },
+  fieldComponents: {
+    TextField,
+    NumberField,
+    IdrField,
+    TextareaField,
+    FileField,
+  },
   formComponents: {
     SubmitButton,
   },

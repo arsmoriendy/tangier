@@ -316,7 +316,11 @@
       "success": "Restorasi database berhasil, silahkan masuk kembali",
       "error": "Restorasi database gagal",
       "fileInputLabel": "File backup",
-      "buttonLabel": "Restorasi database"
+      "fileRequired": "Pilih file backup untuk direstorasikan",
+      "buttonLabel": "Restorasi database",
+      "alertTitle": "Konfirmasi restorasi",
+      "alertDescription": "Semua data dini akan DIHAPUS dan digantikan",
+      "actionLabel": "Lanjutkan"
     }
   }
 }
