@@ -23,10 +23,6 @@ import { useUserSettings } from "@/contexts/user-settings"
 import { useFormatter, useTranslations } from "next-intl"
 import { ComponentProps, ReactNode, useEffect } from "react"
 import { Badge } from "@/components/ui/badge"
-import {
-  ButtonWithHotkeys,
-  ButtonWithHotkeysProps,
-} from "@/components/ui/button-with-hotkeys"
 import { Kbd } from "@/components/ui/kbd"
 import {
   Tooltip,
@@ -41,6 +37,7 @@ import { usePriceGroups } from "@/contexts/price-groups-ctx"
 import { toFormItem } from "@/app/(authorized)/transactions/transaction-item-mapper"
 import { toast } from "sonner"
 import { useSidebar } from "@/components/ui/sidebar"
+import AppButton, { AppButtonProps } from "@/components/app-button"
 
 function FooterBar({ className, ...props }: ComponentProps<"div">) {
   return (
@@ -124,35 +121,35 @@ function FooterButton({
   xlLabel,
   smLabel,
   icon,
-  dynamic = true,
+  dynamicLabels = true,
   ...btnProps
-}: ButtonWithHotkeysProps & {
-  dynamic?: boolean
+}: AppButtonProps & {
+  dynamicLabels?: boolean // sidebar expanded, with hold/recall buttons
   xlLabel?: ReactNode
   smLabel?: ReactNode
   icon?: ReactNode
 }) {
-  if (dynamic)
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <ButtonWithHotkeys {...btnProps}>
-            {icon}
-            {xlLabel && <span className="hidden xl:inline">{xlLabel}</span>}
-            {smLabel && <span className="inline xl:hidden">{smLabel}</span>}
-          </ButtonWithHotkeys>
-        </TooltipTrigger>
-        <TooltipContent className="inline xl:hidden" side="top" arrow={false}>
-          {xlLabel}
-        </TooltipContent>
-      </Tooltip>
-    )
-
   return (
-    <ButtonWithHotkeys {...btnProps}>
+    <AppButton
+      tooltip={xlLabel}
+      tooltipProps={{
+        className: "inline xl:hidden",
+        side: "top",
+        arrow: false,
+      }}
+      wrapTooltip
+      {...btnProps}
+    >
       {icon}
-      {xlLabel}
-    </ButtonWithHotkeys>
+      {dynamicLabels ? (
+        <>
+          <span className="hidden xl:inline">{xlLabel}</span>
+          <span className="inline xl:hidden">{smLabel}</span>
+        </>
+      ) : (
+        <span>{xlLabel}</span>
+      )}
+    </AppButton>
   )
 }
 
@@ -286,7 +283,7 @@ export const TransactionFooter = withForm({
               icon={<TrashIcon />}
               xlLabel={t("removeItems", { count: selected.size })}
               smLabel={selected.size}
-              dynamic={dynamicBtn}
+              dynamicLabels={dynamicBtn}
             />
 
             <FooterButton
@@ -296,25 +293,25 @@ export const TransactionFooter = withForm({
               variant="destructive"
               icon={<ArrowCounterClockwiseIcon />}
               xlLabel={tc("resetAll")}
-              dynamic={dynamicBtn}
+              dynamicLabels={dynamicBtn}
             />
 
             {!hideHoldRecall && (
               <>
                 <form.Subscribe selector={(form) => form.canSubmit}>
                   {(canSubmit) => (
-                    <ButtonWithHotkeys
+                    <AppButton
                       type="button"
                       onClick={onHold}
                       hotkeys={["F5"]}
                       disabled={!canSubmit}
                     >
                       <HandIcon /> <span>Hold</span>
-                    </ButtonWithHotkeys>
+                    </AppButton>
                   )}
                 </form.Subscribe>
 
-                <ButtonWithHotkeys
+                <AppButton
                   type="button"
                   hotkeys={["F6"]}
                   onClick={async () => {
@@ -334,7 +331,7 @@ export const TransactionFooter = withForm({
                   }}
                 >
                   <ClockCountdownIcon /> <span>Recall</span>
-                </ButtonWithHotkeys>
+                </AppButton>
 
                 <RecallDialog
                   form={form}

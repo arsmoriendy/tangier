@@ -1,5 +1,5 @@
+import AppButton from "@/components/app-button"
 import Logo from "@/components/logo"
-import { Button } from "@/components/ui/button"
 import {
   SidebarHeader,
   SidebarMenu,
@@ -24,14 +24,14 @@ export function Header() {
                 <p>tangier</p>
                 <p className="text-xs text-muted-foreground">v{pkg.version}</p>
               </div>
-              <Button
+              <AppButton
                 size="icon-sm"
                 variant="ghost"
                 tooltip={t("collapseSidebar")}
                 onClick={toggleSidebar}
               >
                 <SidebarIcon />
-              </Button>
+              </AppButton>
             </>
           )}
         </div>

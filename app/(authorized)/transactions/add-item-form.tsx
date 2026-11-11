@@ -26,9 +26,9 @@ import {
   CaretUpIcon,
   LinkIcon,
 } from "@phosphor-icons/react/dist/ssr"
-import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Badge } from "@/components/ui/badge"
 import { UserIdrInput, UserIdrInputProps } from "@/components/user-idr-input"
+import AppButton from "@/components/app-button"
 
 type BuyPriceOption = {
   value: string
@@ -383,7 +383,7 @@ export const AddItemForm = withForm({
               </form.SubmitButton>
             </form.AppForm>
 
-            <ButtonWithHotkeys
+            <AppButton
               size="badge"
               type="reset"
               variant="destructive"
@@ -399,7 +399,7 @@ export const AddItemForm = withForm({
             >
               <ArrowCounterClockwiseIcon />
               {t("reset")}
-            </ButtonWithHotkeys>
+            </AppButton>
           </div>
         </Form>
       </>

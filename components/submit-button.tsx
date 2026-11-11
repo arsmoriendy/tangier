@@ -1,17 +1,14 @@
 import { useFormContext } from "@/components/form"
-import {
-  ButtonWithHotkeys,
-  type ButtonWithHotkeysProps,
-} from "./ui/button-with-hotkeys"
+import AppButton, { AppButtonProps } from "@/components/app-button"
 
 export default function SubmitButton(
-  props: Omit<ButtonWithHotkeysProps, "type" | "disabled">
+  props: Omit<AppButtonProps, "type" | "disabled">
 ) {
   const form = useFormContext()
   return (
     <form.Subscribe selector={(state) => state.canSubmit}>
       {(canSubmit) => (
-        <ButtonWithHotkeys disabled={!canSubmit} type="submit" {...props} />
+        <AppButton disabled={!canSubmit} type="submit" {...props} />
       )}
     </form.Subscribe>
   )

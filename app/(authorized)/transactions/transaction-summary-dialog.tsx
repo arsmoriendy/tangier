@@ -9,7 +9,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
-import { ButtonWithHotkeys } from "@/components/ui/button-with-hotkeys"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import AdminOnly from "@/components/admin-only"
 import { useUserSettings } from "@/contexts/user-settings"
@@ -18,6 +17,7 @@ import { marginAndDiscount } from "@/lib/margin"
 import { cn } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 import { ComponentProps } from "react"
+import AppButton from "@/components/app-button"
 
 export const TransactionSummaryDialog = withForm({
   defaultValues: defaultTransactionValues,
@@ -83,14 +83,14 @@ export const TransactionSummaryDialog = withForm({
             }}
           </form.Subscribe>
           <AlertDialogFooter>
-            <ButtonWithHotkeys
+            <AppButton
               hotkeys={["Enter"]}
               onClick={() => {
                 props.onOpenChange?.(false)
               }}
             >
               {t("close")}
-            </ButtonWithHotkeys>
+            </AppButton>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
