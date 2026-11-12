@@ -65,6 +65,7 @@ export async function updateTransaction({
       .select({ held: transactions.held })
       .from(transactions)
       .where(eq(transactions.id, id))
+      .for("update")
 
     if (!prevTrx) return
 
