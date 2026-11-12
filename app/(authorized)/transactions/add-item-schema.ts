@@ -6,7 +6,7 @@ export const addItemSchema = z.object({
   unitId: z.string().optional(),
   buyPrice: z.number().min(0),
   sellPrice: z.number().min(0),
-  quantity: z.number(),
+  quantity: z.number().positive(),
   quantifiedSellPrice: z.number().min(0),
 })
 

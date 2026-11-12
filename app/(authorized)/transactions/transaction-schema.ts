@@ -8,7 +8,7 @@ export const transactionSchema = z.object({
         unit: z.string(),
         buyPrice: z.number().min(0),
         sellPrice: z.number().min(0),
-        quantity: z.number(),
+        quantity: z.number().positive(),
         quantifiedSellPrice: z.number().min(0),
 
         linkedBuyPrice: z
