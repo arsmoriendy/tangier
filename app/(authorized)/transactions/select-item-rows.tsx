@@ -24,29 +24,32 @@ export function SelectItemRows({
     idxRef.current = selectedIdx
   }, [selectedIdx])
 
-  function handleKeys(e: KeyboardEvent) {
-    switch (e.key) {
-      case "ArrowUp":
-      case "k":
-        e.preventDefault()
-        setSelectedIdx((i) => Math.max(0, i - 1))
-        break
-      case "ArrowDown":
-      case "j":
-        e.preventDefault()
-        setSelectedIdx((i) => Math.min(items.length - 1, i + 1))
-        break
-      case "Enter":
-        e.preventDefault()
-        onSelect(items[idxRef.current])
-        break
-    }
-  }
-
   useEffect(() => {
+    function handleKeys(e: KeyboardEvent) {
+      // nothing to focus or select
+      if (items.length < 1) return
+
+      switch (e.key) {
+        case "ArrowUp":
+        case "k":
+          e.preventDefault()
+          setSelectedIdx((i) => Math.max(0, i - 1))
+          break
+        case "ArrowDown":
+        case "j":
+          e.preventDefault()
+          setSelectedIdx((i) => Math.min(items.length - 1, i + 1))
+          break
+        case "Enter":
+          e.preventDefault()
+          onSelect(items[idxRef.current])
+          break
+      }
+    }
+
     document.addEventListener("keydown", handleKeys)
     return () => document.removeEventListener("keydown", handleKeys)
-  }, [])
+  }, [items, onSelect])
 
   return (
     <>
