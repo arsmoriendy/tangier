@@ -65,8 +65,9 @@ export default function CreateItemForm() {
           <PaginationItem>
             <PaginationPrevious
               onClick={async () => {
-                itemFiltersProxy.offset =
-                  (itemFiltersProxy?.offset ?? 0) - itemsPerPage
+                const offset = itemFiltersProxy.offset ?? 0
+                if (offset <= 0) return
+                itemFiltersProxy.offset = offset - itemsPerPage
               }}
               className={
                 itemFiltersSnap.offset === 0 ||
@@ -79,8 +80,9 @@ export default function CreateItemForm() {
           <PaginationItem>
             <PaginationNext
               onClick={async () => {
-                itemFiltersProxy.offset =
-                  (itemFiltersProxy?.offset ?? 0) + itemsPerPage
+                const offset = itemFiltersProxy.offset ?? 0
+                if (offset + itemsPerPage >= itemCount) return
+                itemFiltersProxy.offset = offset + itemsPerPage
               }}
               className={
                 (itemFiltersSnap?.offset ?? 0) + itemsPerPage >= itemCount
