@@ -148,8 +148,8 @@ export const AddItemForm = withForm({
               sp.priceGroup.id === createTransactionForm.state.values.priceGroup
           )?.price
 
-          if (sellPrice !== undefined)
-            form.setFieldValue("sellPrice", sellPrice)
+          // no recorded price for this group: don't inherit the last item's
+          form.setFieldValue("sellPrice", sellPrice ?? 0)
         }
       )
 
