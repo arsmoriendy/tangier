@@ -50,7 +50,7 @@ export function EditTrxDialog({
             transaction={trx}
             onUpdate={(trx) => {
               const i = setTrx.findIndex((t) => t.id === trx.id)
-              setTrx[i] = trx
+              if (i !== -1) setTrx[i] = trx
             }}
           />
         </div>

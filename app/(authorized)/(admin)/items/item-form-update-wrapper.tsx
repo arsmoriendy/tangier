@@ -23,7 +23,10 @@ export function ItemFormUpdateWrapper({
   const { itemsProxy } = useItems()
   const [openDialog, setOpenDialog] = useState(false)
   const t = useTranslations("items")
-  const itemIdx = itemsProxy.findIndex((item) => item.id === props.item.id)
+
+  function findItemIdx() {
+    return itemsProxy.findIndex((item) => item.id === props.item.id)
+  }
 
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
@@ -36,11 +39,13 @@ export function ItemFormUpdateWrapper({
         <ItemForm
           item={props.item}
           afterUpdate={(newItem) => {
-            itemsProxy[itemIdx] = newItem
+            const i = findItemIdx()
+            if (i !== -1) itemsProxy[i] = newItem
             setOpenDialog(false)
           }}
           afterDelete={() => {
-            itemsProxy.splice(itemIdx, 1)
+            const i = findItemIdx()
+            if (i !== -1) itemsProxy.splice(i, 1)
             setOpenDialog(false)
           }}
         />

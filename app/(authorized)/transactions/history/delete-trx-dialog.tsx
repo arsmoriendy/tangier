@@ -21,9 +21,9 @@ export function DeleteTrxDialog({
       title={<>{t("table.delete")}?</>}
       description={t("table.deleteDescription")}
       action={async () => {
-        const i = setTrx.findIndex((t) => t.id === trx.id)
-        setTrx.splice(i, 1)
         await deleteTransaction(trx.id)
+        const i = setTrx.findIndex((t) => t.id === trx.id)
+        if (i !== -1) setTrx.splice(i, 1)
       }}
       trigger={
         <Button variant="destructive" size="icon">

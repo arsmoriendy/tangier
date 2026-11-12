@@ -61,7 +61,7 @@ export const RecallDialog = withForm({
             </TableHeader>
 
             <TableBody>
-              {getHeld.map((trx, i) => {
+              {getHeld.map((trx) => {
                 const date = new Date(trx.createdAt)
                 return (
                   <TableRow key={trx.id}>
@@ -87,7 +87,8 @@ export const RecallDialog = withForm({
                         action={async () => {
                           if (trx.id === recalledTrx?.id) onReset()
                           await deleteTransaction(trx.id)
-                          setHeld.splice(i, 1)
+                          const idx = setHeld.findIndex((t) => t.id === trx.id)
+                          if (idx !== -1) setHeld.splice(idx, 1)
                         }}
                         trigger={
                           <Button variant="destructive" size="icon">

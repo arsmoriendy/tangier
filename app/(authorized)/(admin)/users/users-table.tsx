@@ -84,7 +84,8 @@ export function UsersTable() {
                     await authClient.admin.removeUser({
                       userId: user.id,
                     })
-                    usersProxy.splice(i, 1)
+                    const idx = usersProxy.findIndex((u) => u.id === user.id)
+                    if (idx !== -1) usersProxy.splice(idx, 1)
                     toast.error(tt("deleted"))
                   }}
                   trigger={
