@@ -18,13 +18,16 @@ export const colors = [
 ]
 
 export function getRandomColor() {
-  return colors[Math.floor(Math.random() * (colors.length - 1))]
+  return colors[Math.floor(Math.random() * colors.length)]
 }
 
+/**
+ * Up to `n` distinct random colors. Caps at the palette size, so an `n` larger
+ * than the palette returns the whole palette instead of never settling.
+ */
 export function getRandomColors(n: number) {
-  const set = new Set([getRandomColor()])
-  while (set.size !== n) {
-    set.add(getRandomColor())
-  }
-  return [...set]
+  const count = Math.min(n, colors.length)
+  const picked = new Set<string>()
+  while (picked.size < count) picked.add(getRandomColor())
+  return [...picked]
 }
