@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, ReactNode, useContext, useEffect } from "react"
+import { createContext, ReactNode, useContext, useEffect, useRef } from "react"
 import { proxy, snapshot, subscribe, useSnapshot } from "valtio"
 import { ValtioContext } from "./valtio-context"
 import { upsertUserSettings, type UserSettings } from "@/lib/crud/user-settings"
@@ -23,7 +23,7 @@ export function UserSettingsProvider(props: {
   const { user } = useSession()
   const t = useTranslations("userSettings")
 
-  let previousUserSettings = snapshot(userSettingsProxy)
+  const previousUserSettings = useRef(snapshot(userSettingsProxy))
 
   useEffect(() => {
     return subscribe(userSettingsProxy, async () => {
@@ -31,7 +31,7 @@ export function UserSettingsProvider(props: {
 
       const updatedUserSettings = Object.fromEntries(
         (Object.keys(newUserSettings) as (keyof typeof newUserSettings)[])
-          .filter((k) => newUserSettings[k] !== previousUserSettings[k])
+          .filter((k) => newUserSettings[k] !== previousUserSettings.current[k])
           .map((k) => [k, newUserSettings[k]])
       )
 
@@ -41,7 +41,7 @@ export function UserSettingsProvider(props: {
         toast.success(t("updated"))
       }
 
-      previousUserSettings = newUserSettings
+      previousUserSettings.current = newUserSettings
     })
   }, [])
 
