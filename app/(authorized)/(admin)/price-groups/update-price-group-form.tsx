@@ -43,7 +43,11 @@ export default function UpdatePriceGroupForm(props: {
       setPriceGroups((prev) =>
         prev.map((pg) =>
           pg.id === props.priceGroup.id
-            ? { ...pg, ...value, description: value.description ?? pg.description }
+            ? {
+                ...pg,
+                ...value,
+                description: value.description ?? pg.description,
+              }
             : pg
         )
       )

@@ -100,7 +100,7 @@ export function DatetimeRangeField<T extends DateValue>({
                         "grid size-8 cursor-default place-items-center text-sm hover:bg-muted",
                         isSelected && "bg-secondary text-secondary-foreground",
                         (isSelectionStart || isSelectionEnd) &&
-                          "hover:bg-primary bg-primary text-primary-foreground",
+                          "bg-primary text-primary-foreground hover:bg-primary",
                         isOutsideMonth &&
                           "text-muted-foreground hover:bg-transparent"
                       )}
