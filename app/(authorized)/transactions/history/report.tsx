@@ -148,7 +148,7 @@ export function Report() {
     return subscribe(setTrx, refresh)
   }, [])
 
-  const Revenue = () => (
+  const revenueField = (
     <form.AppField name="revenue">
       {(field) => (
         <field.IdrField
@@ -160,7 +160,7 @@ export function Report() {
     </form.AppField>
   )
 
-  const Expenses = () => (
+  const expensesField = (
     <form.AppField name="expenses">
       {(field) => (
         <field.IdrField
@@ -172,7 +172,7 @@ export function Report() {
     </form.AppField>
   )
 
-  const Profit = () => (
+  const profitField = (
     <form.AppField name="profit">
       {(field) => (
         <field.IdrField
@@ -189,9 +189,9 @@ export function Report() {
       handleSubmit={form.handleSubmit}
       className="grid grid-cols-2 items-end gap-2 space-y-0"
     >
-      <Revenue />
-      <Expenses />
-      <Profit />
+      {revenueField}
+      {expensesField}
+      {profitField}
 
       <Dialog>
         <DialogTrigger asChild>
@@ -201,10 +201,10 @@ export function Report() {
           <DialogTitle>{t("title")}</DialogTitle>
 
           <div className="flex gap-2">
-            <Revenue />
-            <Expenses />
+            {revenueField}
+            {expensesField}
           </div>
-          <Profit />
+          {profitField}
 
           <div className="flex items-end gap-2">
             <form.AppField name="trxCount">
@@ -245,51 +245,43 @@ export function Report() {
               )
 
               const pieChartMargin = 0
-              const PieChartWrapper = ({
-                data,
-                label,
-                dataKey,
-              }: Pick<PieProps, "data"> & {
+
+              function pieChart(
+                data: PieProps["data"],
+                dataKey: string,
                 label: string
-                dataKey: string
-              }) => (
-                <Chart config={config}>
-                  <PieChart
-                    width="50%"
-                    height={240}
-                    margin={{
-                      top: pieChartMargin,
-                      right: pieChartMargin,
-                      bottom: pieChartMargin,
-                      left: pieChartMargin,
-                    }}
-                  >
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Pie
-                      stroke="0"
-                      data={data}
-                      nameKey="user"
-                      dataKey={dataKey}
-                      innerRadius={40}
+              ) {
+                return (
+                  <Chart config={config}>
+                    <PieChart
+                      width="50%"
+                      height={240}
+                      margin={{
+                        top: pieChartMargin,
+                        right: pieChartMargin,
+                        bottom: pieChartMargin,
+                        left: pieChartMargin,
+                      }}
                     >
-                      <Label position="center">{label}</Label>
-                    </Pie>
-                  </PieChart>
-                </Chart>
-              )
+                      <ChartTooltip content={<ChartTooltipContent />} />
+                      <Pie
+                        stroke="0"
+                        data={data}
+                        nameKey="user"
+                        dataKey={dataKey}
+                        innerRadius={40}
+                      >
+                        <Label position="center">{label}</Label>
+                      </Pie>
+                    </PieChart>
+                  </Chart>
+                )
+              }
 
               return (
                 <div className="flex">
-                  <PieChartWrapper
-                    data={salesData}
-                    dataKey="count"
-                    label={t("sales")}
-                  />
-                  <PieChartWrapper
-                    data={revenueData}
-                    dataKey="revenue"
-                    label={t("revenue")}
-                  />
+                  {pieChart(salesData, "count", t("sales"))}
+                  {pieChart(revenueData, "revenue", t("revenue"))}
                 </div>
               )
             }}
