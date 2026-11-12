@@ -70,7 +70,10 @@ export default function TransactionForm({
     onSubmit: async ({ value: { transactionItems, priceGroup, ...value } }) => {
       const items = transactionItems.map(withBuyPriceId)
       const customerPriceGroup =
-        priceGroups.find((pg) => pg.id === priceGroup)?.name ?? ""
+        priceGroups.find((pg) => pg.id === priceGroup)?.name ??
+        // keep the stored snapshot when its price group has been deleted
+        props.transaction?.customerPriceGroup ??
+        ""
       const trx = {
         cashier: session.user.name,
         transactionItems: items,
@@ -134,7 +137,9 @@ export default function TransactionForm({
     const { transactionItems, priceGroup, ...value } = form.state.values
     const items = transactionItems.map(withBuyPriceId)
     const customerPriceGroup =
-      priceGroups.find((pg) => pg.id === priceGroup)?.name ?? ""
+      priceGroups.find((pg) => pg.id === priceGroup)?.name ??
+      recalledTrx?.customerPriceGroup ??
+      ""
 
     const trx = {
       transactionItems: items,
