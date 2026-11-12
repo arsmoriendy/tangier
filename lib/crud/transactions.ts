@@ -5,6 +5,16 @@ import { buyPrices, transactionItems, transactions } from "@/lib/db/schema"
 import { buyPriceStockDeltas } from "@/lib/buy-price-stock"
 import { and, asc, count, desc, eq, gte, ilike, lte, sql } from "drizzle-orm"
 
+type Tx = Parameters<Parameters<typeof db.transaction>[0]>[0]
+
+async function applyStockDeltas(tx: Tx, deltas: Map<string, number>) {
+  for (const [buyPriceId, stockDelta] of deltas)
+    await tx
+      .update(buyPrices)
+      .set({ stock: sql`${buyPrices.stock} + ${stockDelta}` })
+      .where(eq(buyPrices.id, buyPriceId))
+}
+
 export async function countTransactions({
   id = "",
   to = new Date(),
@@ -45,11 +55,7 @@ export async function createTransaction({
 
     // a held transaction doesn't move stock until it's saved as sold
     if (!transaction.held)
-      for (const [buyPriceId, stockDelta] of buyPriceStockDeltas([], items))
-        await trx
-          .update(buyPrices)
-          .set({ stock: sql`${buyPrices.stock} + ${stockDelta}` })
-          .where(eq(buyPrices.id, buyPriceId))
+      await applyStockDeltas(trx, buyPriceStockDeltas([], items))
 
     return { id, createdAt }
   })
@@ -102,14 +108,7 @@ export async function updateTransaction({
     const held = transaction.held ?? prevTrx.held
     if (held) return
 
-    for (const [buyPriceId, stockDelta] of buyPriceStockDeltas(
-      prevItems,
-      items
-    ))
-      await trx
-        .update(buyPrices)
-        .set({ stock: sql`${buyPrices.stock} + ${stockDelta}` })
-        .where(eq(buyPrices.id, buyPriceId))
+    await applyStockDeltas(trx, buyPriceStockDeltas(prevItems, items))
   })
 }
 
