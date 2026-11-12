@@ -79,7 +79,7 @@ export function TrxRow({
       </TableCell>
       <TableCell className="align-top">
         <span className="flex h-8 items-center">
-          {format.dateTime(createdDate)}
+          {format.dateTime(createdDate, { dateStyle: "medium" })}
         </span>
       </TableCell>
       <TableCell className="align-top">

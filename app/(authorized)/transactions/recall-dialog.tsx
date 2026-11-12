@@ -65,7 +65,9 @@ export const RecallDialog = withForm({
                 const date = new Date(trx.createdAt)
                 return (
                   <TableRow key={trx.id}>
-                    <TableCell>{format.dateTime(date)}</TableCell>
+                    <TableCell>
+                      {format.dateTime(date, { dateStyle: "medium" })}
+                    </TableCell>
                     <TableCell>
                       {format.dateTime(date, {
                         hour: "2-digit",
