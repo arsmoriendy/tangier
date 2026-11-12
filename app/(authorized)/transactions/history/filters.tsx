@@ -19,8 +19,13 @@ export function Filters() {
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
   useEffect(() => {
+    let seq = 0
+
     return subscribe(setFilters, async () => {
+      const run = ++seq
       const newTrxList = await listTransactions(setFilters)
+      // a newer filter change already asked for a fresher list
+      if (run !== seq) return
       setTrx.splice(0, setTrx.length, ...newTrxList)
     })
   }, [])
