@@ -48,7 +48,7 @@ Drizzle: `drizzle-kit` (`drizzle.config.ts`, postgresql, output `./drizzle`, no 
 
 ## Secrets
 
-`secrets.json` is **SOPS-encrypted** (AES256_GCM, PGP `4608BD8B17ABEE9F0DB5DE4AC2333D93F6D7C06F`) with `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`. Decrypt locally; never commit plaintext. Required server env: `DATABASE_URL`, `BETTER_AUTH_SECRET` (≥32 chars), `BETTER_AUTH_URL` (URL). `PRINTER_VID`/`PRINTER_PID`/`PRINTER_WIDTH` default to the values above and are optional.
+`secrets.json` is **SOPS-encrypted** (AES256_GCM, PGP `4608BD8B17ABEE9F0DB5DE4AC2333D93F6D7C06F`) with `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`. Decrypt locally; never commit plaintext. Required server env: `DATABASE_URL`, `BETTER_AUTH_SECRET` (≥32 chars), `BETTER_AUTH_URL` (URL). `PRINTER_VID`/`PRINTER_PID`/`PRINTER_WIDTH` default to the values above and are optional. Backup/restore hand `DATABASE_URL` to `pg_dump`/`psql` as `PG*` env vars (`lib/db/pg-env.ts`, tested) so it never lands in argv; URLs that can't be split (keyword/value conninfo, multiple hosts, unknown parameters) fall back to `--dbname` with a warning.
 
 ## Architecture & control flow
 
