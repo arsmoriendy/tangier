@@ -69,7 +69,7 @@ Drizzle: `drizzle-kit` (`drizzle.config.ts`, postgresql, output `./drizzle`, no 
 - **Server actions** are the data layer: every `lib/crud/*.ts` is `"use server"` and calls `db` directly; components call it directly (`createTransaction`, `listItems`). No app-data API client (auth = better-auth client; backup/restore = routes).
 - **Actions are not individually authorized** — no `getSessionOrRedirect`/`isUnauthorized` inside; layout guards only protect navigation (README backlog: "Server function authorization"). Add checks before trusting one.
 - `lib/get-session.ts` + `lib/auth-guard.ts` are `"use server"` too: `getSessionOrRedirect()` guards `(authorized)`, `{ admin: true }` guards `(admin)`; `isUnauthorized(...)` returns 401 JSON.
-- `lib/get-session.ts` verifies a Bearer JWT (`jose`/JWKS at `${BETTER_AUTH_URL}/api/auth/jwks`, issuer/audience `BETTER_AUTH_URL`) then falls back to `auth.api.getSession({ headers })`.
+- `lib/get-session.ts` verifies a Bearer JWT (`jose`/JWKS at `${BETTER_AUTH_URL}/api/auth/jwks`, issuer/audience `BETTER_AUTH_URL`) then falls back to `auth.api.getSession({ headers })`. The JWT is **not** trusted for authorization: `role`/`active` are re-read from `user`, so a token can't outlive a demotion or deactivation.
 - `lib/auth.ts`: drizzle adapter, `admin()` + `jwt()` plugins, email/password (min length **3**), `user.changeEmail`/`deleteUser`. `databaseHooks.user.create.before` **auto-promotes the first user to admin + active** (bootstrap); `beforeDelete` blocks deleting the sole admin.
 - Client auth: `lib/auth-client.ts` (`inferAdditionalFields`, `adminClient`, `jwtClient`); admin user management and Tauri tokens use `authClient.admin.*`/`authClient.token()`.
 
