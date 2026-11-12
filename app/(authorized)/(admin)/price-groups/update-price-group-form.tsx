@@ -22,7 +22,7 @@ export default function UpdatePriceGroupForm(props: {
   onDelete?: () => any
   priceGroup: typeof priceGroups.$inferSelect
 }) {
-  const { priceGroups, setPriceGroups } = usePriceGroups()
+  const { setPriceGroups } = usePriceGroups()
   const t = useTranslations("priceGroups")
   const ct = useTranslations("common")
   const defaultValues: z.infer<typeof createPriceGroupFormSchema> = {
@@ -40,11 +40,13 @@ export default function UpdatePriceGroupForm(props: {
     },
     onSubmit: async ({ value }) => {
       await updatePriceGroup({ id: props.priceGroup.id, ...value })
-      Object.assign(
-        priceGroups.find((pg) => pg.id === props.priceGroup.id)!,
-        value
+      setPriceGroups((prev) =>
+        prev.map((pg) =>
+          pg.id === props.priceGroup.id
+            ? { ...pg, ...value, description: value.description ?? pg.description }
+            : pg
+        )
       )
-      setPriceGroups(priceGroups)
       props.onSumbit?.(value)
     },
   })
