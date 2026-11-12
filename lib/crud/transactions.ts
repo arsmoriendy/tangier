@@ -134,7 +134,30 @@ export type TransactionWithRelations = PartialKey<
 >
 
 export async function deleteTransaction(id: string) {
-  await db.delete(transactions).where(eq(transactions.id, id))
+  await db.transaction(async (trx) => {
+    const [prevTrx] = await trx
+      .select({ held: transactions.held })
+      .from(transactions)
+      .where(eq(transactions.id, id))
+      .for("update")
+
+    if (!prevTrx) return
+
+    const prevItems = await trx
+      .select({
+        buyPriceId: transactionItems.buyPriceId,
+        updateStock: transactionItems.updateStock,
+        quantity: transactionItems.quantity,
+      })
+      .from(transactionItems)
+      .where(eq(transactionItems.transaction, id))
+
+    await trx.delete(transactions).where(eq(transactions.id, id))
+
+    // held transactions never moved stock, so there is nothing to restore
+    if (!prevTrx.held)
+      await applyStockDeltas(trx, buyPriceStockDeltas(prevItems, []))
+  })
 }
 
 export async function listTransactions({
