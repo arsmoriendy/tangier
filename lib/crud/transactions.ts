@@ -1,7 +1,8 @@
 "use server"
 
 import { db } from "@/lib/db"
-import { transactionItems, transactions } from "@/lib/db/schema"
+import { buyPrices, transactionItems, transactions } from "@/lib/db/schema"
+import { buyPriceStockDeltas } from "@/lib/buy-price-stock"
 import { and, asc, count, desc, eq, gte, ilike, lte, sql } from "drizzle-orm"
 
 export async function countTransactions({
@@ -41,6 +42,15 @@ export async function createTransaction({
         transaction: id,
       }))
     )
+
+    // a held transaction doesn't move stock until it's saved as sold
+    if (!transaction.held)
+      for (const [buyPriceId, stockDelta] of buyPriceStockDeltas([], items))
+        await trx
+          .update(buyPrices)
+          .set({ stock: sql`${buyPrices.stock} + ${stockDelta}` })
+          .where(eq(buyPrices.id, buyPriceId))
+
     return { id, createdAt }
   })
 }
@@ -51,23 +61,54 @@ export async function updateTransaction({
   ...transaction
 }: Partial<Omit<TransactionWithRelations, "createdAt">> & { id: string }) {
   return await db.transaction(async (trx) => {
+    const [prevTrx] = await trx
+      .select({ held: transactions.held })
+      .from(transactions)
+      .where(eq(transactions.id, id))
+
+    if (!prevTrx) return
+
     await trx
       .update(transactions)
       .set(transaction)
       .where(eq(transactions.id, id))
 
-    if (items) {
-      await trx
-        .delete(transactionItems)
-        .where(eq(transactionItems.transaction, id))
+    if (!items) return
 
-      await trx.insert(transactionItems).values(
-        items.map(({ linkedBuyPrice, ...i }) => ({
-          ...i,
-          transaction: id,
-        }))
-      )
-    }
+    // held transactions never moved stock, so there is nothing to restore
+    const prevItems = prevTrx.held
+      ? []
+      : await trx
+          .select({
+            buyPriceId: transactionItems.buyPriceId,
+            updateStock: transactionItems.updateStock,
+            quantity: transactionItems.quantity,
+          })
+          .from(transactionItems)
+          .where(eq(transactionItems.transaction, id))
+
+    await trx
+      .delete(transactionItems)
+      .where(eq(transactionItems.transaction, id))
+
+    await trx.insert(transactionItems).values(
+      items.map(({ linkedBuyPrice, ...i }) => ({
+        ...i,
+        transaction: id,
+      }))
+    )
+
+    const held = transaction.held ?? prevTrx.held
+    if (held) return
+
+    for (const [buyPriceId, stockDelta] of buyPriceStockDeltas(
+      prevItems,
+      items
+    ))
+      await trx
+        .update(buyPrices)
+        .set({ stock: sql`${buyPrices.stock} + ${stockDelta}` })
+        .where(eq(buyPrices.id, buyPriceId))
   })
 }
 

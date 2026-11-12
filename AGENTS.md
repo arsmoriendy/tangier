@@ -134,7 +134,7 @@ Base UI single-select `Combobox` over unconstrained option type `O`.
 
 ### Stock handling
 
-`buy_prices.stock` decrements per transaction: form items carry `linkedBuyPrice` + `updateStock` (persisted rows have `buyPriceId`); the form aggregates per `buyPriceId` (including the previous quantity on edits/recalls) and calls `updateBuyPriceStock({ id, stockDelta })`, a SQL `stock + ${stockDelta}`. Held transactions don't touch stock.
+`buy_prices.stock` decrements per transaction: form items carry `linkedBuyPrice` + `updateStock` (persisted rows have `buyPriceId`). `createTransaction`/`updateTransaction` reconcile stock **inside the same `db.transaction` as the write**, via `buyPriceStockDeltas(prevItems, nextItems)` (`lib/buy-price-stock.ts`, tested) netted per `buyPriceId` as `stock + delta`. Prev items are read from the persisted row inside that transaction, so removed rows, cleared `updateStock`, and re-linked buy prices all restore correctly. Held transactions never move stock: `updateTransaction` restores nothing when the stored row was `held`, and skips stock when the write keeps `held: true`. `updateBuyPriceStock` (`lib/crud/buy-prices.ts`) is unused now.
 
 ## DB schema notes
 

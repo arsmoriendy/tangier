@@ -12,8 +12,6 @@ import {
   transactionSchema,
   defaultTransactionValues,
 } from "@/app/(authorized)/transactions/transaction-schema"
-import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
-import { buyPriceStockDeltas } from "@/lib/buy-price-stock"
 import { useSession } from "@/contexts/session-ctx"
 import { toast } from "sonner"
 import { useState } from "react"
@@ -80,16 +78,6 @@ export default function TransactionForm({
         held: false,
         ...value,
       }
-
-      // restore what the edited transaction took, then take what this one
-      // takes; held transactions never moved stock, new ones have no history
-      const stockDeltas = buyPriceStockDeltas(
-        props.transaction?.transactionItems ?? [],
-        items
-      )
-
-      for (const [id, stockDelta] of stockDeltas)
-        await updateBuyPriceStock({ id, stockDelta })
 
       var id: string
       var createdAt: string
