@@ -20,7 +20,7 @@ export default function TextField({
   className,
   onChange,
   hotkeys,
-  ref = useRef<HTMLInputElement>(null),
+  ref: refProp,
   disableUppercaseOption,
   hideHotkeys,
   hideErrors,
@@ -38,13 +38,14 @@ export default function TextField({
   const field = useFieldContext<string>()
   const id = `${field.form.formId}-${field.name}`
   const isInvalid = !field.state.meta.isValid
+  const innerRef = useRef<HTMLInputElement>(null)
+  const ref = refProp ?? innerRef
 
-  if (hotkeys !== undefined) {
-    useHotkeys(hotkeys, () => ref.current?.focus(), {
-      preventDefault: true,
-      enableOnFormTags: true,
-    })
-  }
+  useHotkeys(hotkeys ?? [], () => ref.current?.focus(), {
+    preventDefault: true,
+    enableOnFormTags: true,
+    enabled: hotkeys !== undefined,
+  })
 
   return (
     <Field className={className}>

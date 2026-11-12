@@ -8,10 +8,10 @@ import { useTranslations } from "next-intl"
 import { useCollapsedTooltip } from "@/components/app-sidebar/use-collapsed-tooltip"
 
 export default function CollapsedClientSidebarItem() {
-  if (!isTauri()) return null
-
   const t = useTranslations("common.client")
   const tooltip = useCollapsedTooltip()
+
+  if (!isTauri()) return null
 
   return (
     <ClientDropdown side="right" align="end">

@@ -59,17 +59,19 @@ export default function AppButton(props: AppButtonProps) {
     wrapTooltip,
     hotkeys,
     hideHotkeys,
-    ref = React.useRef<HTMLButtonElement>(null),
+    ref: refProp,
     ...btnProps
   } = props
 
+  const innerRef = React.useRef<HTMLButtonElement>(null)
+  const ref = refProp ?? innerRef
   const innerBtnProps = { hotkeys, hideHotkeys, ref, ...btnProps }
 
-  if (hotkeys)
-    useHotkeys(hotkeys, () => ref?.current?.click(), {
-      preventDefault: true,
-      enableOnFormTags: true,
-    })
+  useHotkeys(hotkeys ?? [], () => ref.current?.click(), {
+    preventDefault: true,
+    enableOnFormTags: true,
+    enabled: hotkeys !== undefined,
+  })
 
   if (wrapTooltip)
     return (

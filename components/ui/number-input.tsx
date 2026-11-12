@@ -1,6 +1,11 @@
 import { inputClass } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
-import { RefObject, useEffect, useRef } from "react"
+import {
+  RefObject,
+  useEffect,
+  useRef,
+  type WheelEvent as ReactWheelEvent,
+} from "react"
 import { NumericFormat, NumericFormatProps } from "react-number-format"
 
 export type NumberInputProps = Omit<
@@ -31,31 +36,32 @@ export function NumberInput({
   onFocus,
   unstyled,
   value: valueProp,
-  ref = useRef<HTMLInputElement>(null),
+  ref: refProp,
   scrollable = false,
   arrowControls = true,
   ...props
 }: NumberInputProps) {
+  const innerRef = useRef<HTMLInputElement>(null)
+  const ref = refProp ?? innerRef
   const clamp = (v: number): number => Math.min(max, Math.max(min, v))
 
-  if (scrollable) {
-    useEffect(() => {
-      function handleWheel(e: WheelEvent) {
-        if (document.activeElement === ref.current) {
-          e.preventDefault()
-          onValueChange(
-            clamp(e.deltaY < 0 ? valueProp + step : valueProp - step)
-          )
-        }
-        // @ts-ignore
-        onWheel?.(e)
+  useEffect(() => {
+    if (!scrollable) return
+
+    const input = ref.current
+    if (!input) return
+
+    function handleWheel(e: WheelEvent) {
+      if (document.activeElement === input) {
+        e.preventDefault()
+        onValueChange(clamp(e.deltaY < 0 ? valueProp + step : valueProp - step))
       }
+      onWheel?.(e as unknown as ReactWheelEvent<HTMLInputElement>)
+    }
 
-      ref.current?.addEventListener("wheel", handleWheel, { passive: false })
-
-      return () => ref.current?.removeEventListener("wheel", handleWheel)
-    })
-  }
+    input.addEventListener("wheel", handleWheel, { passive: false })
+    return () => input.removeEventListener("wheel", handleWheel)
+  })
 
   return (
     <NumericFormat
