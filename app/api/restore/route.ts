@@ -1,5 +1,5 @@
 import * as path from "node:path"
-import { rename } from "node:fs/promises"
+import { rename, rm } from "node:fs/promises"
 import { createWriteStream } from "node:fs"
 import { NextRequest, NextResponse } from "next/server"
 import { Readable } from "stream"
@@ -19,13 +19,18 @@ export async function POST(req: NextRequest) {
   const tmp = path.join("/tmp", `${id}.part`)
   const final = path.join("/tmp", id)
 
-  await pipeline(Readable.fromWeb(req.body as any), createWriteStream(tmp), {
-    signal: req.signal,
-  })
+  try {
+    await pipeline(Readable.fromWeb(req.body as any), createWriteStream(tmp), {
+      signal: req.signal,
+    })
 
-  await rename(tmp, final)
+    await rename(tmp, final)
 
-  await restoreDatabase(final)
+    await restoreDatabase(final)
+  } finally {
+    await rm(tmp, { force: true }).catch(() => {})
+    await rm(final, { force: true }).catch(() => {})
+  }
 
   return new NextResponse()
 }
