@@ -8,6 +8,7 @@ import { I18nProvider } from "@/components/ui/i18n-provider"
 import { NextIntlClientProvider } from "next-intl"
 import { ZodConfig } from "@/lib/zod-config"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { getLocale } from "next-intl/server"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -19,14 +20,16 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 })
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const locale = await getLocale()
+
   return (
     <html
-      lang="en"
+      lang={locale}
       suppressHydrationWarning
       className={cn(
         "antialiased",
