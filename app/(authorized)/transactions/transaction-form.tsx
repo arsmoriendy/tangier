@@ -13,6 +13,7 @@ import {
   defaultTransactionValues,
 } from "@/app/(authorized)/transactions/transaction-schema"
 import { updateBuyPriceStock } from "@/lib/crud/buy-prices"
+import { buyPriceStockDeltas } from "@/lib/buy-price-stock"
 import { useSession } from "@/contexts/session-ctx"
 import { toast } from "sonner"
 import { useState } from "react"
@@ -80,31 +81,15 @@ export default function TransactionForm({
         ...value,
       }
 
-      // unique stock per buyPriceId
-      const bpStockMap = new Map<string, number>()
-      for (const item of items)
-        if (item.updateStock && item.buyPriceId !== null) {
-          const qty = bpStockMap.get(item.buyPriceId)
-          bpStockMap.set(
-            item.buyPriceId,
-            qty === undefined ? item.quantity : qty + item.quantity
-          )
-        }
+      // restore what the edited transaction took, then take what this one
+      // takes; held transactions never moved stock, new ones have no history
+      const stockDeltas = buyPriceStockDeltas(
+        props.transaction?.transactionItems ?? [],
+        items
+      )
 
-      for (const [id, stock] of bpStockMap) {
-        let stockDelta = -stock
-
-        // account for old quantity if any
-        if (props.transaction !== undefined)
-          for (const item of props.transaction.transactionItems)
-            if (item.updateStock && item.buyPriceId === id)
-              stockDelta += item.quantity
-
-        await updateBuyPriceStock({
-          id,
-          stockDelta,
-        })
-      }
+      for (const [id, stockDelta] of stockDeltas)
+        await updateBuyPriceStock({ id, stockDelta })
 
       var id: string
       var createdAt: string
