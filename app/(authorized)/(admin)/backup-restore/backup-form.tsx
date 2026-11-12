@@ -49,7 +49,7 @@ function TauriForm() {
 
     const tokenRes = await authClient.token()
     if (tokenRes.error) {
-      toast.error("Authentication error")
+      toast.error(t("authError"))
       console.error(tokenRes.error)
       return
     }

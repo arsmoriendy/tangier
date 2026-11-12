@@ -121,7 +121,7 @@ export const TransactionItemTable = withForm({
                 <TableHead>{tc("unit")}</TableHead>
                 {showBuyPrice && <TableHead>{tc("buyPrice")}</TableHead>}
                 <TableHead>{tc("sellPrice")}</TableHead>
-                <TableHead>Qty</TableHead>
+                <TableHead>{tc("qty")}</TableHead>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <TableHead className="px-0">

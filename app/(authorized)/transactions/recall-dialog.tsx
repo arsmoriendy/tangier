@@ -34,6 +34,7 @@ export const RecallDialog = withForm({
     const { setHeld, getHeld } = useHeld()
     const format = useFormatter()
     const t = useTranslations("transactions.recall")
+    const tf = useTranslations("transactions.form")
     const tc = useTranslations("common")
 
     // automatically recall if only 1 transaction is held
@@ -46,17 +47,17 @@ export const RecallDialog = withForm({
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-2xl">
-          <DialogTitle>Recall transaction</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
 
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Time</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Item count</TableHead>
-                <TableHead>Total price</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead>{t("date")}</TableHead>
+                <TableHead>{t("time")}</TableHead>
+                <TableHead>{t("customer")}</TableHead>
+                <TableHead>{t("itemCount")}</TableHead>
+                <TableHead>{tc("totalPrice")}</TableHead>
+                <TableHead>{tc("actions")}</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -79,7 +80,7 @@ export const RecallDialog = withForm({
                     <TableCell>{formatCurrency(trx.totalPrice)}</TableCell>
                     <TableCell className="flex gap-2">
                       <Button onClick={() => recallTrx(trx)}>
-                        <ClockCountdownIcon /> Recall
+                        <ClockCountdownIcon /> {tf("recall")}
                       </Button>
                       <DeleteAlert
                         title={<>{tc("delete")}?</>}

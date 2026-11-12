@@ -68,7 +68,7 @@ function RecallBadge({
         <span className="flex size-full rounded rounded-full bg-warning" />
       </span>
 
-      <span>Recalled</span>
+      <span>{t("recalled")}</span>
       <ClockCountdownIcon />
       <span>
         {format.dateTime(createdAt, {
@@ -96,6 +96,7 @@ function MarginBadge({
 }: {
   values: typeof defaultTransactionValues
 }) {
+  const tc = useTranslations("common")
   const expenses = v.transactionItems.reduce(
     (acc, item) => (acc += item.buyPrice * item.quantity),
     0
@@ -104,7 +105,7 @@ function MarginBadge({
 
   return (
     <Badge variant="secondary">
-      <span>Margin:</span>
+      <span>{tc("margin")}:</span>
       <span
         className={cn(
           profitLoss < 0 ? "text-destructive-foreground" : "text-success"
@@ -306,7 +307,7 @@ export const TransactionFooter = withForm({
                       hotkeys={["F5"]}
                       disabled={!canSubmit}
                     >
-                      <HandIcon /> <span>Hold</span>
+                      <HandIcon /> <span>{t("hold")}</span>
                     </AppButton>
                   )}
                 </form.Subscribe>
@@ -330,7 +331,7 @@ export const TransactionFooter = withForm({
                     }
                   }}
                 >
-                  <ClockCountdownIcon /> <span>Recall</span>
+                  <ClockCountdownIcon /> <span>{t("recall")}</span>
                 </AppButton>
 
                 <RecallDialog

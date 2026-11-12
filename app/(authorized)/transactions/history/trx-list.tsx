@@ -31,7 +31,7 @@ export function TrxList() {
       </colgroup>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-right">Id</TableHead>
+          <TableHead className="text-right">{tc("id")}</TableHead>
           <TableHead className="flex items-center justify-between">
             {tc("items")}
             <Button

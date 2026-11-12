@@ -151,7 +151,9 @@ export const SearchItemForm = withForm({
           <DialogContent className="pt-0">
             <DialogTitle className="mt-4">
               {t("title")}{" "}
-              <small className="text-muted-foreground">(max {limit})</small>
+              <small className="text-muted-foreground">
+                {t("maxResults", { count: limit })}
+              </small>
             </DialogTitle>
 
             <DialogDescription>

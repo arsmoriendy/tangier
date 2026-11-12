@@ -3,21 +3,24 @@ import { RestoreForm } from "@/app/(authorized)/(admin)/backup-restore/restore-f
 import PageHeader, { PageTitle } from "@/components/page-header"
 import { FieldLegend, FieldSet } from "@/components/ui/field"
 import { ClockCounterClockwiseIcon } from "@phosphor-icons/react/ssr"
+import { getTranslations } from "next-intl/server"
 
 export default async function Page() {
+  const t = await getTranslations("backupRestore")
+
   return (
     <>
       <PageHeader>
         <ClockCounterClockwiseIcon />
-        <PageTitle>Backup / Restore</PageTitle>
+        <PageTitle>{t("title")}</PageTitle>
       </PageHeader>
       <div className="max-w-sm px-2 pt-2">
         <FieldSet>
-          <FieldLegend>Backup</FieldLegend>
+          <FieldLegend>{t("backup.legend")}</FieldLegend>
           <BackupForm />
         </FieldSet>
         <FieldSet>
-          <FieldLegend>Restore</FieldLegend>
+          <FieldLegend>{t("restore.legend")}</FieldLegend>
           <RestoreForm />
         </FieldSet>
       </div>

@@ -152,12 +152,12 @@ export function AppSidebar() {
                   {({ href, ...props }) => (
                     <SidebarMenuButton
                       asChild
-                      tooltip={tooltip("Backup / Restore")}
+                      tooltip={tooltip(t("backupRestore"))}
                       {...props}
                     >
                       <Link href={href!}>
                         <ClockCounterClockwiseIcon />
-                        Backup / Restore
+                        {t("backupRestore")}
                       </Link>
                     </SidebarMenuButton>
                   )}

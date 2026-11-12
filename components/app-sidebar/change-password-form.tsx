@@ -29,7 +29,7 @@ export function ChangePasswordForm() {
         return
       }
 
-      toast.success("Password changed")
+      toast.success(t("changed"))
     },
   })
   const t = useTranslations("sidebar.account.changePassword")

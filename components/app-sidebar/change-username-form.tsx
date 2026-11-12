@@ -30,7 +30,7 @@ export function ChangeUsernameForm() {
         return
       }
 
-      toast.success("Username changed")
+      toast.success(t("changed"))
 
       window.location.reload()
     },

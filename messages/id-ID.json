@@ -25,6 +25,10 @@
     "items": "Barang",
     "delete": "Hapus",
     "profitLoss": "Laba / rugi",
+    "margin": "Margin",
+    "discount": "Diskon",
+    "qty": "Qty",
+    "actions": "Aksi",
     "client": {
       "title": "Menu klien",
       "exit": "Tutup tangier",
@@ -47,6 +51,7 @@
     "barcodeGroups": "Kelompok barcode",
     "users": "Pengguna",
     "options": "Setelan",
+    "backupRestore": "Cadangkan / Pulihkan",
     "expandSidebar": "Perluas sidebar",
     "collapseSidebar": "Tutup sidebar",
     "language": {
@@ -64,14 +69,16 @@
       "title": "Kelola akun",
       "changeUsername": {
         "title": "Ganti nama pengguna",
-        "newUsername": "Nama pengguna baru"
+        "newUsername": "Nama pengguna baru",
+        "changed": "Nama pengguna diubah"
       },
       "changePassword": {
         "title": "Ganti kata sandi",
         "currentPassword": "Kata sandi sekarang",
         "newPassword": "Kata sandi baru",
         "confirmPassword": "Konfirmasi kata sandi baru",
-        "errors": { "passwordMatch": "Kata sandi tidak cocok" }
+        "errors": { "passwordMatch": "Kata sandi tidak cocok" },
+        "changed": "Kata sandi diubah"
       },
       "signOut": "Keluar",
       "deleteAccount": "Hapus akun",
@@ -92,6 +99,7 @@
         "searchItem": {
           "nameOrBarcode": "Nama atau barcode",
           "title": "Pilih barang",
+          "maxResults": "(maks {count})",
           "description": "Gunakan <Kbd>↑</Kbd>/<Kbd>k</Kbd>/<Kbd>⇧ Shift</Kbd>+<Kbd>⇥ Tab</Kbd> untuk fokus ke barang sebelumnya, dan <Kbd>↓</Kbd>/<Kbd>j</Kbd>/<Kbd>⇥ Tab</Kbd> untuk fokus ke barang selanjutnya.",
           "errors": { "unitNotFound": "Satuan tidak ditemukan" }
         },
@@ -109,6 +117,9 @@
         "title": "Kelompok pelanggan"
       },
       "saveAndPrint": "Simpan|cetak",
+      "hold": "Tahan",
+      "recall": "Panggil",
+      "recalled": "Dipanggil",
       "itemCount": "{count} barang",
       "removeItems": "Hapus {count} barang",
       "summary": {
@@ -130,6 +141,11 @@
       "cancelRecall": "Batalkan recall"
     },
     "recall": {
+      "title": "Panggil transaksi",
+      "date": "Tanggal",
+      "time": "Waktu",
+      "customer": "Pelanggan",
+      "itemCount": "Jumlah barang",
       "deleteDescription": "Apakah anda yakin ingin menghapus transaksi tertahan ini?"
     },
     "history": {
@@ -165,6 +181,7 @@
     "createNew": "Buat barang baru",
     "form": {
       "barcodes": "Barcode",
+      "barcode": "Barcode {name}",
       "addBuyPrice": "Tambah harga beli",
       "pruneEmptyStockPrices": "Hapus harga stok kosong",
       "create": "Buat barang",
@@ -308,11 +325,15 @@
     }
   },
   "backupRestore": {
+    "title": "Cadangkan / Pulihkan",
     "backup": {
+      "legend": "Cadangkan",
       "buttonLabel": "Unduh backup database",
-      "success": "Backup database terunduh"
+      "success": "Backup database terunduh",
+      "authError": "Gagal autentikasi"
     },
     "restore": {
+      "legend": "Pulihkan",
       "success": "Restorasi database berhasil, silahkan masuk kembali",
       "error": "Restorasi database gagal",
       "fileInputLabel": "File backup",

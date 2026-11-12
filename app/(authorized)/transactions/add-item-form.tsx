@@ -301,7 +301,7 @@ export const AddItemForm = withForm({
           </form.Subscribe>
 
           <div className="relative">
-            <Badge className="absolute -top-6 left-0">Qty</Badge>
+            <Badge className="absolute -top-6 left-0">{tc("qty")}</Badge>
             <form.AppField
               name="quantity"
               listeners={{

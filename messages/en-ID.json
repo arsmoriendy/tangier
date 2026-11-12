@@ -25,6 +25,10 @@
     "items": "Items",
     "delete": "Delete",
     "profitLoss": "Profit / loss",
+    "margin": "Margin",
+    "discount": "Discount",
+    "qty": "Qty",
+    "actions": "Actions",
     "client": {
       "title": "Client menu",
       "exit": "Exit tangier",
@@ -47,6 +51,7 @@
     "barcodeGroups": "Barcode groups",
     "users": "Users",
     "options": "Options",
+    "backupRestore": "Backup / Restore",
     "expandSidebar": "Expand sidebar",
     "collapseSidebar": "Collapse sidebar",
     "language": {
@@ -64,14 +69,16 @@
       "title": "Manage account",
       "changeUsername": {
         "title": "Change username",
-        "newUsername": "New username"
+        "newUsername": "New username",
+        "changed": "Username changed"
       },
       "changePassword": {
         "title": "Change password",
         "currentPassword": "Current password",
         "newPassword": "New password",
         "confirmPassword": "Confirm new password",
-        "errors": { "passwordMatch": "Passwords don't match" }
+        "errors": { "passwordMatch": "Passwords don't match" },
+        "changed": "Password changed"
       },
       "signOut": "Sign out",
       "deleteAccount": "Delete account",
@@ -90,6 +97,7 @@
         "searchItem": {
           "nameOrBarcode": "Name or barcode",
           "title": "Select item",
+          "maxResults": "(max {count})",
           "description": "Use <Kbd>↑</Kbd>/<Kbd>k</Kbd>/<Kbd>⇧ Shift</Kbd>+<Kbd>⇥ Tab</Kbd> to focus the previous item, and <Kbd>↓</Kbd>/<Kbd>j</Kbd>/<Kbd>⇥ Tab</Kbd> to focus the next item.",
           "errors": { "unitNotFound": "Unit not found" }
         },
@@ -107,6 +115,9 @@
         "title": "Customer group"
       },
       "saveAndPrint": "Save|print",
+      "hold": "Hold",
+      "recall": "Recall",
+      "recalled": "Recalled",
       "itemCount": "{count, plural, =1 {# item} other {# items}}",
       "removeItems": "Remove {count, plural, =1 {# item} other {# items}}",
       "summary": {
@@ -128,6 +139,11 @@
       "cancelRecall": "Cancel recall"
     },
     "recall": {
+      "title": "Recall transaction",
+      "date": "Date",
+      "time": "Time",
+      "customer": "Customer",
+      "itemCount": "Item count",
       "deleteDescription": "Are you sure you want to delete this held transaction?"
     },
     "history": {
@@ -163,6 +179,7 @@
     "createNew": "Create new item",
     "form": {
       "barcodes": "Barcodes",
+      "barcode": "{name} barcode",
       "addBuyPrice": "Add buy price",
       "pruneEmptyStockPrices": "Prune empty stock prices",
       "create": "Create item",
@@ -306,11 +323,15 @@
     }
   },
   "backupRestore": {
+    "title": "Backup / Restore",
     "backup": {
+      "legend": "Backup",
       "buttonLabel": "Download database dump",
-      "success": "Downloaded database dump"
+      "success": "Downloaded database dump",
+      "authError": "Authentication error"
     },
     "restore": {
+      "legend": "Restore",
       "success": "Database restoration successful, please sign back in",
       "error": "Database restoration failed",
       "fileInputLabel": "Dump file",

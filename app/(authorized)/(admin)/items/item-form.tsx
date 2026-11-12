@@ -192,8 +192,8 @@ export default function ItemForm(props: {
                         <TableHeader>
                           <TableRow>
                             <TableHead></TableHead>
-                            <TableHead>Margin</TableHead>
-                            <TableHead>Discount</TableHead>
+                            <TableHead>{tc("margin")}</TableHead>
+                            <TableHead>{tc("discount")}</TableHead>
                           </TableRow>
                         </TableHeader>
 
@@ -301,7 +301,7 @@ export default function ItemForm(props: {
               <form.AppField name={`barcodes[${i}].barcode`}>
                 {(f) => (
                   <f.TextField
-                    label={`${name} barcode`}
+                    label={t("form.barcode", { name })}
                     disableUppercaseOption
                   />
                 )}
