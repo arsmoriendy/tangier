@@ -74,7 +74,7 @@ export function Report() {
     )
     const profit = revenue - expenses
     const trxCount = trx.length
-    const avgTrx = revenue / trxCount
+    const avgTrx = trxCount === 0 ? 0 : revenue / trxCount
 
     return { revenue, expenses, profit, trxCount, avgTrx }
   }
