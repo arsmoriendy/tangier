@@ -12,7 +12,7 @@ import { formatCurrency } from "@/lib/i18n/currency"
 import { cn } from "@/lib/utils"
 import { DotsSixVerticalIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
-import { useEffect, useRef, useState, type AnimationEvent } from "react"
+import { memo, useEffect, useRef, useState, type AnimationEvent } from "react"
 import {
   itemRowDndHandlers,
   remapSelectedAfterMove,
@@ -40,7 +40,7 @@ function scrollRowIntoView(row: HTMLTableRowElement) {
   })
 }
 
-export const ItemRow = withForm({
+const ItemRowWithForm = withForm({
   defaultValues: defaultTransactionValues,
   props: {
     i: 0,
@@ -294,3 +294,7 @@ export const ItemRow = withForm({
     )
   },
 })
+
+// The table re-renders on every item change (array subscription); each row's
+// cells subscribe to their own fields, so untouched rows can skip that pass.
+export const ItemRow = memo(ItemRowWithForm)
