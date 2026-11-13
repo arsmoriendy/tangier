@@ -18,12 +18,16 @@ import { SearchBar } from "./search-bar"
 import { UnitFilter } from "./unit-filter"
 import { ItemsTable } from "./items-table"
 import { useTranslations } from "next-intl"
+import { toast } from "sonner"
+
+const ITEM_LIST_TOAST_ID = "items-refetch"
 
 export default function CreateItemForm() {
   const itemsPerPage = 10
   const disabledClass =
     "cursor-not-allowed text-muted-foreground hover:text-muted-foreground"
   const t = useTranslations("items")
+  const tc = useTranslations("common")
 
   const { itemsProxy } = useItems()
   const { itemFiltersProxy, itemFiltersSnap } = useItemFilters()
@@ -33,19 +37,30 @@ export default function CreateItemForm() {
     countItems().then(setItemCount)
 
     const subscriptions: (() => void)[] = []
+    let seq = 0
 
     subscriptions.push(
       subscribe(itemFiltersProxy, async () => {
-        const [items, count] = await Promise.all([
-          listItems(itemFiltersProxy),
-          countItems(itemFiltersProxy),
-        ])
-        itemsProxy.splice(0, itemsProxy.length, ...items)
-        setItemCount(count)
+        const run = ++seq
+        toast.loading(tc("loading"), { id: ITEM_LIST_TOAST_ID })
+        try {
+          const [items, count] = await Promise.all([
+            listItems(itemFiltersProxy),
+            countItems(itemFiltersProxy),
+          ])
+          // a newer filter change already asked for a fresher list
+          if (run !== seq) return
+          itemsProxy.splice(0, itemsProxy.length, ...items)
+          setItemCount(count)
+        } finally {
+          // only the latest request may hide the toast
+          if (run === seq) toast.dismiss(ITEM_LIST_TOAST_ID)
+        }
       })
     )
 
     return () => {
+      toast.dismiss(ITEM_LIST_TOAST_ID)
       for (const unsubscribe of subscriptions) unsubscribe()
     }
   }, [])
