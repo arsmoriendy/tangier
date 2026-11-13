@@ -19,7 +19,7 @@ export async function countItems({
       .from(items)
       .where(
         and(
-          ilike(items.name, `%${name}%`),
+          name.length > 0 ? ilike(items.name, `%${name}%`) : undefined,
           unitId ? eq(items.unit, unitId) : undefined
         )
       )
@@ -206,9 +206,8 @@ export async function listItems({
 } = {}) {
   return await db.query.items.findMany({
     where: and(
-      ilike(items.name, `%${name}%`),
-      unitId.length > 0 ? eq(items.unit, unitId) : undefined,
-      undefined
+      name.length > 0 ? ilike(items.name, `%${name}%`) : undefined,
+      unitId.length > 0 ? eq(items.unit, unitId) : undefined
     ),
     limit: limit ?? undefined,
     offset,

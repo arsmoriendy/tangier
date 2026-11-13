@@ -26,7 +26,9 @@ export async function countTransactions({
       .from(transactions)
       .where(
         and(
-          ilike(sql`${transactions.id}::text`, `%${id}%`),
+          id.length > 0
+            ? ilike(sql`${transactions.id}::text`, `%${id}%`)
+            : undefined,
           gte(transactions.createdAt, from.toUTCString()),
           lte(transactions.createdAt, to.toUTCString())
         )
@@ -179,7 +181,9 @@ export async function listTransactions({
     offset,
     limit,
     where: and(
-      ilike(sql`${transactions.id}::text`, `%${id}%`),
+      id.length > 0
+        ? ilike(sql`${transactions.id}::text`, `%${id}%`)
+        : undefined,
       gte(transactions.createdAt, from.toUTCString()),
       lte(transactions.createdAt, to.toUTCString()),
       eq(transactions.held, held)
