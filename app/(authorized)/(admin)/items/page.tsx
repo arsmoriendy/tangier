@@ -14,10 +14,12 @@ import ItemList from "./item-list"
 import { getTranslations } from "next-intl/server"
 
 export default async function Page() {
-  const priceGroups = await listPriceGroups()
-  const barcodeGroups = await listBarcodeGroups()
-  const items = await listItems()
-  const units = await listUnits()
+  const [priceGroups, barcodeGroups, items, units] = await Promise.all([
+    listPriceGroups(),
+    listBarcodeGroups(),
+    listItems(),
+    listUnits(),
+  ])
   const t = await getTranslations("items")
 
   return (
