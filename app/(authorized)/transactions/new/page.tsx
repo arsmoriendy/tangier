@@ -7,13 +7,15 @@ import { listUnits } from "@/lib/crud/units"
 import { HeldProvider } from "../held-ctx"
 
 export default async function Page() {
-  const priceGroups = await listPriceGroups()
-  const units = await listUnits()
-  const held = await listTransactions({
-    held: true,
-    from: new Date(0),
-    to: new Date(),
-  })
+  const [priceGroups, units, held] = await Promise.all([
+    listPriceGroups(),
+    listUnits(),
+    listTransactions({
+      held: true,
+      from: new Date(0),
+      to: new Date(),
+    }),
+  ])
 
   return (
     <HeldProvider initialValue={held}>
