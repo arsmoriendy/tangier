@@ -21,7 +21,7 @@ import {
 import { useHeld } from "@/app/(authorized)/transactions/held-ctx"
 import { useUserSettings } from "@/contexts/user-settings"
 import { useFormatter, useTranslations } from "next-intl"
-import { ComponentProps, ReactNode, useEffect } from "react"
+import { ComponentProps, ReactNode, useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Kbd } from "@/components/ui/kbd"
 import {
@@ -164,7 +164,7 @@ export const TransactionFooter = withForm({
     openRecallDialog: false,
     setOpenRecallDialog: (_open: boolean) => {},
     hideHoldRecall: false,
-    onHold: () => {},
+    onHold: (): void | Promise<void> => {},
     onCancelRecall: () => {},
     onReset: () => {},
     onItemAdded: (_index: number) => {},
@@ -190,6 +190,8 @@ export const TransactionFooter = withForm({
     const t = useTranslations("transactions.form")
     const tc = useTranslations("common")
     const dynamicBtn = sidebarState === "expanded" && !hideHoldRecall
+    const [holding, setHolding] = useState(false)
+    const [recalling, setRecalling] = useState(false)
 
     useEffect(() => {}, [sidebarState, hideHoldRecall])
 
@@ -232,6 +234,36 @@ export const TransactionFooter = withForm({
       )
 
       setOpenRecallDialog(false)
+    }
+
+    async function holdTrx() {
+      setHolding(true)
+      try {
+        await onHold()
+      } finally {
+        setHolding(false)
+      }
+    }
+
+    async function recallHeld() {
+      setRecalling(true)
+      try {
+        await refreshHeldTrxs()
+
+        switch (setHeld.length) {
+          case 0:
+            toast.error(t("toasts.emptyHeldList"))
+            break
+          case 1:
+            recallTrx(setHeld[0])
+            break
+          default:
+            setOpenRecallDialog(true)
+            break
+        }
+      } finally {
+        setRecalling(false)
+      }
     }
 
     return (
@@ -303,9 +335,10 @@ export const TransactionFooter = withForm({
                   {(canSubmit) => (
                     <AppButton
                       type="button"
-                      onClick={onHold}
+                      onClick={holdTrx}
                       hotkeys={["F5"]}
                       disabled={!canSubmit}
+                      loading={holding}
                     >
                       <HandIcon /> <span>{t("hold")}</span>
                     </AppButton>
@@ -315,21 +348,8 @@ export const TransactionFooter = withForm({
                 <AppButton
                   type="button"
                   hotkeys={["F6"]}
-                  onClick={async () => {
-                    await refreshHeldTrxs()
-
-                    switch (setHeld.length) {
-                      case 0:
-                        toast.error(t("toasts.emptyHeldList"))
-                        break
-                      case 1:
-                        recallTrx(setHeld[0])
-                        break
-                      default:
-                        setOpenRecallDialog(true)
-                        break
-                    }
-                  }}
+                  onClick={recallHeld}
+                  loading={recalling}
                 >
                   <ClockCountdownIcon /> <span>{t("recall")}</span>
                 </AppButton>
