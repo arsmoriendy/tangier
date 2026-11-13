@@ -117,12 +117,12 @@ export default function ItemForm(props: {
       }
 
       // update item list
-      itemsProxy.splice(
-        0,
-        itemsProxy.length,
-        ...(await listItems(itemFiltersProxy))
-      )
-      setItemCount(await countItems(itemFiltersProxy))
+      const [items, count] = await Promise.all([
+        listItems(itemFiltersProxy),
+        countItems(itemFiltersProxy),
+      ])
+      itemsProxy.splice(0, itemsProxy.length, ...items)
+      setItemCount(count)
 
       form.reset()
     },
