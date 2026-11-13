@@ -5,11 +5,11 @@ import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { createContext, ReactNode, useContext } from "react"
 import { proxy, useSnapshot } from "valtio"
 
-const trxCtx = createContext<
+const txListCtx = createContext<
   ValtioContext<TransactionWithRelations[]> | undefined
 >(undefined)
 
-export function TrxProvider({
+export function TxListProvider({
   initialValue,
   children,
 }: {
@@ -20,14 +20,13 @@ export function TrxProvider({
   const getter = useSnapshot(setter)
 
   return (
-    <trxCtx.Provider value={{ proxy: setter, snap: getter }}>
+    <txListCtx.Provider value={{ proxy: setter, snap: getter }}>
       {children}
-    </trxCtx.Provider>
+    </txListCtx.Provider>
   )
 }
 
-// TODO: rename to useTrxs
-export function useTrx() {
-  const { proxy, snap } = useContext(trxCtx)!
-  return { setTrx: proxy, getTrx: snap }
+export function useTxList() {
+  const { proxy, snap } = useContext(txListCtx)!
+  return { setTxList: proxy, getTxList: snap }
 }

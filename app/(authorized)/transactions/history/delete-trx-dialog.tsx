@@ -1,4 +1,4 @@
-import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
+import { useTxList } from "@/app/(authorized)/transactions/history/trx-ctx"
 import { DeleteAlert } from "@/components/delete-alert"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,7 +14,7 @@ export function DeleteTrxDialog({
   trx: DeepReadonly<TransactionWithRelations>
 }) {
   const t = useTranslations("transactions.history")
-  const { setTrx } = useTrx()
+  const { setTxList } = useTxList()
 
   return (
     <DeleteAlert
@@ -22,8 +22,8 @@ export function DeleteTrxDialog({
       description={t("table.deleteDescription")}
       action={async () => {
         await deleteTransaction(trx.id)
-        const i = setTrx.findIndex((t) => t.id === trx.id)
-        if (i !== -1) setTrx.splice(i, 1)
+        const i = setTxList.findIndex((t) => t.id === trx.id)
+        if (i !== -1) setTxList.splice(i, 1)
       }}
       trigger={
         <Button variant="destructive" size="icon">

@@ -1,4 +1,4 @@
-import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
+import { useTxList } from "@/app/(authorized)/transactions/history/trx-ctx"
 import TransactionForm from "@/app/(authorized)/transactions/transaction-form"
 import { Button } from "@/components/ui/button"
 import {
@@ -18,7 +18,7 @@ export function EditTrxDialog({
   trx: DeepReadonly<TransactionWithRelations>
 }) {
   const [open, setOpen] = useState(false)
-  const { setTrx } = useTrx()
+  const { setTxList } = useTxList()
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -49,8 +49,8 @@ export function EditTrxDialog({
             className="m-2"
             transaction={trx}
             onUpdate={(trx) => {
-              const i = setTrx.findIndex((t) => t.id === trx.id)
-              if (i !== -1) setTrx[i] = trx
+              const i = setTxList.findIndex((t) => t.id === trx.id)
+              if (i !== -1) setTxList[i] = trx
             }}
           />
         </div>

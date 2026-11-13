@@ -1,6 +1,6 @@
 "use client"
 
-import { useTrx } from "@/app/(authorized)/transactions/history/trx-ctx"
+import { useTxList } from "@/app/(authorized)/transactions/history/trx-ctx"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
 import {
@@ -37,7 +37,7 @@ import { useFormatter, useTranslations } from "next-intl"
 import { useFilters } from "@/app/(authorized)/transactions/history/filters-ctx"
 
 export function Report() {
-  const { setTrx } = useTrx()
+  const { setTxList } = useTxList()
   const { setFilters } = useFilters()
   const t = useTranslations("transactions.history.report")
   const format = useFormatter()
@@ -123,16 +123,16 @@ export function Report() {
   }
 
   function refresh() {
-    const { revenue, expenses, profit, trxCount, avgTrx } = parseTrx(setTrx)
-    const userTrx = [...new Set(setTrx.map((t) => t.cashier))].reduce(
+    const { revenue, expenses, profit, trxCount, avgTrx } = parseTrx(setTxList)
+    const userTrx = [...new Set(setTxList.map((t) => t.cashier))].reduce(
       (acc, user) => {
-        const trx = setTrx.filter((trx) => trx.cashier === user)
+        const trx = setTxList.filter((trx) => trx.cashier === user)
         acc[user] = parseTrx(trx)
         return acc
       },
       {} as typeof defaultValues.userTrx
     )
-    const timeline = parseTimeline(setTrx)
+    const timeline = parseTimeline(setTxList)
 
     form.setFieldValue("revenue", revenue)
     form.setFieldValue("expenses", expenses)
@@ -145,7 +145,7 @@ export function Report() {
 
   useEffect(() => {
     refresh()
-    return subscribe(setTrx, refresh)
+    return subscribe(setTxList, refresh)
   }, [])
 
   const revenueField = (

@@ -1,6 +1,6 @@
 import { listTransactions } from "@/lib/crud/transactions"
 import { ReportFieldSet } from "./report-fieldset"
-import { TrxProvider } from "./trx-ctx"
+import { TxListProvider } from "./trx-ctx"
 import { TrxList } from "./trx-list"
 import { FiltersProvider } from "./filters-ctx"
 import { Filters } from "./filters"
@@ -31,7 +31,7 @@ export default async function Page() {
       }}
     >
       <HeldProvider initialValue={[]}>
-        <TrxProvider initialValue={trxList}>
+        <TxListProvider initialValue={trxList}>
           <PriceGroupsProvider priceGroups={priceGroups}>
             <UnitsProvider units={units}>
               <div className="space-y-2">
@@ -47,7 +47,7 @@ export default async function Page() {
               </div>
             </UnitsProvider>
           </PriceGroupsProvider>
-        </TrxProvider>
+        </TxListProvider>
       </HeldProvider>
     </FiltersProvider>
   )

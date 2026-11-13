@@ -3,7 +3,7 @@
 import { DatetimeRangeField } from "@/components/datetime-range-field"
 import { useFilters } from "./filters-ctx"
 import { fromDate } from "@internationalized/date"
-import { useTrx } from "./trx-ctx"
+import { useTxList } from "./trx-ctx"
 import { listTransactions } from "@/lib/crud/transactions"
 import { subscribe } from "valtio"
 import { useEffect } from "react"
@@ -21,7 +21,7 @@ export function Filters() {
   const t = useTranslations("transactions.history")
   const tc = useTranslations("common")
   const { getFilters, setFilters } = useFilters()
-  const { setTrx } = useTrx()
+  const { setTxList } = useTxList()
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export function Filters() {
           const newTrxList = await listTransactions(setFilters)
           // a newer filter change already asked for a fresher list
           if (run !== seq) return
-          setTrx.splice(0, setTrx.length, ...newTrxList)
+          setTxList.splice(0, setTxList.length, ...newTrxList)
         } finally {
           // only the latest request may hide the toast
           if (run === seq) toast.dismiss(REFETCH_TOAST_ID)

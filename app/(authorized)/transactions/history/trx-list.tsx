@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { useTrx } from "./trx-ctx"
+import { useTxList } from "./trx-ctx"
 import { TrxRow } from "./trx-row"
 import { useTranslations } from "next-intl"
 import { Button } from "@/components/ui/button"
@@ -17,7 +17,7 @@ import { useUserSettings } from "@/contexts/user-settings"
 export function TrxList() {
   const t = useTranslations("transactions.history")
   const tc = useTranslations("common")
-  const { getTrx } = useTrx()
+  const { getTxList } = useTxList()
   const { getUserSettings, setUserSettings } = useUserSettings()
   return (
     <Table>
@@ -56,7 +56,7 @@ export function TrxList() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {getTrx.map((trx, i) => (
+        {getTxList.map((trx, i) => (
           <TrxRow key={i} trx={trx} />
         ))}
       </TableBody>
