@@ -3,6 +3,7 @@ import {
   uuid,
   varchar,
   foreignKey,
+  index,
   primaryKey,
   numeric,
   timestamp,
@@ -33,6 +34,7 @@ export const items = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
+    index("items_unit_index").on(table.unit),
   ]
 )
 
@@ -118,6 +120,7 @@ export const buyPrices = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("cascade"),
+    index("buy_prices_item_index").on(table.item),
   ]
 )
 
@@ -150,19 +153,25 @@ export const sellPrices = pgTable(
   ]
 )
 
-export const transactions = pgTable("transactions", {
-  id: uuid()
-    .notNull()
-    .primaryKey()
-    .$defaultFn(() => v7()),
-  cashier: varchar().notNull(),
-  totalPrice: numeric("total_price", { mode: "number" }).notNull(),
-  customerPriceGroup: varchar("customer_price_group").notNull(),
-  held: boolean().default(false).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-})
+export const transactions = pgTable(
+  "transactions",
+  {
+    id: uuid()
+      .notNull()
+      .primaryKey()
+      .$defaultFn(() => v7()),
+    cashier: varchar().notNull(),
+    totalPrice: numeric("total_price", { mode: "number" }).notNull(),
+    customerPriceGroup: varchar("customer_price_group").notNull(),
+    held: boolean().default(false).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+  },
+  (table) => [
+    index("transactions_held_created_at_index").on(table.held, table.createdAt),
+  ]
+)
 
 export const transactionItems = pgTable(
   "transaction_items",
@@ -194,6 +203,7 @@ export const transactionItems = pgTable(
     })
       .onUpdate("cascade")
       .onDelete("set null"),
+    index("transaction_items_transaction_index").on(table.transaction),
   ]
 )
 
