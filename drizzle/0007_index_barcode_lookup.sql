@@ -1,0 +1,1 @@
+CREATE INDEX "barcodes_barcode_index" ON "barcodes" USING btree ("barcode");

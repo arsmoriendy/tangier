@@ -50,6 +50,13 @@
       "when": 1794565272860,
       "tag": "0006_add_perf_indexes",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794565737629,
+      "tag": "0007_index_barcode_lookup",
+      "breakpoints": true
     }
   ]
 }

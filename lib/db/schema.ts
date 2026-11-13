@@ -80,6 +80,7 @@ export const barcodes = pgTable(
       columns: [table.item, table.barcodeGroup],
       name: "barcodes_pkey",
     }),
+    index("barcodes_barcode_index").on(table.barcode),
   ]
 )
 

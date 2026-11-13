@@ -148,7 +148,7 @@ Base UI single-select `Combobox` over unconstrained option type `O`.
 - `settings`: singleton `id=1`; `listSettings()` returns nulls when missing, `updateSettings()` upserts.
 - `user_settings.showDecimals` (default `false`) only controls `UserIdrInput`'s trailing `,00`, not `formatCurrency`/receipts.
 - FKs: `ON UPDATE cascade ON DELETE cascade`, except `transaction_items.buyPriceId` (`SET NULL`) and `session`/`account.userId` (`ON DELETE cascade` only).
-- Indexes (drizzle `0006`): `transaction_items(transaction)`, `transactions(held, created_at)`, `buy_prices(item)`, `items(unit)`. Postgres doesn't index FK columns, so keep these when adding relations; `sell_prices`/`barcodes` are already covered by their composite PK leading columns.
+- Indexes: FK/scan indexes in `0006` (`transaction_items(transaction)`, `transactions(held, created_at)`, `buy_prices(item)`, `items(unit)`) and `0007` (`barcodes(barcode)`, the POS barcode lookup). Postgres doesn't index FK columns, so keep these when adding relations; `sell_prices`/`barcodes.item` are covered by their composite PK leading columns.
 
 ## Conventions
 
