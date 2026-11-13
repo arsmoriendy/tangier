@@ -48,6 +48,8 @@ Drizzle: `drizzle-kit` (`drizzle.config.ts`, postgresql, output `./drizzle`, no 
 
 ## Secrets
 
+**Never touch the database and never read secrets.** No agent-side DB work: don't connect to Postgres, don't run `psql`/`drizzle-kit push`/`migrate`/`studio` against a live DB, and don't decrypt or read `secrets.json` (don't ask for `DATABASE_URL` or credentials — access is denied by design). Schema changes ship as generated migration files (`drizzle-kit generate` is an offline snapshot diff, so it's fine); the user applies them.
+
 `secrets.json` is **SOPS-encrypted** (AES256_GCM, PGP `4608BD8B17ABEE9F0DB5DE4AC2333D93F6D7C06F`) with `DATABASE_URL`, `BETTER_AUTH_SECRET`, `BETTER_AUTH_URL`. Decrypt locally; never commit plaintext. Required server env: `DATABASE_URL`, `BETTER_AUTH_SECRET` (≥32 chars), `BETTER_AUTH_URL` (URL). `PRINTER_VID`/`PRINTER_PID`/`PRINTER_WIDTH` default to the values above and are optional. Backup/restore hand `DATABASE_URL` to `pg_dump`/`psql` as `PG*` env vars (`lib/db/pg-env.ts`, tested) so it never lands in argv; URLs that can't be split (keyword/value conninfo, multiple hosts, unknown parameters) fall back to `--dbname` with a warning.
 
 ## Architecture & control flow
@@ -146,6 +148,7 @@ Base UI single-select `Combobox` over unconstrained option type `O`.
 - `settings`: singleton `id=1`; `listSettings()` returns nulls when missing, `updateSettings()` upserts.
 - `user_settings.showDecimals` (default `false`) only controls `UserIdrInput`'s trailing `,00`, not `formatCurrency`/receipts.
 - FKs: `ON UPDATE cascade ON DELETE cascade`, except `transaction_items.buyPriceId` (`SET NULL`) and `session`/`account.userId` (`ON DELETE cascade` only).
+- Indexes (drizzle `0006`): `transaction_items(transaction)`, `transactions(held, created_at)`, `buy_prices(item)`, `items(unit)`. Postgres doesn't index FK columns, so keep these when adding relations; `sell_prices`/`barcodes` are already covered by their composite PK leading columns.
 
 ## Conventions
 
