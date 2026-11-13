@@ -21,15 +21,10 @@ export async function listSettings(): Promise<Settings> {
 }
 
 export async function updateSettings(newSettings: Partial<Settings>) {
-  const exists =
-    (await db.select().from(settings).where(eq(settings.id, 1))).length > 0
+  if (Object.keys(newSettings).length === 0) return
 
-  if (exists) {
-    await db.update(settings).set(newSettings).where(eq(settings.id, 1))
-  } else {
-    await db.insert(settings).values({
-      id: 1,
-      ...newSettings,
-    })
-  }
+  await db
+    .insert(settings)
+    .values({ id: 1, ...newSettings })
+    .onConflictDoUpdate({ target: settings.id, set: newSettings })
 }
