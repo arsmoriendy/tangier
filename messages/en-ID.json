@@ -29,6 +29,7 @@
     "discount": "Discount",
     "qty": "Qty",
     "actions": "Actions",
+    "loading": "Loading…",
     "client": {
       "title": "Client menu",
       "exit": "Exit tangier",

@@ -10,10 +10,12 @@ import { useEffect } from "react"
 import { Input } from "@/components/ui/input"
 import { useTranslations } from "next-intl"
 import { FieldLabel } from "@/components/ui/field"
+import { toast } from "sonner"
 
 // `offset` and the changed filter land as separate proxy mutations, and the id
 // input fires per keystroke, so coalesce them into one refetch.
 const REFETCH_DEBOUNCE_MS = 200
+const REFETCH_TOAST_ID = "history-refetch"
 
 export function Filters() {
   const t = useTranslations("transactions.history")
@@ -27,18 +29,25 @@ export function Filters() {
     let timer: ReturnType<typeof setTimeout> | undefined
 
     const unsubscribe = subscribe(setFilters, () => {
+      const run = ++seq
       clearTimeout(timer)
       timer = setTimeout(async () => {
-        const run = ++seq
-        const newTrxList = await listTransactions(setFilters)
-        // a newer filter change already asked for a fresher list
-        if (run !== seq) return
-        setTrx.splice(0, setTrx.length, ...newTrxList)
+        toast.loading(tc("loading"), { id: REFETCH_TOAST_ID })
+        try {
+          const newTrxList = await listTransactions(setFilters)
+          // a newer filter change already asked for a fresher list
+          if (run !== seq) return
+          setTrx.splice(0, setTrx.length, ...newTrxList)
+        } finally {
+          // only the latest request may hide the toast
+          if (run === seq) toast.dismiss(REFETCH_TOAST_ID)
+        }
       }, REFETCH_DEBOUNCE_MS)
     })
 
     return () => {
       clearTimeout(timer)
+      toast.dismiss(REFETCH_TOAST_ID)
       unsubscribe()
     }
   }, [])
