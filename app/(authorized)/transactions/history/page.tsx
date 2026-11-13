@@ -17,9 +17,11 @@ export default async function Page() {
   const to = new Date(from)
   to.setHours(23, 59, 59, 59)
 
-  const trxList = await listTransactions({ from, to })
-  const priceGroups = await listPriceGroups()
-  const units = await listUnits()
+  const [trxList, priceGroups, units] = await Promise.all([
+    listTransactions({ from, to }),
+    listPriceGroups(),
+    listUnits(),
+  ])
 
   return (
     <FiltersProvider
