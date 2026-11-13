@@ -3,7 +3,7 @@
 import { Printer } from "@node-escpos/core"
 import USB from "@node-escpos/usb-adapter"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
-import { listSettings } from "@/lib/crud/settings"
+import { listSettings, type Settings } from "@/lib/crud/settings"
 import { env } from "@/lib/env"
 import { format } from "date-fns"
 import { formatCols } from "./format-cols"
@@ -98,13 +98,29 @@ export async function printTrxReceipt(trx: TransactionWithRelations) {
   const pid = env.PRINTER_PID
   const width = env.PRINTER_WIDTH
 
-  const settings = await listSettings()
+  const settingsPromise = listSettings()
 
   const device = new USB(vid, pid)
 
-  await new Promise<void>((resolve, reject) =>
-    device.open((err) => (err ? reject(err) : resolve()))
+  // open the device while the header/footer load: both are needed to print and
+  // neither depends on the other.
+  let deviceOpened = false
+  const openedPromise = new Promise<void>((resolve, reject) =>
+    device.open((err) => {
+      if (err) return reject(err)
+      deviceOpened = true
+      resolve()
+    })
   )
+
+  let settings: Settings
+  try {
+    ;[, settings] = await Promise.all([openedPromise, settingsPromise])
+  } catch (e) {
+    // a failed settings read must not leave the device claimed
+    if (deviceOpened) device.close()
+    throw e
+  }
 
   const printer = new Printer(device, { encoding: "ascii", width })
 
