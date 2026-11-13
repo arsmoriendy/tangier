@@ -59,18 +59,14 @@ export function pgEnvFromUrl(databaseUrl: string) {
     return null
   }
 
-  if (url.protocol !== "postgres:" && url.protocol !== "postgresql:") return null
+  if (url.protocol !== "postgres:" && url.protocol !== "postgresql:")
+    return null
 
   const host = url.hostname === "" ? "" : decodeHost(url.hostname)
   const user = decode(url.username)
   const password = decode(url.password)
   const database = decode(url.pathname.slice(1))
-  if (
-    host === null ||
-    user === null ||
-    password === null ||
-    database === null
-  )
+  if (host === null || user === null || password === null || database === null)
     return null
 
   const pgEnv: Record<string, string> = {}

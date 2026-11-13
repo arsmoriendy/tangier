@@ -40,9 +40,9 @@ describe("pgEnvFromUrl", () => {
   })
 
   test("handles a unix socket host", () => {
-    expect(
-      pgEnvFromUrl("postgresql://%2Fvar%2Frun%2Fpostgresql/shop")
-    ).toEqual({ PGHOST: "/var/run/postgresql", PGDATABASE: "shop" })
+    expect(pgEnvFromUrl("postgresql://%2Fvar%2Frun%2Fpostgresql/shop")).toEqual(
+      { PGHOST: "/var/run/postgresql", PGDATABASE: "shop" }
+    )
     expect(pgEnvFromUrl("postgresql:///shop")).toEqual({ PGDATABASE: "shop" })
   })
 
@@ -55,7 +55,9 @@ describe("pgEnvFromUrl", () => {
   })
 
   test("bails out on unknown parameters", () => {
-    expect(pgEnvFromUrl("postgresql://h/shop?sslmode=require&bogus=1")).toBeNull()
+    expect(
+      pgEnvFromUrl("postgresql://h/shop?sslmode=require&bogus=1")
+    ).toBeNull()
   })
 
   test("bails out when the URI can't be mapped faithfully", () => {
