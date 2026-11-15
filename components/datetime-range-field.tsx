@@ -41,7 +41,7 @@ export function DatetimeRangeField<T extends DateValue>({
 
   return (
     <DateRangePicker className={className} {...props}>
-      <FieldLabel className="mb-2">{label}</FieldLabel>
+      {label && <FieldLabel className="mb-2">{label}</FieldLabel>}
       <Group className={cn(inputClass, "flex items-center gap-2 pl-0 text-sm")}>
         <Button className={buttonVariants({ size: "icon", variant: "ghost" })}>
           <CalendarBlankIcon />

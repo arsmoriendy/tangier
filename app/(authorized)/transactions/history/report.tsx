@@ -187,14 +187,7 @@ export function Report() {
   )
 
   return (
-    <Form
-      handleSubmit={form.handleSubmit}
-      className="grid grid-cols-2 items-end gap-2 space-y-0"
-    >
-      {revenueField}
-      {expensesField}
-      {profitField}
-
+    <Form handleSubmit={form.handleSubmit}>
       <Dialog>
         <DialogTrigger asChild>
           <Button type="button">{t("details")}</Button>

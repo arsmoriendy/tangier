@@ -4,8 +4,6 @@ import { DatetimeRangeField } from "@/components/datetime-range-field"
 import { useFilters } from "./filters-ctx"
 import { fromDate } from "@internationalized/date"
 import { Input } from "@/components/ui/input"
-import { useTranslations } from "next-intl"
-import { FieldLabel } from "@/components/ui/field"
 import { useEffect, useState } from "react"
 
 // the id input fires per keystroke, so wait for a pause before changing the
@@ -13,8 +11,6 @@ import { useEffect, useState } from "react"
 const ID_DEBOUNCE_MS = 200
 
 export function Filters() {
-  const t = useTranslations("transactions.history")
-  const tc = useTranslations("common")
   const { getFilters, setFilters } = useFilters()
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone
   const [id, setId] = useState(getFilters.id)
@@ -30,14 +26,15 @@ export function Filters() {
   }, [id, setFilters])
 
   return (
-    <div className="space-y-2">
-      <div className="space-y-2">
-        <FieldLabel>{tc("id")}</FieldLabel>
-        <Input value={id} onChange={(e) => setId(e.target.value)} />
-      </div>
+    <>
+      <Input
+        placeholder="Id"
+        value={id}
+        onChange={(e) => setId(e.target.value)}
+      />
 
       <DatetimeRangeField
-        label={t("filters.timeRange")}
+        className="shrink-0"
         value={{
           start: fromDate(getFilters.from, tz),
           end: fromDate(getFilters.to, tz),
@@ -49,6 +46,6 @@ export function Filters() {
           setFilters.to = v.end.toDate()
         }}
       />
-    </div>
+    </>
   )
 }

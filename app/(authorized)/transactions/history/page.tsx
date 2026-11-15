@@ -1,6 +1,6 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import { getQueryClient } from "@/lib/query-client"
-import { ReportFieldSet } from "./report-fieldset"
+import { Report } from "./report"
 import { TrxList } from "./trx-list"
 import { FiltersProvider } from "./filters-ctx"
 import { Filters } from "./filters"
@@ -10,7 +10,6 @@ import { listPriceGroups } from "@/lib/crud/price-groups"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
 import { UnitsProvider } from "@/contexts/units-ctx"
 import { HeldProvider } from "../held-ctx"
-import { FieldLegend, FieldSet } from "@/components/ui/field"
 
 export default async function Page() {
   const from = new Date()
@@ -37,13 +36,10 @@ export default async function Page() {
         <HeldProvider initialValue={[]}>
           <PriceGroupsProvider priceGroups={priceGroups}>
             <UnitsProvider units={units}>
-              <div className="flex h-svh flex-col gap-2 overflow-hidden">
-                <div className="flex max-h-[50svh] shrink-0 justify-stretch gap-2 overflow-auto px-2 pt-2">
-                  <FieldSet className="xl:flex-1">
-                    <FieldLegend>Filters</FieldLegend>
-                    <Filters />
-                  </FieldSet>
-                  <ReportFieldSet />
+              <div className="flex h-svh flex-col">
+                <div className="flex gap-2 p-2">
+                  <Filters />
+                  <Report />
                 </div>
 
                 <TrxList />
