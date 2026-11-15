@@ -1,6 +1,5 @@
 "use client"
 
-import { useTxList } from "@/app/(authorized)/transactions/history/trx-ctx"
 import { Form, useAppForm } from "@/components/form"
 import { Button } from "@/components/ui/button"
 import {
@@ -22,7 +21,7 @@ import {
 } from "@/components/ui/dialog"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { useEffect } from "react"
-import { subscribe } from "valtio"
+import { useQuery } from "@tanstack/react-query"
 import z from "zod"
 import {
   Chart,
@@ -35,10 +34,11 @@ import {
 import { getRandomColor, getRandomColors } from "@/lib/catpuccun-colors"
 import { useFormatter, useTranslations } from "next-intl"
 import { useFilters } from "@/app/(authorized)/transactions/history/filters-ctx"
+import { trxReportQueryOptions } from "./trx-query"
 
 export function Report() {
-  const { setTxList } = useTxList()
-  const { setFilters } = useFilters()
+  const { getFilters } = useFilters()
+  const { data: trx } = useQuery(trxReportQueryOptions(getFilters))
   const t = useTranslations("transactions.history.report")
   const format = useFormatter()
 
@@ -92,8 +92,8 @@ export function Report() {
     if (trx.length < 1) return timeline
 
     // initialize timeline
-    const minDate = new Date(setFilters.from!)
-    const maxDate = new Date(setFilters.to!)
+    const minDate = new Date(getFilters.from)
+    const maxDate = new Date(getFilters.to)
     minDate.setHours(0, 0, 0, 0)
     maxDate.setHours(24, 0, 0, 0)
     const duration = msBetween(maxDate, minDate)
@@ -122,17 +122,17 @@ export function Report() {
     return timeline
   }
 
-  function refresh() {
-    const { revenue, expenses, profit, trxCount, avgTrx } = parseTrx(setTxList)
-    const userTrx = [...new Set(setTxList.map((t) => t.cashier))].reduce(
+  function refresh(trx: TransactionWithRelations[]) {
+    const { revenue, expenses, profit, trxCount, avgTrx } = parseTrx(trx)
+    const userTrx = [...new Set(trx.map((t) => t.cashier))].reduce(
       (acc, user) => {
-        const trx = setTxList.filter((trx) => trx.cashier === user)
-        acc[user] = parseTrx(trx)
+        const userTransactions = trx.filter((trx) => trx.cashier === user)
+        acc[user] = parseTrx(userTransactions)
         return acc
       },
       {} as typeof defaultValues.userTrx
     )
-    const timeline = parseTimeline(setTxList)
+    const timeline = parseTimeline(trx)
 
     form.setFieldValue("revenue", revenue)
     form.setFieldValue("expenses", expenses)
@@ -144,9 +144,11 @@ export function Report() {
   }
 
   useEffect(() => {
-    refresh()
-    return subscribe(setTxList, refresh)
-  }, [])
+    if (!trx) return
+
+    refresh(trx)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trx])
 
   const revenueField = (
     <form.AppField name="revenue">

@@ -3,7 +3,7 @@
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { formatCurrency } from "@/lib/i18n/currency"
-import { useEffect, useState } from "react"
+import { ComponentProps, useEffect, useState } from "react"
 import { useFormatter } from "next-intl"
 import {
   Collapsible,
@@ -20,9 +20,10 @@ import { quantifiedSellPrice } from "@/lib/quantified-sell-price"
 
 export function TrxRow({
   trx,
+  ...props
 }: {
   trx: DeepReadonly<TransactionWithRelations>
-}) {
+} & ComponentProps<typeof TableRow>) {
   const createdDate = new Date(trx.createdAt)
   const { setUserSettings } = useUserSettings()
   const [showItems, setShowItems] = useState(false)
@@ -39,7 +40,7 @@ export function TrxRow({
   }, [])
 
   return (
-    <TableRow>
+    <TableRow {...props}>
       <TableCell className="align-top">
         <div className="flex h-8 flex-col items-end">
           <small className="text-muted-foreground">{trx.id.slice(0, 24)}</small>

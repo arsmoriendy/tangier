@@ -1,9 +1,10 @@
-import { listTransactions } from "@/lib/crud/transactions"
+import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
+import { getQueryClient } from "@/lib/query-client"
 import { ReportFieldSet } from "./report-fieldset"
-import { TxListProvider } from "./trx-ctx"
 import { TrxList } from "./trx-list"
 import { FiltersProvider } from "./filters-ctx"
 import { Filters } from "./filters"
+import { trxListQueryOptions } from "./trx-query"
 import { listUnits } from "@/lib/crud/units"
 import { listPriceGroups } from "@/lib/crud/price-groups"
 import { PriceGroupsProvider } from "@/contexts/price-groups-ctx"
@@ -17,25 +18,27 @@ export default async function Page() {
   const to = new Date(from)
   to.setHours(23, 59, 59, 59)
 
-  const [trxList, priceGroups, units] = await Promise.all([
-    listTransactions({ from, to }),
+  const filters = { id: "", from, to }
+
+  const [priceGroups, units] = await Promise.all([
     listPriceGroups(),
     listUnits(),
   ])
 
+  // the first page is fetched on the server and hydrated into the query cache,
+  // so the client starts with rows instead of a loading state and only asks for
+  // more when the list is scrolled
+  const queryClient = getQueryClient()
+  await queryClient.prefetchInfiniteQuery(trxListQueryOptions(filters))
+
   return (
-    <FiltersProvider
-      initialValue={{
-        to,
-        from,
-      }}
-    >
-      <HeldProvider initialValue={[]}>
-        <TxListProvider initialValue={trxList}>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <FiltersProvider initialValue={filters}>
+        <HeldProvider initialValue={[]}>
           <PriceGroupsProvider priceGroups={priceGroups}>
             <UnitsProvider units={units}>
-              <div className="space-y-2">
-                <div className="flex justify-stretch gap-2 px-2 pt-2">
+              <div className="flex h-svh flex-col gap-2 overflow-hidden">
+                <div className="flex max-h-[50svh] shrink-0 justify-stretch gap-2 overflow-auto px-2 pt-2">
                   <FieldSet className="xl:flex-1">
                     <FieldLegend>Filters</FieldLegend>
                     <Filters />
@@ -47,8 +50,8 @@ export default async function Page() {
               </div>
             </UnitsProvider>
           </PriceGroupsProvider>
-        </TxListProvider>
-      </HeldProvider>
-    </FiltersProvider>
+        </HeldProvider>
+      </FiltersProvider>
+    </HydrationBoundary>
   )
 }

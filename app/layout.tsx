@@ -9,6 +9,7 @@ import { NextIntlClientProvider } from "next-intl"
 import { ZodConfig } from "@/lib/zod-config"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { getLocale } from "next-intl/server"
+import QueryProvider from "@/components/query-provider"
 
 const fontSans = Geist({
   subsets: ["latin"],
@@ -49,8 +50,10 @@ export default async function RootLayout({
               <I18nProvider>
                 <TooltipProvider>
                   <ZodConfig>
-                    {children}
-                    <Toaster />
+                    <QueryProvider>
+                      {children}
+                      <Toaster />
+                    </QueryProvider>
                   </ZodConfig>
                 </TooltipProvider>
               </I18nProvider>

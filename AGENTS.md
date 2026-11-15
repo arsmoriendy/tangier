@@ -59,7 +59,7 @@ Drizzle: `drizzle-kit` (`drizzle.config.ts`, postgresql, output `./drizzle`, no 
 - `app/auth/` — unauthenticated sign-in/up; `auth/inactive/` for `active=false` (where `getSessionOrRedirect` sends them).
 - `app/(authorized)/` — `getSessionOrRedirect()` (session + `user.active`); layout adds `SessionProvider`/`UserSettingsProvider`/`SidebarProvider`/`AppSidebar` and seeds settings via `getUserSettings({ userId })`.
 - `app/(authorized)/(admin)/` — `getSessionOrRedirect({ admin: true })` (inactive → `/auth/inactive`, otherwise `/auth`); holds `items`, `units`, `price-groups`, `barcode-groups`, `users`, `backup-restore`; sidebar links are admin-only.
-- `app/(authorized)/transactions/` — POS UI (`new/` form, `history/` past + reports), all authorized users.
+- `app/(authorized)/transactions/` — POS UI (`new/` form, `history/` past + reports), all authorized users. `history/` is a react-query infinite list (`trx-query.ts`) virtualized with `@tanstack/react-virtual`; page 1 is prefetched on the server and hydrated into the cache.
 - `app/(authorized)/options/` — settings + receipt header/footer; all users, some user-settings controls admin-gated (receipt fields are not).
 - `app/page.tsx` → `/transactions/new`.
 - `app/api/auth/[...all]/route.ts` — better-auth handler (`toNextJsHandler`).
@@ -79,7 +79,7 @@ Drizzle: `drizzle-kit` (`drizzle.config.ts`, postgresql, output `./drizzle`, no 
 
 Two trees, React Context + **valtio** proxies.
 
-1. Root (`app/layout.tsx`): `ThemeProvider` → `LocalStorageProvider` → `NextIntlClientProvider` → `I18nProvider` → `TooltipProvider` → `ZodConfig` → children + `<Toaster/>`.
+1. Root (`app/layout.tsx`): `ThemeProvider` → `LocalStorageProvider` → `NextIntlClientProvider` → `I18nProvider` → `TooltipProvider` → `ZodConfig` → `QueryProvider` (react-query, `lib/query-client.ts`) → children + `<Toaster/>`.
 2. Per page (server components, e.g. `transactions/new/page.tsx`) fetch data, then compose the providers needed (`PriceGroupsProvider`, `UnitsProvider`, `ItemsProvider`, `HeldProvider`, `TrxProvider`, `FiltersProvider`, …).
 
 - `ValtioContext<T> = { proxy: T; snap: Snapshot<T> }` (`contexts/valtio-context.d.ts`): Items, Held, Trx, Filters, UserSettings, LocalStorage; hooks expose `{ setX: proxy, getX: snap }`. PriceGroups/Units/BarcodeGroups use `StateContext<T>` (`{ state, setState }`); Session is plain React context.
@@ -181,7 +181,7 @@ Base UI single-select `Combobox` over unconstrained option type `O`.
 - **Sidebar collapse**: `user_settings.collapseSidebar` is two-way bound via `components/app-sidebar/persistent-sidebar-provider.tsx` (`SidebarProvider` is controlled); header toggles persist it, but `contexts/user-settings.tsx` suppresses the update toast because it is in `silentUserSettings`. Mobile sheet toggles (`openMobile`) don't persist.
 - **Held/recall**: fetch held transactions with `listTransactions({ held: true, from: new Date(0), ... })` — the default 3-hour window would miss them. Recalling updates the held transaction in place rather than creating a new one.
 - **`formatCols` prioritizes one column** (usually the rightmost/price column) and truncates the rest to fit; the overflow tests encode exact behavior. Re-run them if you change the width default.
-- **History refetch is debounced** (`REFETCH_DEBOUNCE_MS` in `history/filters.tsx`): the id input fires per keystroke and `offset`/filter land as separate valtio mutations, so the subscription coalesces them into one `listTransactions` call; the `seq` guard still drops out-of-order responses.
+- **History list is paged by offset** (`history/trx-query.ts`, 10 rows/page, `staleTime: 0` so a remount refetches the loaded pages): the filters proxy is serialized into the query key, so changing a filter starts a new query at page 1 and resets the scroll; the virtualizer calls `fetchNextPage` when the loader row enters the window (`getNextPageParam` stops on a short page), and `flattenTrxPages` (`lib/trx-pagination.ts`, tested) drops the duplicate ids offset paging can produce. The id input is debounced (`ID_DEBOUNCE_MS` in `filters.tsx`) before it reaches the proxy.
 - **Pre-commit hook needs a tty**: `.git/hooks/pre-commit` does `exec </dev/tty` to prompt about remote URLs, so it aborts in non-interactive/agent shells. Commit interactively, or `git commit --no-verify` when a session explicitly allows committing.
 - **`showHisotryItems`** [sic] in the `user_settings` column/defaults; **`defaultUserSetings`** [sic] in `lib/default-user-settings.ts`. Preserve the DB typo (or migrate it); the export typo is independent.
 - **`next.config.mjs`**: `serverExternalPackages: ["usb"]` (native USB binding), `transpilePackages` includes `@t3-oss/env-nextjs` + `@t3-oss/env-core`, `output: "standalone"` (Dockerfile).

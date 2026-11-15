@@ -150,6 +150,7 @@
       "deleteDescription": "Apakah anda yakin ingin menghapus transaksi tertahan ini?"
     },
     "history": {
+      "noTransactions": "Belum ada transaksi",
       "filters": {
         "timeRange": "Rentang waktu",
         "from": "Dari",

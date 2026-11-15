@@ -1,19 +1,19 @@
 "use client"
 
 import { ValtioContext } from "@/contexts/valtio-context"
-import { type listTransactions } from "@/lib/crud/transactions"
 import { createContext, ReactNode, useContext } from "react"
 import { proxy, useSnapshot } from "valtio"
+import { type TrxFilters } from "./trx-query"
 
-type Filters = NonNullable<Parameters<typeof listTransactions>[0]>
-
-const filtersCtx = createContext<ValtioContext<Filters> | undefined>(undefined)
+const filtersCtx = createContext<ValtioContext<TrxFilters> | undefined>(
+  undefined
+)
 
 export function FiltersProvider({
   initialValue,
   children,
 }: {
-  initialValue: Filters
+  initialValue: TrxFilters
   children: ReactNode
 }) {
   const setter = proxy(initialValue)

@@ -1,4 +1,3 @@
-import { useTxList } from "@/app/(authorized)/transactions/history/trx-ctx"
 import TransactionForm from "@/app/(authorized)/transactions/transaction-form"
 import { Button } from "@/components/ui/button"
 import {
@@ -11,6 +10,8 @@ import {
 import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { PencilIcon, XIcon } from "@phosphor-icons/react"
 import { useState } from "react"
+import { useQueryClient } from "@tanstack/react-query"
+import { invalidateTrxQueries } from "./trx-query"
 
 export function EditTrxDialog({
   trx,
@@ -18,7 +19,7 @@ export function EditTrxDialog({
   trx: DeepReadonly<TransactionWithRelations>
 }) {
   const [open, setOpen] = useState(false)
-  const { setTxList } = useTxList()
+  const queryClient = useQueryClient()
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -48,9 +49,8 @@ export function EditTrxDialog({
           <TransactionForm
             className="m-2"
             transaction={trx}
-            onUpdate={(trx) => {
-              const i = setTxList.findIndex((t) => t.id === trx.id)
-              if (i !== -1) setTxList[i] = trx
+            onUpdate={async () => {
+              await invalidateTrxQueries(queryClient)
             }}
           />
         </div>

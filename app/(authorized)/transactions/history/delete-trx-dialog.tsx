@@ -1,4 +1,3 @@
-import { useTxList } from "@/app/(authorized)/transactions/history/trx-ctx"
 import { DeleteAlert } from "@/components/delete-alert"
 import { Button } from "@/components/ui/button"
 import {
@@ -7,6 +6,8 @@ import {
 } from "@/lib/crud/transactions"
 import { TrashIcon } from "@phosphor-icons/react"
 import { useTranslations } from "next-intl"
+import { useQueryClient } from "@tanstack/react-query"
+import { invalidateTrxQueries } from "./trx-query"
 
 export function DeleteTrxDialog({
   trx,
@@ -14,7 +15,7 @@ export function DeleteTrxDialog({
   trx: DeepReadonly<TransactionWithRelations>
 }) {
   const t = useTranslations("transactions.history")
-  const { setTxList } = useTxList()
+  const queryClient = useQueryClient()
 
   return (
     <DeleteAlert
@@ -22,8 +23,7 @@ export function DeleteTrxDialog({
       description={t("table.deleteDescription")}
       action={async () => {
         await deleteTransaction(trx.id)
-        const i = setTxList.findIndex((t) => t.id === trx.id)
-        if (i !== -1) setTxList.splice(i, 1)
+        await invalidateTrxQueries(queryClient)
       }}
       trigger={
         <Button variant="destructive" size="icon">
