@@ -45,7 +45,7 @@
   "sidebar": {
     "transactions": {
       "newTransaction": "Transaksi baru",
-      "history": "Riwayat"
+      "history": "Riwayat & Laporan"
     },
     "units": "Satuan",
     "priceGroups": "Kelompok harga",

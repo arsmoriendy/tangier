@@ -45,7 +45,7 @@
   "sidebar": {
     "transactions": {
       "newTransaction": "New transaction",
-      "history": "History"
+      "history": "History & Report"
     },
     "units": "Units",
     "priceGroups": "Price groups",
