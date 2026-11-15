@@ -1,7 +1,6 @@
 "use client"
 
 import { Form, useAppForm } from "@/components/form"
-import { Button } from "@/components/ui/button"
 import {
   Area,
   AreaChart,
@@ -13,12 +12,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts"
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
 import { TransactionWithRelations } from "@/lib/crud/transactions"
 import { useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
@@ -36,7 +29,7 @@ import { useFormatter, useTranslations } from "next-intl"
 import { useFilters } from "@/app/(authorized)/transactions/history/filters-ctx"
 import { trxReportQueryOptions } from "./trx-query"
 
-export function Report() {
+export function ReportContent() {
   const { getFilters } = useFilters()
   const { data: trx } = useQuery(trxReportQueryOptions(getFilters))
   const t = useTranslations("transactions.history.report")
@@ -188,162 +181,145 @@ export function Report() {
 
   return (
     <Form handleSubmit={form.handleSubmit}>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button type="button">{t("details")}</Button>
-        </DialogTrigger>
-        <DialogContent className="max-h-[92vh] overflow-auto">
-          <DialogTitle>{t("title")}</DialogTitle>
+      <div className="flex gap-2">
+        {revenueField}
+        {expensesField}
+      </div>
+      {profitField}
 
-          <div className="flex gap-2">
-            {revenueField}
-            {expensesField}
-          </div>
-          {profitField}
+      <div className="flex items-end gap-2">
+        <form.AppField name="trxCount">
+          {(field) => <field.NumberField label={t("trxCount")} disabled />}
+        </form.AppField>
 
-          <div className="flex items-end gap-2">
-            <form.AppField name="trxCount">
-              {(field) => <field.NumberField label={t("trxCount")} disabled />}
-            </form.AppField>
+        <form.AppField name="avgTrx">
+          {(field) => (
+            <field.IdrField
+              label={t("avgTrx")}
+              disabled
+              inputClass="bg-warning/25"
+            />
+          )}
+        </form.AppField>
+      </div>
 
-            <form.AppField name="avgTrx">
-              {(field) => (
-                <field.IdrField
-                  label={t("avgTrx")}
-                  disabled
-                  inputClass="bg-warning/25"
-                />
-              )}
-            </form.AppField>
-          </div>
+      <form.Subscribe selector={(form) => form.values.userTrx}>
+        {(userTrx) => {
+          const users = Object.keys(userTrx)
+          const entries = Object.entries(userTrx)
 
-          <form.Subscribe selector={(form) => form.values.userTrx}>
-            {(userTrx) => {
-              const users = Object.keys(userTrx)
-              const entries = Object.entries(userTrx)
+          if (users.length < 2) return undefined
 
-              if (users.length < 2) return undefined
+          const colors = getRandomColors(users.length)
+          const salesData = entries.map(([user, trx], i) => ({
+            user,
+            count: trx.trxCount,
+            fill: "#" + colors[i],
+          }))
+          const revenueData = entries.map(([user, trx], i) => ({
+            user,
+            revenue: trx.revenue,
+            fill: "#" + colors[i],
+          }))
+          const config = Object.fromEntries(
+            entries.map(([user]) => [user, { label: user }])
+          )
 
-              const colors = getRandomColors(users.length)
-              const salesData = entries.map(([user, trx], i) => ({
-                user,
-                count: trx.trxCount,
-                fill: "#" + colors[i],
-              }))
-              const revenueData = entries.map(([user, trx], i) => ({
-                user,
-                revenue: trx.revenue,
-                fill: "#" + colors[i],
-              }))
-              const config = Object.fromEntries(
-                entries.map(([user]) => [user, { label: user }])
-              )
+          const pieChartMargin = 0
 
-              const pieChartMargin = 0
-
-              function pieChart(
-                data: PieProps["data"],
-                dataKey: string,
-                label: string
-              ) {
-                return (
-                  <Chart config={config}>
-                    <PieChart
-                      width="50%"
-                      height={240}
-                      margin={{
-                        top: pieChartMargin,
-                        right: pieChartMargin,
-                        bottom: pieChartMargin,
-                        left: pieChartMargin,
-                      }}
-                    >
-                      <ChartTooltip content={<ChartTooltipContent />} />
-                      <Pie
-                        stroke="0"
-                        data={data}
-                        nameKey="user"
-                        dataKey={dataKey}
-                        innerRadius={40}
-                      >
-                        <Label position="center">{label}</Label>
-                      </Pie>
-                    </PieChart>
-                  </Chart>
-                )
-              }
-
-              return (
-                <div className="flex">
-                  {pieChart(salesData, "count", t("sales"))}
-                  {pieChart(revenueData, "revenue", t("revenue"))}
-                </div>
-              )
-            }}
-          </form.Subscribe>
-
-          <form.Subscribe selector={(form) => form.values.timeline}>
-            {(timeline) => {
-              const timelineData = Object.entries(timeline).map(
-                ([k, sales]) => ({
-                  timestamp: k,
-                  sales,
-                })
-              )
-
-              if (timelineData.length < 2) {
-                return undefined
-              }
-
-              const color = getRandomColor()
-              return (
-                <ChartContainer config={{ sales: { label: t("sales") } }}>
-                  <AreaChart
-                    accessibilityLayer
-                    data={timelineData}
-                    margin={{ left: -30 }}
+          function pieChart(
+            data: PieProps["data"],
+            dataKey: string,
+            label: string
+          ) {
+            return (
+              <Chart config={config}>
+                <PieChart
+                  width="50%"
+                  height={240}
+                  margin={{
+                    top: pieChartMargin,
+                    right: pieChartMargin,
+                    bottom: pieChartMargin,
+                    left: pieChartMargin,
+                  }}
+                >
+                  <ChartTooltip content={<ChartTooltipContent />} />
+                  <Pie
+                    stroke="0"
+                    data={data}
+                    nameKey="user"
+                    dataKey={dataKey}
+                    innerRadius={40}
                   >
-                    <defs>
-                      <linearGradient
-                        id="fillSales"
-                        x1="0"
-                        y1="0"
-                        x2="0"
-                        y2="1"
-                      >
-                        <stop
-                          offset="5%"
-                          stopColor={`#${color}`}
-                          stopOpacity={0.8}
-                        />
-                        <stop
-                          offset="95%"
-                          stopColor={`#${color}`}
-                          stopOpacity={0.1}
-                        />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid vertical={false} />
-                    <XAxis dataKey="timestamp" />
-                    <YAxis dataKey="sales" />
-                    <ChartTooltip
-                      content={<ChartTooltipContent indicator="line" />}
+                    <Label position="center">{label}</Label>
+                  </Pie>
+                </PieChart>
+              </Chart>
+            )
+          }
+
+          return (
+            <div className="flex">
+              {pieChart(salesData, "count", t("sales"))}
+              {pieChart(revenueData, "revenue", t("revenue"))}
+            </div>
+          )
+        }}
+      </form.Subscribe>
+
+      <form.Subscribe selector={(form) => form.values.timeline}>
+        {(timeline) => {
+          const timelineData = Object.entries(timeline).map(([k, sales]) => ({
+            timestamp: k,
+            sales,
+          }))
+
+          if (timelineData.length < 2) {
+            return undefined
+          }
+
+          const color = getRandomColor()
+          return (
+            <ChartContainer config={{ sales: { label: t("sales") } }}>
+              <AreaChart
+                accessibilityLayer
+                data={timelineData}
+                margin={{ left: -30 }}
+              >
+                <defs>
+                  <linearGradient id="fillSales" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="5%"
+                      stopColor={`#${color}`}
+                      stopOpacity={0.8}
                     />
-                    <Area
-                      dot
-                      dataKey="sales"
-                      type="step"
-                      fill="url(#fillSales)"
-                      stroke={`#${color}`}
+                    <stop
+                      offset="95%"
+                      stopColor={`#${color}`}
+                      stopOpacity={0.1}
                     />
-                    <ChartLegend content={<ChartLegendContent />} />
-                  </AreaChart>
-                </ChartContainer>
-              )
-            }}
-          </form.Subscribe>
-        </DialogContent>
-      </Dialog>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid vertical={false} />
+                <XAxis dataKey="timestamp" />
+                <YAxis dataKey="sales" />
+                <ChartTooltip
+                  content={<ChartTooltipContent indicator="line" />}
+                />
+                <Area
+                  dot
+                  dataKey="sales"
+                  type="step"
+                  fill="url(#fillSales)"
+                  stroke={`#${color}`}
+                />
+                <ChartLegend content={<ChartLegendContent />} />
+              </AreaChart>
+            </ChartContainer>
+          )
+        }}
+      </form.Subscribe>
     </Form>
   )
 }

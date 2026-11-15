@@ -1,6 +1,6 @@
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query"
 import { getQueryClient } from "@/lib/query-client"
-import { Report } from "./report"
+import { ReportDialog } from "./report-dialog"
 import { TrxList } from "./trx-list"
 import { FiltersProvider } from "./filters-ctx"
 import { Filters } from "./filters"
@@ -39,7 +39,7 @@ export default async function Page() {
               <div className="flex h-svh flex-col">
                 <div className="flex gap-2 p-2">
                   <Filters />
-                  <Report />
+                  <ReportDialog />
                 </div>
 
                 <TrxList />
