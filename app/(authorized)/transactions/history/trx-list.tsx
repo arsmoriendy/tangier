@@ -140,9 +140,10 @@ export function TrxList() {
         >
           <TableRow>
             <TableHead className="text-right">{tc("id")}</TableHead>
-            <TableHead className="flex items-center justify-between">
+            <TableHead className="relative">
               {tc("items")}
               <Button
+                className="absolute right-1 bottom-1"
                 size="icon-xs"
                 variant="outline"
                 onClick={() =>
