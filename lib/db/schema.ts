@@ -222,7 +222,6 @@ export const userSettings = pgTable(
     showHisotryItems: boolean().default(false).notNull(),
     showTrxSummary: boolean().default(false).notNull(),
     showTrxBuyPrice: boolean().default(false).notNull(),
-    showHistoryReports: boolean().default(false).notNull(),
     showMarginAndDiscounts: boolean().default(false).notNull(),
     coloredSellPrice: boolean().default(false).notNull(),
     uppercaseInput: boolean().default(true).notNull(),

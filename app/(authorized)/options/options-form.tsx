@@ -74,14 +74,6 @@ export default function OptionsForm({
         <FieldSet>
           <FieldLegend variant="label">{t("historyPage")}</FieldLegend>
 
-          <AdminOnly>
-            <OptionCheckbox
-              checked={getUserSettings.showHistoryReports}
-              onCheckedChange={(c) => (setUserSettings.showHistoryReports = c)}
-              label={ts("showHistoryReports")}
-            />
-          </AdminOnly>
-
           <OptionCheckbox
             checked={getUserSettings.showHisotryItems}
             onCheckedChange={(c) => (setUserSettings.showHisotryItems = c)}
