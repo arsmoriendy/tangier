@@ -270,7 +270,13 @@
       "delete": "Hapus",
       "deleteDescription": "Apakah anda yakin ingin menghapus pengguna ini?",
       "admin": "Admin",
-      "active": "Aktif"
+      "active": "Aktif",
+      "promote": "Jadikan admin",
+      "promoteTitle": "Jadikan admin?",
+      "promoteDescription": "Apakah anda yakin ingin menjadikan {name} sebagai admin? Admin dapat mengakses semua halaman, termasuk pengguna, backup, dan restore.",
+      "enable": "Aktifkan",
+      "enableTitle": "Aktifkan pengguna?",
+      "enableDescription": "Apakah anda yakin ingin mengaktifkan {name}? Pengguna akan dapat masuk dan menggunakan aplikasi."
     },
     "toast": {
       "updated": "Pengguna diperbarui",

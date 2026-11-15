@@ -1,5 +1,6 @@
 "use client"
 
+import { Alert } from "@/components/alert"
 import { DeleteAlert } from "@/components/delete-alert"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -22,6 +23,17 @@ export function UsersTable() {
   const t = useTranslations("users.table")
   const tt = useTranslations("users.toast")
 
+  async function updateUser(
+    userId: string,
+    data: { role?: "admin" | "user"; active?: boolean }
+  ) {
+    await authClient.admin.updateUser({ userId, data })
+    const updated = usersProxy.find((u) => u.id === userId)
+    if (!updated) return
+    Object.assign(updated, data)
+    toast.success(tt("updated"))
+  }
+
   return (
     <Table>
       <TableHeader>
@@ -35,45 +47,51 @@ export function UsersTable() {
 
       <TableBody>
         {usersSnap.map((user, i) => {
-          const disabled = user.role === "admin"
+          const isAdmin = user.role === "admin"
+          const adminId = `${user.id}-admin`
+          const activeId = `${user.id}-active`
           return (
             <TableRow key={i}>
               <TableCell>{user.name}</TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  <Checkbox
-                    id={`${user.id}-admin`}
-                    checked={user.role === "admin"}
-                    disabled={disabled}
-                    onCheckedChange={async (checked: boolean) => {
-                      const role = checked ? "admin" : "user"
-                      await authClient.admin.updateUser({
-                        userId: user.id,
-                        data: { role },
-                      })
-                      usersProxy.find((u) => u.id === user.id)!.role = role
-                      toast.success(tt("updated"))
-                    }}
-                  />
-                  <label htmlFor={`${user.id}-admin`}>{t("admin")}</label>
+                  {isAdmin ? (
+                    <Checkbox id={adminId} checked disabled />
+                  ) : (
+                    <Alert
+                      title={<>{t("promoteTitle")}</>}
+                      description={t("promoteDescription", {
+                        name: user.name,
+                      })}
+                      actionLabel={t("promote")}
+                      action={() => updateUser(user.id, { role: "admin" })}
+                      trigger={<Checkbox id={adminId} checked={false} />}
+                    />
+                  )}
+                  <label htmlFor={adminId}>{t("admin")}</label>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex gap-2">
-                  <Checkbox
-                    id={`${user.id}-active`}
-                    checked={user.active}
-                    disabled={disabled}
-                    onCheckedChange={async (checked: boolean) => {
-                      await authClient.admin.updateUser({
-                        userId: user.id,
-                        data: { active: checked },
-                      })
-                      usersProxy.find((u) => u.id === user.id)!.active = checked
-                      toast.success(tt("updated"))
-                    }}
-                  />
-                  <label htmlFor={`${user.id}-active`}>{t("active")}</label>
+                  {isAdmin || user.active ? (
+                    <Checkbox
+                      id={activeId}
+                      checked={user.active}
+                      disabled={isAdmin}
+                      onCheckedChange={(checked: boolean) =>
+                        updateUser(user.id, { active: checked })
+                      }
+                    />
+                  ) : (
+                    <Alert
+                      title={<>{t("enableTitle")}</>}
+                      description={t("enableDescription", { name: user.name })}
+                      actionLabel={t("enable")}
+                      action={() => updateUser(user.id, { active: true })}
+                      trigger={<Checkbox id={activeId} checked={false} />}
+                    />
+                  )}
+                  <label htmlFor={activeId}>{t("active")}</label>
                 </div>
               </TableCell>
               <TableCell>
@@ -89,7 +107,7 @@ export function UsersTable() {
                     toast.error(tt("deleted"))
                   }}
                   trigger={
-                    <Button variant="destructive" disabled={disabled}>
+                    <Button variant="destructive" disabled={isAdmin}>
                       {t("delete")}
                     </Button>
                   }

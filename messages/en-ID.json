@@ -268,7 +268,13 @@
       "delete": "Delete",
       "deleteDescription": "Are you sure you want to delete this user?",
       "admin": "Admin",
-      "active": "Active"
+      "active": "Active",
+      "promote": "Promote",
+      "promoteTitle": "Promote to admin?",
+      "promoteDescription": "Are you sure you want to promote {name} to admin? Admins can access every page, including users, backup and restore.",
+      "enable": "Enable",
+      "enableTitle": "Enable user?",
+      "enableDescription": "Are you sure you want to enable {name}? They will be able to log in and use the app."
     },
     "toast": {
       "updated": "User updated",
