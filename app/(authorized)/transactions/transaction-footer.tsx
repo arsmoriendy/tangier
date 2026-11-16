@@ -42,6 +42,7 @@ import { useSidebar } from "@/components/ui/sidebar"
 import AppButton, { AppButtonProps } from "@/components/app-button"
 import { useEditedTrx } from "@/app/(authorized)/transactions/edited-trx-ctx"
 import { useSession } from "@/contexts/session-ctx"
+import { Button } from "@/components/ui/button"
 
 function FooterBar({ className, ...props }: ComponentProps<"div">) {
   return (
@@ -303,33 +304,28 @@ export const TransactionFooter = withForm({
 
           {editedTrx !== undefined && (
             <div className="absolute -top-4 right-2 flex gap-2">
-              <Badge>
-                <UserIcon />
-                {cashier}
-
-                {editedTrx.cashier !== session.user.name && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        type="button"
-                        aria-label={t("changeCashier")}
-                        onClick={() => setOverrideCashier(!overrideCashier)}
-                      >
-                        <UserSwitchIcon />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      {overrideCashier
-                        ? t("keepOriginalCashier", {
-                            name: editedTrx.cashier,
-                          })
-                        : t("useCurrentCashier", {
-                            name: session.user.name,
-                          })}
-                    </TooltipContent>
-                  </Tooltip>
-                )}
-              </Badge>
+              {editedTrx.cashier !== session.user.name && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size="badge"
+                      onClick={() => setOverrideCashier(!overrideCashier)}
+                    >
+                      <UserSwitchIcon />
+                      {cashier}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {overrideCashier
+                      ? t("keepOriginalCashier", {
+                          name: editedTrx.cashier,
+                        })
+                      : t("useCurrentCashier", {
+                          name: session.user.name,
+                        })}
+                  </TooltipContent>
+                </Tooltip>
+              )}
 
               {editedTrx.held && (
                 <RecallBadge
