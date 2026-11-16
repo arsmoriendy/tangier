@@ -9,6 +9,7 @@ import {
   TrashIcon,
   ArrowCounterClockwiseIcon,
   UserIcon,
+  UserSwitchIcon,
 } from "@phosphor-icons/react/dist/ssr"
 import { AddItemForm } from "@/app/(authorized)/transactions/add-item-form"
 import { AddItemProvider } from "@/app/(authorized)/transactions/add-item-ctx"
@@ -40,6 +41,7 @@ import { toast } from "sonner"
 import { useSidebar } from "@/components/ui/sidebar"
 import AppButton, { AppButtonProps } from "@/components/app-button"
 import { useEditedTrx } from "@/app/(authorized)/transactions/edited-trx-ctx"
+import { useSession } from "@/contexts/session-ctx"
 
 function FooterBar({ className, ...props }: ComponentProps<"div">) {
   return (
@@ -164,6 +166,7 @@ export const TransactionFooter = withForm({
     openRecallDialog: false,
     setOpenRecallDialog: (_open: boolean) => {},
     hideHoldRecall: false,
+    cashier: "",
     onHold: (): void | Promise<void> => {},
     onCancelRecall: () => {},
     onReset: () => {},
@@ -176,12 +179,15 @@ export const TransactionFooter = withForm({
     openRecallDialog,
     setOpenRecallDialog,
     hideHoldRecall,
+    cashier,
     onHold,
     onCancelRecall,
     onReset,
     onItemAdded,
   }) {
-    const { editedTrx, setEditedTrx } = useEditedTrx()
+    const { editedTrx, setEditedTrx, overrideCashier, setOverrideCashier } =
+      useEditedTrx()
+    const session = useSession()
     const { getUserSettings } = useUserSettings()
     const { setHeld } = useHeld()
     const { priceGroups } = usePriceGroups()
@@ -299,7 +305,30 @@ export const TransactionFooter = withForm({
             <div className="absolute -top-4 right-2 flex gap-2">
               <Badge>
                 <UserIcon />
-                {editedTrx.cashier}
+                {cashier}
+
+                {editedTrx.cashier !== session.user.name && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        aria-label={t("changeCashier")}
+                        onClick={() => setOverrideCashier(!overrideCashier)}
+                      >
+                        <UserSwitchIcon />
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      {overrideCashier
+                        ? t("keepOriginalCashier", {
+                            name: editedTrx.cashier,
+                          })
+                        : t("useCurrentCashier", {
+                            name: session.user.name,
+                          })}
+                    </TooltipContent>
+                  </Tooltip>
+                )}
               </Badge>
 
               {editedTrx.held && (

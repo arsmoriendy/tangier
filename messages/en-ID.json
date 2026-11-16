@@ -119,6 +119,9 @@
       "hold": "Hold",
       "recall": "Recall",
       "recalled": "Recalled",
+      "changeCashier": "Change cashier",
+      "useCurrentCashier": "Use current cashier: {name}",
+      "keepOriginalCashier": "Keep original cashier: {name}",
       "itemCount": "{count, plural, =1 {# item} other {# items}}",
       "removeItems": "Remove {count, plural, =1 {# item} other {# items}}",
       "summary": {

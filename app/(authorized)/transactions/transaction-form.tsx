@@ -61,9 +61,12 @@ function TransactionFormInner({
   onUpdate?: (trx: TransactionWithRelations) => any
   hideHoldRecall: boolean
 }) {
-  const { editedTrx, resetEditedTrx } = useEditedTrx()
+  const { editedTrx, resetEditedTrx, overrideCashier } = useEditedTrx()
   const session = useSession()
   const { priceGroups } = usePriceGroups()
+  // the stored cashier is kept unless the user explicitly overrides it
+  const cashier =
+    editedTrx && !overrideCashier ? editedTrx.cashier : session.user.name
   const [openRecallDialog, setOpenRecallDialog] = useState(false)
   const [getOpenSummary, setOpenSummary] = useState<boolean>(false)
   const { getUserSettings } = useUserSettings()
@@ -98,7 +101,7 @@ function TransactionFormInner({
         editedTrx?.customerPriceGroup ??
         ""
       const trx = {
-        cashier: session.user.name,
+        cashier,
         transactionItems: items,
         customerPriceGroup,
         held: false,
@@ -132,7 +135,7 @@ function TransactionFormInner({
         await printTrxReceipt({
           id,
           createdAt,
-          cashier: session.user.name,
+          cashier,
           totalPrice: value.totalPrice,
           transactionItems: items,
           customerPriceGroup,
@@ -166,7 +169,7 @@ function TransactionFormInner({
 
     const trx = {
       transactionItems: items,
-      cashier: session.user.name,
+      cashier,
       customerPriceGroup,
       held: true,
       ...value,
@@ -220,6 +223,7 @@ function TransactionFormInner({
           openRecallDialog={openRecallDialog}
           setOpenRecallDialog={setOpenRecallDialog}
           hideHoldRecall={hideHoldRecall}
+          cashier={cashier}
           onHold={hold}
           onCancelRecall={cancelRecall}
           onReset={resetTransactionForm}

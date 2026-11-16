@@ -10,6 +10,8 @@ const editedTrxCtx = createContext<
       editedTrx: EditedTrx
       setEditedTrx: (trx: EditedTrx) => void
       resetEditedTrx: () => void
+      overrideCashier: boolean
+      setOverrideCashier: (override: boolean) => void
     }
   | undefined
 >(undefined)
@@ -22,8 +24,11 @@ export function EditedTrxProvider({
   children: ReactNode
 }) {
   const [editedTrx, setEditedTrxState] = useState<EditedTrx>(initialValue)
+  const [overrideCashier, setOverrideCashier] = useState(false)
 
   function setEditedTrx(trx: EditedTrx) {
+    // a stale cashier override must not carry over to a different transaction
+    setOverrideCashier(false)
     setEditedTrxState(trx)
   }
 
@@ -31,11 +36,20 @@ export function EditedTrxProvider({
   // history edit dialog keeps its transaction after a save, so resetting must
   // not turn it into a blank new transaction form
   function resetEditedTrx() {
+    setOverrideCashier(false)
     setEditedTrxState(initialValue)
   }
 
   return (
-    <editedTrxCtx.Provider value={{ editedTrx, setEditedTrx, resetEditedTrx }}>
+    <editedTrxCtx.Provider
+      value={{
+        editedTrx,
+        setEditedTrx,
+        resetEditedTrx,
+        overrideCashier,
+        setOverrideCashier,
+      }}
+    >
       {children}
     </editedTrxCtx.Provider>
   )

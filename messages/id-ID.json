@@ -121,6 +121,9 @@
       "hold": "Tahan",
       "recall": "Panggil",
       "recalled": "Dipanggil",
+      "changeCashier": "Ubah kasir",
+      "useCurrentCashier": "Gunakan kasir saat ini: {name}",
+      "keepOriginalCashier": "Pertahankan kasir asli: {name}",
       "itemCount": "{count} barang",
       "removeItems": "Hapus {count} barang",
       "summary": {
