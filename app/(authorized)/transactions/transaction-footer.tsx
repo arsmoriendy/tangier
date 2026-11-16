@@ -295,17 +295,19 @@ export const TransactionFooter = withForm({
             </AdminOnly>
           </div>
 
-          {editedTrx?.held && (
+          {editedTrx !== undefined && (
             <div className="absolute -top-4 right-2 flex gap-2">
               <Badge>
                 <UserIcon />
                 {editedTrx.cashier}
               </Badge>
 
-              <RecallBadge
-                createdAt={new Date(editedTrx.createdAt)}
-                onCancelRecall={onCancelRecall}
-              />
+              {editedTrx.held && (
+                <RecallBadge
+                  createdAt={new Date(editedTrx.createdAt)}
+                  onCancelRecall={onCancelRecall}
+                />
+              )}
             </div>
           )}
 
