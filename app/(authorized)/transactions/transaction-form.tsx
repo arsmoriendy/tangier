@@ -27,21 +27,44 @@ import {
 } from "@/app/(authorized)/transactions/transaction-item-mapper"
 import { cn } from "@/lib/utils"
 import { useHotkeys } from "react-hotkeys-hook"
+import {
+  EditedTrxProvider,
+  useEditedTrx,
+} from "@/app/(authorized)/transactions/edited-trx-ctx"
 
 export default function TransactionForm({
+  initialTransaction,
+  onUpdate,
   className,
-  ...props
 }: {
-  transaction?: DeepReadonly<TransactionWithRelations>
+  initialTransaction?: DeepReadonly<TransactionWithRelations>
   onUpdate?: (trx: TransactionWithRelations) => any
   className?: string
 }) {
+  return (
+    <EditedTrxProvider initialValue={initialTransaction}>
+      <TransactionFormInner
+        className={className}
+        onUpdate={onUpdate}
+        hideHoldRecall={initialTransaction !== undefined}
+      />
+    </EditedTrxProvider>
+  )
+}
+
+function TransactionFormInner({
+  className,
+  onUpdate,
+  hideHoldRecall,
+}: {
+  className?: string
+  onUpdate?: (trx: TransactionWithRelations) => any
+  hideHoldRecall: boolean
+}) {
+  const { editedTrx, resetEditedTrx } = useEditedTrx()
   const session = useSession()
   const { priceGroups } = usePriceGroups()
   const [openRecallDialog, setOpenRecallDialog] = useState(false)
-  const [recalledTrx, setRecalledTrx] = useState<
-    TransactionWithRelations | undefined
-  >(undefined)
   const [getOpenSummary, setOpenSummary] = useState<boolean>(false)
   const { getUserSettings } = useUserSettings()
   const [selected, setSelected] = useState<Set<number>>(new Set())
@@ -51,13 +74,13 @@ export default function TransactionForm({
   }>()
   const t = useTranslations("transactions.form")
   const form = useAppForm({
-    defaultValues: (props.transaction
+    defaultValues: (editedTrx
       ? {
-          totalPrice: props.transaction.totalPrice,
+          totalPrice: editedTrx.totalPrice,
           priceGroup: priceGroups.find(
-            (pg) => pg.name === props.transaction!.customerPriceGroup
+            (pg) => pg.name === editedTrx.customerPriceGroup
           )?.id,
-          transactionItems: props.transaction.transactionItems.map(toFormItem),
+          transactionItems: editedTrx.transactionItems.map(toFormItem),
         }
       : {
           ...defaultTransactionValues,
@@ -72,7 +95,7 @@ export default function TransactionForm({
       const customerPriceGroup =
         priceGroups.find((pg) => pg.id === priceGroup)?.name ??
         // keep the stored snapshot when its price group has been deleted
-        props.transaction?.customerPriceGroup ??
+        editedTrx?.customerPriceGroup ??
         ""
       const trx = {
         cashier: session.user.name,
@@ -84,9 +107,9 @@ export default function TransactionForm({
 
       var id: string
       var createdAt: string
-      if (props.transaction !== undefined || recalledTrx !== undefined) {
-        id = props.transaction?.id ?? recalledTrx!.id
-        createdAt = props.transaction?.createdAt ?? recalledTrx!.createdAt
+      if (editedTrx !== undefined) {
+        id = editedTrx.id
+        createdAt = editedTrx.createdAt
 
         await updateTransaction({
           id,
@@ -94,7 +117,7 @@ export default function TransactionForm({
         })
 
         toast.success(t("toasts.updated"))
-        props.onUpdate?.({
+        onUpdate?.({
           id,
           createdAt,
           ...trx,
@@ -119,7 +142,7 @@ export default function TransactionForm({
       }
 
       if (getUserSettings.showTrxSummary) {
-        setRecalledTrx(undefined)
+        resetEditedTrx()
         setOpenSummary(true)
       } else resetTransactionForm()
     },
@@ -127,7 +150,7 @@ export default function TransactionForm({
 
   function resetTransactionForm() {
     setSelected(new Set())
-    setRecalledTrx(undefined)
+    resetEditedTrx()
     form.reset()
   }
 
@@ -138,7 +161,7 @@ export default function TransactionForm({
     const items = transactionItems.map(withBuyPriceId)
     const customerPriceGroup =
       priceGroups.find((pg) => pg.id === priceGroup)?.name ??
-      recalledTrx?.customerPriceGroup ??
+      editedTrx?.customerPriceGroup ??
       ""
 
     const trx = {
@@ -149,9 +172,9 @@ export default function TransactionForm({
       ...value,
     }
 
-    if (recalledTrx) {
+    if (editedTrx) {
       await updateTransaction({
-        id: recalledTrx.id,
+        id: editedTrx.id,
         ...trx,
       })
     } else {
@@ -163,7 +186,7 @@ export default function TransactionForm({
   }
 
   async function cancelRecall() {
-    if (recalledTrx === undefined) return
+    if (!editedTrx?.held) return
     resetTransactionForm()
     toast.info(t("toasts.recallCancelled"))
   }
@@ -194,11 +217,9 @@ export default function TransactionForm({
           form={form}
           selected={selected}
           setSelected={setSelected}
-          recalledTrx={recalledTrx}
-          setRecalledTrx={setRecalledTrx}
           openRecallDialog={openRecallDialog}
           setOpenRecallDialog={setOpenRecallDialog}
-          hideHoldRecall={props.transaction !== undefined}
+          hideHoldRecall={hideHoldRecall}
           onHold={hold}
           onCancelRecall={cancelRecall}
           onReset={resetTransactionForm}

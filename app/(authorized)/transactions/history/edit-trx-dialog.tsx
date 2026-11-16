@@ -48,7 +48,7 @@ export function EditTrxDialog({
         <div className="mb-2 h-[92vh] overflow-auto">
           <TransactionForm
             className="m-2"
-            transaction={trx}
+            initialTransaction={trx}
             onUpdate={async () => {
               await invalidateTrxQueries(queryClient)
             }}

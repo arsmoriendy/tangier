@@ -39,6 +39,7 @@ import { toFormItem } from "@/app/(authorized)/transactions/transaction-item-map
 import { toast } from "sonner"
 import { useSidebar } from "@/components/ui/sidebar"
 import AppButton, { AppButtonProps } from "@/components/app-button"
+import { useEditedTrx } from "@/app/(authorized)/transactions/edited-trx-ctx"
 
 function FooterBar({ className, ...props }: ComponentProps<"div">) {
   return (
@@ -160,8 +161,6 @@ export const TransactionFooter = withForm({
   props: {
     selected: new Set<number>(),
     setSelected: (_selected: Set<number>) => {},
-    recalledTrx: undefined as TransactionWithRelations | undefined,
-    setRecalledTrx: (_trx: TransactionWithRelations | undefined) => {},
     openRecallDialog: false,
     setOpenRecallDialog: (_open: boolean) => {},
     hideHoldRecall: false,
@@ -174,8 +173,6 @@ export const TransactionFooter = withForm({
     form,
     selected,
     setSelected,
-    recalledTrx,
-    setRecalledTrx,
     openRecallDialog,
     setOpenRecallDialog,
     hideHoldRecall,
@@ -184,6 +181,7 @@ export const TransactionFooter = withForm({
     onReset,
     onItemAdded,
   }) {
+    const { editedTrx, setEditedTrx } = useEditedTrx()
     const { getUserSettings } = useUserSettings()
     const { setHeld } = useHeld()
     const { priceGroups } = usePriceGroups()
@@ -220,7 +218,7 @@ export const TransactionFooter = withForm({
 
     async function recallTrx(trx: DeepReadonly<TransactionWithRelations>) {
       setSelected(new Set())
-      setRecalledTrx(trx as DeepMutable<typeof trx>)
+      setEditedTrx(trx)
 
       form.setFieldValue(
         "priceGroup",
@@ -297,15 +295,15 @@ export const TransactionFooter = withForm({
             </AdminOnly>
           </div>
 
-          {recalledTrx !== undefined && (
+          {editedTrx?.held && (
             <div className="absolute -top-4 right-2 flex gap-2">
               <Badge>
                 <UserIcon />
-                {recalledTrx.cashier}
+                {editedTrx.cashier}
               </Badge>
 
               <RecallBadge
-                createdAt={new Date(recalledTrx.createdAt)}
+                createdAt={new Date(editedTrx.createdAt)}
                 onCancelRecall={onCancelRecall}
               />
             </div>
@@ -366,7 +364,6 @@ export const TransactionFooter = withForm({
                   form={form}
                   open={openRecallDialog}
                   setOpen={setOpenRecallDialog}
-                  recalledTrx={recalledTrx}
                   onReset={onReset}
                   recallTrx={recallTrx}
                 />

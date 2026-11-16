@@ -20,17 +20,18 @@ import { formatCurrency } from "@/lib/i18n/currency"
 import { TrashIcon, ClockCountdownIcon } from "@phosphor-icons/react"
 import { useFormatter, useTranslations } from "next-intl"
 import { useEffect } from "react"
+import { useEditedTrx } from "@/app/(authorized)/transactions/edited-trx-ctx"
 
 export const RecallDialog = withForm({
   defaultValues: defaultTransactionValues,
   props: {
     open: false,
     setOpen: (_open: boolean) => {},
-    recalledTrx: undefined as undefined | TransactionWithRelations,
     onReset: () => {},
     recallTrx: (_trx: DeepReadonly<TransactionWithRelations>) => {},
   },
-  render: function Render({ open, setOpen, recalledTrx, onReset, recallTrx }) {
+  render: function Render({ open, setOpen, onReset, recallTrx }) {
+    const { editedTrx } = useEditedTrx()
     const { setHeld, getHeld } = useHeld()
     const format = useFormatter()
     const t = useTranslations("transactions.recall")
@@ -86,7 +87,7 @@ export const RecallDialog = withForm({
                         title={<>{tc("delete")}?</>}
                         description={t("deleteDescription")}
                         action={async () => {
-                          if (trx.id === recalledTrx?.id) onReset()
+                          if (trx.id === editedTrx?.id) onReset()
                           await deleteTransaction(trx.id)
                           const idx = setHeld.findIndex((t) => t.id === trx.id)
                           if (idx !== -1) setHeld.splice(idx, 1)
