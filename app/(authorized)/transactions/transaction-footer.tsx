@@ -8,6 +8,7 @@ import {
   PrinterIcon,
   TrashIcon,
   ArrowCounterClockwiseIcon,
+  UserIcon,
 } from "@phosphor-icons/react/dist/ssr"
 import { AddItemForm } from "@/app/(authorized)/transactions/add-item-form"
 import { AddItemProvider } from "@/app/(authorized)/transactions/add-item-ctx"
@@ -62,7 +63,7 @@ function RecallBadge({
   const format = useFormatter()
 
   return (
-    <Badge className="absolute -top-4 right-2 gap-2">
+    <Badge>
       <span className="relative size-2">
         <span className="absolute size-full animate-ping rounded-full bg-warning opacity-75" />
         <span className="flex size-full rounded rounded-full bg-warning" />
@@ -297,10 +298,17 @@ export const TransactionFooter = withForm({
           </div>
 
           {recalledTrx !== undefined && (
-            <RecallBadge
-              createdAt={new Date(recalledTrx.createdAt)}
-              onCancelRecall={onCancelRecall}
-            />
+            <div className="absolute -top-4 right-2 flex gap-2">
+              <Badge>
+                <UserIcon />
+                {recalledTrx.cashier}
+              </Badge>
+
+              <RecallBadge
+                createdAt={new Date(recalledTrx.createdAt)}
+                onCancelRecall={onCancelRecall}
+              />
+            </div>
           )}
 
           <form.AppField name="totalPrice">
